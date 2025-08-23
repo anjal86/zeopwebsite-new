@@ -30,7 +30,7 @@ export const useCountUp = ({
           setHasAnimated(true);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     if (elementRef.current) {
@@ -43,6 +43,7 @@ export const useCountUp = ({
   useEffect(() => {
     if (!isVisible) return;
 
+    let animationFrame: number;
     const startTime = Date.now();
     const startValue = start;
     const endValue = end;
@@ -59,16 +60,25 @@ export const useCountUp = ({
       setCount(currentValue);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrame = requestAnimationFrame(animate);
+      } else {
+        setCount(endValue); // Ensure we end at the exact value
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
   }, [isVisible, start, end, duration]);
 
   const formatNumber = (num: number) => {
-    const rounded = decimals > 0 ? num.toFixed(decimals) : Math.floor(num).toString();
-    return `${prefix}${rounded}${suffix}`;
+    const rounded = decimals > 0 ? num.toFixed(decimals) : Math.floor(num);
+    const formattedNumber = typeof rounded === 'number' ? rounded.toLocaleString() : rounded.toString();
+    return `${prefix}${formattedNumber}${suffix}`;
   };
 
   return {

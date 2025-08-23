@@ -30,6 +30,7 @@ const AnimatedCounter: React.FC<{
     suffix,
     prefix,
     duration,
+    start: 0
   });
 
   return (
@@ -85,7 +86,7 @@ const Home: React.FC = () => {
                       View All Destinations
                       <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <div className="text-sm text-gray-400">50+ Destinations</div>
+                    <div className="text-sm text-gray-400">14 Destinations</div>
                   </div>
                 </div>
               </div>
@@ -106,7 +107,7 @@ const Home: React.FC = () => {
                       Browse Tours
                       <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <div className="text-sm text-gray-400">100+ Tours</div>
+                    <div className="text-sm text-gray-400">9 Tours</div>
                   </div>
                 </div>
               </div>
@@ -349,25 +350,25 @@ const Home: React.FC = () => {
           <div className="mt-16 pt-12 border-t border-gray-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <AnimatedCounter
-                end={10000}
+                end={1500}
                 suffix="+"
                 label="Happy Travelers"
                 duration={3000}
               />
               <AnimatedCounter
-                end={150}
-                suffix="+"
+                end={14}
+                suffix=""
                 label="Destinations"
                 duration={2500}
               />
               <AnimatedCounter
-                end={25}
+                end={5}
                 suffix="+"
                 label="Years Experience"
                 duration={2000}
               />
               <AnimatedCounter
-                end={100}
+                end={98}
                 suffix="%"
                 label="Satisfaction Rate"
                 duration={2800}
