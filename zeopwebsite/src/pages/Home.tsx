@@ -15,6 +15,32 @@ import {
   Clock3
 } from 'lucide-react';
 import Hero from '../components/Hero/Hero';
+import { useCountUp } from '../hooks/useCountUp';
+
+// Animated Counter Component
+const AnimatedCounter: React.FC<{
+  end: number;
+  suffix?: string;
+  prefix?: string;
+  label: string;
+  duration?: number;
+}> = ({ end, suffix = '', prefix = '', label, duration = 2500 }) => {
+  const { count, ref } = useCountUp({
+    end,
+    suffix,
+    prefix,
+    duration,
+  });
+
+  return (
+    <div ref={ref} className="group">
+      <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
+        {count}
+      </div>
+      <div className="text-gray-600">{label}</div>
+    </div>
+  );
+};
 
 const Home: React.FC = () => {
   return (
@@ -25,8 +51,8 @@ const Home: React.FC = () => {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-sky-blue rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-sunrise-orange rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
         </div>
         
         <div className="section-container relative z-10">
@@ -111,7 +137,12 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Destinations Preview */}
-      <section className="py-20 bg-white relative">
+      <section className="py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl transform translate-x-1/3 -translate-y-1/3"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
+        </div>
         <div className="section-container">
           <div className="text-center mb-16">
             <div className="inline-flex items-center bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -239,8 +270,8 @@ const Home: React.FC = () => {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-earth-green rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-sky-blue rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary rounded-full blur-3xl"></div>
         </div>
         
         <div className="section-container relative z-10">
@@ -317,29 +348,37 @@ const Home: React.FC = () => {
           {/* Trust Indicators */}
           <div className="mt-16 pt-12 border-t border-gray-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div className="group">
-                <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">10,000+</div>
-                <div className="text-gray-600">Happy Travelers</div>
-              </div>
-              <div className="group">
-                <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-secondary transition-colors">150+</div>
-                <div className="text-gray-600">Destinations</div>
-              </div>
-              <div className="group">
-                <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">25+</div>
-                <div className="text-gray-600">Years Experience</div>
-              </div>
-              <div className="group">
-                <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-secondary transition-colors">100%</div>
-                <div className="text-gray-600">Satisfaction Rate</div>
-              </div>
+              <AnimatedCounter
+                end={10000}
+                suffix="+"
+                label="Happy Travelers"
+                duration={3000}
+              />
+              <AnimatedCounter
+                end={150}
+                suffix="+"
+                label="Destinations"
+                duration={2500}
+              />
+              <AnimatedCounter
+                end={25}
+                suffix="+"
+                label="Years Experience"
+                duration={2000}
+              />
+              <AnimatedCounter
+                end={100}
+                suffix="%"
+                label="Satisfaction Rate"
+                duration={2800}
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white relative">
+      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5 relative">
         <div className="section-container">
           <div className="text-center mb-16">
             <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
