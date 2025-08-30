@@ -6,7 +6,6 @@ import { Calendar, Users, Star, Heart, TrendingUp, Shield, Award } from 'lucide-
 import { useFeaturedTours } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
-import type { Tour } from '../../services/api';
 
 const Tours: React.FC = () => {
   // Use API hook to fetch featured tours
@@ -188,7 +187,7 @@ const Tours: React.FC = () => {
                           </span>
                           <span className="flex items-center text-gray-600">
                             <Users className="w-4 h-4 mr-1" />
-                            Group: {tour.groupSize}
+                            Group: {tour.group_size}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">

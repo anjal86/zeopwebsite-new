@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import PageHeader from '../components/PageHeader/PageHeader';
 import TourCard from '../components/Tours/TourCard';
 import EmptyState from '../components/UI/EmptyState';
-import type { Tour } from '../components/Tours/TourCard';
+import type { Tour } from '../services/api';
 
 const ActivityDetail: React.FC = () => {
   const { activityName } = useParams<{ activityName: string }>();
@@ -55,7 +55,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070',
         price: 1899,
         duration: '16 days',
-        groupSize: '2-10',
+        group_size: '2-10',
         difficulty: 'Challenging',
         rating: 4.9,
         reviews: 324,
@@ -63,7 +63,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Everest, Nepal',
         description: 'Trek to the base of the world\'s highest mountain through Sherpa villages.',
         inclusions: ['Accommodation', 'Meals', 'Guide', 'Permits'],
-        bestTime: 'Oct-Dec, Mar-May'
+        best_time: 'Oct-Dec, Mar-May'
       }
     ],
     mountaineering: [
@@ -74,7 +74,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070',
         price: 2499,
         duration: '19 days',
-        groupSize: '2-6',
+        group_size: '2-6',
         difficulty: 'Challenging',
         rating: 4.7,
         reviews: 89,
@@ -82,7 +82,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Everest, Nepal',
         description: 'Technical mountaineering expedition to Island Peak with stunning Himalayan views.',
         inclusions: ['Accommodation', 'Meals', 'Guide', 'Equipment', 'Permits'],
-        bestTime: 'Oct-Dec, Mar-May'
+        best_time: 'Oct-Dec, Mar-May'
       }
     ],
     adventure: [
@@ -93,7 +93,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1540882082344-b273b04e2c2f?q=80&w=2070',
         price: 599,
         duration: '5 days',
-        groupSize: '2-12',
+        group_size: '2-12',
         difficulty: 'Moderate',
         rating: 4.8,
         reviews: 156,
@@ -101,7 +101,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Pokhara, Nepal',
         description: 'Ultimate adventure package with paragliding, rafting, and extreme sports.',
         inclusions: ['Accommodation', 'Activities', 'Guide', 'Equipment'],
-        bestTime: 'Oct-Apr'
+        best_time: 'Oct-Apr'
       }
     ],
     'jungle-safari': [
@@ -112,7 +112,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072',
         price: 399,
         duration: '3 days',
-        groupSize: '2-12',
+        group_size: '2-12',
         difficulty: 'Easy',
         rating: 4.6,
         reviews: 178,
@@ -120,7 +120,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Chitwan, Nepal',
         description: 'Wildlife safari adventure in Nepal\'s premier national park.',
         inclusions: ['Accommodation', 'Meals', 'Safari Activities', 'Guide'],
-        bestTime: 'Oct-Mar'
+        best_time: 'Oct-Mar'
       }
     ],
     cultural: [
@@ -131,7 +131,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1565537714828-9bbde8c42c3f?q=80&w=2070',
         price: 199,
         duration: '2 days',
-        groupSize: '2-20',
+        group_size: '2-20',
         difficulty: 'Easy',
         rating: 4.5,
         reviews: 234,
@@ -139,7 +139,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Kathmandu, Nepal',
         description: 'Discover the rich cultural heritage of Nepal\'s capital city.',
         inclusions: ['Guide', 'Entrance Fees', 'Transportation'],
-        bestTime: 'Year Round'
+        best_time: 'Year Round'
       }
     ],
     pilgrimage: [
@@ -150,7 +150,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070',
         price: 2999,
         duration: '15 days',
-        groupSize: '2-15',
+        group_size: '2-15',
         difficulty: 'Moderate',
         rating: 4.9,
         reviews: 67,
@@ -158,7 +158,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Tibet',
         description: 'Sacred pilgrimage to the holy mountain and pristine lake.',
         inclusions: ['Accommodation', 'Meals', 'Guide', 'Permits', 'Transportation'],
-        bestTime: 'May-Sep'
+        best_time: 'May-Sep'
       }
     ],
     meditation: [
@@ -169,7 +169,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070',
         price: 799,
         duration: '7 days',
-        groupSize: '2-10',
+        group_size: '2-10',
         difficulty: 'Easy',
         rating: 4.8,
         reviews: 92,
@@ -177,7 +177,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Pokhara, Nepal',
         description: 'Peaceful meditation and wellness retreat in the Himalayas.',
         inclusions: ['Accommodation', 'Meals', 'Meditation Sessions', 'Yoga'],
-        bestTime: 'Year Round'
+        best_time: 'Year Round'
       }
     ],
     volunteering: [
@@ -188,7 +188,7 @@ const ActivityDetail: React.FC = () => {
         image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=2070',
         price: 499,
         duration: '10 days',
-        groupSize: '2-8',
+        group_size: '2-8',
         difficulty: 'Easy',
         rating: 4.7,
         reviews: 45,
@@ -196,7 +196,7 @@ const ActivityDetail: React.FC = () => {
         location: 'Rural Nepal',
         description: 'Meaningful volunteering experience helping local communities.',
         inclusions: ['Accommodation', 'Meals', 'Project Materials', 'Guide'],
-        bestTime: 'Oct-Apr'
+        best_time: 'Oct-Apr'
       }
     ]
   };

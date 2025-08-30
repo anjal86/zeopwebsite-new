@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Grid, List, SortAsc, SortDesc, Filter } from 'lucide-react';
 import TourCard from './TourCard';
 import EmptyState from '../UI/EmptyState';
-import type { Tour } from './TourCard';
+import type { Tour } from '../../services/api';
 
 interface TourGridProps {
   tours: Tour[];
@@ -40,7 +40,7 @@ const TourGrid: React.FC<TourGridProps> = ({
           tour.description.toLowerCase().includes(searchTerm) ||
           tour.location.toLowerCase().includes(searchTerm) ||
           tour.category.toLowerCase().includes(searchTerm) ||
-          tour.highlights.some(h => h.toLowerCase().includes(searchTerm));
+          tour.highlights.some((h: string) => h.toLowerCase().includes(searchTerm));
         
         if (!matchesSearch) return false;
       }
@@ -54,10 +54,10 @@ const TourGrid: React.FC<TourGridProps> = ({
       if (filters.activity) {
         const activityTerm = filters.activity.toLowerCase();
         const matchesActivity =
-          tour.highlights.some(h => h.toLowerCase().includes(activityTerm)) ||
+          tour.highlights.some((h: string) => h.toLowerCase().includes(activityTerm)) ||
           tour.category.toLowerCase().includes(activityTerm) ||
           tour.description.toLowerCase().includes(activityTerm) ||
-          tour.inclusions.some(i => i.toLowerCase().includes(activityTerm));
+          tour.inclusions.some((i: string) => i.toLowerCase().includes(activityTerm));
         
         if (!matchesActivity) return false;
       }

@@ -1,22 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Mountain, 
-  Calendar, 
-  Users, 
-  Star, 
-  MapPin, 
-  Clock, 
-  Shield, 
-  Award,
-  Heart,
-  Compass,
+import {
   Phone,
   Mail,
-  CheckCircle,
-  ArrowRight,
-  Quote
+  Quote,
+  Star
 } from 'lucide-react';
+import PageHeader from '../components/PageHeader/PageHeader';
+import TourGrid from '../components/Tours/TourGrid';
+import type { Tour } from '../services/api';
 
 const KailashMansarovarPage: React.FC = () => {
   const spiritualJourney = [
@@ -52,197 +44,165 @@ const KailashMansarovarPage: React.FC = () => {
     }
   ];
 
-  const packages = [
+  const [filters] = useState({
+    search: '',
+    destination: '',
+    activity: ''
+  });
+
+  // Kailash Mansarovar tour packages formatted as Tour objects
+  const kailashTours: Tour[] = [
     {
-      name: 'Sacred Journey',
-      duration: '12 Days',
+      id: 1,
+      slug: 'kailash-sacred-journey',
+      title: 'Sacred Journey - Kailash Mansarovar',
+      description: 'Embark on the most sacred pilgrimage on Earth. Experience the divine presence of Lord Shiva at Mount Kailash and cleanse your spirit in the holy waters of Lake Mansarovar.',
+      image: 'https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070',
       price: 3999,
       originalPrice: 4999,
-      groupSize: '10-15',
-      includes: ['Accommodation', 'All Meals', 'Transportation', 'Permits', 'Spiritual Guide'],
-      popular: false,
-      badge: 'Best Value'
+      duration: '12 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 4.8,
+      reviews: 156,
+      group_size: '10-15 people',
+      difficulty: 'Moderate',
+      category: 'Pilgrimage',
+      featured: false,
+      highlights: ['Mount Kailash Darshan', 'Mansarovar Lake', 'Sacred Parikrama', 'Spiritual Ceremonies'],
+      inclusions: ['Accommodation', 'All Meals', 'Transportation', 'Permits', 'Spiritual Guide', 'Sacred Ceremonies'],
+      best_time: 'May to September'
     },
     {
-      name: 'Divine Experience',
-      duration: '14 Days',
+      id: 2,
+      slug: 'kailash-divine-experience',
+      title: 'Divine Experience - Kailash Mansarovar',
+      description: 'The most popular pilgrimage package with extended journey including Everest Base Camp and Tibetan monasteries. Perfect blend of spirituality and cultural immersion.',
+      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2070',
       price: 5999,
       originalPrice: 7499,
-      groupSize: '6-10',
-      includes: ['Premium Accommodation', 'All Meals', 'Private Transport', 'Permits', 'Expert Guide', 'Medical Support', 'Spiritual Ceremonies'],
-      popular: true,
-      badge: 'Most Popular'
+      duration: '14 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 4.9,
+      reviews: 243,
+      group_size: '6-10 people',
+      difficulty: 'Moderate',
+      category: 'Pilgrimage',
+      featured: true,
+      highlights: ['Extended Parikrama', 'Everest Base Camp', 'Tibetan Monasteries', 'Cultural Immersion'],
+      inclusions: ['Premium Accommodation', 'All Meals', 'Private Transport', 'Permits', 'Expert Guide', 'Medical Support', 'Spiritual Ceremonies', 'Cultural Tours'],
+      best_time: 'May to September'
     },
     {
-      name: 'Enlightened Path',
-      duration: '16 Days',
+      id: 3,
+      slug: 'kailash-enlightened-path',
+      title: 'Enlightened Path - Luxury Kailash',
+      description: 'Premium luxury pilgrimage with helicopter access, private ceremonies, and personal spiritual guide. The ultimate comfort journey to the sacred mountain.',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070',
       price: 8999,
       originalPrice: 11999,
-      groupSize: '2-6',
-      includes: ['Luxury Hotels', 'Gourmet Meals', 'Private Helicopter', 'All Permits', 'Personal Guide', 'Medical Team', 'Private Ceremonies', 'Luxury Amenities'],
-      popular: false,
-      badge: 'Premium'
+      duration: '16 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 5.0,
+      reviews: 89,
+      group_size: '2-6 people',
+      difficulty: 'Easy',
+      category: 'Luxury Pilgrimage',
+      featured: false,
+      highlights: ['Helicopter Access', 'Private Ceremonies', 'Luxury Camping', 'Personal Spiritual Guide'],
+      inclusions: ['Luxury Hotels', 'Gourmet Meals', 'Private Helicopter', 'All Permits', 'Personal Guide', 'Medical Team', 'Private Ceremonies', 'Luxury Amenities', 'Photography Service'],
+      best_time: 'May to September'
+    },
+    {
+      id: 4,
+      slug: 'kailash-pilgrims-path',
+      title: 'Pilgrims Path - Budget Kailash',
+      description: 'Traditional overland route for authentic pilgrimage experience. Budget-friendly option with group experience and basic facilities for the true spiritual seeker.',
+      image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070',
+      price: 2999,
+      originalPrice: 3999,
+      duration: '10 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 4.6,
+      reviews: 198,
+      group_size: '15-20 people',
+      difficulty: 'Challenging',
+      category: 'Budget Pilgrimage',
+      featured: false,
+      highlights: ['Traditional Route', 'Group Experience', 'Basic Facilities', 'Authentic Journey'],
+      inclusions: ['Basic Accommodation', 'Meals', 'Group Transport', 'Permits', 'Group Guide', 'Basic Medical Kit'],
+      best_time: 'May to September'
+    },
+    {
+      id: 5,
+      slug: 'kailash-spiritual-retreat',
+      title: 'Spiritual Retreat - Wellness Kailash',
+      description: 'Extended spiritual journey with meditation retreats, yoga sessions, and Ayurvedic treatments. Perfect for those seeking deep spiritual transformation and wellness.',
+      image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070',
+      price: 12999,
+      originalPrice: 15999,
+      duration: '18 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 4.9,
+      reviews: 67,
+      group_size: '4-8 people',
+      difficulty: 'Easy',
+      category: 'Spiritual Wellness',
+      featured: false,
+      highlights: ['Meditation Retreats', 'Yoga Sessions', 'Spiritual Teachings', 'Wellness Focus'],
+      inclusions: ['Luxury Accommodation', 'Organic Meals', 'Private Transport', 'All Permits', 'Spiritual Master', 'Meditation Sessions', 'Yoga Classes', 'Ayurvedic Treatments'],
+      best_time: 'May to September'
+    },
+    {
+      id: 6,
+      slug: 'kailash-cultural-explorer',
+      title: 'Cultural Explorer - Heritage Kailash',
+      description: 'Comprehensive cultural journey exploring Tibetan heritage, local communities, traditional arts, and historical sites along with the sacred pilgrimage.',
+      image: 'https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2070',
+      price: 7999,
+      originalPrice: 9999,
+      duration: '15 Days',
+      location: 'Mount Kailash, Tibet',
+      rating: 4.7,
+      reviews: 134,
+      group_size: '8-12 people',
+      difficulty: 'Moderate',
+      category: 'Cultural Pilgrimage',
+      featured: false,
+      highlights: ['Tibetan Culture', 'Local Communities', 'Traditional Arts', 'Historical Sites'],
+      inclusions: ['Cultural Hotels', 'Local Cuisine', 'Cultural Transport', 'Permits', 'Cultural Guide', 'Museum Visits', 'Local Interactions', 'Traditional Ceremonies'],
+      best_time: 'May to September'
     }
   ];
 
+  const handleTourBook = (tour: Tour) => {
+    console.log('Booking Kailash tour:', tour.title);
+    // Implement booking logic
+  };
+
+  const handleTourView = (tour: Tour) => {
+    console.log('Viewing Kailash tour details:', tour.title);
+    // Navigate to tour detail page or show modal
+  };
+
   return (
     <div className="kailash-mansarovar-page overflow-hidden">
-      {/* Hero Section - Full Screen with Emotional Impact */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Video/Image */}
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070"
-            alt="Mount Kailash"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-        </div>
-
-        {/* Floating Sacred Symbol */}
-        <motion.div
-          animate={{
-            rotate: 360,
-            scale: [1, 1.1, 1]
-          }}
-          transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-          }}
-          className="absolute top-20 right-20 text-6xl opacity-20 float-animation sacred-pulse"
-        >
-          🕉️
-        </motion.div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            <div className="mb-6">
-              <span className="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-full text-sm font-semibold mb-4">
-                Sacred Pilgrimage
-              </span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Kailash Mansarovar
-              <span className="block text-3xl md:text-4xl text-orange-300 font-light mt-2">
-                The Journey Within
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed max-w-3xl mx-auto">
-              Embark on the most sacred pilgrimage on Earth. Where the divine meets the mortal, 
-              and souls find their eternal peace.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                className="divine-cta bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 sacred-glow"
-              >
-                Begin Your Sacred Journey
-                <ArrowRight className="inline ml-2 w-5 h-5" />
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300 sacred-border"
-              >
-                Watch Sacred Journey
-              </motion.button>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center gap-8 text-sm">
-              <div className="flex items-center">
-                <Shield className="w-5 h-5 mr-2 text-green-400" />
-                <span>100% Safe & Blessed</span>
-              </div>
-              <div className="flex items-center">
-                <Award className="w-5 h-5 mr-2 text-yellow-400" />
-                <span>25+ Years Experience</span>
-              </div>
-              <div className="flex items-center">
-                <Heart className="w-5 h-5 mr-2 text-red-400" />
-                <span>1000+ Souls Transformed</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white scroll-indicator"
-        >
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center sacred-glow">
-            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Emotional Connection Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-900 to-black text-white relative overflow-hidden spiritual-bg">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-
-        <div className="section-container relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <Quote className="w-12 h-12 text-orange-400 mx-auto mb-6 sacred-pulse" />
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              "When you touch the sacred waters of Mansarovar,
-              <span className="block text-orange-300 mt-2">your soul touches eternity"</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              This is not just a journey to a destination. It's a pilgrimage to your inner self,
-              a transformation that begins the moment you decide to answer the call of the divine.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {spiritualJourney.map((journey, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="text-center p-8 bg-gradient-to-b from-gray-800/50 to-gray-900/50 rounded-2xl backdrop-blur-sm border border-gray-700/50 glass-dark hover:scale-105 transition-all duration-300"
-              >
-                <div className="text-6xl mb-6 sacred-pulse">{journey.icon}</div>
-                <h3 className="text-2xl font-bold mb-4 text-orange-300">{journey.title}</h3>
-                <p className="text-gray-300 leading-relaxed">{journey.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Page Header */}
+      <PageHeader
+        title="Kailash Mansarovar"
+        subtitle="The most sacred pilgrimage on Earth - Where the divine meets the mortal, and souls find their eternal peace"
+        breadcrumb="Kailash Mansarovar"
+        backgroundImage="https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070"
+      />
 
       {/* Sacred Statistics */}
-      <section className="py-16 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+      <section className="py-16 bg-gradient-to-r from-orange-500 to-red-500 text-white -mt-16 relative z-10">
         <div className="section-container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { number: "6,638m", label: "Sacred Peak Height" },
-              { number: "4,590m", label: "Holy Lake Altitude" },
-              { number: "52km", label: "Divine Parikrama" },
-              { number: "1000+", label: "Blessed Pilgrims" }
+              { number: "6,638m", label: "Sacred Peak Height", icon: "⛰️" },
+              { number: "4,590m", label: "Holy Lake Altitude", icon: "🏔️" },
+              { number: "52km", label: "Divine Parikrama", icon: "🚶‍♂️" },
+              { number: "1000+", label: "Blessed Pilgrims", icon: "🙏" }
             ].map((stat, index) => (
               <motion.div
                 key={index}
@@ -252,11 +212,78 @@ const KailashMansarovarPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="stat-counter"
               >
-                <div className="text-4xl md:text-5xl font-bold mb-2 sacred-glow">{stat.number}</div>
-                <div className="text-orange-100 font-medium">{stat.label}</div>
+                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div className="text-3xl md:text-4xl font-bold mb-2 sacred-glow">{stat.number}</div>
+                <div className="text-orange-100 font-medium text-sm">{stat.label}</div>
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Sacred Journey Introduction */}
+      <section className="py-16 bg-white">
+        <div className="section-container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <div className="text-6xl mb-6 sacred-pulse">🕉️</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Choose Your <span className="text-gradient bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Sacred Path</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Embark on the most sacred pilgrimage on Earth. Each journey is carefully crafted to provide
+              a transformative spiritual experience while ensuring your comfort and safety.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {spiritualJourney.map((journey, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl border border-orange-100 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="text-4xl mb-4 sacred-pulse">{journey.icon}</div>
+                <h3 className="text-xl font-bold mb-3 text-gray-900">{journey.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{journey.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Kailash Tours Grid */}
+      <section className="pt-8 pb-12 bg-gray-50">
+        <div className="section-container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Sacred <span className="text-gradient bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Pilgrimage Packages</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Every soul's journey is unique. Select the path that resonates with your spiritual calling and travel preferences.
+            </p>
+          </motion.div>
+
+          <TourGrid
+            tours={kailashTours}
+            filters={filters}
+            onTourBook={handleTourBook}
+            onTourView={handleTourView}
+          />
         </div>
       </section>
 
@@ -312,89 +339,62 @@ const KailashMansarovarPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Sacred Packages - Emotional Pricing */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      {/* Trust & Safety Section */}
+      <section className="py-16 bg-white">
         <div className="section-container">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Choose Your <span className="text-gradient">Sacred Path</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Our Sacred Journey?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Every soul's journey is unique. Select the path that resonates with your spiritual calling.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We're committed to providing exceptional pilgrimage experiences with the highest standards of safety, spirituality, and service.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              {
+                icon: '🛡️',
+                title: '100% Safe & Blessed',
+                description: 'All our pilgrimages are fully insured and follow strict safety protocols with experienced guides.'
+              },
+              {
+                icon: '🕉️',
+                title: 'Spiritual Guidance',
+                description: 'Expert spiritual guides and masters accompany you throughout your sacred journey.'
+              },
+              {
+                icon: '🏔️',
+                title: '25+ Years Experience',
+                description: 'Decades of experience organizing successful Kailash Mansarovar pilgrimages.'
+              },
+              {
+                icon: '❤️',
+                title: '1000+ Blessed Souls',
+                description: 'Over a thousand pilgrims have completed their spiritual transformation with us.'
+              }
+            ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`package-card relative bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 ${
-                  pkg.popular ? 'ring-4 ring-orange-400 scale-105 popular sacred-glow' : ''
-                }`}
+                className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl border border-orange-100 hover:shadow-lg transition-all duration-300"
               >
-                {pkg.popular && (
-                  <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-3 font-bold">
-                    ✨ {pkg.badge} ✨
-                  </div>
-                )}
-                
-                <div className={`p-8 ${pkg.popular ? 'pt-16' : ''}`}>
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{pkg.name}</h3>
-                    <div className="flex items-center justify-center mb-4">
-                      <span className="text-5xl font-bold text-orange-500">${pkg.price}</span>
-                      <div className="ml-3">
-                        <div className="text-gray-400 line-through text-lg">${pkg.originalPrice}</div>
-                        <div className="text-sm text-gray-600">per person</div>
-                      </div>
-                    </div>
-                    <div className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                      Save ${pkg.originalPrice - pkg.price}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center text-gray-600">
-                      <Calendar className="w-5 h-5 mr-3 text-orange-500" />
-                      {pkg.duration} Sacred Journey
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Users className="w-5 h-5 mr-3 text-orange-500" />
-                      Intimate Group: {pkg.groupSize}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    {pkg.includes.map((item, i) => (
-                      <div key={i} className="flex items-center text-gray-700">
-                        <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-300 ${
-                      pkg.popular
-                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-2xl hover:shadow-orange-500/25'
-                        : 'border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white'
-                    }`}
-                  >
-                    Begin This Sacred Path
-                  </motion.button>
-                </div>
+                <div className="text-4xl mb-4 sacred-pulse">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -403,15 +403,7 @@ const KailashMansarovarPage: React.FC = () => {
 
       {/* Final CTA - Emotional Call to Action */}
       <section className="py-20 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2070"
-            alt="Sacred Mountain"
-            className="w-full h-full object-cover opacity-20"
-          />
-        </div>
-        
-        <div className="section-container relative z-10 text-center">
+        <div className="section-container text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

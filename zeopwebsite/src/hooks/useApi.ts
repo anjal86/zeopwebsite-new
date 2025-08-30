@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import api, { type Tour, type Destination, type Activity, type Slider } from '../services/api';
+import { useState, useEffect, useCallback } from 'react';
+import api, { type Tour } from '../services/api';
 
 // Generic hook for API calls with loading and error states
 export function useApiCall<T>(
@@ -10,10 +10,23 @@ export function useApiCall<T>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const result = await apiCall();
+      setData(result);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  }, [apiCall]);
+
   useEffect(() => {
     let isMounted = true;
 
-    const fetchData = async () => {
+    const runFetch = async () => {
       try {
         setLoading(true);
         setError(null);
@@ -32,14 +45,14 @@ export function useApiCall<T>(
       }
     };
 
-    fetchData();
+    runFetch();
 
     return () => {
       isMounted = false;
     };
   }, dependencies);
 
-  return { data, loading, error };
+  return { data, loading, error, refetch: fetchData };
 }
 
 // Tours hooks
@@ -82,6 +95,29 @@ export function useDestinationsByType(type: 'nepal' | 'international') {
 
 export function useDestinationByName(name: string) {
   return useApiCall(() => api.destinations.getByName(name), [name]);
+}
+
+// Content Destinations hooks (for Markdown + YAML destinations)
+export function useContentDestinations() {
+  return useApiCall(() => api.contentDestinations.getAll());
+}
+
+export function useContentDestination(slug: string) {
+  return useApiCall(() => {
+    // Don't make API call if slug is empty, undefined, or invalid
+    if (!slug || slug.trim() === '' || slug === 'undefined' || slug === 'null') {
+      return Promise.resolve(null);
+    }
+    return api.contentDestinations.getBySlug(slug);
+  }, [slug]);
+}
+
+export function useFeaturedContentDestinations() {
+  return useApiCall(() => api.contentDestinations.getFeatured());
+}
+
+export function useContentDestinationsByCountry(country: string) {
+  return useApiCall(() => api.contentDestinations.getByCountry(country), [country]);
 }
 
 // Activities hooks

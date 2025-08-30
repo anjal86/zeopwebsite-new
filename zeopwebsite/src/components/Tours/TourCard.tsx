@@ -1,33 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Star, 
-  MapPin, 
+import { useNavigate } from 'react-router-dom';
+import {
+  Star,
+  MapPin,
   Clock,
   Users,
   ArrowRight
 } from 'lucide-react';
-
-export interface Tour {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  duration: string;
-  groupSize: string;
-  difficulty: 'Easy' | 'Moderate' | 'Challenging';
-  rating: number;
-  reviews: number;
-  highlights: string[];
-  featured?: boolean;
-  discount?: number;
-  location: string;
-  description: string;
-  inclusions: string[];
-  bestTime: string;
-}
+import type { Tour } from '../../services/api';
 
 interface TourCardProps {
   tour: Tour;
@@ -36,16 +17,21 @@ interface TourCardProps {
   variant?: 'grid' | 'list';
 }
 
-const TourCard: React.FC<TourCardProps> = ({ 
-  tour, 
-  onBookNow, 
-  onViewDetails, 
-  variant = 'grid' 
+const TourCard: React.FC<TourCardProps> = ({
+  tour,
+  onViewDetails,
+  variant = 'grid'
 }) => {
+  const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleViewDetails = () => {
-    onViewDetails?.(tour);
+    if (onViewDetails) {
+      onViewDetails(tour);
+    } else {
+      // Default navigation to tour detail page using slug with React Router
+      navigate(`/tours/${tour.slug}`);
+    }
   };
 
   // List layout design - horizontal layout
@@ -114,7 +100,7 @@ const TourCard: React.FC<TourCardProps> = ({
                 </div>
                 <div className="flex items-center">
                   <Users className="w-4 h-4 mr-2 text-gray-400" />
-                  <span>{tour.groupSize}</span>
+                  <span>{tour.group_size}</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
@@ -224,7 +210,7 @@ const TourCard: React.FC<TourCardProps> = ({
           </div>
           <div className="flex items-center">
             <Users className="w-4 h-4 mr-2 text-gray-400" />
-            <span>{tour.groupSize}</span>
+            <span>{tour.group_size}</span>
           </div>
           <div className="text-right">
             <span className="text-xs text-gray-500">{tour.reviews} reviews</span>

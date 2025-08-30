@@ -1,0 +1,121 @@
+{
+  "id": 2,
+  "slug": "annapurna-circuit-trek",
+  "title": "Annapurna Circuit Trek",
+  "category": "Trekking",
+  "description": "Discover the diverse landscapes of the Annapurna region on this classic circuit trek through varied terrain and cultures.",
+  "location": "Annapurna Region",
+  "price": 1800,
+  "duration": "15 nights 16 days",
+  "group_size": "2-15 people",
+  "difficulty": "Moderate",
+  "rating": 4.7,
+  "reviews": 203,
+  "best_time": "March-May, September-November",
+  "featured": true,
+  "image": "/uploads/destinations/tours/tours-pic-2.webp",
+  "gallery": [
+    "/uploads/destinations/tours/tours-pic-2.webp"
+  ],
+  "highlights": [
+    "Cross Thorong La Pass at 5,416m",
+    "Diverse landscapes and cultures",
+    "Visit Muktinath Temple",
+    "Hot springs at Tatopani",
+    "Stunning Annapurna views",
+    "Traditional Gurung villages"
+  ],
+  "inclusions": [
+    "Airport transfers",
+    "Accommodation in Kathmandu",
+    "Experienced guide",
+    "All meals during trek",
+    "Permits and fees",
+    "Porter service",
+    "Transportation to trek start",
+    "First aid kit"
+  ],
+  "exclusions": [
+    "International flights",
+    "Nepal visa fees",
+    "Personal expenses",
+    "Travel insurance",
+    "Tips for guide and porter",
+    "Extra meals in Kathmandu",
+    "Personal trekking equipment"
+  ],
+  "activities": [
+    {
+      "name": "Trekking",
+      "description": "Classic circuit trekking route"
+    },
+    {
+      "name": "Cultural Experience",
+      "description": "Experience diverse ethnic cultures"
+    },
+    {
+      "name": "Mountain Views",
+      "description": "360-degree mountain panoramas"
+    }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival in Kathmandu",
+      "description": "Arrive at Tribhuvan International Airport. Transfer to hotel. Trip briefing and preparation.",
+      "accommodation": "Hotel in Kathmandu",
+      "meals": "Welcome dinner"
+    },
+    {
+      "day": 2,
+      "title": "Drive to Besisahar, Trek to Bhulbhule",
+      "description": "Drive to Besisahar and begin trek to Bhulbhule (840m). Walking time: 5-6 hours.",
+      "accommodation": "Tea house in Bhulbhule",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 3,
+      "title": "Trek to Jagat",
+      "description": "Trek through terraced fields and traditional villages to Jagat (1,300m).",
+      "accommodation": "Tea house in Jagat",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 4,
+      "title": "Trek to Dharapani",
+      "description": "Continue trekking through beautiful landscapes to Dharapani (1,960m).",
+      "accommodation": "Tea house in Dharapani",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 5,
+      "title": "Trek to Chame",
+      "description": "Trek to Chame (2,710m), the district headquarters of Manang.",
+      "accommodation": "Tea house in Chame",
+      "meals": "Breakfast, Lunch, Dinner"
+    }
+  ],
+  "what_to_bring": [
+    "Comfortable trekking boots",
+    "Warm clothing layers",
+    "Rain gear",
+    "Sleeping bag",
+    "Personal first aid kit",
+    "Water purification tablets",
+    "Headlamp and batteries",
+    "Sunglasses and sunscreen"
+  ],
+  "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+  "altitude_profile": {
+    "max_altitude": "5,416m (Thorong La Pass)",
+    "acclimatization_days": 2,
+    "difficulty_level": "Moderate to high altitude trekking"
+  },
+  "booking_info": {
+    "advance_booking": "21 days recommended",
+    "group_discounts": "Available for 6+ people",
+    "cancellation_policy": "Free cancellation up to 15 days before departure"
+  },
+  "created_at": "2025-08-24T13:52:18.550Z",
+  "updated_at": "2025-08-24T13:52:18.550Z"
+}

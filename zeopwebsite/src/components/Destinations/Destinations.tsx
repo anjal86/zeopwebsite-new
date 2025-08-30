@@ -111,7 +111,7 @@ const Destinations: React.FC = () => {
                 whileHover={{ scale: 1.03 }}
                 className="group cursor-pointer"
               >
-                <Link to={`/destinations/${destination.slug}`} className="block">
+                <Link to={destination.href || `/destinations/${destination.name.toLowerCase()}`} className="block">
                   <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                     <img
                       src={destination.image}

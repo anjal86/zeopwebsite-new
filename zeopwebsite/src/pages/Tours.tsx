@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PageHeader from '../components/PageHeader/PageHeader';
 import TourFilters from '../components/Tours/TourFilters';
@@ -9,6 +10,7 @@ import { useFilteredTours } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 
 const ToursPage: React.FC = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     search: '',
     destination: '',
@@ -20,12 +22,14 @@ const ToursPage: React.FC = () => {
 
   const handleTourBook = (tour: Tour) => {
     console.log('Booking tour:', tour.title);
-    // Implement booking logic
+    // Navigate to tour detail page for booking
+    navigate(`/tours/${tour.slug}`);
   };
 
   const handleTourView = (tour: Tour) => {
     console.log('Viewing tour details:', tour.title);
-    // Implement view details logic (could navigate to tour detail page)
+    // Navigate to tour detail page
+    navigate(`/tours/${tour.slug}`);
   };
 
   return (
