@@ -149,7 +149,7 @@ const Hero: React.FC = () => {
   }
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-center pt-24 bg-black">
+    <section id="home" className="relative min-h-screen w-full overflow-hidden bg-black">
       {/* Background Slider with Parallax */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -291,11 +291,11 @@ const Hero: React.FC = () => {
       )}
 
       {/* Hero Content with Parallax */}
-      <motion.div 
-        className="relative z-10 w-full flex items-center justify-center py-20"
+      <motion.div
+        className="absolute inset-0 z-10 flex items-center justify-center"
         style={{ y: contentY }}
       >
-        <div className="section-container text-center">
+        <div className="w-full h-full flex items-center justify-center px-4 sm:px-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -303,24 +303,26 @@ const Hero: React.FC = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="max-w-4xl mx-auto"
+              className="text-center max-w-6xl mx-auto w-full"
             >
               {/* Location Badge with Parallax */}
               <motion.div
                 variants={textVariants}
-                className="inline-flex items-center glass px-4 py-2 rounded-full mb-6"
+                className="w-full flex justify-center mb-6"
                 style={{ y: locationY }}
               >
-                <MapPin className="w-4 h-4 text-sky-blue mr-2" />
-                <span className="text-white text-sm font-medium">
-                  {slides[currentSlide].location || 'Nepal'}
-                </span>
+                <div className="inline-flex items-center glass px-4 py-2 rounded-full">
+                  <MapPin className="w-4 h-4 text-sky-blue mr-2" />
+                  <span className="text-white text-sm font-medium">
+                    {slides[currentSlide].location || 'Nepal'}
+                  </span>
+                </div>
               </motion.div>
 
               {/* Main Title with Parallax */}
               <motion.h1
                 variants={textVariants}
-                className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-6 leading-tight text-center"
                 style={{ y: titleY }}
               >
                 {slides[currentSlide].title}
@@ -329,7 +331,7 @@ const Hero: React.FC = () => {
               {/* Subtitle with Parallax */}
               <motion.p
                 variants={textVariants}
-                className="text-xl md:text-2xl text-white/90 mb-10 font-light"
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-10 font-light text-center max-w-3xl mx-auto"
                 style={{ y: subtitleY }}
               >
                 {slides[currentSlide].subtitle || ''}
@@ -339,7 +341,7 @@ const Hero: React.FC = () => {
               {slides[currentSlide].show_button && (
                 <motion.div
                   variants={textVariants}
-                  className="flex justify-center"
+                  className="w-full flex justify-center"
                   style={{ y: buttonY }}
                 >
                   <motion.a
@@ -364,31 +366,39 @@ const Hero: React.FC = () => {
       </motion.div>
 
       {/* Slide Indicators with Parallax */}
-      <motion.div 
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20"
+      <motion.div
+        className="absolute bottom-8 md:bottom-10 w-full z-20"
         style={{ y: indicatorsY }}
       >
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`transition-all duration-300 ${
-              index === currentSlide
-                ? 'w-12 h-2 bg-sky-blue'
-                : 'w-2 h-2 bg-white/50 hover:bg-white/70'
-            } rounded-full`}
-          />
-        ))}
+        <div className="w-full flex justify-center items-center">
+          <div className="flex space-x-3">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`transition-all duration-300 ${
+                  index === currentSlide
+                    ? 'w-8 md:w-12 h-2 bg-sky-blue'
+                    : 'w-2 h-2 bg-white/50 hover:bg-white/70'
+                } rounded-full`}
+              />
+            ))}
+          </div>
+        </div>
       </motion.div>
 
       {/* Scroll Indicator with Enhanced Parallax */}
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-24 left-1/2 transform -translate-x-1/2 text-white z-20"
+        className="absolute bottom-20 md:bottom-24 w-full z-20"
         style={{ y: scrollIndicatorY }}
       >
-        <ChevronDown className="w-8 h-8" />
+        <div className="w-full flex justify-center items-center">
+          <div className="text-white">
+            <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+          </div>
+        </div>
       </motion.div>
 
       {/* Additional Parallax Layers for Depth */}
