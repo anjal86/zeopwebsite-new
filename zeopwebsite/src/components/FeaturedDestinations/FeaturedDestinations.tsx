@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mountain, ArrowRight, MapPin } from 'lucide-react';
-import { useFeaturedDestinations } from '../../hooks/useApi';
+import { useDestinations } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const FeaturedDestinations: React.FC = () => {
-  const { data: destinations, loading, error, refetch } = useFeaturedDestinations();
+  const { data: allDestinations, loading, error, refetch } = useDestinations();
+  
+  // Show only first 6 destinations for homepage (no more featured filtering)
+  const destinations = allDestinations?.slice(0, 6) || [];
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
 
   // Listen for destination updates from admin interface
@@ -48,8 +51,8 @@ const FeaturedDestinations: React.FC = () => {
     );
   }
 
-  // Show only first 6 featured destinations for homepage
-  const featuredDestinations = destinations?.slice(0, 6) || [];
+  // Use the first 6 destinations
+  const featuredDestinations = destinations || [];
 
   const containerVariants = {
     hidden: { opacity: 0 },

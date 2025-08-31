@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import Hero from '../components/Hero/Hero';
 import FeaturedDestinations from '../components/FeaturedDestinations/FeaturedDestinations';
+import TestimonialsSlider from '../components/Testimonials/TestimonialsSlider';
 import { useCountUp } from '../hooks/useCountUp';
 import { useDestinations, useContact } from '../hooks/useApi';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
@@ -256,96 +257,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="section-container relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Quote className="w-4 h-4 mr-2" />
-              Testimonials
-            </div>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
-              What Our Traveler Say About <br />
-              <span className="text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Our Tour Services</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {[
-              {
-                name: 'Sarah Johnson',
-                title: 'Adventure Enthusiast',
-                rating: 5,
-                text: 'To take a trivial example which of us ever undertakes laborious physical exercise except to obtain advantage from has any right to find fault with man.',
-                image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=150&h=150&fit=crop&crop=face'
-              },
-              {
-                name: 'Michael Chen',
-                title: 'Travel Blogger',
-                rating: 5,
-                text: 'To take a trivial example which of us ever undertakes laborious physical exercise except to obtain advantage from has any right to find fault with man.',
-                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&h=150&fit=crop&crop=face'
-              },
-              {
-                name: 'Emma Thompson',
-                title: 'Photography Expert',
-                rating: 5,
-                text: 'To take a trivial example which of us ever undertakes laborious physical exercise except to obtain advantage from has any right to find fault with man.',
-                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&h=150&fit=crop&crop=face'
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 relative group">
-                {/* Large Quote Icon */}
-                <div className="mb-6">
-                  <Quote className="w-16 h-16 text-primary/20 transform rotate-180" />
-                </div>
-
-                {/* Service Title */}
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Quality Services</h3>
-                  
-                  {/* Rating Stars */}
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="text-gray-600 mb-8 leading-relaxed">{testimonial.text}</p>
-
-                <div className="flex items-center">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-gray-100"
-                  />
-                  <div>
-                    <h4 className="font-bold text-gray-900 text-lg">{testimonial.name}</h4>
-                    <p className="text-gray-500">{testimonial.title}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Navigation Dots */}
-          <div className="flex justify-center space-x-2">
-            <div className="w-3 h-3 bg-primary/30 rounded-full"></div>
-            <div className="w-3 h-3 bg-primary rounded-full"></div>
-            <div className="w-3 h-3 bg-primary/30 rounded-full"></div>
-            <div className="w-3 h-3 bg-primary/30 rounded-full"></div>
-          </div>
-        </div>
-      </section>
+      {/* Featured Testimonials Slider */}
+      <TestimonialsSlider />
 
       {/* Call to Action Section */}
       <section className="py-20 bg-gradient-to-r from-primary via-primary-dark to-secondary relative overflow-hidden">

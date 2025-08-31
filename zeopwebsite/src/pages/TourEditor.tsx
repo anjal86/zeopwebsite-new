@@ -29,7 +29,8 @@ import {
   Image,
   Eye,
   MapPin,
-  Activity
+  Activity,
+  Info
 } from 'lucide-react';
 import ProgressModal from '../components/UI/ProgressModal';
 import { useDestinations, useActivities } from '../hooks/useApi';
@@ -51,16 +52,11 @@ interface TourDetails {
   id?: number;
   slug: string;
   title: string;
-  category: string;
   description: string;
   price: number;
   duration: string;
   group_size: string;
-  difficulty: string;
-  rating: number;
-  reviews: number;
   best_time: string;
-  featured: boolean;
   image: string;
   gallery?: string[];
   highlights?: string[];
@@ -108,16 +104,11 @@ const TourEditor: React.FC = () => {
   const [formData, setFormData] = useState<TourDetails>({
     slug: '',
     title: '',
-    category: 'Trekking',
     description: '',
     price: 0,
     duration: '',
     group_size: '',
-    difficulty: 'Moderate',
-    rating: 4.5,
-    reviews: 0,
     best_time: '',
-    featured: false,
     image: '',
     gallery: [],
     highlights: [],
@@ -440,15 +431,34 @@ const TourEditor: React.FC = () => {
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
     if (imageFiles.length > 0) {
-      handleImageUpload(imageFiles[0], isGallery);
+      if (isGallery && imageFiles.length > 1) {
+        // Handle multiple files for gallery
+        imageFiles.forEach((file, index) => {
+          setTimeout(() => handleImageUpload(file, isGallery), index * 500);
+        });
+      } else {
+        handleImageUpload(imageFiles[0], isGallery);
+      }
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, isGallery: boolean = false) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleImageUpload(file, isGallery);
+    const files = Array.from(e.target.files || []);
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    
+    if (imageFiles.length > 0) {
+      if (isGallery && imageFiles.length > 1) {
+        // Handle multiple files for gallery
+        imageFiles.forEach((file, index) => {
+          setTimeout(() => handleImageUpload(file, isGallery), index * 500);
+        });
+      } else {
+        handleImageUpload(imageFiles[0], isGallery);
+      }
     }
+    
+    // Reset the input value to allow selecting the same files again
+    e.target.value = '';
   };
 
   const addItineraryDay = () => {
@@ -739,44 +749,7 @@ const TourEditor: React.FC = () => {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Category *
-                        </label>
-                        <select
-                          name="category"
-                          value={formData.category}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="Trekking">Trekking</option>
-                          <option value="Wildlife">Wildlife</option>
-                          <option value="Cultural">Cultural</option>
-                          <option value="Adventure">Adventure</option>
-                          <option value="Pilgrimage">Pilgrimage</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Difficulty *
-                        </label>
-                        <select
-                          name="difficulty"
-                          value={formData.difficulty}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="Easy">Easy</option>
-                          <option value="Moderate">Moderate</option>
-                          <option value="Challenging">Challenging</option>
-                          <option value="Very Challenging">Very Challenging</option>
-                        </select>
-                      </div>
-                    </div>
+                    {/* Category and difficulty are now derived from activities, so these fields are removed */}
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
                       <div>
@@ -840,65 +813,119 @@ const TourEditor: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Rating
-                        </label>
-                        <input
-                          type="number"
-                          name="rating"
-                          value={formData.rating}
-                          onChange={handleInputChange}
-                          min="0"
-                          max="5"
-                          step="0.1"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Reviews Count
-                        </label>
-                        <input
-                          type="number"
-                          name="reviews"
-                          value={formData.reviews}
-                          onChange={handleInputChange}
-                          min="0"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        />
-                      </div>
-                    </div>
+                    {/* Removed rating, reviews, and featured fields */}
 
+                    {/* Main Image Upload Section */}
                     <div className="mt-6">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          name="featured"
-                          checked={formData.featured}
-                          onChange={handleInputChange}
-                          className="w-4 h-4 text-gray-500 focus:ring-green-500 border-gray-300 rounded"
-                        />
-                        <label className="text-sm font-medium text-gray-700">
-                          Featured Tour
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="mt-6">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Main Image URL
+                      <label className="block text-sm font-medium text-gray-700 mb-4">
+                        Main Image *
                       </label>
-                      <input
-                        type="url"
-                        name="image"
-                        value={formData.image}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        placeholder="https://example.com/image.jpg"
-                      />
+                      
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Upload Area */}
+                        <div>
+                          <div
+                            onDrop={(e) => handleDrop(e, false)}
+                            onDragOver={(e) => e.preventDefault()}
+                            className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-500 transition-colors cursor-pointer bg-gray-50"
+                          >
+                            <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+                            <h4 className="text-sm font-semibold text-gray-900 mb-2">Upload Image</h4>
+                            <p className="text-xs text-gray-600 mb-3">Drag and drop or click to browse</p>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleFileSelect(e, false)}
+                              className="hidden"
+                              id="basic-image-upload"
+                            />
+                            <label
+                              htmlFor="basic-image-upload"
+                              className="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors cursor-pointer inline-flex items-center gap-2 text-sm"
+                            >
+                              <Camera className="w-4 h-4" />
+                              Choose Image
+                            </label>
+                          </div>
+                          
+                          {/* Upload Progress */}
+                          {uploading && (
+                            <div className="mt-3">
+                              <div className="flex justify-between text-xs text-gray-600 mb-1">
+                                <span>Uploading...</span>
+                                <span>{uploadProgress}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${uploadProgress}%` }}
+                                />
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* URL Input Alternative */}
+                          <div className="mt-4">
+                            <label className="block text-xs font-medium text-gray-600 mb-2">
+                              Or enter image URL
+                            </label>
+                            <input
+                              type="url"
+                              name="image"
+                              value={formData.image}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              placeholder="https://example.com/image.jpg"
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Image Preview */}
+                        <div>
+                          {formData.image ? (
+                            <div className="relative">
+                              <img
+                                src={formData.image.startsWith('http') ? formData.image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${formData.image}`}
+                                alt="Main tour image preview"
+                                className="w-full h-48 object-cover rounded-xl border border-gray-200 shadow-sm"
+                                onError={(e) => {
+                                  console.error('Failed to load main image:', formData.image);
+                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                }}
+                              />
+                              <div className="absolute top-2 right-2 flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => window.open(formData.image, '_blank')}
+                                  className="bg-black bg-opacity-50 text-white p-2 rounded-lg hover:bg-opacity-70 transition-colors"
+                                  title="View full size"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                                  className="bg-red-500 bg-opacity-80 text-white p-2 rounded-lg hover:bg-opacity-100 transition-colors"
+                                  title="Remove image"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                                Main Image
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-full h-48 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center">
+                              <div className="text-center">
+                                <Image className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                <p className="text-sm text-gray-500">No image selected</p>
+                                <p className="text-xs text-gray-400">Upload or enter URL above</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -1446,102 +1473,25 @@ const TourEditor: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-8"
                   >
-                    {/* Main Image Section */}
-                    <div className="bg-white rounded-lg shadow-sm border p-6">
-                      <h2 className="text-xl font-semibold text-gray-900 mb-6">Main Tour Image</h2>
-                      
-                      {/* Main Image Upload Area */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Upload Area */}
-                        <div>
-                          <div
-                            onDrop={(e) => handleDrop(e, false)}
-                            onDragOver={(e) => e.preventDefault()}
-                            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-green-500 transition-colors cursor-pointer"
-                          >
-                            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Main Image</h3>
-                            <p className="text-gray-600 mb-4">Drag and drop an image here, or click to browse</p>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => handleFileSelect(e, false)}
-                              className="hidden"
-                              id="main-image-upload"
-                            />
-                            <label
-                              htmlFor="main-image-upload"
-                              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors cursor-pointer inline-flex items-center gap-2"
-                            >
-                              <Camera className="w-4 h-4" />
-                              Choose Image
-                            </label>
+                    {/* Enhanced Gallery Section */}
+                    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg border border-gray-200 p-8">
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <Camera className="w-6 h-6 text-white" />
                           </div>
-                          
-                          {/* URL Input Alternative */}
-                          <div className="mt-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Or enter image URL
-                            </label>
-                            <input
-                              type="url"
-                              name="image"
-                              value={formData.image}
-                              onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                              placeholder="https://example.com/image.jpg"
-                            />
+                          <div>
+                            <h2 className="text-2xl font-bold text-gray-900">Gallery Images</h2>
+                            <p className="text-sm text-gray-600">Create a stunning visual gallery for your tour</p>
                           </div>
                         </div>
-                        
-                        {/* Image Preview */}
-                        <div>
-                          {formData.image ? (
-                            <div className="relative">
-                              <img
-                                src={formData.image}
-                                alt="Main tour image"
-                                className="w-full h-64 object-cover rounded-xl border border-gray-200"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                                }}
-                              />
-                              <div className="absolute top-2 right-2 flex gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => window.open(formData.image, '_blank')}
-                                  className="bg-black bg-opacity-50 text-white p-2 rounded-lg hover:bg-opacity-70 transition-colors"
-                                  title="View full size"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                                  className="bg-red-500 bg-opacity-80 text-white p-2 rounded-lg hover:bg-opacity-100 transition-colors"
-                                  title="Remove image"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="w-full h-64 bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center">
-                              <div className="text-center">
-                                <Image className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                <p className="text-gray-500">No image selected</p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Gallery Section */}
-                    <div className="bg-white rounded-lg shadow-sm border p-6">
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-semibold text-gray-900">Gallery Images</h2>
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-sm font-medium text-gray-700">
+                              {(formData.gallery || []).length} images
+                            </span>
+                          </div>
                           <input
                             type="file"
                             accept="image/*"
@@ -1555,91 +1505,270 @@ const TourEditor: React.FC = () => {
                           />
                           <label
                             htmlFor="gallery-upload"
-                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors cursor-pointer flex items-center gap-2"
+                            className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200 cursor-pointer flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
                           >
-                            <Upload className="w-4 h-4" />
-                            Upload Images
+                            <Upload className="w-5 h-5" />
+                            <span className="font-medium">Add Images</span>
                           </label>
                         </div>
                       </div>
 
-                      {/* Gallery Grid */}
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-                        {(formData.gallery || []).map((imageUrl, index) => (
-                          <div key={index} className="relative group">
-                            <img
-                              src={imageUrl}
-                              alt={`Gallery image ${index + 1}`}
-                              className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                      {/* Enhanced Upload Progress */}
+                      {uploading && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6"
+                        >
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+                              <Upload className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-gray-900">Uploading Image...</div>
+                              <div className="text-sm text-gray-600">Processing your image for the gallery</div>
+                            </div>
+                            <div className="ml-auto text-2xl font-bold text-blue-600">
+                              {uploadProgress}%
+                            </div>
+                          </div>
+                          <div className="w-full bg-white rounded-full h-4 overflow-hidden shadow-inner">
+                            <motion.div
+                              className="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full relative overflow-hidden"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${uploadProgress}%` }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <div className="absolute inset-0 bg-white opacity-20 animate-pulse"></div>
+                            </motion.div>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Enhanced Gallery Grid */}
+                      {(formData.gallery || []).length > 0 ? (
+                        <div className="space-y-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {(formData.gallery || []).map((imageUrl, index) => (
+                              <motion.div
+                                key={index}
+                                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: index * 0.1 }}
+                                className="relative group bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                              >
+                                <div className="aspect-square overflow-hidden">
+                                  <img
+                                    src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`}
+                                    alt={`Gallery image ${index + 1}`}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                    onError={(e) => {
+                                      console.error('Failed to load gallery image:', imageUrl);
+                                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                    }}
+                                  />
+                                </div>
+                                
+                                {/* Enhanced Image Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                  <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                                    <div className="text-white">
+                                      <div className="text-sm font-semibold">Image {index + 1}</div>
+                                      <div className="text-xs opacity-80">Gallery Photo</div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <button
+                                        type="button"
+                                        onClick={() => window.open(imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`, '_blank')}
+                                        className="bg-white/20 backdrop-blur-sm text-white p-2.5 rounded-xl hover:bg-white/30 transition-all duration-200 shadow-lg"
+                                        title="View full size"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => removeArrayItem('gallery', index)}
+                                        className="bg-red-500/80 backdrop-blur-sm text-white p-2.5 rounded-xl hover:bg-red-600 transition-all duration-200 shadow-lg"
+                                        title="Remove image"
+                                      >
+                                        <X className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Enhanced Image Number Badge */}
+                                <div className="absolute top-3 left-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                  #{index + 1}
+                                </div>
+
+                                {/* Image Quality Indicator */}
+                                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  <div className="bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-lg">
+                                    ✓ Ready
+                                  </div>
+                                </div>
+                              </motion.div>
+                            ))}
+                            
+                            {/* Enhanced Add More Images Drop Zone */}
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              transition={{ duration: 0.4, delay: (formData.gallery || []).length * 0.1 }}
+                              onDrop={(e) => handleDrop(e, true)}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDragEnter={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.add('border-green-500', 'bg-green-50', 'scale-105');
                               }}
-                            />
-                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center">
-                              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                                <button
-                                  type="button"
-                                  onClick={() => window.open(imageUrl, '_blank')}
-                                  className="bg-white text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                                  title="View full size"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => removeArrayItem('gallery', index)}
-                                  className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-colors"
-                                  title="Remove image"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
+                              onDragLeave={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.remove('border-green-500', 'bg-green-50', 'scale-105');
+                              }}
+                              className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center hover:border-green-500 hover:bg-green-50 transition-all duration-300 cursor-pointer group transform hover:scale-105"
+                            >
+                              <div className="text-center">
+                                <div className="w-16 h-16 bg-gradient-to-r from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-green-200 group-hover:to-blue-200 transition-all duration-300 shadow-lg">
+                                  <Plus className="w-8 h-8 text-green-600 group-hover:text-green-700 group-hover:scale-110 transition-all duration-300" />
+                                </div>
+                                <p className="text-sm font-semibold text-gray-700 group-hover:text-green-700 mb-1">Add More Images</p>
+                                <p className="text-xs text-gray-500">Drag & drop or click</p>
+                              </div>
+                            </motion.div>
+                          </div>
+
+                          {/* Enhanced Gallery Actions */}
+                          <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-full">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                <span><strong>Tip:</strong> Drag images to reorder them</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-gray-600 bg-purple-50 px-4 py-2 rounded-full">
+                                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                                <span>Supports JPG, PNG, WebP</span>
+                              </div>
+                            </div>
+                            <div className="flex gap-3">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to remove all gallery images?')) {
+                                    setFormData(prev => ({ ...prev, gallery: [] }));
+                                  }
+                                }}
+                                className="text-red-600 hover:text-red-700 px-4 py-2 rounded-xl hover:bg-red-50 transition-all duration-200 text-sm flex items-center gap-2 border border-red-200 hover:border-red-300"
+                                disabled={(formData.gallery || []).length === 0}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Clear All
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Enhanced Empty State */
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-center py-16"
+                        >
+                          <div className="relative mb-8">
+                            <div className="w-32 h-32 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+                              <Camera className="w-16 h-16 text-blue-600" />
+                            </div>
+                            <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                              <Plus className="w-6 h-6 text-white" />
+                            </div>
+                          </div>
+                          
+                          <h3 className="text-3xl font-bold text-gray-900 mb-4">Create Your Gallery</h3>
+                          <p className="text-gray-600 mb-8 max-w-lg mx-auto text-lg leading-relaxed">
+                            Showcase the beauty of your tour with stunning images. Upload multiple photos to give travelers a preview of their adventure.
+                          </p>
+                          
+                          {/* Enhanced Upload Options */}
+                          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+                            <label
+                              htmlFor="gallery-upload"
+                              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-10 py-4 rounded-2xl hover:from-green-700 hover:to-green-800 transition-all duration-200 cursor-pointer flex items-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105"
+                            >
+                              <Upload className="w-6 h-6" />
+                              <span className="font-semibold text-lg">Upload Images</span>
+                            </label>
+                            
+                            <div className="flex items-center gap-3 text-gray-400">
+                              <div className="w-8 h-px bg-gray-300"></div>
+                              <span className="text-sm font-medium">or</span>
+                              <div className="w-8 h-px bg-gray-300"></div>
+                            </div>
+                            
+                            <div
+                              onDrop={(e) => handleDrop(e, true)}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDragEnter={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.add('border-blue-500', 'bg-blue-100', 'scale-105');
+                              }}
+                              onDragLeave={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.remove('border-blue-500', 'bg-blue-100', 'scale-105');
+                              }}
+                              onClick={() => document.getElementById('gallery-upload')?.click()}
+                              className="border-2 border-dashed border-blue-300 bg-blue-50 rounded-2xl px-10 py-4 hover:border-blue-500 hover:bg-blue-100 transition-all duration-300 cursor-pointer transform hover:scale-105"
+                            >
+                              <div className="flex items-center gap-3 text-blue-700">
+                                <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center">
+                                  <Image className="w-5 h-5" />
+                                </div>
+                                <div>
+                                  <div className="font-semibold">Drag & Drop Here</div>
+                                  <div className="text-sm opacity-75">Multiple files supported</div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        ))}
-                        
-                        {/* Add More Images Drop Zone */}
-                        <div
-                          onDrop={(e) => handleDrop(e, true)}
-                          onDragOver={(e) => e.preventDefault()}
-                          className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex items-center justify-center hover:border-green-500 transition-colors cursor-pointer"
-                        >
-                          <div className="text-center">
-                            <Plus className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                            <p className="text-sm text-gray-500">Drop images here</p>
+                          
+                          {/* Enhanced Upload Guidelines */}
+                          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                            <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                <Info className="w-3 h-3 text-blue-600" />
+                              </div>
+                              Upload Guidelines
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-200">
+                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                  <FileText className="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-green-800">File Types</div>
+                                  <div className="text-xs text-green-600">JPG, PNG, WebP</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
+                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                  <Upload className="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-blue-800">File Size</div>
+                                  <div className="text-xs text-blue-600">Max 10MB each</div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-xl border border-purple-200">
+                                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                                  <Image className="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-purple-800">Resolution</div>
+                                  <div className="text-xs text-purple-600">1920x1080px ideal</div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* Upload Progress */}
-                      {uploading && (
-                        <div className="mb-4">
-                          <div className="flex justify-between text-sm text-gray-600 mb-2">
-                            <span>Uploading...</span>
-                            <span>{uploadProgress}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${uploadProgress}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {(!formData.gallery || formData.gallery.length === 0) && !uploading && (
-                        <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-                          <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Gallery Images</h3>
-                          <p className="text-gray-600 mb-4">Upload images to create a beautiful gallery for your tour</p>
-                          <label
-                            htmlFor="gallery-upload"
-                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors cursor-pointer inline-flex items-center gap-2"
-                          >
-                            <Upload className="w-4 h-4" />
-                            Upload First Image
-                          </label>
-                        </div>
+                        </motion.div>
                       )}
                     </div>
                   </motion.div>

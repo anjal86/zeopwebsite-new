@@ -123,10 +123,12 @@ const TourDetail: React.FC = () => {
       (t as any).activity_ids?.includes(actId)
     );
     
-    // Also include tours with same category as fallback
-    const sameCategory = t.category === tour?.category;
+    // Also include tours with shared activities as fallback
+    const sharedActivitiesFallback = (tourDetails?.activity_ids || []).some((actId: number) =>
+      (t as any).activity_ids?.includes(actId)
+    );
     
-    return sharedPrimaryDestination || sharedAnyDestination || sharedActivities || sameCategory;
+    return sharedPrimaryDestination || sharedAnyDestination || sharedActivities || sharedActivitiesFallback;
   }).slice(0, 3) || [];
 
   // Get primary destination for this tour
@@ -149,18 +151,11 @@ const TourDetail: React.FC = () => {
 
   // Create image gallery using detailed tour data
   const images = tourDetails ? (
-    tourDetails.gallery && tourDetails.gallery.length > 1
+    tourDetails.gallery && tourDetails.gallery.length > 0
       ? tourDetails.gallery
-      : [
-          tourDetails.image,
-          tourDetails.image, // Duplicate for demo - in real app these would be different images
-          tourDetails.image,
-          tourDetails.image,
-          tourDetails.image,
-          tourDetails.image,
-          tourDetails.image,
-          tourDetails.image
-        ]
+      : tourDetails.image
+        ? [tourDetails.image]
+        : []
   ).filter(Boolean) : [];
 
   const [dragStartX, setDragStartX] = useState(0);
@@ -182,7 +177,12 @@ const TourDetail: React.FC = () => {
     if (Math.abs(dragDistance) > 50) {
       if (dragDistance > 0) {
         // Dragged left, go to next
-        setCurrentImageIndex((prev) => Math.min(prev + 1, images.length - 3));
+        setCurrentImageIndex((prev) => {
+          const isMobile = window.innerWidth < 768;
+          const visibleCount = isMobile ? 2 : (images.length <= 3 ? images.length : 4);
+          const maxIndex = Math.max(0, images.length - visibleCount);
+          return Math.min(prev + 1, maxIndex);
+        });
       } else {
         // Dragged right, go to previous
         setCurrentImageIndex((prev) => Math.max(prev - 1, 0));
@@ -192,10 +192,12 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     // Auto-advance seamless slider every 5 seconds
-    if (images.length > 3) {
+    const isMobile = window.innerWidth < 768;
+    const visibleImages = isMobile ? 2 : (images.length <= 3 ? images.length : 4);
+    if (images.length > visibleImages) {
       const interval = setInterval(() => {
         setCurrentImageIndex((prev) => {
-          if (prev >= images.length - 3) {
+          if (prev >= images.length - visibleImages) {
             return 0; // Reset to beginning for seamless loop
           }
           return prev + 1;
@@ -257,47 +259,120 @@ const TourDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Hero Section with Seamless Draggable Grid Slider */}
-      <section className="relative h-96 md:h-[500px] overflow-hidden">
-        {images.length > 0 && (
-          <div 
-            className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing"
-            onMouseDown={handleDragStart}
-            onMouseUp={handleDragEnd}
-            onTouchStart={handleDragStart}
-            onTouchEnd={handleDragEnd}
-          >
-            {/* Seamless Horizontal Scroll Container */}
-            <motion.div
-              className="flex h-full"
-              animate={{ x: `-${currentImageIndex * 33.333}%` }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              style={{ width: `${images.length * 33.333}%` }}
-            >
-              {images.map((image, index) => (
-                <div key={index} className="w-1/3 h-full flex-shrink-0 px-2">
-                  <div className="w-full h-full relative rounded-xl overflow-hidden">
+      {/* Hero Section with Responsive Image Slider */}
+      <section className="relative overflow-hidden">
+        {/* Mobile Layout - Square Images */}
+        <div className="block md:hidden">
+          <div className="h-80 overflow-hidden">
+            {images.length > 0 && (
+              <div
+                className="relative w-full h-full overflow-hidden cursor-grab active:cursor-grabbing"
+                onMouseDown={handleDragStart}
+                onMouseUp={handleDragEnd}
+                onTouchStart={handleDragStart}
+                onTouchEnd={handleDragEnd}
+              >
+                <motion.div
+                  className="flex h-full"
+                  animate={{ x: `-${currentImageIndex * 50}%` }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  style={{ width: `${images.length * 50}%` }}
+                >
+                  {images.map((image, index) => (
+                    <div key={index} className="w-1/2 h-full flex-shrink-0 px-1">
+                      <div className="w-full aspect-square relative rounded-lg overflow-hidden mx-auto" style={{ maxHeight: '300px' }}>
+                        <img
+                          src={image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${image}`}
+                          alt={`${tourDetails.title} - View ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            console.error('Failed to load gallery image:', image);
+                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Layout - Adaptive Design */}
+        <div className="hidden md:block">
+          <div className="h-[500px] overflow-hidden">
+            {images.length > 0 && (
+              <div className="relative w-full h-full overflow-hidden">
+                {images.length === 1 ? (
+                  // Single image - full width
+                  <div className="w-full h-full">
                     <img
-                      src={image}
-                      alt={`${tourDetails.title} - View ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      src={images[0]}
+                      alt={`${tourDetails.title} - Main Image`}
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* Action Buttons */}
-            <div className="absolute top-6 right-6 flex space-x-3 z-10">
-              <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all backdrop-blur-sm">
-                <Share2 className="w-5 h-5" />
-              </button>
-              <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all backdrop-blur-sm">
-                <Heart className="w-5 h-5" />
-              </button>
-            </div>
+                ) : images.length <= 3 ? (
+                  // 2-3 images - show all without sliding
+                  <div className="flex h-full gap-2">
+                    {images.map((image, index) => (
+                      <div key={index} className="flex-1 h-full">
+                        <img
+                          src={image}
+                          alt={`${tourDetails.title} - View ${index + 1}`}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  // 4+ images - sliding carousel
+                  <div
+                    className="relative w-full h-full cursor-grab active:cursor-grabbing"
+                    onMouseDown={handleDragStart}
+                    onMouseUp={handleDragEnd}
+                    onTouchStart={handleDragStart}
+                    onTouchEnd={handleDragEnd}
+                  >
+                    <motion.div
+                      className="flex h-full"
+                      animate={{ x: `-${currentImageIndex * 25}%` }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      style={{ width: `${images.length * 25}%` }}
+                    >
+                      {images.map((image, index) => (
+                        <div key={index} className="w-1/4 h-full flex-shrink-0 px-1">
+                          <div className="w-full h-full relative rounded-lg overflow-hidden">
+                            <img
+                              src={image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${image}`}
+                              alt={`${tourDetails.title} - View ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                console.error('Failed to load gallery image:', image);
+                                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </motion.div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Action Buttons - Positioned over both layouts */}
+        <div className="absolute top-4 right-4 flex space-x-2 z-10">
+          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all backdrop-blur-sm">
+            <Share2 className="w-4 h-4" />
+          </button>
+          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all backdrop-blur-sm">
+            <Heart className="w-4 h-4" />
+          </button>
+        </div>
       </section>
 
       {/* Tour Header Info with Tabs and Booking Card */}
@@ -306,14 +381,16 @@ const TourDetail: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Left Column - Tour Info and Tabs */}
             <div className="lg:col-span-3">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                  {tourDetails.category}
-                </span>
-                {tourDetails.featured && (
-                  <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-                    <Award className="w-4 h-4" />
-                    Featured
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                {/* Display activities as badges instead of category */}
+                {tourActivities.slice(0, 3).map((activity, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {activity.name}
+                  </span>
+                ))}
+                {tourActivities.length > 3 && (
+                  <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">
+                    +{tourActivities.length - 3} more
                   </span>
                 )}
               </div>
@@ -342,23 +419,6 @@ const TourDetail: React.FC = () => {
                   </div>
                 )}
                 
-                <div className="flex items-center">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(tourDetails.rating)
-                            ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-sm text-gray-600">
-                    {tourDetails.rating} ({tourDetails.reviews} reviews)
-                  </span>
-                </div>
               </div>
 
               {/* Quick Info Grid */}
@@ -374,9 +434,9 @@ const TourDetail: React.FC = () => {
                   <div className="font-semibold text-gray-900">{tourDetails.group_size}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
-                  <Mountain className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                  <div className="text-sm text-gray-600">Difficulty</div>
-                  <div className="font-semibold text-gray-900">{tourDetails.difficulty}</div>
+                  <Activity className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-600">Activities</div>
+                  <div className="font-semibold text-gray-900">{tourActivities.length} included</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
                   <Calendar className="w-6 h-6 text-green-600 mx-auto mb-2" />
@@ -710,9 +770,13 @@ const TourDetail: React.FC = () => {
                       {images.map((image, index) => (
                         <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
                           <img
-                            src={image}
+                            src={image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${image}`}
                             alt={`${tourDetails.title} - Image ${index + 1}`}
                             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              console.error('Failed to load gallery image:', image);
+                              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                            }}
                           />
                         </div>
                       ))}

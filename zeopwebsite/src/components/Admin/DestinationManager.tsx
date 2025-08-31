@@ -36,7 +36,6 @@ interface ContentDestination {
   country: string;
   region?: string;
   image: string;
-  featured: boolean;
   href?: string;
   type?: string;
   description?: string;
@@ -61,7 +60,6 @@ const DestinationManager: React.FC = () => {
     country: 'Nepal',
     region: '',
     image: '',
-    featured: false
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -86,8 +84,7 @@ const DestinationManager: React.FC = () => {
       title: '',
       country: 'Nepal',
       region: '',
-      image: '',
-      featured: false
+      image: ''
     });
     setEditingDestination(null);
     setSubmitError(null);
@@ -113,7 +110,6 @@ const DestinationManager: React.FC = () => {
         country: destination.country || 'Nepal',
         region: (destination as any).region || '',
         image: destination.image || '',
-        featured: destination.featured || false
       };
       console.log('Opening modal with destination:', destination);
       console.log('Mapped form data:', mappedData);
@@ -203,7 +199,6 @@ const DestinationManager: React.FC = () => {
         country: formData.country,
         region: formData.region,
         image: imageUrl, // This should be the new uploaded image URL
-        featured: formData.featured
       };
       
       console.log('Sending API data:', apiData);
@@ -406,14 +401,6 @@ const DestinationManager: React.FC = () => {
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
                     }}
                   />
-                  {destination.featured && (
-                    <div className="absolute top-3 right-3">
-                      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
-                        <Star className="w-3 h-3" />
-                        Featured
-                      </div>
-                    </div>
-                  )}
                 </div>
                 
                 <div className="p-4">
@@ -694,11 +681,6 @@ const DestinationManager: React.FC = () => {
                             </p>
                           </div>
                           <div className="ml-4">
-                            <Toggle
-                              checked={formData.featured}
-                              onChange={(checked: boolean) => setFormData(prev => ({ ...prev, featured: checked }))}
-                              size="md"
-                            />
                           </div>
                         </div>
                       </div>

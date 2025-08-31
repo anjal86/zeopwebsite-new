@@ -64,9 +64,6 @@ export function useTour(id: number) {
   return useApiCall(() => api.tours.getById(id), [id]);
 }
 
-export function useFeaturedTours() {
-  return useApiCall(() => api.tours.getFeatured());
-}
 
 export function useToursByCategory(category: string) {
   return useApiCall(() => api.tours.getByCategory(category), [category]);
@@ -89,9 +86,6 @@ export function useDestination(id: number) {
   return useApiCall(() => api.destinations.getById(id), [id]);
 }
 
-export function useFeaturedDestinations() {
-  return useApiCall(() => api.destinations.getFeatured());
-}
 
 export function useDestinationsByType(type: 'nepal' | 'international') {
   return useApiCall(() => api.destinations.getByType(type), [type]);
@@ -158,6 +152,15 @@ export function useSlider(id: number) {
 // Contact hook
 export function useContact() {
   return useApiCall(() => api.contact.get());
+}
+
+// Testimonials hooks
+export function useTestimonials() {
+  return useApiCall(() => api.testimonials.getAll());
+}
+
+export function useFeaturedTestimonials() {
+  return useApiCall(() => api.testimonials.getFeatured());
 }
 
 // Custom hook for filtered tours with client-side filtering

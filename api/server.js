@@ -274,6 +274,7 @@ let activitiesData = loadData('activities.json');
 let slidersData = loadData('sliders.json');
 let usersData = loadData('users.json');
 let contactData = loadData('contact.json');
+let testimonialsData = loadData('testimonials.json');
 let tourDetails = loadTourDetails();
 
 // Extract arrays from the loaded data
@@ -283,6 +284,7 @@ let activities = activitiesData.activities || activitiesData || [];
 let sliders = slidersData.sliders || slidersData || [];
 let users = usersData.users || usersData || [];
 let contact = contactData || {};
+let testimonials = testimonialsData.testimonials || testimonialsData || [];
 
 // Helper functions
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -668,10 +670,6 @@ app.get('/api/tours', async (req, res) => {
   
   let filteredTours = [...allTours];
 
-  // Filter by featured
-  if (featured === 'true') {
-    filteredTours = filteredTours.filter(tour => tour.featured);
-  }
 
   // Filter by category
   if (category) {
@@ -839,7 +837,7 @@ app.get('/api/tours/slug/:slug', async (req, res) => {
 app.get('/api/destinations', async (req, res) => {
   await delay(300);
   
-  const { country, featured } = req.query;
+  const { country } = req.query;
   let filteredDestinations = [...destinations];
 
   // Calculate dynamic tour counts based on actual relationships
@@ -853,11 +851,6 @@ app.get('/api/destinations', async (req, res) => {
     filteredDestinations = filteredDestinations.filter(dest =>
       dest.country.toLowerCase() === country.toLowerCase()
     );
-  }
-
-  // Filter by featured
-  if (featured === 'true') {
-    filteredDestinations = filteredDestinations.filter(dest => dest.featured === true);
   }
 
   res.json(filteredDestinations);
@@ -1166,6 +1159,259 @@ app.put('/api/admin/contact', authenticateToken, async (req, res) => {
   }
 });
 
+// ==================== TESTIMONIALS API ====================
+
+// Get all approved testimonials (public endpoint)
+app.get('/api/testimonials', async (req, res) => {
+  try {
+    await delay(200);
+    const { featured, limit } = req.query;
+    
+    let filteredTestimonials = testimonials.filter(testimonial => testimonial.is_approved);
+    
+    // Filter by featured if requested
+    if (featured === 'true') {
+      filteredTestimonials = filteredTestimonials.filter(testimonial => testimonial.is_featured);
+    }
+    
+    // Sort by date (newest first)
+    filteredTestimonials.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    // Limit results if specified
+    if (limit) {
+      const limitNum = parseInt(limit);
+      if (!isNaN(limitNum) && limitNum > 0) {
+        filteredTestimonials = filteredTestimonials.slice(0, limitNum);
+      }
+    }
+    
+    res.json(filteredTestimonials);
+  } catch (error) {
+    console.error('Error fetching testimonials:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get testimonial by ID (public endpoint)
+app.get('/api/testimonials/:id', async (req, res) => {
+  try {
+    await delay(200);
+    const testimonialId = parseInt(req.params.id);
+    const testimonial = testimonials.find(t => t.id === testimonialId && t.is_approved);
+    
+    if (!testimonial) {
+      return res.status(404).json({
+        success: false,
+        message: 'Testimonial not found'
+      });
+    }
+    
+    res.json(testimonial);
+  } catch (error) {
+    console.error('Error fetching testimonial:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Submit new testimonial (public endpoint)
+app.post('/api/testimonials', async (req, res) => {
+  try {
+    console.log('Submitting new testimonial...');
+    console.log('Request body:', req.body);
+    
+    const { name, email, country, tour, rating, title, message } = req.body;
+    
+    // Validate required fields
+    if (!name || !email || !tour || !rating || !title || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    
+    // Validate rating
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+    }
+    
+    const newTestimonial = {
+      id: Math.max(...testimonials.map(t => t.id), 0) + 1,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      country: country?.trim() || '',
+      tour: tour.trim(),
+      rating: parseInt(rating),
+      title: title.trim(),
+      message: message.trim(),
+      image: '', // Will be set by admin if needed
+      date: new Date().toISOString().split('T')[0],
+      is_featured: false,
+      is_approved: false, // Requires admin approval
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    testimonials.push(newTestimonial);
+    const saved = saveData('testimonials.json', testimonials);
+    
+    if (!saved) {
+      throw new Error('Failed to save testimonial data to file');
+    }
+    
+    console.log('Testimonial submitted successfully');
+    res.status(201).json({
+      success: true,
+      message: 'Testimonial submitted successfully. It will be reviewed before being published.',
+      testimonial: newTestimonial
+    });
+  } catch (error) {
+    console.error('Error submitting testimonial:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// ==================== ADMIN TESTIMONIALS API ====================
+
+// Admin: Get all testimonials (including unapproved ones)
+app.get('/api/admin/testimonials', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    const { status } = req.query;
+    
+    let filteredTestimonials = [...testimonials];
+    
+    // Filter by approval status if requested
+    if (status === 'approved') {
+      filteredTestimonials = filteredTestimonials.filter(t => t.is_approved);
+    } else if (status === 'pending') {
+      filteredTestimonials = filteredTestimonials.filter(t => !t.is_approved);
+    }
+    
+    // Sort by date (newest first)
+    filteredTestimonials.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    res.json(filteredTestimonials);
+  } catch (error) {
+    console.error('Error fetching admin testimonials:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Update testimonial
+app.put('/api/admin/testimonials/:id', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating testimonial with ID:', req.params.id);
+    console.log('Request body:', req.body);
+    
+    const { id } = req.params;
+    const updateData = req.body;
+    const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(id));
+    
+    if (testimonialIndex === -1) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    const existingTestimonial = testimonials[testimonialIndex];
+    
+    // Update testimonial data
+    testimonials[testimonialIndex] = {
+      ...existingTestimonial,
+      ...updateData,
+      updated_at: new Date().toISOString()
+    };
+    
+    const saved = saveData('testimonials.json', testimonials);
+    if (!saved) {
+      throw new Error('Failed to save testimonial data to file');
+    }
+    
+    console.log('Testimonial updated successfully');
+    res.json(testimonials[testimonialIndex]);
+  } catch (error) {
+    console.error('Error updating testimonial:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Delete testimonial
+app.delete('/api/admin/testimonials/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(id));
+    
+    if (testimonialIndex === -1) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    testimonials.splice(testimonialIndex, 1);
+    const saved = saveData('testimonials.json', testimonials);
+    
+    if (!saved) {
+      throw new Error('Failed to save testimonial data to file');
+    }
+    
+    res.json({ message: 'Testimonial deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting testimonial:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Approve testimonial
+app.patch('/api/admin/testimonials/:id/approve', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(id));
+    
+    if (testimonialIndex === -1) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    testimonials[testimonialIndex].is_approved = true;
+    testimonials[testimonialIndex].updated_at = new Date().toISOString();
+    
+    const saved = saveData('testimonials.json', testimonials);
+    if (!saved) {
+      throw new Error('Failed to save testimonial data to file');
+    }
+    
+    res.json({
+      success: true,
+      message: 'Testimonial approved successfully',
+      testimonial: testimonials[testimonialIndex]
+    });
+  } catch (error) {
+    console.error('Error approving testimonial:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Toggle featured status
+app.patch('/api/admin/testimonials/:id/featured', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(id));
+    
+    if (testimonialIndex === -1) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    testimonials[testimonialIndex].is_featured = !testimonials[testimonialIndex].is_featured;
+    testimonials[testimonialIndex].updated_at = new Date().toISOString();
+    
+    const saved = saveData('testimonials.json', testimonials);
+    if (!saved) {
+      throw new Error('Failed to save testimonial data to file');
+    }
+    
+    res.json({
+      success: true,
+      message: `Testimonial ${testimonials[testimonialIndex].is_featured ? 'featured' : 'unfeatured'} successfully`,
+      testimonial: testimonials[testimonialIndex]
+    });
+  } catch (error) {
+    console.error('Error toggling featured status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -1206,6 +1452,7 @@ app.listen(PORT, () => {
   console.log(`🏔️ Destinations: http://localhost:${PORT}/api/destinations`);
   console.log(`🎯 Activities: http://localhost:${PORT}/api/activities`);
   console.log(`🖼️ Sliders: http://localhost:${PORT}/api/sliders`);
+  console.log(`💬 Testimonials: http://localhost:${PORT}/api/testimonials`);
 });
 
 module.exports = app;

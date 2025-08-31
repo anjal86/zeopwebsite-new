@@ -9,9 +9,11 @@ import {
   BarChart3,
   LogOut,
   Menu,
-  X
+  X,
+  MessageSquare
 } from 'lucide-react';
 import SliderManager from '../components/Admin/SliderManager';
+import TestimonialManager from '../components/Admin/TestimonialManager';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState('sliders');
@@ -19,6 +21,7 @@ const Admin: React.FC = () => {
 
   const tabs = [
     { id: 'sliders', label: 'Hero Sliders', icon: Image, component: SliderManager },
+    { id: 'testimonials', label: 'Testimonials', icon: MessageSquare, component: TestimonialManager },
     { id: 'tours', label: 'Tours', icon: MapPin, component: () => <div className="p-8 text-center text-gray-500">Tours management coming soon...</div> },
     { id: 'destinations', label: 'Destinations', icon: MapPin, component: () => <div className="p-8 text-center text-gray-500">Destinations management coming soon...</div> },
     { id: 'users', label: 'Users', icon: Users, component: () => <div className="p-8 text-center text-gray-500">User management coming soon...</div> },

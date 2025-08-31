@@ -183,6 +183,23 @@ export interface Contact {
   };
 }
 
+export interface Testimonial {
+  id: number;
+  name: string;
+  email: string;
+  country: string;
+  tour: string;
+  rating: number;
+  title: string;
+  message: string;
+  image: string;
+  date: string;
+  is_featured: boolean;
+  is_approved: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Blog {
   title: string;
   slug: string;
@@ -390,11 +407,6 @@ export const toursApi = {
     }
   },
 
-  // Get featured tours
-  async getFeatured(): Promise<Tour[]> {
-    const tours = await apiCallWithRetry<Tour[]>('/tours?featured=true');
-    return tours.map(convertTourImageUrls);
-  },
 
   // Get tours by category
   async getByCategory(category: string): Promise<Tour[]> {
@@ -710,6 +722,41 @@ export const contactApi = {
   }
 };
 
+// Testimonials API
+export const testimonialsApi = {
+  // Get all approved testimonials
+  async getAll(): Promise<Testimonial[]> {
+    return apiCallWithRetry<Testimonial[]>('/testimonials');
+  },
+
+  // Get featured testimonials
+  async getFeatured(): Promise<Testimonial[]> {
+    return apiCall<Testimonial[]>('/testimonials?featured=true');
+  },
+
+  // Get testimonial by ID
+  async getById(id: number): Promise<Testimonial | null> {
+    try {
+      return await apiCall<Testimonial>(`/testimonials/${id}`);
+    } catch (error) {
+      console.warn(`Testimonial ${id} not found:`, error);
+      return null;
+    }
+  },
+
+  // Submit new testimonial (public)
+  async submit(testimonialData: Omit<Testimonial, 'id' | 'date' | 'is_featured' | 'is_approved' | 'created_at' | 'updated_at'>): Promise<{
+    success: boolean;
+    message: string;
+    testimonial: Testimonial;
+  }> {
+    return apiCall('/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(testimonialData)
+    });
+  }
+};
+
 // Health check API
 export const healthApi = {
   async check(): Promise<{
@@ -738,6 +785,7 @@ const api = {
   sliders: slidersApi,
   featured: featuredApi,
   contact: contactApi,
+  testimonials: testimonialsApi,
   health: healthApi,
   // New hybrid APIs
   blogs: blogsApi,
