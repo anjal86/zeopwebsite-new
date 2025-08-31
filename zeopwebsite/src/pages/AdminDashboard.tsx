@@ -14,6 +14,7 @@ import {
 import DestinationManager from '../components/Admin/DestinationManager';
 import TourManager from '../components/Admin/TourManager';
 import SliderManager from '../components/Admin/SliderManager';
+import ContactManager from '../components/Admin/ContactManager';
 
 interface User {
   id: number;
@@ -288,12 +289,7 @@ const UsersContent: React.FC = () => {
 
 // Settings Content Component
 const SettingsContent: React.FC = () => {
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
-      <h3 className="text-lg font-semibold text-slate-900 mb-4">Settings</h3>
-      <p className="text-slate-600">Application settings will be implemented here.</p>
-    </div>
-  );
+  return <ContactManager />;
 };
 
 export default AdminDashboard;

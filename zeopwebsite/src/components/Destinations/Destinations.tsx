@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
@@ -10,9 +10,25 @@ import type { Destination } from '../../services/api';
 
 const Destinations: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
+  const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
 
   // Use API hook to fetch destinations
-  const { data: destinations, loading, error } = useDestinations();
+  const { data: destinations, loading, error, refetch } = useDestinations();
+
+  // Listen for destination updates from admin interface
+  useEffect(() => {
+    const handleDestinationUpdate = (event: CustomEvent) => {
+      console.log('Destination updated, refreshing destinations list:', event.detail);
+      setImageRefreshKey(Date.now());
+      refetch();
+    };
+
+    window.addEventListener('destinationUpdated', handleDestinationUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('destinationUpdated', handleDestinationUpdate as EventListener);
+    };
+  }, [refetch]);
   
   // Filter destinations based on country since SQLite data doesn't have 'type' field
   const filteredDestinations = destinations?.filter(destination => {
@@ -114,9 +130,14 @@ const Destinations: React.FC = () => {
                 <Link to={destination.href || `/destinations/${destination.name.toLowerCase()}`} className="block">
                   <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                     <img
-                      src={destination.image}
+                      key={`${destination.id}-${imageRefreshKey}`}
+                      src={`${destination.image}?t=${imageRefreshKey}`}
                       alt={destination.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      onError={(e) => {
+                        console.error('Image failed to load:', destination.image);
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                      }}
                     />
                     
                     {/* Gradient Overlay */}

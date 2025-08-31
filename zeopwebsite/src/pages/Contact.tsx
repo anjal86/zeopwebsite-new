@@ -1,8 +1,11 @@
 import React from 'react';
 import PageHeader from '../components/PageHeader/PageHeader';
 import Contact from '../components/Contact/Contact';
+import { useContact } from '../hooks/useApi';
 
 const ContactPage: React.FC = () => {
+  const { data: contactInfo } = useContact();
+  
   return (
     <div className="contact-page">
       <PageHeader

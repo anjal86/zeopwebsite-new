@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, MessageSquare, Send, Clock, Globe, CheckCircle } from 'lucide-react';
+import { useContact } from '../../hooks/useApi';
 
 const Contact: React.FC = () => {
+  const { data: contactInfo } = useContact();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,29 +46,41 @@ const Contact: React.FC = () => {
     }, 2000);
   };
 
-  const contactInfo = [
+  const contactDetails = [
     {
       icon: Phone,
       title: 'Phone',
-      details: ['+977 9851234567', '+977 9841234567'],
+      details: [
+        contactInfo?.contact.phone.display || '+977 985 123 4567',
+        contactInfo?.contact.phone.secondary || '+977 1-4123456'
+      ],
       color: 'text-sky-blue'
     },
     {
       icon: Mail,
       title: 'Email',
-      details: ['info@zeotourism.com', 'booking@Zeo Tourism.com'],
+      details: [
+        contactInfo?.contact.email.primary || 'info@zeotourism.com',
+        contactInfo?.contact.email.booking || 'booking@zeotourism.com'
+      ],
       color: 'text-sunrise-orange'
     },
     {
       icon: MapPin,
       title: 'Office',
-      details: ['Thamel, Kathmandu', 'Nepal 44600'],
+      details: [
+        contactInfo?.contact.address.street || 'Thamel, Kathmandu',
+        contactInfo?.contact.address.full || 'Nepal 44600'
+      ],
       color: 'text-earth-green'
     },
     {
       icon: Clock,
       title: 'Working Hours',
-      details: ['Mon-Sat: 9AM-6PM', 'Sun: 10AM-4PM'],
+      details: [
+        contactInfo?.business.hours.display || 'Mon-Sat: 9AM-6PM',
+        contactInfo?.business.support.availability || '24/7 Support Available'
+      ],
       color: 'text-purple-600'
     }
   ];
@@ -234,7 +248,7 @@ const Contact: React.FC = () => {
 
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-gray-500">
-                    We'll get back to you within 24 hours
+                    {contactInfo?.business.support.response_time ? `We'll get back to you ${contactInfo.business.support.response_time.toLowerCase()}` : "We'll get back to you within 24 hours"}
                   </p>
                   
                   <motion.button
@@ -287,7 +301,7 @@ const Contact: React.FC = () => {
             className="space-y-6"
           >
             {/* Quick Contact Cards */}
-            {contactInfo.map((info, index) => (
+            {contactDetails.map((info, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}

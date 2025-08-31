@@ -13,9 +13,13 @@
       "difficulty": "Challenging",
       "rating": 4.9,
       "reviews": 156,
-      "location": "Everest Regions",
       "best_time": "March-May, September-November",
       "featured": true,
+      "primary_destination_id": 2,
+      "secondary_destination_ids": [],
+      "related_destinations": ["Everest"],
+      "activity_ids": [1, 2],
+      "related_activities": ["Trekking", "Mountain Views"],
       "highlights": [
         "Reach Everest Base Camp at 5,364m",
         "Stunning views of Mount Everest",
@@ -35,18 +39,9 @@
         "First aid kit"
       ],
       "activities": [
-        {
-          "name": "Trekking",
-          "description": "Multi-day trekking through Himalayan trails"
-        },
-        {
-          "name": "Mountain Views",
-          "description": "Spectacular views of world's highest peaks"
-        },
-        {
-          "name": "Cultural Experience",
-          "description": "Immerse in authentic Sherpa culture"
-        }
+        "Trekking",
+        "Cultural Experience",
+        "Mountain Views"
       ],
       "created_at": "2025-08-24T13:52:18.549Z",
       "updated_at": "2025-08-25T06:52:57.339Z",
@@ -134,9 +129,13 @@
       "difficulty": "Moderate",
       "rating": 4.7,
       "reviews": 203,
-      "location": "Annapurna Region",
       "best_time": "March-May, September-November",
       "featured": true,
+      "primary_destination_id": 1,
+      "secondary_destination_ids": [],
+      "related_destinations": ["Annapurna"],
+      "activity_ids": [1],
+      "related_activities": ["Trekking"],
       "highlights": [
         "Cross Thorong La Pass at 5,416m",
         "Diverse landscapes and cultures",
@@ -161,8 +160,8 @@
     },
     {
       "id": 3,
-      "title": "Chitwan Safari Adventure",
-      "slug": "chitwan-safari-adventure",
+      "title": "Annapurana Safari Adventure",
+      "slug": "annapurana-safari-adventure",
       "category": "Wildlife",
       "description": "Explore Nepal's premier wildlife destination with jungle safaris, elephant encounters, and bird watching in Chitwan National Park.",
       "image": "/uploads/destinations/tours/tours-pic-3.webp",
@@ -172,9 +171,13 @@
       "difficulty": "Easy",
       "rating": 4.5,
       "reviews": 89,
-      "location": "Chitwan Region",
       "best_time": "October-March",
       "featured": false,
+      "primary_destination_id": 1,
+      "secondary_destination_ids": [],
+      "related_destinations": ["Annapurna"],
+      "activity_ids": [1],
+      "related_activities": ["Trekking"],
       "highlights": [
         "Jungle safari in 4WD vehicle",
         "Elephant breeding center visit",
@@ -198,7 +201,7 @@
     },
     {
       "id": 4,
-      "title": "Langtang Valley Trek - Updated",
+      "title": "Langtang Valley Trek",
       "slug": "langtang-valley-trek",
       "category": "Trekking",
       "description": "Explore the beautiful Langtang Valley with stunning mountain views, rich Tamang culture, and pristine alpine lakes.",
@@ -209,9 +212,13 @@
       "difficulty": "Moderate",
       "rating": 4.7,
       "reviews": 95,
-      "location": "Langtang Region",
       "best_time": "March-May, September-November",
       "featured": true,
+      "primary_destination_id": 3,
+      "secondary_destination_ids": [],
+      "related_destinations": ["Langtang"],
+      "activity_ids": [1, 5],
+      "related_activities": ["Trekking", "Cultural Experience"],
       "highlights": [
         "Langtang Valley views",
         "Tamang culture experience",

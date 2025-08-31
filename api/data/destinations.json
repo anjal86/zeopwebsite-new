@@ -3,18 +3,30 @@
     "id": 1,
     "name": "Annapurna",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 1,
+    "image": "/uploads/destinations/annapurna/annapurna.JPG",
+    "tourCount": 2,
     "href": "/destinations/annapurna",
     "type": "nepal",
     "featured": true,
-    "description": "The Annapurna region offers some of the most diverse and spectacular trekking in Nepal, with routes ranging from easy walks to challenging high-altitude adventures.",
-    "highlights": ["Annapurna Circuit", "Annapurna Base Camp", "Poon Hill", "Thorong La Pass"],
+    "description": "Discover the beauty and culture of Annapurna in Nepal.",
+    "highlights": [
+      "Annapurna Circuit",
+      "Annapurna Base Camp",
+      "Poon Hill",
+      "Thorong La Pass"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "3,210m",
     "difficulty": "Moderate to Challenging",
-    "relatedTours": [2],
-    "relatedActivities": [1]
+    "relatedTours": [
+      2,
+      3
+    ],
+    "relatedActivities": [
+      1
+    ],
+    "title": "Annapurna",
+    "region": "asdasd"
   },
   {
     "id": 2,
@@ -26,12 +38,22 @@
     "type": "nepal",
     "featured": true,
     "description": "Home to the world's highest peak, the Everest region offers legendary trekking routes through Sherpa villages and Buddhist monasteries.",
-    "highlights": ["Everest Base Camp", "Kala Patthar", "Namche Bazaar", "Tengboche Monastery"],
+    "highlights": [
+      "Everest Base Camp",
+      "Kala Patthar",
+      "Namche Bazaar",
+      "Tengboche Monastery"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "5,364m",
     "difficulty": "Challenging",
-    "relatedTours": [1],
-    "relatedActivities": [1, 2]
+    "relatedTours": [
+      1
+    ],
+    "relatedActivities": [
+      1,
+      2
+    ]
   },
   {
     "id": 3,
@@ -43,12 +65,22 @@
     "type": "nepal",
     "featured": true,
     "description": "Known as the 'Valley of Glaciers', Langtang offers stunning mountain views, rich Tamang culture, and the famous yak cheese factory.",
-    "highlights": ["Kyanjin Gompa", "Langtang Valley", "Tamang Heritage Trail", "Cheese Factory"],
+    "highlights": [
+      "Kyanjin Gompa",
+      "Langtang Valley",
+      "Tamang Heritage Trail",
+      "Cheese Factory"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "3,870m",
     "difficulty": "Moderate",
-    "relatedTours": [4],
-    "relatedActivities": [1, 5]
+    "relatedTours": [
+      4
+    ],
+    "relatedActivities": [
+      1,
+      5
+    ]
   },
   {
     "id": 4,
@@ -60,12 +92,20 @@
     "type": "nepal",
     "featured": false,
     "description": "The Manaslu Circuit offers a remote and less crowded alternative to other popular treks, with stunning mountain views and rich cultural experiences.",
-    "highlights": ["Manaslu Base Camp", "Larkya La Pass", "Samagaon", "Buddhist Monasteries"],
+    "highlights": [
+      "Manaslu Base Camp",
+      "Larkya La Pass",
+      "Samagaon",
+      "Buddhist Monasteries"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "5,106m",
     "difficulty": "Challenging",
     "relatedTours": [],
-    "relatedActivities": [1, 5]
+    "relatedActivities": [
+      1,
+      5
+    ]
   },
   {
     "id": 5,
@@ -77,12 +117,19 @@
     "type": "nepal",
     "featured": true,
     "description": "Nepal's adventure capital, offering stunning lake views, mountain panoramas, and thrilling activities like paragliding and bungee jumping.",
-    "highlights": ["Phewa Lake", "Paragliding", "World Peace Pagoda", "Sarangkot Sunrise"],
+    "highlights": [
+      "Phewa Lake",
+      "Paragliding",
+      "World Peace Pagoda",
+      "Sarangkot Sunrise"
+    ],
     "bestTime": "Sep-May",
     "altitude": "822m",
     "difficulty": "Easy",
     "relatedTours": [],
-    "relatedActivities": [3]
+    "relatedActivities": [
+      3
+    ]
   },
   {
     "id": 6,
@@ -94,29 +141,44 @@
     "type": "nepal",
     "featured": true,
     "description": "The cultural heart of Nepal, home to ancient temples, bustling markets, and UNESCO World Heritage sites showcasing centuries of history.",
-    "highlights": ["Durbar Square", "Swayambhunath", "Boudhanath", "Pashupatinath"],
+    "highlights": [
+      "Durbar Square",
+      "Swayambhunath",
+      "Boudhanath",
+      "Pashupatinath"
+    ],
     "bestTime": "Year-round",
     "altitude": "1,400m",
     "difficulty": "Easy",
     "relatedTours": [],
-    "relatedActivities": [5]
+    "relatedActivities": [
+      5
+    ]
   },
   {
     "id": 7,
     "name": "Chitwan",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 1,
+    "tourCount": 0,
     "href": "/destinations/chitwan",
     "type": "nepal",
     "featured": true,
     "description": "Nepal's first national park, famous for its wildlife including one-horned rhinoceros, Bengal tigers, and diverse bird species.",
-    "highlights": ["Jungle Safari", "Elephant Breeding Center", "Tharu Culture", "Bird Watching"],
+    "highlights": [
+      "Jungle Safari",
+      "Elephant Breeding Center",
+      "Tharu Culture",
+      "Bird Watching"
+    ],
     "bestTime": "Oct-Mar",
     "altitude": "150m",
     "difficulty": "Easy",
-    "relatedTours": [3],
-    "relatedActivities": [4, 5]
+    "relatedTours": [],
+    "relatedActivities": [
+      4,
+      5
+    ]
   },
   {
     "id": 8,
@@ -128,12 +190,20 @@
     "type": "nepal",
     "featured": false,
     "description": "A remote and mystical region offering pristine wilderness, ancient Tibetan culture, and some of Nepal's most challenging trekking routes.",
-    "highlights": ["Phoksundo Lake", "Shey Gompa", "Tibetan Culture", "Remote Wilderness"],
+    "highlights": [
+      "Phoksundo Lake",
+      "Shey Gompa",
+      "Tibetan Culture",
+      "Remote Wilderness"
+    ],
     "bestTime": "May-Sep",
     "altitude": "3,611m",
     "difficulty": "Very Challenging",
     "relatedTours": [],
-    "relatedActivities": [1, 5]
+    "relatedActivities": [
+      1,
+      5
+    ]
   },
   {
     "id": 9,
@@ -145,12 +215,20 @@
     "type": "international",
     "featured": false,
     "description": "The 'Roof of the World' offers spiritual journeys, ancient monasteries, and breathtaking high-altitude landscapes including Mount Kailash.",
-    "highlights": ["Mount Kailash", "Lake Mansarovar", "Potala Palace", "Jokhang Temple"],
+    "highlights": [
+      "Mount Kailash",
+      "Lake Mansarovar",
+      "Potala Palace",
+      "Jokhang Temple"
+    ],
     "bestTime": "May-Sep",
     "altitude": "3,656m",
     "difficulty": "Moderate to Challenging",
     "relatedTours": [],
-    "relatedActivities": [6, 5]
+    "relatedActivities": [
+      6,
+      5
+    ]
   },
   {
     "id": 10,
@@ -162,12 +240,20 @@
     "type": "international",
     "featured": false,
     "description": "The Last Shangri-La, known for its pristine environment, unique culture, and philosophy of Gross National Happiness.",
-    "highlights": ["Tiger's Nest Monastery", "Thimphu Dzong", "Punakha Dzong", "Buddhist Culture"],
+    "highlights": [
+      "Tiger's Nest Monastery",
+      "Thimphu Dzong",
+      "Punakha Dzong",
+      "Buddhist Culture"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "2,320m",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [5, 1]
+    "relatedActivities": [
+      5,
+      1
+    ]
   },
   {
     "id": 11,
@@ -179,12 +265,20 @@
     "type": "international",
     "featured": false,
     "description": "A land of incredible diversity, offering everything from the Taj Mahal to the Himalayas, spiritual experiences to vibrant cultures.",
-    "highlights": ["Taj Mahal", "Golden Triangle", "Kerala Backwaters", "Rajasthan Palaces"],
+    "highlights": [
+      "Taj Mahal",
+      "Golden Triangle",
+      "Kerala Backwaters",
+      "Rajasthan Palaces"
+    ],
     "bestTime": "Oct-Mar",
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [5, 6]
+    "relatedActivities": [
+      5,
+      6
+    ]
   },
   {
     "id": 12,
@@ -196,12 +290,20 @@
     "type": "international",
     "featured": false,
     "description": "The Land of Smiles offers tropical beaches, ancient temples, vibrant street food, and warm hospitality.",
-    "highlights": ["Phi Phi Islands", "Bangkok Temples", "Chiang Mai", "Thai Cuisine"],
+    "highlights": [
+      "Phi Phi Islands",
+      "Bangkok Temples",
+      "Chiang Mai",
+      "Thai Cuisine"
+    ],
     "bestTime": "Nov-Mar",
     "altitude": "Sea Level",
     "difficulty": "Easy",
     "relatedTours": [],
-    "relatedActivities": [3, 5]
+    "relatedActivities": [
+      3,
+      5
+    ]
   },
   {
     "id": 13,
@@ -213,12 +315,20 @@
     "type": "international",
     "featured": false,
     "description": "A tropical paradise of crystal-clear waters, pristine beaches, and luxury overwater villas perfect for romantic getaways.",
-    "highlights": ["Overwater Villas", "Coral Reefs", "Water Sports", "Luxury Spas"],
+    "highlights": [
+      "Overwater Villas",
+      "Coral Reefs",
+      "Water Sports",
+      "Luxury Spas"
+    ],
     "bestTime": "Nov-Apr",
     "altitude": "Sea Level",
     "difficulty": "Easy",
     "relatedTours": [],
-    "relatedActivities": [7, 3]
+    "relatedActivities": [
+      7,
+      3
+    ]
   },
   {
     "id": 14,
@@ -230,11 +340,19 @@
     "type": "international",
     "featured": false,
     "description": "The Pearl of the Indian Ocean, offering ancient ruins, tea plantations, wildlife safaris, and beautiful beaches.",
-    "highlights": ["Sigiriya Rock", "Tea Plantations", "Elephant Orphanage", "Galle Fort"],
+    "highlights": [
+      "Sigiriya Rock",
+      "Tea Plantations",
+      "Elephant Orphanage",
+      "Galle Fort"
+    ],
     "bestTime": "Dec-Mar, Jul-Sep",
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [5, 4]
+    "relatedActivities": [
+      5,
+      4
+    ]
   }
 ]

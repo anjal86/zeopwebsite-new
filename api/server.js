@@ -273,6 +273,7 @@ let destinationsData = loadData('destinations.json');
 let activitiesData = loadData('activities.json');
 let slidersData = loadData('sliders.json');
 let usersData = loadData('users.json');
+let contactData = loadData('contact.json');
 let tourDetails = loadTourDetails();
 
 // Extract arrays from the loaded data
@@ -281,6 +282,7 @@ let destinations = destinationsData.destinations || destinationsData || [];
 let activities = activitiesData.activities || activitiesData || [];
 let sliders = slidersData.sliders || slidersData || [];
 let users = usersData.users || usersData || [];
+let contact = contactData || {};
 
 // Helper functions
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -617,6 +619,34 @@ app.delete('/api/admin/sliders/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// Helper function to update destination relationships when tour relationships change
+const updateDestinationRelationships = (tourId, newPrimaryDestId, newSecondaryDestIds = [], oldPrimaryDestId = null, oldSecondaryDestIds = []) => {
+  // Remove tour from all old destinations
+  const allOldDestIds = [oldPrimaryDestId, ...oldSecondaryDestIds].filter(Boolean);
+  allOldDestIds.forEach(destId => {
+    const destIndex = destinations.findIndex(d => d.id === destId);
+    if (destIndex !== -1) {
+      const relatedTours = destinations[destIndex].relatedTours || [];
+      destinations[destIndex].relatedTours = relatedTours.filter(id => id !== tourId);
+    }
+  });
+
+  // Add tour to all new destinations (primary + secondary)
+  const allNewDestIds = [newPrimaryDestId, ...newSecondaryDestIds].filter(Boolean);
+  allNewDestIds.forEach(destId => {
+    const destIndex = destinations.findIndex(d => d.id === destId);
+    if (destIndex !== -1) {
+      const relatedTours = destinations[destIndex].relatedTours || [];
+      if (!relatedTours.includes(tourId)) {
+        destinations[destIndex].relatedTours = [...relatedTours, tourId];
+      }
+    }
+  });
+
+  // Save updated destinations
+  saveData('destinations.json', destinations);
+};
+
 // ==================== TOURS API ====================
 
 // Get all tours (merge basic tours with detailed tours)
@@ -672,6 +702,96 @@ app.get('/api/tours', async (req, res) => {
   res.json(filteredTours);
 });
 
+// Admin: Create new tour with relationship management
+app.post('/api/admin/tours', authenticateToken, async (req, res) => {
+  try {
+    console.log('Creating new tour with relationships...');
+    console.log('Request body:', req.body);
+    
+    const tourData = req.body;
+    const newTour = {
+      ...tourData,
+      id: Math.max(...tours.map(t => t.id), ...tourDetails.map(t => t.id), 0) + 1,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    // Add to tours array
+    tourDetails.push(newTour);
+    
+    // Update destination relationships
+    if (newTour.primary_destination_id || (newTour.secondary_destination_ids && newTour.secondary_destination_ids.length > 0)) {
+      updateDestinationRelationships(
+        newTour.id,
+        newTour.primary_destination_id,
+        newTour.secondary_destination_ids || []
+      );
+    }
+    
+    // Save tour data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
+    }
+    
+    console.log('Tour created successfully with relationships');
+    res.status(201).json(newTour);
+  } catch (error) {
+    console.error('Error creating tour:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Update tour with relationship management
+app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating tour with relationships...');
+    console.log('Request body:', req.body);
+    
+    const { id } = req.params;
+    const tourData = req.body;
+    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(id));
+    
+    if (tourIndex === -1) {
+      return res.status(404).json({ error: 'Tour not found' });
+    }
+    
+    const existingTour = tourDetails[tourIndex];
+    const oldPrimaryDestId = existingTour.primary_destination_id || existingTour.destination_id || null;
+    const oldSecondaryDestIds = existingTour.secondary_destination_ids || [];
+    const newPrimaryDestId = tourData.primary_destination_id || null;
+    const newSecondaryDestIds = tourData.secondary_destination_ids || [];
+    
+    // Update tour data
+    tourDetails[tourIndex] = {
+      ...existingTour,
+      ...tourData,
+      updated_at: new Date().toISOString()
+    };
+    
+    // Update destination relationships
+    updateDestinationRelationships(
+      parseInt(id),
+      newPrimaryDestId,
+      newSecondaryDestIds,
+      oldPrimaryDestId,
+      oldSecondaryDestIds
+    );
+    
+    // Save tour data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
+    }
+    
+    console.log('Tour updated successfully with relationships');
+    res.json(tourDetails[tourIndex]);
+  } catch (error) {
+    console.error('Error updating tour:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
 // Get tour by ID (check detailed tours first, then basic tours)
 app.get('/api/tours/:id', async (req, res) => {
   await delay(200);
@@ -721,6 +841,12 @@ app.get('/api/destinations', async (req, res) => {
   
   const { country, featured } = req.query;
   let filteredDestinations = [...destinations];
+
+  // Calculate dynamic tour counts based on actual relationships
+  filteredDestinations = filteredDestinations.map(dest => ({
+    ...dest,
+    tourCount: (dest.relatedTours || []).length
+  }));
 
   // Filter by country
   if (country) {
@@ -877,26 +1003,28 @@ app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, re
     
     const existingDestination = destinations[destinationIndex];
     
-    // Update the destination
-    destinations[destinationIndex] = {
+    // Update the destination with explicit image URL update
+    const updatedDestination = {
       ...existingDestination,
       name: title || existingDestination.name,
       title: title || existingDestination.title,
       country: country || existingDestination.country,
       region: region !== undefined ? region : existingDestination.region,
-      image: image || existingDestination.image,
+      image: image || existingDestination.image, // This should be the new uploaded image URL
       featured: featured !== undefined ? featured : existingDestination.featured,
       type: country ? (country.toLowerCase() === 'nepal' ? 'nepal' : 'international') : existingDestination.type,
       description: title ? `Discover the beauty and culture of ${title} in ${country || existingDestination.country}.` : existingDestination.description
     };
+    
+    destinations[destinationIndex] = updatedDestination;
     
     const saved = saveData('destinations.json', destinations);
     if (!saved) {
       throw new Error('Failed to save destination data to file');
     }
     
-    console.log('Destination updated successfully');
-    res.json(destinations[destinationIndex]);
+    console.log('Destination updated successfully with new image:', updatedDestination.image);
+    res.json(updatedDestination);
   } catch (error) {
     console.error('Error updating destination:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
@@ -944,16 +1072,34 @@ app.post('/api/admin/upload', authenticateToken, upload.single('image'), async (
     const destinationSlug = req.body.destinationSlug || 'destination';
     const file = req.file;
     
-    // Create destination-specific directory
-    const destinationDir = path.join(uploadsDir, 'destinations', destinationSlug);
+    console.log(`Uploading file for destination: ${destinationSlug}`);
+    
+    // Create destination-specific directory with clean slug
+    const cleanSlug = destinationSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+    const destinationDir = path.join(uploadsDir, 'destinations', cleanSlug);
     if (!fs.existsSync(destinationDir)) {
       fs.mkdirSync(destinationDir, { recursive: true });
+      console.log(`Created directory: ${destinationDir}`);
     }
     
-    // Generate unique filename
+    // Delete any existing files for this destination to keep directory clean
+    try {
+      const existingFiles = fs.readdirSync(destinationDir);
+      existingFiles.forEach(existingFile => {
+        if (existingFile.startsWith(cleanSlug)) {
+          const oldFilePath = path.join(destinationDir, existingFile);
+          fs.unlinkSync(oldFilePath);
+          console.log(`Deleted old file: ${oldFilePath}`);
+        }
+      });
+    } catch (error) {
+      console.log('No existing files to delete or error cleaning up:', error.message);
+    }
+    
+    // Generate simple filename with destination name and timestamp to avoid caching issues
     const timestamp = Date.now();
-    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = `${timestamp}_${sanitizedName}`;
+    const fileExtension = path.extname(file.originalname);
+    const filename = `${cleanSlug}_${timestamp}${fileExtension}`;
     const finalPath = path.join(destinationDir, filename);
     
     // Move file to final location
@@ -963,14 +1109,60 @@ app.post('/api/admin/upload', authenticateToken, upload.single('image'), async (
     const relativePath = path.relative(uploadsDir, finalPath).replace(/\\/g, '/');
     const fileUrl = `/uploads/${relativePath}`;
     
+    console.log(`File uploaded successfully: ${fileUrl}`);
+    
     res.json({
       success: true,
       url: fileUrl,
-      filename: filename
+      filename: filename,
+      destination: cleanSlug
     });
   } catch (error) {
     console.error('Error uploading file:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== CONTACT API ====================
+
+// Get contact information
+app.get('/api/contact', async (req, res) => {
+  try {
+    await delay(200);
+    res.json(contact);
+  } catch (error) {
+    console.error('Error fetching contact information:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Update contact information
+app.put('/api/admin/contact', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating contact information...');
+    console.log('Request body:', req.body);
+    
+    const updatedContact = req.body;
+    
+    // Validate required fields
+    if (!updatedContact.company?.name || !updatedContact.contact?.email?.primary) {
+      return res.status(400).json({ error: 'Company name and primary email are required' });
+    }
+    
+    // Update the contact data
+    contact = updatedContact;
+    
+    // Save to file
+    const saved = saveData('contact.json', contact);
+    if (!saved) {
+      throw new Error('Failed to save contact data to file');
+    }
+    
+    console.log('Contact information updated successfully');
+    res.json(contact);
+  } catch (error) {
+    console.error('Error updating contact information:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });
 

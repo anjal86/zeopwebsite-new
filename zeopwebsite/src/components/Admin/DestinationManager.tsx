@@ -52,6 +52,8 @@ const DestinationManager: React.FC = () => {
   const [editingDestination, setEditingDestination] = useState<ContentDestination | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
+  const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
 
   const [formData, setFormData] = useState<DestinationFormData>({
     slug: '',
@@ -170,7 +172,9 @@ const DestinationManager: React.FC = () => {
       if (formData.imageFile) {
         const uploadFormData = new FormData();
         uploadFormData.append('image', formData.imageFile);
-        uploadFormData.append('destinationSlug', formData.slug || formData.title || 'destination');
+        // Use the destination slug/title for organizing uploads
+        const destinationSlug = formData.slug || generateSlug(formData.title || 'destination');
+        uploadFormData.append('destinationSlug', destinationSlug);
         
         const token = localStorage.getItem('adminToken');
         const uploadResponse = await fetch(`${getApiBaseUrl()}/admin/upload`, {
@@ -184,6 +188,12 @@ const DestinationManager: React.FC = () => {
         if (uploadResponse.ok) {
           const uploadResult = await uploadResponse.json();
           imageUrl = uploadResult.url;
+          console.log('File uploaded successfully:', uploadResult);
+          console.log('New image URL:', imageUrl);
+        } else {
+          const errorText = await uploadResponse.text();
+          console.error('Upload failed:', errorText);
+          throw new Error(`Upload failed: ${errorText}`);
         }
       }
 
@@ -192,9 +202,11 @@ const DestinationManager: React.FC = () => {
         title: formData.title,
         country: formData.country,
         region: formData.region,
-        image: imageUrl,
+        image: imageUrl, // This should be the new uploaded image URL
         featured: formData.featured
       };
+      
+      console.log('Sending API data:', apiData);
 
       const url = editingDestination
         ? `${getApiBaseUrl()}/admin/destinations/${editingDestination.slug || editingDestination.id}`
@@ -217,8 +229,31 @@ const DestinationManager: React.FC = () => {
         throw new Error(errorData.error || 'Failed to save destination');
       }
 
+      const savedDestination = await response.json();
+      console.log('Destination saved successfully:', savedDestination);
+      
+      // Force a complete data reload with cache busting
+      const refreshKey = Date.now();
+      setImageRefreshKey(refreshKey);
+      
+      // Wait a moment for the server to finish processing
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Force refetch to get updated data and refresh UI
       await refetch();
+      
       closeModal();
+      
+      // Trigger a global refresh event for other components
+      window.dispatchEvent(new CustomEvent('destinationUpdated', {
+        detail: {
+          destinationId: savedDestination.id,
+          newImageUrl: savedDestination.image,
+          timestamp: refreshKey
+        }
+      }));
+      
+      console.log('Destination saved and UI refreshed with new image:', savedDestination.image);
     } catch (error) {
       console.error('Error saving destination:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to save destination');
@@ -278,6 +313,22 @@ const DestinationManager: React.FC = () => {
     );
   }
 
+  // Filter destinations based on active tab
+  const filteredDestinations = destinations?.filter(destination => {
+    const country = (destination as any).country || '';
+    const type = (destination as any).type || '';
+    
+    console.log('Filtering destination:', destination.name, 'Country:', country, 'Type:', type, 'Active tab:', activeTab);
+    
+    if (activeTab === 'nepal') {
+      return country === 'Nepal' || type === 'nepal';
+    } else {
+      return country !== 'Nepal' && type === 'international';
+    }
+  }) || [];
+
+  console.log('Filtered destinations for', activeTab, ':', filteredDestinations.map(d => d.name));
+
   return (
     <div className="destination-manager">
       {/* Header */}
@@ -295,22 +346,51 @@ const DestinationManager: React.FC = () => {
         </button>
       </div>
 
+      {/* Tab Navigation */}
+      <div className="flex justify-center mb-8">
+        <div className="bg-gray-100 rounded-full p-1">
+          <button
+            onClick={() => setActiveTab('nepal')}
+            className={`px-8 py-3 rounded-full font-medium transition-all duration-300 ${
+              activeTab === 'nepal'
+                ? 'bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg'
+                : 'text-gray-600 hover:text-primary'
+            }`}
+          >
+            Nepal Destinations ({destinations?.filter(d => (d as any).country === 'Nepal' || (d as any).type === 'nepal').length || 0})
+          </button>
+          <button
+            onClick={() => setActiveTab('international')}
+            className={`px-8 py-3 rounded-full font-medium transition-all duration-300 ${
+              activeTab === 'international'
+                ? 'bg-gradient-to-r from-secondary to-secondary-dark text-white shadow-lg'
+                : 'text-gray-600 hover:text-secondary'
+            }`}
+          >
+            International Destinations ({destinations?.filter(d => (d as any).country !== 'Nepal' && (d as any).type !== 'nepal').length || 0})
+          </button>
+        </div>
+      </div>
+
       {/* Destinations Grid */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <div className="flex items-center justify-between">
-            <h4 className="text-lg font-semibold text-gray-900">Destination Management</h4>
+            <h4 className="text-lg font-semibold text-gray-900">
+              {activeTab === 'nepal' ? 'Nepal' : 'International'} Destinations
+            </h4>
             <div className="flex items-center gap-4">
               <div className="text-sm text-gray-500">
-                {destinations?.length || 0} destination{(destinations?.length || 0) !== 1 ? 's' : ''} total
+                {filteredDestinations.length} destination{filteredDestinations.length !== 1 ? 's' : ''}
+                {activeTab === 'nepal' ? ' in Nepal' : ' internationally'}
               </div>
             </div>
           </div>
         </div>
 
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {destinations?.map((destination, index) => (
+          <div key={activeTab} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDestinations.map((destination, index) => (
               <div
                 key={(destination as any).slug || (destination as any).name || (destination as any).id || index}
                 className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 cursor-pointer group"
@@ -318,7 +398,8 @@ const DestinationManager: React.FC = () => {
               >
                 <div className="relative">
                   <img
-                    src={destination.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}
+                    key={`${destination.id}-${imageRefreshKey}`}
+                    src={`${destination.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}?t=${imageRefreshKey}`}
                     alt={(destination as any).name || (destination as any).title || 'Destination'}
                     className="w-full h-48 object-cover rounded-t-lg"
                     onError={(e) => {
@@ -588,14 +669,14 @@ const DestinationManager: React.FC = () => {
                             Image URL (Alternative)
                           </label>
                           <input
-                            type="url"
+                            type="text"
                             name="image"
                             value={formData.image}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                            placeholder="https://example.com/image.jpg"
+                            placeholder="https://example.com/image.jpg or /uploads/destinations/..."
                           />
-                          <p className="text-xs text-gray-500 mt-1">Or provide a direct URL to an image</p>
+                          <p className="text-xs text-gray-500 mt-1">Provide a full URL or relative path to an image</p>
                         </div>
                       </div>
                     </div>

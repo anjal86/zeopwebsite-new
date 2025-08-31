@@ -2,8 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Mountain, Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { useContact } from '../../hooks/useApi';
 
 const Footer: React.FC = () => {
+  const { data: contactInfo } = useContact();
   const footerLinks = {
     destinations: [
       { name: 'Everest Base Camp', href: '#' },
@@ -31,10 +33,10 @@ const Footer: React.FC = () => {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Youtube, href: '#', label: 'YouTube' }
+    { icon: Facebook, href: contactInfo?.social.facebook || '#', label: 'Facebook' },
+    { icon: Instagram, href: contactInfo?.social.instagram || '#', label: 'Instagram' },
+    { icon: Twitter, href: contactInfo?.social.twitter || '#', label: 'Twitter' },
+    { icon: Youtube, href: contactInfo?.social.youtube || '#', label: 'YouTube' }
   ];
 
   return (
@@ -66,22 +68,22 @@ const Footer: React.FC = () => {
                   />
                 </Link>
                 <p className="text-gray-400 mb-6 max-w-sm">
-                  Your trusted partner for authentic Himalayan adventures. Creating memories that last a lifetime since 2009.
+                  {contactInfo?.company.description || 'Your trusted partner for authentic Himalayan adventures. Creating memories that last a lifetime since 2009.'}
                 </p>
                 
                 {/* Contact Info */}
                 <div className="space-y-3 mb-6">
-                  <a href="tel:+9779851234567" className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
+                  <a href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
                     <Phone className="w-4 h-4 mr-2" />
-                    +977 9851234567
+                    {contactInfo?.contact.phone.display || '+977 985 123 4567'}
                   </a>
-                  <a href="mailto:info@zeotourism.com" className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
+                  <a href={`mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
                     <Mail className="w-4 h-4 mr-2" />
-                    info@zeotourism.com
+                    {contactInfo?.contact.email.primary || 'info@zeotourism.com'}
                   </a>
                   <div className="flex items-center text-gray-400">
                     <MapPin className="w-4 h-4 mr-2" />
-                    Thamel, Kathmandu, Nepal
+                    {contactInfo?.contact.address.full || 'Thamel, Kathmandu, Nepal'}
                   </div>
                 </div>
 
@@ -221,7 +223,7 @@ const Footer: React.FC = () => {
         <div className="py-6 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © 2024 Zeo Tourism. All rights reserved. | Crafted with{' '}
+              © 2024 {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved. | Crafted with{' '}
               <Heart className="w-4 h-4 inline text-red-500 fill-current" /> in Nepal
             </p>
             <div className="flex space-x-6 text-sm">

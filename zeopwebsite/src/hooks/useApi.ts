@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import api, { type Tour } from '../services/api';
+import api, { type Tour, type Contact } from '../services/api';
 
 // Generic hook for API calls with loading and error states
 export function useApiCall<T>(
@@ -153,6 +153,11 @@ export function useSliders() {
 
 export function useSlider(id: number) {
   return useApiCall(() => api.sliders.getById(id), [id]);
+}
+
+// Contact hook
+export function useContact() {
+  return useApiCall(() => api.contact.get());
 }
 
 // Custom hook for filtered tours with client-side filtering

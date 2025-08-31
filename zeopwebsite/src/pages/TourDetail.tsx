@@ -20,10 +20,11 @@ import {
   Utensils,
   Bed,
   FileText,
-  Info
+  Info,
+  Activity
 } from 'lucide-react';
 import TourCard from '../components/Tours/TourCard';
-import { useTours } from '../hooks/useApi';
+import { useTours, useDestinations, useActivities } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 
 // Extended tour interface for detailed data
@@ -54,12 +55,20 @@ interface TourDetails extends Tour {
     group_discounts: string;
     cancellation_policy: string;
   };
+  // Relationship fields - Primary + Secondary Destinations
+  primary_destination_id?: number;
+  secondary_destination_ids?: number[];
+  activity_ids?: number[];
+  related_destinations?: string[];
+  related_activities?: string[];
 }
 
 const TourDetail: React.FC = () => {
   const { tourSlug } = useParams<{ tourSlug: string }>();
   const navigate = useNavigate();
   const { data: allTours, loading, error } = useTours();
+  const { data: destinations } = useDestinations();
+  const { data: activities } = useActivities();
   
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showBookingForm, setShowBookingForm] = useState(false);
@@ -96,11 +105,47 @@ const TourDetail: React.FC = () => {
     fetchTourDetails();
   }, [tour]);
 
-  // Get related tours (same category or location, excluding current tour)
-  const relatedTours = allTours?.filter(t =>
-    t.id !== tour?.id &&
-    (t.category === tour?.category || t.location === tour?.location)
-  ).slice(0, 3) || [];
+  // Get related tours based on shared destinations or activities
+  const relatedTours = allTours?.filter(t => {
+    if (t.id === tour?.id) return false;
+    
+    // Check if tours share primary destination
+    const sharedPrimaryDestination = tourDetails?.primary_destination_id &&
+      (t as any).primary_destination_id === tourDetails.primary_destination_id;
+    
+    // Check if tours share any destinations (primary or secondary)
+    const allTourDestIds = [tourDetails?.primary_destination_id, ...(tourDetails?.secondary_destination_ids || [])].filter(Boolean);
+    const allOtherTourDestIds = [(t as any).primary_destination_id, ...((t as any).secondary_destination_ids || [])].filter(Boolean);
+    const sharedAnyDestination = allTourDestIds.some(id => allOtherTourDestIds.includes(id));
+    
+    // Check if tours share activities
+    const sharedActivities = (tourDetails?.activity_ids || []).some((actId: number) =>
+      (t as any).activity_ids?.includes(actId)
+    );
+    
+    // Also include tours with same category as fallback
+    const sameCategory = t.category === tour?.category;
+    
+    return sharedPrimaryDestination || sharedAnyDestination || sharedActivities || sameCategory;
+  }).slice(0, 3) || [];
+
+  // Get primary destination for this tour
+  const primaryDestination = destinations?.find(dest =>
+    dest.id === tourDetails?.primary_destination_id
+  );
+
+  // Get secondary destinations for this tour
+  const secondaryDestinations = destinations?.filter(dest =>
+    tourDetails?.secondary_destination_ids?.includes(dest.id)
+  ) || [];
+
+  // Get all destinations for this tour
+  const allTourDestinations = [primaryDestination, ...secondaryDestinations].filter(Boolean);
+
+  // Get activity names for this tour
+  const tourActivities = activities?.filter(activity =>
+    tourDetails?.activity_ids?.includes(activity.id)
+  ) || [];
 
   // Create image gallery using detailed tour data
   const images = tourDetails ? (
@@ -276,10 +321,27 @@ const TourDetail: React.FC = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{tourDetails.title}</h1>
               
               <div className="flex flex-wrap items-center gap-6 mb-6">
-                <div className="flex items-center text-gray-600">
-                  <MapPin className="w-5 h-5 mr-2 text-green-600" />
-                  <span>{tourDetails.location}</span>
-                </div>
+                {/* Destinations */}
+                {allTourDestinations.length > 0 && (
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="w-5 h-5 mr-2 text-green-600" />
+                    <span>
+                      {primaryDestination?.name}
+                      {secondaryDestinations.length > 0 && (
+                        <span className="text-gray-500"> + {secondaryDestinations.length} more</span>
+                      )}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Activities */}
+                {tourActivities.length > 0 && (
+                  <div className="flex items-center text-gray-600">
+                    <Activity className="w-5 h-5 mr-2 text-blue-600" />
+                    <span>{tourActivities.map(a => a.name).join(', ')}</span>
+                  </div>
+                )}
+                
                 <div className="flex items-center">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -380,22 +442,112 @@ const TourDetail: React.FC = () => {
                       </motion.div>
                     )}
 
-                    {/* Activities */}
-                    {tourDetails.activities && tourDetails.activities.length > 0 && (
+                    {/* Tour Destinations */}
+                    {allTourDestinations.length > 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-white rounded-xl p-8 shadow-sm border"
                       >
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Activities</h2>
-                        <div className="flex flex-wrap gap-3">
-                          {tourDetails.activities.map((activity, index) => (
-                            <span
-                              key={index}
-                              className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium"
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                          <MapPin className="w-6 h-6 text-green-600 mr-2" />
+                          Destinations Covered
+                        </h2>
+                        
+                        <div className="space-y-4">
+                          {/* Primary Destination */}
+                          {primaryDestination && (
+                            <div>
+                              <div className="flex items-center gap-2 mb-3">
+                                <span className="bg-primary text-white px-2 py-1 rounded-full text-xs font-bold">PRIMARY</span>
+                                <span className="text-sm text-gray-600">Main destination for this tour</span>
+                              </div>
+                              <Link
+                                to={primaryDestination.href || `/destinations/${primaryDestination.name.toLowerCase()}`}
+                                className="flex items-center gap-4 p-4 border-2 border-primary/20 bg-primary/5 rounded-lg hover:border-primary/40 hover:shadow-md transition-all"
+                              >
+                                <img
+                                  src={primaryDestination.image}
+                                  alt={primaryDestination.name}
+                                  className="w-16 h-16 object-cover rounded-lg"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                  }}
+                                />
+                                <div>
+                                  <h4 className="font-semibold text-gray-900 text-lg">{primaryDestination.name}</h4>
+                                  <p className="text-gray-500">{(primaryDestination as any).country}</p>
+                                  <p className="text-sm text-gray-600 mt-1">{(primaryDestination as any).description?.substring(0, 100)}...</p>
+                                </div>
+                              </Link>
+                            </div>
+                          )}
+                          
+                          {/* Secondary Destinations */}
+                          {secondaryDestinations.length > 0 && (
+                            <div>
+                              <div className="flex items-center gap-2 mb-3">
+                                <span className="bg-secondary text-white px-2 py-1 rounded-full text-xs font-bold">ALSO VISITS</span>
+                                <span className="text-sm text-gray-600">Additional destinations included in this tour</span>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {secondaryDestinations.map((destination) => (
+                                  <Link
+                                    key={destination.id}
+                                    to={destination.href || `/destinations/${destination.name.toLowerCase()}`}
+                                    className="flex items-center gap-3 p-4 border border-secondary/20 bg-secondary/5 rounded-lg hover:border-secondary/40 hover:shadow-sm transition-all"
+                                  >
+                                    <img
+                                      src={destination.image}
+                                      alt={destination.name}
+                                      className="w-12 h-12 object-cover rounded-lg"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                      }}
+                                    />
+                                    <div>
+                                      <h4 className="font-medium text-gray-900">{destination.name}</h4>
+                                      <p className="text-sm text-gray-500">{(destination as any).country}</p>
+                                    </div>
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Related Activities */}
+                    {tourActivities.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-xl p-8 shadow-sm border"
+                      >
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                          <Activity className="w-6 h-6 text-blue-600 mr-2" />
+                          Activities Included
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {tourActivities.map((activity) => (
+                            <div
+                              key={activity.id}
+                              className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg"
                             >
-                              {typeof activity === 'string' ? activity : activity.name}
-                            </span>
+                              <img
+                                src={activity.image}
+                                alt={activity.name}
+                                className="w-12 h-12 object-cover rounded-lg"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                }}
+                              />
+                              <div>
+                                <h4 className="font-medium text-gray-900">{activity.name}</h4>
+                                <p className="text-sm text-gray-500">{(activity as any).type || 'Activity'}</p>
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </motion.div>

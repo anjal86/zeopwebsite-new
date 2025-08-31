@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mountain, ArrowRight, MapPin } from 'lucide-react';
@@ -6,7 +6,23 @@ import { useFeaturedDestinations } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const FeaturedDestinations: React.FC = () => {
-  const { data: destinations, loading, error } = useFeaturedDestinations();
+  const { data: destinations, loading, error, refetch } = useFeaturedDestinations();
+  const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
+
+  // Listen for destination updates from admin interface
+  useEffect(() => {
+    const handleDestinationUpdate = (event: CustomEvent) => {
+      console.log('Destination updated, refreshing featured destinations:', event.detail);
+      setImageRefreshKey(Date.now());
+      refetch();
+    };
+
+    window.addEventListener('destinationUpdated', handleDestinationUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('destinationUpdated', handleDestinationUpdate as EventListener);
+    };
+  }, [refetch]);
 
   if (loading) {
     return (
@@ -94,9 +110,14 @@ const FeaturedDestinations: React.FC = () => {
               <Link to={destination.href || `/destinations/${destination.name.toLowerCase()}`} className="block">
                 <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                   <img
-                    src={destination.image}
+                    key={`${destination.id}-${imageRefreshKey}`}
+                    src={`${destination.image}?t=${imageRefreshKey}`}
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      console.error('Image failed to load:', destination.image);
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                    }}
                   />
                   
                   {/* Gradient Overlay */}

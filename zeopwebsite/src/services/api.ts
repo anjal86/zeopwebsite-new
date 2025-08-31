@@ -115,6 +115,74 @@ export interface Slider {
   updated_at?: string;
 }
 
+export interface Contact {
+  company: {
+    name: string;
+    tagline: string;
+    description: string;
+  };
+  contact: {
+    phone: {
+      primary: string;
+      secondary: string;
+      display: string;
+    };
+    email: {
+      primary: string;
+      booking: string;
+      admin: string;
+      support: string;
+    };
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      country: string;
+      postal_code: string;
+      full: string;
+    };
+    location: {
+      coordinates: {
+        latitude: number;
+        longitude: number;
+      };
+      timezone: string;
+      display: string;
+    };
+  };
+  business: {
+    hours: {
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+      sunday: string;
+      display: string;
+    };
+    support: {
+      availability: string;
+      emergency: string;
+      response_time: string;
+    };
+  };
+  social: {
+    facebook: string;
+    instagram: string;
+    twitter: string;
+    youtube: string;
+    linkedin: string;
+    whatsapp: string;
+  };
+  legal: {
+    registration: string;
+    tax_id: string;
+    established: string;
+    certifications: string[];
+  };
+}
+
 export interface Blog {
   title: string;
   slug: string;
@@ -635,6 +703,13 @@ export const featuredApi = {
   }
 };
 
+// Contact API
+export const contactApi = {
+  async get(): Promise<Contact> {
+    return apiCallWithRetry<Contact>('/contact');
+  }
+};
+
 // Health check API
 export const healthApi = {
   async check(): Promise<{
@@ -662,6 +737,7 @@ const api = {
   search: searchApi,
   sliders: slidersApi,
   featured: featuredApi,
+  contact: contactApi,
   health: healthApi,
   // New hybrid APIs
   blogs: blogsApi,

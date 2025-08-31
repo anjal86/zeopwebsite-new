@@ -17,7 +17,7 @@ import {
 import Hero from '../components/Hero/Hero';
 import FeaturedDestinations from '../components/FeaturedDestinations/FeaturedDestinations';
 import { useCountUp } from '../hooks/useCountUp';
-import { useDestinations } from '../hooks/useApi';
+import { useDestinations, useContact } from '../hooks/useApi';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
 
@@ -48,6 +48,8 @@ const AnimatedCounter: React.FC<{
 };
 
 const Home: React.FC = () => {
+  const { data: contactInfo } = useContact();
+  
   return (
     <div className="home-page">
       <Hero />
@@ -383,15 +385,15 @@ const Home: React.FC = () => {
               <div className="grid md:grid-cols-3 gap-6 text-white/80">
                 <div className="flex items-center justify-center">
                   <Phone className="w-5 h-5 mr-2" />
-                  <span>+977-1-4123456</span>
+                  <span>{contactInfo?.contact.phone.display || '+977-1-4123456'}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <Mail className="w-5 h-5 mr-2" />
-                  <span>info@zeotourism.com</span>
+                  <span>{contactInfo?.contact.email.primary || 'info@zeotourism.com'}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <Clock3 className="w-5 h-5 mr-2" />
-                  <span>24/7 Support Available</span>
+                  <span>{contactInfo?.business.support.availability || '24/7 Support Available'}</span>
                 </div>
               </div>
             </div>

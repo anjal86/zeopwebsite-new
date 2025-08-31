@@ -27,9 +27,12 @@ import {
   Utensils,
   Upload,
   Image,
-  Eye
+  Eye,
+  MapPin,
+  Activity
 } from 'lucide-react';
 import ProgressModal from '../components/UI/ProgressModal';
+import { useDestinations, useActivities } from '../hooks/useApi';
 
 interface ItineraryDay {
   day: number;
@@ -50,7 +53,6 @@ interface TourDetails {
   title: string;
   category: string;
   description: string;
-  location: string;
   price: number;
   duration: string;
   group_size: string;
@@ -68,6 +70,12 @@ interface TourDetails {
   itinerary?: ItineraryDay[];
   what_to_bring?: string[];
   fitness_requirements?: string;
+  // Relationship fields - Primary + Secondary Destinations
+  primary_destination_id?: number;
+  secondary_destination_ids?: number[];
+  activity_ids?: number[];
+  related_destinations?: string[];
+  related_activities?: string[];
 }
 
 const TourEditor: React.FC = () => {
@@ -82,6 +90,10 @@ const TourEditor: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basic');
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Fetch destinations and activities for relationship management
+  const { data: destinations } = useDestinations();
+  const { data: activities } = useActivities();
   
   // Progress modal state
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -98,7 +110,6 @@ const TourEditor: React.FC = () => {
     title: '',
     category: 'Trekking',
     description: '',
-    location: '',
     price: 0,
     duration: '',
     group_size: '',
@@ -115,7 +126,12 @@ const TourEditor: React.FC = () => {
     activities: [],
     itinerary: [],
     what_to_bring: [],
-    fitness_requirements: ''
+    fitness_requirements: '',
+    primary_destination_id: undefined,
+    secondary_destination_ids: [],
+    activity_ids: [],
+    related_destinations: [],
+    related_activities: []
   });
 
   // Debug log to see formData changes
@@ -162,15 +178,33 @@ const TourEditor: React.FC = () => {
       
       console.log('Fetching tour details for:', tourId, 'using endpoint:', endpoint);
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${endpoint}`);
+      const response = await fetch(endpoint);
       console.log('Response status:', response.status);
       
       if (response.ok) {
         const details = await response.json();
         console.log('Tour details received:', details);
         console.log('Setting form data...');
-        setFormData(details);
-        console.log('Form data set successfully');
+        
+        // Ensure relationship fields are properly initialized
+        const formattedDetails = {
+          ...details,
+          primary_destination_id: details.primary_destination_id || details.destination_id || details.destination_ids?.[0] || undefined,
+          secondary_destination_ids: details.secondary_destination_ids || [],
+          activity_ids: details.activity_ids || [],
+          related_destinations: details.related_destinations || [],
+          related_activities: details.related_activities || [],
+          gallery: details.gallery || [],
+          highlights: details.highlights || [],
+          inclusions: details.inclusions || [],
+          exclusions: details.exclusions || [],
+          activities: details.activities || [],
+          itinerary: details.itinerary || [],
+          what_to_bring: details.what_to_bring || []
+        };
+        
+        setFormData(formattedDetails);
+        console.log('Form data set successfully with relationships:', formattedDetails);
       } else {
         const errorText = await response.text();
         console.error('API Error:', response.status, errorText);
@@ -260,8 +294,8 @@ const TourEditor: React.FC = () => {
       
       const token = localStorage.getItem('adminToken');
       const url = isEditing
-        ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/tours/${formData.id}`
-        : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/tours`;
+        ? `/api/admin/tours/${formData.id}`
+        : `/api/admin/tours`;
       
       const method = isEditing ? 'PUT' : 'POST';
 
@@ -269,13 +303,26 @@ const TourEditor: React.FC = () => {
       setProgressValue(75);
       setProgressMessage('Generating tour details...');
 
+      // Prepare tour data with relationships
+      const tourData = {
+        ...formData,
+        // Ensure relationships are properly formatted
+        primary_destination_id: formData.primary_destination_id || undefined,
+        secondary_destination_ids: formData.secondary_destination_ids || [],
+        activity_ids: formData.activity_ids || [],
+        related_destinations: formData.related_destinations || [],
+        related_activities: formData.related_activities || []
+      };
+
+      console.log('Saving tour with relationships:', tourData);
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(tourData),
       });
 
       if (!response.ok) {
@@ -323,6 +370,7 @@ const TourEditor: React.FC = () => {
 
   const tabs = [
     { id: 'basic', label: 'Basic Info', icon: FileText },
+    { id: 'relationships', label: 'Destinations & Activities', icon: MapPin },
     { id: 'details', label: 'Details', icon: Star },
     { id: 'itinerary', label: 'Itinerary', icon: Calendar },
     { id: 'media', label: 'Media', icon: Camera }
@@ -348,7 +396,7 @@ const TourEditor: React.FC = () => {
 
       const token = localStorage.getItem('adminToken');
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/upload`, {
+      const response = await fetch('/api/admin/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -691,7 +739,7 @@ const TourEditor: React.FC = () => {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Category *
@@ -709,21 +757,6 @@ const TourEditor: React.FC = () => {
                           <option value="Adventure">Adventure</option>
                           <option value="Pilgrimage">Pilgrimage</option>
                         </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Location *
-                        </label>
-                        <input
-                          type="text"
-                          name="location"
-                          value={formData.location}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="e.g., Everest Region"
-                        />
                       </div>
                       
                       <div>
@@ -866,6 +899,247 @@ const TourEditor: React.FC = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         placeholder="https://example.com/image.jpg"
                       />
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Relationships Tab */}
+                {activeTab === 'relationships' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-6"
+                  >
+                    {/* Related Destinations */}
+                    <div className="bg-white rounded-lg shadow-sm border p-6">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <Mountain className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">Related Destinations</h3>
+                          <p className="text-sm text-gray-500">Select destinations that this tour visits or relates to</p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {destinations?.map((destination) => {
+                          const isPrimary = formData.primary_destination_id === destination.id;
+                          const isSecondary = formData.secondary_destination_ids?.includes(destination.id);
+                          const isSelected = isPrimary || isSecondary;
+                          
+                          return (
+                            <div
+                              key={destination.id}
+                              onClick={() => {
+                                const secondaryIds = formData.secondary_destination_ids || [];
+                                const relatedDestinations = formData.related_destinations || [];
+                                
+                                if (isPrimary) {
+                                  // If clicking on primary, make it unselected
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    primary_destination_id: undefined,
+                                    related_destinations: relatedDestinations.filter(name => name !== destination.name)
+                                  }));
+                                } else if (isSecondary) {
+                                  // If clicking on secondary, remove from secondary
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    secondary_destination_ids: secondaryIds.filter(id => id !== destination.id),
+                                    related_destinations: relatedDestinations.filter(name => name !== destination.name)
+                                  }));
+                                } else {
+                                  // If not selected, add as primary if no primary exists, otherwise add as secondary
+                                  if (!formData.primary_destination_id) {
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      primary_destination_id: destination.id,
+                                      related_destinations: [...relatedDestinations, destination.name]
+                                    }));
+                                  } else {
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      secondary_destination_ids: [...secondaryIds, destination.id],
+                                      related_destinations: [...relatedDestinations, destination.name]
+                                    }));
+                                  }
+                                }
+                              }}
+                              className={`relative cursor-pointer rounded-lg border-2 transition-all duration-200 ${
+                                isPrimary
+                                  ? 'border-primary bg-primary/10 shadow-md'
+                                  : isSecondary
+                                  ? 'border-secondary bg-secondary/10 shadow-md'
+                                  : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                              }`}
+                            >
+                              <div className="p-4">
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={destination.image}
+                                    alt={destination.name}
+                                    className="w-12 h-12 object-cover rounded-lg"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                    }}
+                                  />
+                                  <div className="flex-1">
+                                    <h4 className="font-medium text-gray-900">{destination.name}</h4>
+                                    <p className="text-sm text-gray-500">{(destination as any).country}</p>
+                                  </div>
+                                  {isPrimary && (
+                                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                      <span className="text-white text-xs font-bold">P</span>
+                                    </div>
+                                  )}
+                                  {isSecondary && (
+                                    <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
+                                      <span className="text-white text-xs font-bold">S</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      {(!destinations || destinations.length === 0) && (
+                        <div className="text-center py-8 text-gray-500">
+                          <Mountain className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                          <p>No destinations available. Create destinations first.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Related Activities */}
+                    <div className="bg-white rounded-lg shadow-sm border p-6">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center">
+                          <Activity className="w-4 h-4 text-secondary" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">Related Activities</h3>
+                          <p className="text-sm text-gray-500">Select activities that are part of this tour</p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {activities?.map((activity) => {
+                          const isSelected = formData.activity_ids?.includes(activity.id) ||
+                                           formData.related_activities?.includes(activity.name);
+                          return (
+                            <div
+                              key={activity.id}
+                              onClick={() => {
+                                const activityIds = formData.activity_ids || [];
+                                const relatedActivities = formData.related_activities || [];
+                                
+                                if (isSelected) {
+                                  // Remove from selection
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    activity_ids: activityIds.filter(id => id !== activity.id),
+                                    related_activities: relatedActivities.filter(name => name !== activity.name)
+                                  }));
+                                } else {
+                                  // Add to selection
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    activity_ids: [...activityIds, activity.id],
+                                    related_activities: [...relatedActivities, activity.name]
+                                  }));
+                                }
+                              }}
+                              className={`relative cursor-pointer rounded-lg border-2 transition-all duration-200 ${
+                                isSelected
+                                  ? 'border-secondary bg-secondary/5 shadow-md'
+                                  : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                              }`}
+                            >
+                              <div className="p-4">
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={activity.image}
+                                    alt={activity.name}
+                                    className="w-12 h-12 object-cover rounded-lg"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                    }}
+                                  />
+                                  <div className="flex-1">
+                                    <h4 className="font-medium text-gray-900">{activity.name}</h4>
+                                    <p className="text-sm text-gray-500">{(activity as any).type || 'Activity'}</p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
+                                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                      </svg>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      {(!activities || activities.length === 0) && (
+                        <div className="text-center py-8 text-gray-500">
+                          <Activity className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                          <p>No activities available. Create activities first.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Summary */}
+                    <div className="bg-gray-50 rounded-lg p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Relationship Summary</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">Primary Destination</h4>
+                          <div className="space-y-1">
+                            {formData.primary_destination_id ? (
+                              <div className="text-sm text-gray-600 bg-primary/10 border border-primary/20 px-3 py-1 rounded-full inline-block mr-2 mb-1">
+                                <span className="text-primary font-medium">P</span> {destinations?.find(d => d.id === formData.primary_destination_id)?.name}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-500">No primary destination selected</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">Secondary Destinations ({formData.secondary_destination_ids?.length || 0})</h4>
+                          <div className="space-y-1">
+                            {formData.secondary_destination_ids?.length ? (
+                              formData.secondary_destination_ids.map((destId) => {
+                                const dest = destinations?.find(d => d.id === destId);
+                                return dest ? (
+                                  <div key={destId} className="text-sm text-gray-600 bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-full inline-block mr-2 mb-1">
+                                    <span className="text-secondary font-medium">S</span> {dest.name}
+                                  </div>
+                                ) : null;
+                              })
+                            ) : (
+                              <p className="text-sm text-gray-500">No secondary destinations selected</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">Selected Activities ({formData.activity_ids?.length || 0})</h4>
+                          <div className="space-y-1">
+                            {formData.related_activities?.map((activity, index) => (
+                              <div key={index} className="text-sm text-gray-600 bg-white px-3 py-1 rounded-full inline-block mr-2 mb-1">
+                                {activity}
+                              </div>
+                            )) || <p className="text-sm text-gray-500">No activities selected</p>}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 )}
