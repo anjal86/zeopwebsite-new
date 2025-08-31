@@ -724,14 +724,14 @@ app.get('/api/destinations', async (req, res) => {
 
   // Filter by country
   if (country) {
-    filteredDestinations = filteredDestinations.filter(dest => 
+    filteredDestinations = filteredDestinations.filter(dest =>
       dest.country.toLowerCase() === country.toLowerCase()
     );
   }
 
   // Filter by featured
   if (featured === 'true') {
-    filteredDestinations = filteredDestinations.filter(dest => dest.featured);
+    filteredDestinations = filteredDestinations.filter(dest => dest.featured === true);
   }
 
   res.json(filteredDestinations);
@@ -786,6 +786,192 @@ app.get('/api/activities/:id', async (req, res) => {
   }
   
   res.json(activity);
+});
+
+// ==================== ADMIN DESTINATIONS API ====================
+
+// Admin: Get all destinations (including inactive ones)
+app.get('/api/admin/destinations', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    res.json(destinations);
+  } catch (error) {
+    console.error('Error fetching admin destinations:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Create new destination
+app.post('/api/admin/destinations', authenticateToken, async (req, res) => {
+  try {
+    console.log('Creating new destination...');
+    console.log('Request body:', req.body);
+    
+    const { slug, title, country, region, image, featured } = req.body;
+    
+    // Validate required fields
+    if (!slug || !title || !country) {
+      return res.status(400).json({ error: 'Slug, title, and country are required' });
+    }
+    
+    // Check if destination with this slug already exists
+    const existingDestination = destinations.find(d => d.slug === slug);
+    if (existingDestination) {
+      return res.status(400).json({ error: 'A destination with this slug already exists' });
+    }
+    
+    const newDestination = {
+      id: Math.max(...destinations.map(d => d.id), 0) + 1,
+      name: title,
+      slug: slug,
+      title: title,
+      country: country,
+      region: region || '',
+      image: image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop',
+      featured: featured || false,
+      tourCount: 0,
+      href: `/destinations/${slug}`,
+      type: country.toLowerCase() === 'nepal' ? 'nepal' : 'international',
+      description: `Discover the beauty and culture of ${title} in ${country}.`,
+      highlights: [],
+      bestTime: 'Year-round',
+      altitude: 'Varies',
+      difficulty: 'Easy to Moderate',
+      relatedTours: [],
+      relatedActivities: []
+    };
+    
+    destinations.push(newDestination);
+    const saved = saveData('destinations.json', destinations);
+    
+    if (!saved) {
+      throw new Error('Failed to save destination data to file');
+    }
+    
+    console.log('Destination created successfully');
+    res.status(201).json(newDestination);
+  } catch (error) {
+    console.error('Error creating destination:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Update destination (supports both slug and ID)
+app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating destination with identifier:', req.params.identifier);
+    console.log('Request body:', req.body);
+    
+    const { identifier } = req.params;
+    const { title, country, region, image, featured } = req.body;
+    
+    // Try to find by slug first, then by ID
+    let destinationIndex = destinations.findIndex(d => d.slug === identifier);
+    if (destinationIndex === -1) {
+      destinationIndex = destinations.findIndex(d => d.id === parseInt(identifier));
+    }
+    
+    if (destinationIndex === -1) {
+      return res.status(404).json({ error: 'Destination not found' });
+    }
+    
+    const existingDestination = destinations[destinationIndex];
+    
+    // Update the destination
+    destinations[destinationIndex] = {
+      ...existingDestination,
+      name: title || existingDestination.name,
+      title: title || existingDestination.title,
+      country: country || existingDestination.country,
+      region: region !== undefined ? region : existingDestination.region,
+      image: image || existingDestination.image,
+      featured: featured !== undefined ? featured : existingDestination.featured,
+      type: country ? (country.toLowerCase() === 'nepal' ? 'nepal' : 'international') : existingDestination.type,
+      description: title ? `Discover the beauty and culture of ${title} in ${country || existingDestination.country}.` : existingDestination.description
+    };
+    
+    const saved = saveData('destinations.json', destinations);
+    if (!saved) {
+      throw new Error('Failed to save destination data to file');
+    }
+    
+    console.log('Destination updated successfully');
+    res.json(destinations[destinationIndex]);
+  } catch (error) {
+    console.error('Error updating destination:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Delete destination (supports both slug and ID)
+app.delete('/api/admin/destinations/:identifier', authenticateToken, async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    
+    // Try to find by slug first, then by ID
+    let destinationIndex = destinations.findIndex(d => d.slug === identifier);
+    if (destinationIndex === -1) {
+      destinationIndex = destinations.findIndex(d => d.id === parseInt(identifier));
+    }
+    
+    if (destinationIndex === -1) {
+      return res.status(404).json({ error: 'Destination not found' });
+    }
+    
+    destinations.splice(destinationIndex, 1);
+    const saved = saveData('destinations.json', destinations);
+    
+    if (!saved) {
+      throw new Error('Failed to save destination data to file');
+    }
+    
+    res.json({ message: 'Destination deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting destination:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== FILE UPLOAD API ====================
+
+// Admin: Upload file endpoint
+app.post('/api/admin/upload', authenticateToken, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const destinationSlug = req.body.destinationSlug || 'destination';
+    const file = req.file;
+    
+    // Create destination-specific directory
+    const destinationDir = path.join(uploadsDir, 'destinations', destinationSlug);
+    if (!fs.existsSync(destinationDir)) {
+      fs.mkdirSync(destinationDir, { recursive: true });
+    }
+    
+    // Generate unique filename
+    const timestamp = Date.now();
+    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const filename = `${timestamp}_${sanitizedName}`;
+    const finalPath = path.join(destinationDir, filename);
+    
+    // Move file to final location
+    fs.renameSync(file.path, finalPath);
+    
+    // Return the URL path
+    const relativePath = path.relative(uploadsDir, finalPath).replace(/\\/g, '/');
+    const fileUrl = `/uploads/${relativePath}`;
+    
+    res.json({
+      success: true,
+      url: fileUrl,
+      filename: filename
+    });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Health check endpoint

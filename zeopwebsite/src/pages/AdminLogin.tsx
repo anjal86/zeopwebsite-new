@@ -14,8 +14,8 @@ const getApiBaseUrl = (): string => {
     return `${window.location.protocol}//${window.location.host}/api`;
   }
   
-  // Development environment
-  return import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
 };
 
 const AdminLogin: React.FC = () => {

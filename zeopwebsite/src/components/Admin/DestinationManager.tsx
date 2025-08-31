@@ -9,9 +9,12 @@ import {
   Globe,
   Star,
   AlertCircle,
-  Upload
+  Upload,
+  Image as ImageIcon,
+  MapPin
 } from 'lucide-react';
 import { useDestinations } from '../../hooks/useApi';
+import Toggle from '../UI/Toggle';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -21,8 +24,8 @@ const getApiBaseUrl = (): string => {
     return `${window.location.protocol}//${window.location.host}/api`;
   }
   
-  // Development environment
-  return import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
 };
 
 interface ContentDestination {
@@ -194,7 +197,7 @@ const DestinationManager: React.FC = () => {
       };
 
       const url = editingDestination
-        ? `${getApiBaseUrl()}/admin/destinations/${editingDestination.slug}`
+        ? `${getApiBaseUrl()}/admin/destinations/${editingDestination.slug || editingDestination.id}`
         : `${getApiBaseUrl()}/admin/destinations`;
       
       const method = editingDestination ? 'PUT' : 'POST';
@@ -231,7 +234,7 @@ const DestinationManager: React.FC = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug}`, {
+      const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug || 'unknown'}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -293,57 +296,103 @@ const DestinationManager: React.FC = () => {
       </div>
 
       {/* Destinations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {destinations?.map((destination, index) => (
-          <div
-            key={(destination as any).slug || (destination as any).name || (destination as any).id || index}
-            className="card-base hover:shadow-lg transition-all duration-300"
-          >
-            <div className="relative">
-              <img
-                src={destination.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}
-                alt={(destination as any).name || (destination as any).title || 'Destination'}
-                className="w-full h-48 object-cover rounded-t-xl"
-              />
-              {destination.featured && (
-                <div className="absolute top-3 right-3">
-                  <div className="bg-secondary text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                    <Star className="w-3 h-3" />
-                    Featured
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <div className="p-4">
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">{(destination as any).title || (destination as any).name || 'Unnamed Destination'}</h4>
-              
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Globe className="w-4 h-4" />
-                  {destination.country}{(destination as any).region ? `, ${(destination as any).region}` : ''}
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => openModal(destination)}
-                  className="flex-1 bg-primary text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors flex items-center justify-center gap-2"
-                >
-                  <Edit className="w-4 h-4" />
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(destination.slug || destination.name || destination.id?.toString() || '')}
-                  className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between">
+            <h4 className="text-lg font-semibold text-gray-900">Destination Management</h4>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-500">
+                {destinations?.length || 0} destination{(destinations?.length || 0) !== 1 ? 's' : ''} total
               </div>
             </div>
           </div>
-        ))}
+        </div>
+
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {destinations?.map((destination, index) => (
+              <div
+                key={(destination as any).slug || (destination as any).name || (destination as any).id || index}
+                className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 cursor-pointer group"
+                onClick={() => openModal(destination)}
+              >
+                <div className="relative">
+                  <img
+                    src={destination.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}
+                    alt={(destination as any).name || (destination as any).title || 'Destination'}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                    }}
+                  />
+                  {destination.featured && (
+                    <div className="absolute top-3 right-3">
+                      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg">
+                        <Star className="w-3 h-3" />
+                        Featured
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="p-4">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    {(destination as any).title || (destination as any).name || 'Unnamed Destination'}
+                  </h4>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <MapPin className="w-4 h-4" />
+                      {destination.country}{(destination as any).region ? `, ${(destination as any).region}` : ''}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openModal(destination);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete((destination as any).slug || (destination as any).id?.toString() || destination.name || '');
+                      }}
+                      className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center justify-center shadow-sm"
+                      title="Delete destination"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+      {/* Empty State */}
+      {(!destinations || destinations.length === 0) && !loading && (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Globe className="w-8 h-8 text-gray-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Destinations Found</h3>
+          <p className="text-gray-600 mb-4">Get started by creating your first destination.</p>
+          <button
+            onClick={() => openModal()}
+            className="btn-primary flex items-center gap-2 mx-auto"
+          >
+            <Plus className="w-4 h-4" />
+            Create First Destination
+          </button>
+        </div>
+      )}
 
       {/* Modal */}
       <AnimatePresence>
@@ -352,10 +401,8 @@ const DestinationManager: React.FC = () => {
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
             onClick={(e) => e.target === e.currentTarget && closeModal()}
           >
-            <div
-              className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
-            >
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
                 <h3 className="text-xl font-semibold text-gray-900">
                   {editingDestination ? 'Edit Destination' : 'Add New Destination'}
                 </h3>
@@ -367,149 +414,230 @@ const DestinationManager: React.FC = () => {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-140px)]">
-                <div className="p-6 space-y-6">
-                  {submitError && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <div className="flex items-center gap-2 text-red-800">
-                        <AlertCircle className="w-5 h-5" />
-                        <span className="font-medium">Error</span>
-                      </div>
-                      <p className="text-red-700 mt-1">{submitError}</p>
-                    </div>
-                  )}
-
-                  {/* Basic Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Title *
-                      </label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                        placeholder="e.g., Everest Region"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Slug * (Auto-generated)
-                      </label>
-                      <input
-                        type="text"
-                        name="slug"
-                        value={formData.slug}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-gray-50"
-                        placeholder="e.g., everest-region"
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Country *
-                      </label>
-                      <select
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                      >
-                        <option value="Nepal">Nepal</option>
-                        <option value="Tibet">Tibet</option>
-                        <option value="Bhutan">Bhutan</option>
-                        <option value="India">India</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Region *
-                      </label>
-                      <input
-                        type="text"
-                        name="region"
-                        value={formData.region}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                        placeholder="e.g., Khumbu"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Image Upload
-                    </label>
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                      />
-                      <Upload className="w-5 h-5 text-gray-400" />
-                    </div>
-                    {formData.image && (
-                      <div className="mt-3">
-                        <img 
-                          src={formData.image} 
-                          alt="Preview" 
-                          className="h-32 w-32 object-cover rounded-lg border"
-                        />
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+                <div className="overflow-y-auto flex-1 p-6">
+                  <div className="space-y-6">
+                    {submitError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-center gap-2 text-red-800">
+                          <AlertCircle className="w-5 h-5" />
+                          <span className="font-medium">Error</span>
+                        </div>
+                        <p className="text-red-700 mt-1">{submitError}</p>
                       </div>
                     )}
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Image URL (Alternative)
-                    </label>
-                    <input
-                      type="url"
-                      name="image"
-                      value={formData.image}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                      placeholder="https://example.com/image.jpg"
-                    />
-                  </div>
+                    {/* Basic Information */}
+                    <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-900">Basic Information</h4>
+                          <p className="text-sm text-gray-500">Set the main details for this destination</p>
+                        </div>
+                      </div>
 
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      name="featured"
-                      checked={formData.featured}
-                      onChange={handleInputChange}
-                      className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
-                    />
-                    <label className="text-sm font-medium text-gray-700">
-                      Featured Destination
-                    </label>
+                      <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-900 mb-2">
+                              Title *
+                            </label>
+                            <input
+                              type="text"
+                              name="title"
+                              value={formData.title}
+                              onChange={handleInputChange}
+                              required
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              placeholder="e.g., Everest Region"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">This will be the main name displayed for the destination</p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-900 mb-2">
+                              Slug * (Auto-generated)
+                            </label>
+                            <input
+                              type="text"
+                              name="slug"
+                              value={formData.slug}
+                              onChange={handleInputChange}
+                              required
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 transition-colors"
+                              placeholder="e.g., everest-region"
+                              readOnly
+                            />
+                            <p className="text-xs text-gray-500 mt-1">URL-friendly version of the title</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-900 mb-2">
+                              Country *
+                            </label>
+                            <select
+                              name="country"
+                              value={formData.country}
+                              onChange={handleInputChange}
+                              required
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            >
+                              <option value="Nepal">Nepal</option>
+                              <option value="Tibet">Tibet</option>
+                              <option value="Bhutan">Bhutan</option>
+                              <option value="India">India</option>
+                            </select>
+                            <p className="text-xs text-gray-500 mt-1">Select the country where this destination is located</p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-900 mb-2">
+                              Region *
+                            </label>
+                            <input
+                              type="text"
+                              name="region"
+                              value={formData.region}
+                              onChange={handleInputChange}
+                              required
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              placeholder="e.g., Khumbu"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Specific region or area within the country</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Image Upload */}
+                    <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <ImageIcon className="w-4 h-4 text-gray-600" />
+                        </div>
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-900">Destination Image</h4>
+                          <p className="text-sm text-gray-500">Upload or provide a URL for the destination image</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-900 mb-3">
+                            Image Upload
+                          </label>
+                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                            <div className="flex flex-col items-center gap-4">
+                              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                <ImageIcon className="w-6 h-6 text-gray-600" />
+                              </div>
+                              <div>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleFileChange}
+                                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                />
+                                <p className="text-xs text-gray-500 mt-2">
+                                  PNG, JPG, GIF up to 10MB
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {formData.image && (
+                            <div className="mt-6">
+                              <div className="flex items-center justify-between mb-3">
+                                <p className="text-sm font-medium text-gray-900">Current Image:</p>
+                              </div>
+                              <div className="relative">
+                                <img
+                                  src={formData.image}
+                                  alt="Preview"
+                                  className="w-full max-w-md h-48 object-cover rounded-lg border shadow-sm"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (previewUrl && previewUrl.startsWith('blob:')) {
+                                      URL.revokeObjectURL(previewUrl);
+                                    }
+                                    setFormData(prev => ({ ...prev, image: '', imageFile: undefined }));
+                                    setPreviewUrl(null);
+                                  }}
+                                  className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg"
+                                  title="Remove image"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-900 mb-2">
+                            Image URL (Alternative)
+                          </label>
+                          <input
+                            type="url"
+                            name="image"
+                            value={formData.image}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="https://example.com/image.jpg"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">Or provide a direct URL to an image</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Featured Toggle */}
+                    <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                      <div className="bg-white rounded-lg p-4 border border-gray-200">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <label className="text-sm font-medium text-gray-900 cursor-pointer">
+                              Featured Destination
+                            </label>
+                            <p className="text-xs text-gray-500 mt-1">
+                              When enabled, this destination will appear in the "Popular Destinations" section on the homepage
+                            </p>
+                          </div>
+                          <div className="ml-4">
+                            <Toggle
+                              checked={formData.featured}
+                              onChange={(checked: boolean) => setFormData(prev => ({ ...prev, featured: checked }))}
+                              size="md"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+                {/* Sticky Footer with Action Buttons */}
+                <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 font-medium"
                   >
                     {isSubmitting ? (
                       <>

@@ -89,6 +89,10 @@ export function useDestination(id: number) {
   return useApiCall(() => api.destinations.getById(id), [id]);
 }
 
+export function useFeaturedDestinations() {
+  return useApiCall(() => api.destinations.getFeatured());
+}
+
 export function useDestinationsByType(type: 'nepal' | 'international') {
   return useApiCall(() => api.destinations.getByType(type), [type]);
 }

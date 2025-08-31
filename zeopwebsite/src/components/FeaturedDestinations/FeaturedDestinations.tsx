@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mountain, ArrowRight, MapPin } from 'lucide-react';
-import { useDestinations } from '../../hooks/useApi';
+import { useFeaturedDestinations } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const FeaturedDestinations: React.FC = () => {
-  const { data: destinations, loading, error } = useDestinations();
+  const { data: destinations, loading, error } = useFeaturedDestinations();
 
   if (loading) {
     return (
@@ -32,7 +32,7 @@ const FeaturedDestinations: React.FC = () => {
     );
   }
 
-  // Show only first 6 destinations for homepage
+  // Show only first 6 featured destinations for homepage
   const featuredDestinations = destinations?.slice(0, 6) || [];
 
   const containerVariants = {

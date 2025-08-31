@@ -1,0 +1,71 @@
+{
+  "company": {
+    "name": "Zeo Tourism",
+    "tagline": "Embrace the Journey",
+    "description": "Your trusted partner for authentic Himalayan adventures and spiritual journeys"
+  },
+  "contact": {
+    "phone": {
+      "primary": "+977-985-123-4567",
+      "secondary": "+977-1-4123456",
+      "display": "+977 985 123 4567"
+    },
+    "email": {
+      "primary": "info@zeotourism.com",
+      "booking": "booking@zeotourism.com",
+      "admin": "admin@zeotourism.com",
+      "support": "support@zeotourism.com"
+    },
+    "address": {
+      "street": "Thamel, Kathmandu",
+      "city": "Kathmandu",
+      "state": "Bagmati Province",
+      "country": "Nepal",
+      "postal_code": "44600",
+      "full": "Thamel, Kathmandu 44600, Nepal"
+    },
+    "location": {
+      "coordinates": {
+        "latitude": 27.7172,
+        "longitude": 85.3240
+      },
+      "timezone": "Asia/Katmandu",
+      "display": "Kathmandu, Nepal"
+    }
+  },
+  "business": {
+    "hours": {
+      "monday": "9:00 AM - 6:00 PM",
+      "tuesday": "9:00 AM - 6:00 PM",
+      "wednesday": "9:00 AM - 6:00 PM",
+      "thursday": "9:00 AM - 6:00 PM",
+      "friday": "9:00 AM - 6:00 PM",
+      "saturday": "9:00 AM - 5:00 PM",
+      "sunday": "10:00 AM - 4:00 PM",
+      "display": "Mon-Fri: 9:00 AM - 6:00 PM"
+    },
+    "support": {
+      "availability": "24/7 Support Available",
+      "emergency": "+977-985-123-4567",
+      "response_time": "Within 2 hours"
+    }
+  },
+  "social": {
+    "facebook": "https://facebook.com/zeotourism",
+    "instagram": "https://instagram.com/zeotourism",
+    "twitter": "https://twitter.com/zeotourism",
+    "youtube": "https://youtube.com/@zeotourism",
+    "linkedin": "https://linkedin.com/company/zeotourism",
+    "whatsapp": "https://wa.me/9779851234567"
+  },
+  "legal": {
+    "registration": "Tourism License: 1234/078-79",
+    "tax_id": "600123456",
+    "established": "2018",
+    "certifications": [
+      "Nepal Tourism Board Certified",
+      "TAAN Member",
+      "NMA Affiliated"
+    ]
+  }
+}

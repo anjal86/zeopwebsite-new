@@ -6,8 +6,8 @@ const getApiBaseUrl = (): string => {
     return `${window.location.protocol}//${window.location.host}/api`;
   }
   
-  // Development environment
-  return 'http://localhost:3000/api';
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
 };
 
 const getImageBaseUrl = (): string => {
@@ -17,8 +17,8 @@ const getImageBaseUrl = (): string => {
     return `${window.location.protocol}//${window.location.host}`;
   }
   
-  // Development environment
-  return 'http://localhost:3000';
+  // Development environment - use relative URL to leverage Vite proxy
+  return '';
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -377,6 +377,11 @@ export const destinationsApi = {
   // Get destinations by type
   async getByType(type: 'nepal' | 'international'): Promise<Destination[]> {
     return apiCall<Destination[]>(`/destinations?type=${type}`);
+  },
+
+  // Get featured destinations
+  async getFeatured(): Promise<Destination[]> {
+    return apiCall<Destination[]>('/destinations?featured=true');
   },
 
   // Get destination by name
