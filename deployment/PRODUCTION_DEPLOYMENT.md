@@ -3,14 +3,17 @@
 ## Current Issue
 The frontend is trying to call API endpoints at `https://zeo.brandspire.com.np/api/` but getting HTML responses (404 pages) instead of JSON. This means the Node.js API server is not deployed or running on the production server.
 
+## ✅ SQLite3 Dependencies Removed
+All SQLite3 dependencies have been removed from the deployment package.json. The API server now uses only JSON files for data storage, eliminating native compilation issues.
+
 ## Required Steps to Fix API Issues
 
 ### 1. Deploy Node.js API Server
 The production server needs to run the Node.js API server from this deployment folder.
 
 **Files needed on production server:**
-- `server.js` - Main API server
-- `package.json` - Dependencies
+- `server.js` - Main API server (JSON-based, no SQLite)
+- `package.json` - Dependencies (SQLite3 removed)
 - `data/` folder - All JSON data files
 - `uploads/` folder - All uploaded media files
 
@@ -19,6 +22,7 @@ On the production server, run:
 ```bash
 npm install
 ```
+**Note:** No native compilation required - all dependencies are pure JavaScript.
 
 ### 3. Start the API Server
 The API server should be running on the production server:
