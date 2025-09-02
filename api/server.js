@@ -368,7 +368,9 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/sliders', async (req, res) => {
   try {
     await delay(200);
-    const activeSliders = sliders.filter(slider => slider.is_active);
+    const activeSliders = sliders
+      .filter(slider => slider.is_active)
+      .sort((a, b) => a.order_index - b.order_index);
     res.json(activeSliders);
   } catch (error) {
     console.error('Error fetching sliders:', error);
@@ -380,7 +382,8 @@ app.get('/api/sliders', async (req, res) => {
 app.get('/api/admin/sliders', authenticateToken, async (req, res) => {
   try {
     await delay(200);
-    res.json(sliders);
+    const sortedSliders = sliders.sort((a, b) => a.order_index - b.order_index);
+    res.json(sortedSliders);
   } catch (error) {
     console.error('Error fetching admin sliders:', error);
     res.status(500).json({ error: 'Internal server error' });
