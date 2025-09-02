@@ -195,6 +195,11 @@ const Hero: React.FC = () => {
                         : `http://localhost:3000${slides[currentSlide].image}`
                   }
                   src={slides[currentSlide].video.startsWith('blob:') || slides[currentSlide].video.startsWith('http') ? slides[currentSlide].video : `http://localhost:3000${slides[currentSlide].video}`}
+                  onLoadedData={(e) => {
+                    // Start video from 14 seconds
+                    const video = e.target as HTMLVideoElement;
+                    video.currentTime = 14;
+                  }}
                   onError={(e) => {
                     console.error('Video loading error:', slides[currentSlide].video, e);
                     // Hide video and show fallback image
