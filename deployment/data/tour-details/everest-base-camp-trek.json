@@ -1,0 +1,121 @@
+{
+  "id": 1,
+  "slug": "everest-base-camp-trek",
+  "title": "Everest Base Camp Trek",
+  "category": "Trekking",
+  "description": "Experience the ultimate adventure with our Everest Base Camp trek. Journey through the heart of the Himalayas and witness breathtaking mountain views.",
+  "location": "Everest Regions",
+  "price": 2500,
+  "duration": "13 nights 14 days",
+  "group_size": "2-12 people",
+  "difficulty": "Challenging",
+  "rating": 4.9,
+  "reviews": 156,
+  "best_time": "March-May, September-November",
+  "featured": true,
+  "image": "/uploads/destinations/tours/tours-pic-1.webp",
+  "gallery": [
+    "/uploads/destinations/tours/tours-pic-5.webp"
+  ],
+  "highlights": [
+    "Reach Everest Base Camp at 5,364m",
+    "Stunning views of Mount Everest",
+    "Experience Sherpa culture",
+    "Visit Tengboche Monastery",
+    "Cross suspension bridges",
+    "Explore Namche Bazaar"
+  ],
+  "inclusions": [
+    "Airport transfers",
+    "Accommodation in Kathmandu",
+    "Domestic flights",
+    "Experienced guide",
+    "All meals during trek",
+    "Permits and fees",
+    "Porter service",
+    "First aid kit"
+  ],
+  "exclusions": [
+    "International flights",
+    "Nepal visa fees",
+    "Personal expenses",
+    "Travel insurance",
+    "Tips for guide and porter",
+    "Extra meals in Kathmandu",
+    "Personal trekking equipment"
+  ],
+  "activities": [
+    {
+      "name": "Trekking",
+      "description": "Multi-day trekking through Himalayan trails"
+    },
+    {
+      "name": "Mountain Views",
+      "description": "Spectacular views of world's highest peaks"
+    },
+    {
+      "name": "Cultural Experience",
+      "description": "Immerse in authentic Sherpa culture"
+    }
+  ],
+  "created_at": "2025-08-24T13:52:18.549Z",
+  "updated_at": "2025-08-25T06:52:57.340Z",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival in Kathmandu",
+      "description": "Arrive at Tribhuvan International Airport. Transfer to hotel. Trip briefing and preparation.",
+      "accommodation": "Hotel in Kathmandu",
+      "meals": "Welcome dinner"
+    },
+    {
+      "day": 2,
+      "title": "Fly to Lukla, Trek to Phakding",
+      "description": "Early morning flight to Lukla (2,840m). Begin trek to Phakding (2,610m). Walking time: 3-4 hours.",
+      "accommodation": "Tea house in Phakding",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 3,
+      "title": "Trek to Namche Bazaar",
+      "description": "Trek to Namche Bazaar (3,440m), the gateway to Everest. Cross suspension bridges and enter Sagarmatha National Park.",
+      "accommodation": "Tea house in Namche Bazaar",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 4,
+      "title": "Acclimatization Day in Namche",
+      "description": "Rest day for acclimatization. Optional hike to Everest View Hotel or visit local markets.",
+      "accommodation": "Tea house in Namche Bazaar",
+      "meals": "Breakfast, Lunch, Dinner"
+    },
+    {
+      "day": 5,
+      "title": "Trek to Tengboche",
+      "description": "Trek to Tengboche (3,860m). Visit the famous Tengboche Monastery with stunning mountain views.",
+      "accommodation": "Tea house in Tengboche",
+      "meals": "Breakfast, Lunch, Dinner"
+    }
+  ],
+  "what_to_bring": [
+    "Comfortable trekking boots",
+    "Warm clothing layers",
+    "Rain gear",
+    "Sleeping bag",
+    "Personal first aid kit",
+    "Water purification tablets",
+    "Headlamp and batteries",
+    "Sunglasses and sunscreen"
+  ],
+  "fitness_requirements": "Good physical fitness required. Regular cardio exercise recommended 2-3 months before trek.",
+  "altitude_profile": {
+    "max_altitude": "5,364m (Everest Base Camp)",
+    "acclimatization_days": 2,
+    "difficulty_level": "High altitude trekking"
+  },
+  "booking_info": {
+    "advance_booking": "30 days recommended",
+    "group_discounts": "Available for 6+ people",
+    "cancellation_policy": "Free cancellation up to 15 days before departure"
+  }
+}
