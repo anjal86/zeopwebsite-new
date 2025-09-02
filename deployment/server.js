@@ -20,7 +20,14 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000'], // Specific origins for better security
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+    'https://zeo.brandspire.com.np',
+    'http://zeo.brandspire.com.np'
+  ], // Include production domain
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range', 'Cache-Control', 'X-Requested-With', 'Accept', 'Accept-Encoding'],
@@ -47,12 +54,22 @@ app.use('/uploads', (req, res, next) => {
   const filePath = path.join(uploadsDir, req.path);
   
   // Set CORS headers for all uploads
-  res.set({
-    'Access-Control-Allow-Origin': 'http://localhost:5173',
-    'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
-    'Access-Control-Allow-Headers': 'Range, Accept, Accept-Encoding, Cache-Control',
-    'Cross-Origin-Resource-Policy': 'cross-origin'
-  });
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://zeo.brandspire.com.np',
+    'http://zeo.brandspire.com.np'
+  ];
+  
+  if (allowedOrigins.includes(origin)) {
+    res.set({
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+      'Access-Control-Allow-Headers': 'Range, Accept, Accept-Encoding, Cache-Control',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
+    });
+  }
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
