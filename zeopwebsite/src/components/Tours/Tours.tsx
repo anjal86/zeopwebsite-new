@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { Calendar, Users, Star, Heart, TrendingUp, Shield, Award } from 'lucide-react';
-import { useFeaturedTours } from '../../hooks/useApi';
+import { useTours } from '../../hooks/useApi';
+import type { Tour } from '../../services/api';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
 
 const Tours: React.FC = () => {
-  // Use API hook to fetch featured tours
-  const { data: tours, loading, error } = useFeaturedTours();
+  // Use API hook to fetch tours
+  const { data: tours, loading, error } = useTours();
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -111,7 +112,7 @@ const Tours: React.FC = () => {
               }}
               className="tours-swiper pb-12"
             >
-              {tours.map((tour) => (
+              {tours.map((tour: Tour) => (
                 <SwiperSlide key={tour.id}>
                   <motion.div
                     whileHover={{ y: -10 }}
@@ -199,7 +200,7 @@ const Tours: React.FC = () => {
 
                       {/* Highlights */}
                       <div className="flex flex-wrap gap-1 mb-4">
-                        {tour.highlights.slice(0, 2).map((highlight, index) => (
+                        {tour.highlights.slice(0, 2).map((highlight: string, index: number) => (
                           <span
                             key={index}
                             className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
