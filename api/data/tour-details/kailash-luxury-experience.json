@@ -1,0 +1,126 @@
+{
+  "id": 102,
+  "slug": "kailash-luxury-experience",
+  "title": "Luxury Experience - Kailash Mansarovar",
+  "description": "Premium luxury pilgrimage with helicopter access, private ceremonies, and personal spiritual guide. The ultimate comfort journey to the sacred mountain with luxury accommodations and exclusive services.",
+  "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+  "price": 8999,
+  "originalPrice": 11999,
+  "duration": "16 Days",
+  "location": "Mount Kailash, Tibet",
+  "rating": 5.0,
+  "reviews": 89,
+  "group_size": "2-6 people",
+  "difficulty": "Easy",
+  "category": "Luxury Pilgrimage",
+  "featured": true,
+  "highlights": [
+    "Helicopter Access",
+    "Private Ceremonies",
+    "Luxury Camping",
+    "Personal Spiritual Guide",
+    "Exclusive Services",
+    "Premium Accommodations"
+  ],
+  "inclusions": [
+    "Luxury Hotels",
+    "Gourmet Meals",
+    "Private Helicopter",
+    "All Permits",
+    "Personal Guide",
+    "Medical Team",
+    "Private Ceremonies",
+    "Luxury Amenities",
+    "Photography Service"
+  ],
+  "best_time": "May to September",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Luxury Arrival in Kathmandu",
+      "description": "VIP arrival, luxury hotel accommodation, and personal briefing with spiritual guide."
+    },
+    {
+      "day": 2,
+      "title": "Kathmandu Preparation Day",
+      "description": "Spiritual preparation, permit processing, and luxury shopping for the journey."
+    },
+    {
+      "day": 3,
+      "title": "Private Flight to Nepalgunj",
+      "description": "Private charter flight to Nepalgunj with luxury ground services."
+    },
+    {
+      "day": 4,
+      "title": "Helicopter to Simikot",
+      "description": "Private helicopter flight to Simikot with scenic mountain views."
+    },
+    {
+      "day": 5,
+      "title": "Simikot to Hilsa Border",
+      "description": "Luxury ground transport to Tibet border with VIP processing."
+    },
+    {
+      "day": 6,
+      "title": "Hilsa to Taklakot",
+      "description": "Cross into Tibet with expedited processing and luxury accommodation."
+    },
+    {
+      "day": 7,
+      "title": "Acclimatization in Taklakot",
+      "description": "Rest day with spa services and spiritual preparation."
+    },
+    {
+      "day": 8,
+      "title": "Taklakot to Mansarovar",
+      "description": "Luxury transport to sacred Lake Mansarovar with private ceremony."
+    },
+    {
+      "day": 9,
+      "title": "Sacred Mansarovar Experience",
+      "description": "Full day at Mansarovar with private spiritual ceremonies and meditation."
+    },
+    {
+      "day": 10,
+      "title": "Mansarovar to Darchen",
+      "description": "Luxury transport to Darchen with premium camping setup."
+    },
+    {
+      "day": 11,
+      "title": "Kailash Parikrama Day 1",
+      "description": "Begin sacred circumambulation with personal guide and support team."
+    },
+    {
+      "day": 12,
+      "title": "Kailash Parikrama Day 2",
+      "description": "Cross Dolma La Pass with helicopter support if needed."
+    },
+    {
+      "day": 13,
+      "title": "Kailash Parikrama Day 3",
+      "description": "Complete the sacred circuit and return to luxury base camp."
+    },
+    {
+      "day": 14,
+      "title": "Darchen to Taklakot",
+      "description": "Luxury return journey with celebration dinner."
+    },
+    {
+      "day": 15,
+      "title": "Taklakot to Kathmandu",
+      "description": "VIP border crossing and private flight back to Kathmandu."
+    },
+    {
+      "day": 16,
+      "title": "Departure",
+      "description": "Luxury departure services and blessed farewell."
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+    "https://images.unsplash.com/photo-1545389336-cf090694435e?q=80&w=2070",
+    "https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2070"
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-15T00:00:00.000Z"
+}

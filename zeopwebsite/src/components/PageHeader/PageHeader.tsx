@@ -19,7 +19,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   const breadcrumbParts = breadcrumb.split(' > ');
   const isDestinationDetail = breadcrumbParts.length > 1 && breadcrumbParts[0] === 'Destinations'; // Is a destination detail page
   return (
-    <section className="relative text-white overflow-hidden min-h-[60vh] flex items-center">
+    <section className="relative text-white overflow-hidden min-h-[40vh] flex items-center">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -32,7 +32,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       </div>
       
       {/* Content */}
-      <div className="section-container text-center relative z-10 w-full py-32">
+      <div className="section-container text-center relative z-10 w-full py-20 pt-40">
         <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4">
           {title}
         </h1>

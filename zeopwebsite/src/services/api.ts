@@ -105,6 +105,7 @@ export interface Slider {
   location?: string;
   image: string;
   video?: string;
+  video_start_time?: number;
   order_index: number;
   is_active: boolean;
   button_text?: string;

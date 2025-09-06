@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -87,33 +88,35 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <Layout>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/destinations" element={<DestinationsPage />} />
-          <Route path="/destinations/:destinationName" element={<DestinationDetail />} />
-          <Route path="/tours" element={<ToursPage />} />
-          <Route path="/tours/:tourSlug" element={<TourDetail />} />
-          <Route path="/activities" element={<ActivitiesPage />} />
-          <Route path="/activities/:activityName" element={<ActivityDetail />} />
-          <Route path="/kailash-mansarovar" element={<KailashMansarovarPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/tours/new" element={<TourEditor />} />
-          <Route path="/admin/tours/:tourSlug" element={<TourEditor />} />
-          
-          {/* Catch-all route for 404 pages */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <Layout>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/destinations" element={<DestinationsPage />} />
+            <Route path="/destinations/:destinationName" element={<DestinationDetail />} />
+            <Route path="/tours" element={<ToursPage />} />
+            <Route path="/tours/:tourSlug" element={<TourDetail />} />
+            <Route path="/activities" element={<ActivitiesPage />} />
+            <Route path="/activities/:activityName" element={<ActivityDetail />} />
+            <Route path="/kailash-mansarovar" element={<KailashMansarovarPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/tours/new" element={<TourEditor />} />
+            <Route path="/admin/tours/:tourSlug" element={<TourEditor />} />
+            
+            {/* Catch-all route for 404 pages */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </HelmetProvider>
   );
 }
 

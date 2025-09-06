@@ -416,6 +416,7 @@ app.post('/api/admin/sliders', authenticateToken, (req, res) => {
         location: sliderData.location || '',
         image: sliderData.image || '',
         video: sliderData.video || '',
+        video_start_time: sliderData.video_start_time || 0,
         order_index: sliderData.order_index || 1,
         is_active: sliderData.is_active !== undefined ? sliderData.is_active : true,
         button_text: sliderData.button_text || '',
@@ -1411,6 +1412,86 @@ app.patch('/api/admin/testimonials/:id/featured', authenticateToken, async (req,
     });
   } catch (error) {
     console.error('Error toggling featured status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== SITEMAP GENERATION API ====================
+
+// Auto-generate sitemap endpoint
+app.get('/api/generate-sitemap', async (req, res) => {
+  try {
+    const { generateSitemap } = require('../zeopwebsite/scripts/generateSitemap.cjs');
+    await generateSitemap();
+    
+    res.json({
+      success: true,
+      message: 'Sitemap generated successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate sitemap',
+      message: error.message
+    });
+  }
+});
+
+// Serve sitemap.xml
+app.get('/sitemap.xml', (req, res) => {
+  try {
+    const sitemapPath = path.join(__dirname, '../zeopwebsite/public/sitemap.xml');
+    
+    if (fs.existsSync(sitemapPath)) {
+      res.set('Content-Type', 'application/xml');
+      res.sendFile(sitemapPath);
+    } else {
+      res.status(404).json({ error: 'Sitemap not found' });
+    }
+  } catch (error) {
+    console.error('Error serving sitemap:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== SITEMAP GENERATION API ====================
+
+// Auto-generate sitemap endpoint
+app.get('/api/generate-sitemap', async (req, res) => {
+  try {
+    const { generateSitemap } = require('../zeopwebsite/scripts/generateSitemap.cjs');
+    await generateSitemap();
+    
+    res.json({
+      success: true,
+      message: 'Sitemap generated successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate sitemap',
+      message: error.message
+    });
+  }
+});
+
+// Serve sitemap.xml
+app.get('/sitemap.xml', (req, res) => {
+  try {
+    const sitemapPath = path.join(__dirname, '../zeopwebsite/public/sitemap.xml');
+    
+    if (fs.existsSync(sitemapPath)) {
+      res.set('Content-Type', 'application/xml');
+      res.sendFile(sitemapPath);
+    } else {
+      res.status(404).json({ error: 'Sitemap not found' });
+    }
+  } catch (error) {
+    console.error('Error serving sitemap:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

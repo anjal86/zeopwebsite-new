@@ -53,6 +53,7 @@ interface Slider {
   location?: string;
   image: string;
   video?: string;
+  video_start_time?: number;
   order_index: number;
   is_active: boolean;
   button_text?: string;
@@ -245,6 +246,9 @@ const SliderManager: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [isReordering] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   // DnD Kit sensors
   const sensors = useSensors(
@@ -261,6 +265,7 @@ const SliderManager: React.FC = () => {
     location: '',
     image: '',
     video: '',
+    video_start_time: 0,
     order_index: 1,
     is_active: true,
     button_text: 'Explore Adventures',
@@ -319,6 +324,7 @@ const SliderManager: React.FC = () => {
       location: '',
       image: '',
       video: '',
+      video_start_time: 0,
       order_index: sliders ? Math.max(...sliders.map(s => s.order_index)) + 1 : 1,
       is_active: true,
       button_text: 'Explore Adventures',
@@ -414,6 +420,69 @@ const SliderManager: React.FC = () => {
     }
   };
 
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      
+      // Create a fake event object to reuse existing logic
+      const fakeEvent = {
+        target: {
+          files: [file]
+        }
+      } as any;
+      
+      handleMediaChange(fakeEvent);
+    }
+  };
+
+  // Format time helper
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Video timeline handlers
+  const handleVideoLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    setVideoDuration(video.duration);
+    setIsVideoLoaded(true);
+    if (formData.video_start_time) {
+      video.currentTime = formData.video_start_time;
+    }
+  };
+
+  const handleTimelineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value);
+    setFormData(prev => ({ ...prev, video_start_time: newTime }));
+    
+    // Update video preview time
+    const video = document.querySelector('.video-timeline-preview') as HTMLVideoElement;
+    if (video) {
+      video.currentTime = newTime;
+    }
+  };
+
+  const handleVideoSeek = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    setFormData(prev => ({ ...prev, video_start_time: video.currentTime }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -432,6 +501,7 @@ const SliderManager: React.FC = () => {
         location: formData.location,
         image: formData.image,
         video: formData.video,
+        video_start_time: formData.video_start_time,
         order_index: formData.order_index,
         is_active: formData.is_active,
         button_text: formData.button_text,
@@ -777,100 +847,138 @@ const SliderManager: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Media Upload */}
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-semibold text-gray-900">Background Media</h4>
-                          <p className="text-sm text-gray-500">Upload image or video for the slider background</p>
+                    {/* Media Upload - First Priority */}
+                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <ImageIcon className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold text-gray-900">Media Upload</h4>
+                            <p className="text-sm text-gray-600">Upload your slider background</p>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-3">
-                            Media File *
-                          </label>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                            <div className="flex flex-col items-center gap-4">
-                              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                {mediaType === 'video' ? (
-                                  <Play className="w-6 h-6 text-gray-600" />
-                                ) : (
-                                  <ImageIcon className="w-6 h-6 text-gray-600" />
-                                )}
+                      <div className="p-6">
+                        {/* Enhanced Minimal Upload Zone */}
+                        <div
+                          className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+                            isDragOver
+                              ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 scale-[1.02] shadow-lg'
+                              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+                          }`}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          onDrop={handleDrop}
+                        >
+                          <div className="flex flex-col items-center gap-4">
+                            {/* Animated Icon */}
+                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                              isDragOver
+                                ? 'bg-blue-200 scale-110 rotate-3'
+                                : 'bg-gradient-to-br from-gray-100 to-gray-200 hover:from-blue-50 hover:to-blue-100'
+                            }`}>
+                              {isDragOver ? (
+                                <svg className="w-8 h-8 text-blue-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                              ) : (
+                                <ImageIcon className="w-8 h-8 text-gray-600" />
+                              )}
+                            </div>
+                            
+                            {/* Upload Text */}
+                            <div className="space-y-2">
+                              <h4 className={`text-lg font-semibold transition-colors ${
+                                isDragOver ? 'text-blue-700' : 'text-gray-800'
+                              }`}>
+                                {isDragOver ? 'Drop your file here!' : 'Upload Media'}
+                              </h4>
+                              
+                              <p className="text-sm text-gray-500">
+                                Drag & drop or click to browse
+                              </p>
+                            </div>
+                            
+                            {/* File Input Button */}
+                            <label className="relative cursor-pointer">
+                              <div className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                Choose File
                               </div>
-                              <div>
-                                <input
-                                  type="file"
-                                  accept="image/*,video/*"
-                                  onChange={handleMediaChange}
-                                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                                />
-                                <p className="text-xs text-gray-500 mt-2">
-                                  Images: PNG, JPG, GIF up to 2GB (auto-compressed)<br />
-                                  Videos: MP4, WebM up to 2GB (auto-compressed)<br />
-                                  <span className="text-orange-600 font-medium">Large files will be automatically optimized</span>
-                                </p>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={handleMediaChange}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              />
+                            </label>
+                            
+                            {/* File Type Indicators */}
+                            <div className="flex items-center gap-6 text-xs text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <ImageIcon className="w-4 h-4" />
+                                <span>Images</span>
+                              </div>
+                              <div className="w-px h-4 bg-gray-300"></div>
+                              <div className="flex items-center gap-1">
+                                <Play className="w-4 h-4" />
+                                <span>Videos</span>
                               </div>
                             </div>
                           </div>
+                        </div>
 
-                          {/* Current Media Display */}
-                          {(formData.image || formData.video || previewUrl) && (
-                            <div className="mt-6">
-                              <div className="flex items-center justify-between mb-3">
-                                <p className="text-sm font-medium text-gray-900">Current Media:</p>
-                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium ${
-                                  mediaType === 'video'
-                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                    : 'bg-gray-50 text-gray-700 border border-gray-200'
-                                }`}>
-                                  {mediaType === 'video' ? (
-                                    <>
-                                      <Play className="w-3 h-3" />
-                                      Video
-                                    </>
-                                  ) : (
-                                    <>
-                                      <ImageIcon className="w-3 h-3" />
-                                      Image
-                                    </>
-                                  )}
-                                </span>
-                              </div>
-                              
+                        {/* Simple Media Preview with Timeline */}
+                        {(formData.image || formData.video || previewUrl) && (
+                          <div className="mt-6">
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                               <div className="relative">
                                 {mediaType === 'video' ? (
-                                  previewUrl ? (
+                                  <div className="space-y-4">
                                     <video
-                                      src={previewUrl}
-                                      className="w-full max-w-md h-48 object-cover rounded-lg border shadow-sm"
+                                      src={previewUrl || formData.video}
+                                      className="video-timeline-preview w-full h-48 object-cover rounded-lg border bg-black"
                                       controls
+                                      onLoadedMetadata={handleVideoLoadedMetadata}
+                                      onSeeked={handleVideoSeek}
                                       onError={(e) => {
                                         console.error('Video preview error:', e);
                                       }}
                                     />
-                                  ) : formData.video ? (
-                                    <video
-                                      src={formData.video}
-                                      className="w-full max-w-md h-48 object-cover rounded-lg border shadow-sm"
-                                      controls
-                                      onError={(e) => {
-                                        console.error('Video error:', e);
-                                      }}
-                                    />
-                                  ) : null
+                                    
+                                    {/* Simple Timeline Control */}
+                                    {isVideoLoaded && videoDuration > 0 && (
+                                      <div className="space-y-3 bg-white p-4 rounded-lg border">
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-sm font-medium text-gray-700">Video Start Time:</span>
+                                          <span className="text-sm text-blue-600 font-semibold">
+                                            {formatTime(formData.video_start_time || 0)} / {formatTime(videoDuration)}
+                                          </span>
+                                        </div>
+                                        
+                                        <input
+                                          type="range"
+                                          min="0"
+                                          max={videoDuration}
+                                          step="0.5"
+                                          value={formData.video_start_time || 0}
+                                          onChange={handleTimelineChange}
+                                          className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-timeline"
+                                          style={{
+                                            background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((formData.video_start_time || 0) / videoDuration) * 100}%, #e5e7eb ${((formData.video_start_time || 0) / videoDuration) * 100}%, #e5e7eb 100%)`
+                                          }}
+                                        />
+                                        <p className="text-xs text-gray-500 text-center">Drag to set where the video should start</p>
+                                      </div>
+                                    )}
+                                  </div>
                                 ) : (
                                   <img
                                     src={previewUrl || formData.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}
                                     alt="Preview"
-                                    className="w-full max-w-md h-48 object-cover rounded-lg border shadow-sm"
+                                    className="w-full h-48 object-cover rounded-lg border"
                                     onError={(e) => {
                                       console.error('Image preview error:', previewUrl || formData.image);
                                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
@@ -878,44 +986,28 @@ const SliderManager: React.FC = () => {
                                   />
                                 )}
                                 
-                                {/* Remove Media Button */}
+                                {/* Simple Remove Button */}
                                 <button
                                   type="button"
                                   onClick={() => {
                                     if (previewUrl && previewUrl.startsWith('blob:')) {
                                       URL.revokeObjectURL(previewUrl);
                                     }
-                                    setFormData(prev => ({ ...prev, image: '', video: '', mediaFile: undefined }));
+                                    setFormData(prev => ({ ...prev, image: '', video: '', mediaFile: undefined, video_start_time: 0 }));
                                     setPreviewUrl(null);
                                     setMediaType('image');
+                                    setIsVideoLoaded(false);
+                                    setVideoDuration(0);
                                   }}
-                                  className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg"
-                                  title="Remove media"
+                                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors text-xs"
+                                  title="Remove"
                                 >
-                                  <X className="w-4 h-4" />
+                                  <X className="w-3 h-3" />
                                 </button>
                               </div>
                             </div>
-                          )}
-
-                          {/* Info Box */}
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-                            <div className="flex gap-3">
-                              <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              <div className="text-sm text-blue-800">
-                                <p className="font-medium mb-1">Media Guidelines:</p>
-                                <ul className="space-y-1 text-xs">
-                                  <li>• <strong>Images:</strong> Will be used as static background (auto-compressed to WebP/JPEG)</li>
-                                  <li>• <strong>Videos:</strong> Will autoplay as background (auto-compressed to MP4 H.264)</li>
-                                  <li>• <strong>Recommended:</strong> Use high-quality, landscape-oriented media</li>
-                                  <li>• <strong>Performance:</strong> Files are automatically optimized for web delivery</li>
-                                </ul>
-                              </div>
-                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
 

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { ChevronDown, MapPin } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, MapPin, Volume2, VolumeX } from 'lucide-react';
 import { useSliders } from '../../hooks/useApi';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   
   // Fetch sliders from API
   const { data: slides, loading, error } = useSliders();
@@ -56,37 +58,6 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Handle user interaction for video unmuting
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      if (!userInteracted) {
-        setUserInteracted(true);
-        // Try to unmute Kailash video if it's currently playing
-        const videos = document.querySelectorAll('video');
-        videos.forEach((video) => {
-          if (slides && slides[currentSlide]?.title === 'Kailash Mansarovar Yatra') {
-            try {
-              video.muted = false;
-              console.log('Video unmuted after user interaction');
-            } catch (error) {
-              console.log('Could not unmute video:', error);
-            }
-          }
-        });
-      }
-    };
-
-    // Add event listeners for user interaction
-    document.addEventListener('click', handleUserInteraction, { once: true });
-    document.addEventListener('touchstart', handleUserInteraction, { once: true });
-    document.addEventListener('keydown', handleUserInteraction, { once: true });
-
-    return () => {
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-    };
-  }, [slides, currentSlide, userInteracted]);
 
   useEffect(() => {
     if (!slides || slides.length === 0) return;
@@ -99,6 +70,60 @@ const Hero: React.FC = () => {
     }, duration);
     return () => clearInterval(interval);
   }, [slides, currentSlide]);
+
+  // Navigation functions
+  const goToPrevSlide = () => {
+    if (!slides || slides.length === 0) return;
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToNextSlide = () => {
+    if (!slides || slides.length === 0) return;
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  // Touch/swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      goToNextSlide();
+    } else if (isRightSwipe) {
+      goToPrevSlide();
+    }
+  };
+
+  // Handle mute/unmute functionality
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    const videos = document.querySelectorAll('video');
+    videos.forEach((video) => {
+      video.muted = !isMuted;
+    });
+  };
+
+  // Update video mute state when isMuted changes
+  useEffect(() => {
+    const videos = document.querySelectorAll('video');
+    videos.forEach((video) => {
+      video.muted = isMuted;
+    });
+  }, [isMuted]);
 
   const textVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -149,7 +174,13 @@ const Hero: React.FC = () => {
   }
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden bg-black">
+    <section
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden bg-black"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       {/* Background Slider with Parallax */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -180,7 +211,7 @@ const Hero: React.FC = () => {
                     left: '-5vw'
                   }}
                   autoPlay
-                  muted={true}
+                  muted={isMuted}
                   loop
                   playsInline
                   preload="auto"
@@ -196,9 +227,10 @@ const Hero: React.FC = () => {
                   }
                   src={slides[currentSlide].video.startsWith('blob:') || slides[currentSlide].video.startsWith('http') ? slides[currentSlide].video : `http://localhost:3000${slides[currentSlide].video}`}
                   onLoadedData={(e) => {
-                    // Start video from 14 seconds
+                    // Start video from configured start time
                     const video = e.target as HTMLVideoElement;
-                    video.currentTime = 14;
+                    const startTime = slides[currentSlide].video_start_time || 14;
+                    video.currentTime = startTime;
                   }}
                   onError={(e) => {
                     console.error('Video loading error:', slides[currentSlide].video, e);
@@ -370,6 +402,33 @@ const Hero: React.FC = () => {
         </div>
       </motion.div>
 
+      {/* Navigation Arrows */}
+      {slides && slides.length > 1 && (
+        <>
+          {/* Previous Arrow */}
+          <motion.button
+            onClick={goToPrevSlide}
+            whileHover={{ scale: 1.1, x: -2 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute left-2 sm:left-4 md:left-8 top-[55%] sm:top-[58%] md:top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:text-sky-blue transition-colors duration-300" />
+          </motion.button>
+
+          {/* Next Arrow */}
+          <motion.button
+            onClick={goToNextSlide}
+            whileHover={{ scale: 1.1, x: 2 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute right-2 sm:right-4 md:right-8 top-[55%] sm:top-[58%] md:top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:text-sky-blue transition-colors duration-300" />
+          </motion.button>
+        </>
+      )}
+
       {/* Slide Indicators with Parallax */}
       <motion.div
         className="absolute bottom-8 md:bottom-10 w-full z-20"
@@ -405,6 +464,31 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Mute/Unmute Button - Only show when there's a video */}
+      {slides && slides[currentSlide]?.video && (
+        <motion.div
+          className="absolute bottom-4 right-4 z-30"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.button
+            onClick={toggleMute}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="glass p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20"
+            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          >
+            {isMuted ? (
+              <VolumeX className="w-5 h-5" />
+            ) : (
+              <Volume2 className="w-5 h-5" />
+            )}
+          </motion.button>
+        </motion.div>
+      )}
 
       {/* Additional Parallax Layers for Depth */}
       {!isMobile && (

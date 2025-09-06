@@ -46,10 +46,11 @@
     "order_index": 1,
     "is_active": true,
     "created_at": "2025-09-02T04:11:00.000Z",
-    "updated_at": "2025-09-02T04:13:52.957Z",
+    "updated_at": "2025-09-06T19:42:13.078Z",
     "show_button": true,
     "button_text": "Book Sacred Journey",
     "button_url": "/kailash-mansarovar",
-    "button_style": "primary"
+    "button_style": "primary",
+    "video_start_time": 164.5
   }
 ]

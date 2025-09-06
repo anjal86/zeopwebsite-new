@@ -14,6 +14,7 @@ import {
   Mail,
   Clock3
 } from 'lucide-react';
+import SEO from '../components/SEO/SEO';
 import Hero from '../components/Hero/Hero';
 import FeaturedDestinations from '../components/FeaturedDestinations/FeaturedDestinations';
 import TestimonialsSlider from '../components/Testimonials/TestimonialsSlider';
@@ -21,6 +22,7 @@ import { useCountUp } from '../hooks/useCountUp';
 import { useDestinations, useContact } from '../hooks/useApi';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
+import { createOrganizationSchema, createWebSiteSchema, createLocalBusinessSchema } from '../utils/schema';
 
 // Animated Counter Component
 const AnimatedCounter: React.FC<{
@@ -51,9 +53,24 @@ const AnimatedCounter: React.FC<{
 const Home: React.FC = () => {
   const { data: contactInfo } = useContact();
   
+  // Create structured data for the homepage
+  const organizationSchema = createOrganizationSchema();
+  const websiteSchema = createWebSiteSchema();
+  const localBusinessSchema = createLocalBusinessSchema();
+  
   return (
-    <div className="home-page">
-      <Hero />
+    <>
+      <SEO
+        title="Zeo Tourism - Nepal Tours, Travel & Holiday Packages"
+        description="Discover Nepal with Zeo Tourism. Customized tour packages, cultural holidays, adventure travel, and spiritual journeys. 25+ years of Nepal travel expertise."
+        keywords="Nepal tours, Nepal travel packages, Nepal holidays, cultural tours Nepal, adventure travel, spiritual journeys, luxury travel Nepal, Nepal vacation packages, tour operator Nepal"
+        url="https://zeotourism.com"
+        type="website"
+        structuredData={[organizationSchema, websiteSchema, localBusinessSchema]}
+      />
+      
+      <div className="home-page">
+        <Hero />
       
       {/* Quick Services Section */}
       <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
@@ -313,7 +330,8 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -8,27 +8,27 @@ const Footer: React.FC = () => {
   const { data: contactInfo } = useContact();
   const footerLinks = {
     destinations: [
-      { name: 'Everest Base Camp', href: '#' },
-      { name: 'Kailash Mansarovar', href: '#' },
-      { name: 'Annapurna Circuit', href: '#' },
-      { name: 'Kathmandu Valley', href: '#' },
-      { name: 'Langtang Valley', href: '#' },
-      { name: 'Pokhara', href: '#' }
+      { name: 'Everest Base Camp', href: '/tours/everest-base-camp-trek' },
+      { name: 'Kailash Mansarovar', href: '/kailash-mansarovar' },
+      { name: 'Annapurna Circuit', href: '/tours/annapurna-circuit-trek' },
+      { name: 'Langtang Valley', href: '/tours/langtang-valley-trek' },
+      { name: 'Chitwan Safari', href: '/tours/chitwan-safari-adventure' },
+      { name: 'All Destinations', href: '/destinations' }
     ],
     company: [
       { name: 'About Us', href: '/about' },
-      { name: 'Our Team', href: '#' },
-      { name: 'Testimonials', href: '#' },
-      { name: 'Careers', href: '#' },
+      { name: 'Our Tours', href: '/tours' },
+      { name: 'Activities', href: '/activities' },
+      { name: 'Destinations', href: '/destinations' },
       { name: 'Contact', href: '/contact' }
     ],
     support: [
-      { name: 'Travel Insurance', href: '#' },
-      { name: 'Visa Information', href: '#' },
-      { name: 'Packing List', href: '#' },
-      { name: 'Health & Safety', href: '#' },
-      { name: 'FAQs', href: '#' },
-      { name: 'Terms & Conditions', href: '#' }
+      { name: 'Tour Packages', href: '/tours' },
+      { name: 'Holiday Planning', href: '/contact' },
+      { name: 'Travel Tips', href: '/about' },
+      { name: 'Booking Help', href: '/contact' },
+      { name: 'Customer Support', href: '/contact' },
+      { name: 'Travel Insurance', href: '/contact' }
     ]
   };
 
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
                   />
                 </Link>
                 <p className="text-gray-400 mb-6 max-w-sm">
-                  {contactInfo?.company.description || 'Your trusted partner for authentic Himalayan adventures. Creating memories that last a lifetime since 2009.'}
+                  {contactInfo?.company.description || 'Your trusted partner for Nepal tours, travel packages, and holiday experiences. Specializing in cultural tours, adventure travel, and spiritual journeys since 2000.'}
                 </p>
                 
                 {/* Contact Info */}
@@ -117,12 +117,12 @@ const Footer: React.FC = () => {
                 <ul className="space-y-2">
                   {footerLinks.destinations.map((link, index) => (
                     <li key={index}>
-                      <a
-                        href={link.href}
+                      <Link
+                        to={link.href}
                         className="text-gray-400 hover:text-sky-blue transition-colors duration-300 text-sm"
                       >
                         {link.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -174,12 +174,12 @@ const Footer: React.FC = () => {
                 <ul className="space-y-2">
                   {footerLinks.support.map((link, index) => (
                     <li key={index}>
-                      <a
-                        href={link.href}
+                      <Link
+                        to={link.href}
                         className="text-gray-400 hover:text-sky-blue transition-colors duration-300 text-sm"
                       >
                         {link.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

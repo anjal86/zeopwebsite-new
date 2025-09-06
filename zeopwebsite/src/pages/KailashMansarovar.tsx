@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Phone,
@@ -8,9 +9,12 @@ import {
 } from 'lucide-react';
 import PageHeader from '../components/PageHeader/PageHeader';
 import TourGrid from '../components/Tours/TourGrid';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
+import ErrorMessage from '../components/UI/ErrorMessage';
 import type { Tour } from '../services/api';
 
 const KailashMansarovarPage: React.FC = () => {
+  const navigate = useNavigate();
   const spiritualJourney = [
     {
       title: "Purification of Soul",
@@ -50,8 +54,48 @@ const KailashMansarovarPage: React.FC = () => {
     activity: ''
   });
 
-  // Kailash Mansarovar tour packages formatted as Tour objects
-  const kailashTours: Tour[] = [
+  // State for API data
+  const [kailashTours, setKailashTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch Kailash packages from tours API
+  useEffect(() => {
+    const fetchKailashPackages = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/tours');
+        if (!response.ok) {
+          throw new Error('Failed to fetch tours');
+        }
+        const allTours = await response.json();
+        console.log('All tours from API:', allTours);
+        // For now, show all tours until server is restarted to pick up new Kailash tours
+        // Filter for Kailash-related tours (will work once server is restarted)
+        const kailashTours = allTours.filter((tour: Tour) =>
+          tour.location.toLowerCase().includes('kailash') ||
+          tour.title.toLowerCase().includes('kailash') ||
+          tour.category.toLowerCase().includes('pilgrimage')
+        );
+        
+        // If no Kailash tours found, show all tours temporarily
+        const toursToShow = kailashTours.length > 0 ? kailashTours : allTours;
+        console.log('Tours to show:', toursToShow);
+        setKailashTours(toursToShow);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching Kailash packages:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load packages');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchKailashPackages();
+  }, []);
+
+  // Remove hardcoded data - now using API
+  const kailashToursOld: Tour[] = [
     {
       id: 1,
       slug: 'kailash-sacred-journey',
@@ -176,12 +220,14 @@ const KailashMansarovarPage: React.FC = () => {
 
   const handleTourBook = (tour: Tour) => {
     console.log('Booking Kailash tour:', tour.title);
-    // Implement booking logic
+    // Navigate to tour detail page for booking
+    navigate(`/tours/${tour.slug}`);
   };
 
   const handleTourView = (tour: Tour) => {
     console.log('Viewing Kailash tour details:', tour.title);
-    // Navigate to tour detail page or show modal
+    // Navigate to tour detail page
+    navigate(`/tours/${tour.slug}`);
   };
 
   return (
@@ -278,12 +324,28 @@ const KailashMansarovarPage: React.FC = () => {
             </p>
           </motion.div>
 
-          <TourGrid
-            tours={kailashTours}
-            filters={filters}
-            onTourBook={handleTourBook}
-            onTourView={handleTourView}
-          />
+          {/* Loading State */}
+          {loading && (
+            <LoadingSpinner className="py-20" size="lg" />
+          )}
+
+          {/* Error State */}
+          {error && (
+            <ErrorMessage
+              message={`Failed to load Kailash packages: ${error}`}
+              className="py-20"
+            />
+          )}
+
+          {/* Tours Grid */}
+          {!loading && !error && (
+            <TourGrid
+              tours={kailashTours}
+              filters={filters}
+              onTourBook={handleTourBook}
+              onTourView={handleTourView}
+            />
+          )}
         </div>
       </section>
 

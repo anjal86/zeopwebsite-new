@@ -1,0 +1,103 @@
+{
+  "id": 101,
+  "slug": "kailash-sacred-journey",
+  "title": "Sacred Journey - Kailash Mansarovar",
+  "description": "Embark on the most sacred pilgrimage on Earth. Experience the divine presence of Lord Shiva at Mount Kailash and cleanse your spirit in the holy waters of Lake Mansarovar.",
+  "image": "https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070",
+  "price": 3999,
+  "originalPrice": 4999,
+  "duration": "12 Days",
+  "location": "Mount Kailash, Tibet",
+  "rating": 4.8,
+  "reviews": 156,
+  "group_size": "10-15 people",
+  "difficulty": "Moderate",
+  "category": "Pilgrimage",
+  "featured": false,
+  "highlights": [
+    "Mount Kailash Darshan",
+    "Mansarovar Lake",
+    "Sacred Parikrama",
+    "Spiritual Ceremonies",
+    "Tibetan Monasteries",
+    "Cultural Immersion"
+  ],
+  "inclusions": [
+    "Accommodation",
+    "All Meals",
+    "Transportation",
+    "Permits",
+    "Spiritual Guide",
+    "Sacred Ceremonies"
+  ],
+  "best_time": "May to September",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival in Kathmandu",
+      "description": "Arrive in Kathmandu, meet our team, and prepare for the sacred journey ahead."
+    },
+    {
+      "day": 2,
+      "title": "Kathmandu to Nepalgunj",
+      "description": "Fly to Nepalgunj and prepare for border crossing to Tibet."
+    },
+    {
+      "day": 3,
+      "title": "Nepalgunj to Simikot to Hilsa",
+      "description": "Helicopter flight to Simikot, then drive to Hilsa border."
+    },
+    {
+      "day": 4,
+      "title": "Hilsa to Taklakot",
+      "description": "Cross into Tibet and drive to Taklakot for acclimatization."
+    },
+    {
+      "day": 5,
+      "title": "Taklakot to Mansarovar",
+      "description": "Drive to the sacred Lake Mansarovar for holy bath and prayers."
+    },
+    {
+      "day": 6,
+      "title": "Mansarovar to Darchen",
+      "description": "Morning prayers at Mansarovar, then drive to Darchen, base for Kailash Parikrama."
+    },
+    {
+      "day": 7,
+      "title": "Kailash Parikrama Day 1",
+      "description": "Begin the sacred circumambulation of Mount Kailash."
+    },
+    {
+      "day": 8,
+      "title": "Kailash Parikrama Day 2",
+      "description": "Cross Dolma La Pass (5,630m) and complete the sacred circuit."
+    },
+    {
+      "day": 9,
+      "title": "Darchen to Taklakot",
+      "description": "Return journey to Taklakot for rest and reflection."
+    },
+    {
+      "day": 10,
+      "title": "Taklakot to Hilsa",
+      "description": "Drive back to Hilsa border."
+    },
+    {
+      "day": 11,
+      "title": "Hilsa to Simikot to Nepalgunj",
+      "description": "Cross back to Nepal and fly to Nepalgunj."
+    },
+    {
+      "day": 12,
+      "title": "Return to Kathmandu",
+      "description": "Fly back to Kathmandu with blessed memories."
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070",
+    "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2070",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070"
+  ],
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-15T00:00:00.000Z"
+}
