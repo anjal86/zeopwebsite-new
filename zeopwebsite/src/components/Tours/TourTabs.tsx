@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Check, Info, FileText, Camera, Activity, Bed, Utensils, X } from 'lucide-react';
 
 interface ItineraryDay {
@@ -33,30 +33,47 @@ const TourTabs: React.FC<TourTabsProps> = ({
   title
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [hasHiddenTabs, setHasHiddenTabs] = useState(false);
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Info },
     { id: 'itinerary', label: 'Itinerary', icon: FileText },
-    { id: 'inclusions', label: 'Inclusions', icon: Check },
-    { id: 'gallery', label: 'Gallery', icon: Camera }
+    { id: 'inclusions', label: 'Inclusions', icon: Check }
   ];
+
+  // Check if tabs are clipped/hidden
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (tabsContainerRef.current) {
+        const container = tabsContainerRef.current;
+        const isScrollable = container.scrollWidth > container.clientWidth;
+        setHasHiddenTabs(isScrollable);
+      }
+    };
+
+    checkScrollable();
+    window.addEventListener('resize', checkScrollable);
+    return () => window.removeEventListener('resize', checkScrollable);
+  }, []);
 
   return (
     <div className="bg-white rounded-xl shadow-sm mb-8">
       {/* Tab Navigation */}
-      <div className="border-b px-6">
-        <div className="flex space-x-8 overflow-x-auto">
+      <div className="border-b px-6 tour-tabs relative">
+        <div
+          ref={tabsContainerRef}
+          className="flex space-x-2 overflow-x-auto pb-0 scrollbar-thin"
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-green-600 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+                className={`tour-tab-button flex items-center space-x-2 whitespace-nowrap ${
+                  activeTab === tab.id ? 'active' : ''
+                } ${hasHiddenTabs && tab.id === tabs[tabs.length - 1].id ? 'sacred-pulse' : ''}`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
@@ -64,10 +81,15 @@ const TourTabs: React.FC<TourTabsProps> = ({
             );
           })}
         </div>
+        
+        {/* Gradient fade indicator for hidden tabs */}
+        {hasHiddenTabs && (
+          <div className="absolute right-6 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+        )}
       </div>
 
       {/* Tab Content */}
-      <div className="p-6">
+      <div className="p-6 tab-content">
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
@@ -276,38 +298,6 @@ const TourTabs: React.FC<TourTabsProps> = ({
           </div>
         )}
 
-        {/* Gallery Tab */}
-        {activeTab === 'gallery' && (
-          <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Photo Gallery</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {images.map((image, index) => (
-                <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
-                  <img
-                    src={image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${image}`}
-                    alt={`${title} - Image ${index + 1}`}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      console.error('Failed to load gallery image:', image);
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                    }}
-                  />
-                </div>
-              ))}
-              {/* Add more placeholder images if needed */}
-              {images.length === 1 && (
-                <>
-                  <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
-                    <Camera className="w-12 h-12 text-gray-400" />
-                  </div>
-                  <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
-                    <Camera className="w-12 h-12 text-gray-400" />
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -468,7 +468,7 @@ const Hero: React.FC = () => {
       {/* Mute/Unmute Button - Only show when there's a video */}
       {slides && slides[currentSlide]?.video && (
         <motion.div
-          className="absolute bottom-4 right-4 z-30"
+          className="absolute bottom-4 left-4 z-30"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}

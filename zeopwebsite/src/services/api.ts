@@ -126,7 +126,7 @@ export interface Contact {
     phone: {
       primary: string;
       secondary: string;
-      display: string;
+      whatsapp: string;
     };
     email: {
       primary: string;

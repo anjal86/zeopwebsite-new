@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, MessageCircle, Mail, AlertCircle, CheckCircle } from 'lucide-react';
+import { useContact } from '../../hooks/useApi';
 
 interface TourEnquiryButtonProps {
   price: number;
@@ -8,6 +9,7 @@ interface TourEnquiryButtonProps {
 }
 
 const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle }) => {
+  const { data: contactInfo } = useContact();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -95,7 +97,8 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle 
     const messageInfo = formData.message ? `Message: ${formData.message}\n` : '';
     
     const message = `Hi! I'm interested in the ${tourTitle || 'tour'}.\n\n${customerInfo}${emailInfo}${phoneInfo}${travelersInfo}${dateInfo}${messageInfo}\nCould you please provide more details?`;
-    const whatsappUrl = `https://wa.me/9779851234567?text=${encodeURIComponent(message)}`;
+    const whatsappNumber = contactInfo?.contact.phone.whatsapp?.replace('+', '') || '9779851234567';
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -108,7 +111,7 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle 
     
     const subject = `Enquiry about ${tourTitle || 'Tour'}`;
     const body = `Hi,\n\nI'm interested in the ${tourTitle || 'tour'}.\n\n${customerInfo}${phoneInfo}${travelersInfo}${dateInfo}${messageInfo}\nCould you please provide more details?\n\nThank you!`;
-    const emailUrl = `mailto:info@zeotourism.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const emailUrl = `mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = emailUrl;
   };
 

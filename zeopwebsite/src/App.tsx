@@ -7,6 +7,7 @@ import 'aos/dist/aos.css';
 // Import components
 import Navigation from './components/Navigation/Navigation';
 import Footer from './components/Footer/Footer';
+import FloatingWhatsApp from './components/UI/FloatingWhatsApp';
 
 // Import pages
 import Home from './pages/Home';
@@ -61,6 +62,13 @@ function Layout({ children }: { children: React.ReactNode }) {
       
       {/* Footer - Only show on non-admin routes */}
       {!isAdminRoute && <Footer />}
+      
+      {/* Floating WhatsApp - Only show on non-admin routes */}
+      {!isAdminRoute && (
+        <div className="fixed bottom-6 right-6 z-30">
+          <FloatingWhatsApp />
+        </div>
+      )}
     </div>
   );
 }

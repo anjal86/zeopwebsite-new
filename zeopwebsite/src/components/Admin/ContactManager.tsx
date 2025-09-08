@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   Save,
@@ -40,7 +40,7 @@ interface ContactFormData {
     phone: {
       primary: string;
       secondary: string;
-      display: string;
+      whatsapp: string;
     };
     email: {
       primary: string;
@@ -100,9 +100,10 @@ interface ContactFormData {
 
 const ContactManager: React.FC = () => {
   const { data: contactInfo, loading, error, refetch } = useContact();
-  const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
   const [formData, setFormData] = useState<ContactFormData>({
     company: {
       name: 'Zeo Tourism',
@@ -111,23 +112,23 @@ const ContactManager: React.FC = () => {
     },
     contact: {
       phone: {
-        primary: '+977-985-123-4567',
-        secondary: '+977-1-4123456',
-        display: '+977 985 123 4567'
+        primary: '+97714500064',
+        secondary: '+97714500064',
+        whatsapp: '+9779705246799'
       },
       email: {
-        primary: 'info@zeotourism.com',
-        booking: 'booking@zeotourism.com',
+        primary: 'sales@zeotourism.com',
+        booking: 'sales@zeotourism.com',
         admin: 'admin@zeotourism.com',
-        support: 'support@zeotourism.com'
+        support: 'sales@zeotourism.com'
       },
       address: {
-        street: 'Thamel, Kathmandu',
+        street: 'Baluwatar-4, Kathmandu',
         city: 'Kathmandu',
         state: 'Bagmati Province',
         country: 'Nepal',
         postal_code: '44600',
-        full: 'Thamel, Kathmandu 44600, Nepal'
+        full: 'Baluwatar-4, Kathmandu, Nepal'
       },
       location: {
         coordinates: {
@@ -151,7 +152,7 @@ const ContactManager: React.FC = () => {
       },
       support: {
         availability: '24/7 Support Available',
-        emergency: '+977-985-123-4567',
+        emergency: '+9779705246799',
         response_time: 'Within 2 hours'
       }
     },
@@ -161,7 +162,7 @@ const ContactManager: React.FC = () => {
       twitter: 'https://twitter.com/zeotourism',
       youtube: 'https://youtube.com/@zeotourism',
       linkedin: 'https://linkedin.com/company/zeotourism',
-      whatsapp: 'https://wa.me/9779851234567'
+      whatsapp: 'https://wa.me/9779705246799'
     },
     legal: {
       registration: 'Tourism License: 1234/078-79',
@@ -178,6 +179,57 @@ const ContactManager: React.FC = () => {
     }
   }, [contactInfo]);
 
+  // Debounce utility function
+  const debounce = useCallback((func: Function, wait: number) => {
+    let timeout: number;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = window.setTimeout(() => func(...args), wait);
+    };
+  }, []);
+
+  // Auto-save function without page refresh
+  const autoSave = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${getApiBaseUrl()}/admin/contact`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save contact information');
+      }
+
+      // Don't refetch - just show success
+      setLastSaved(new Date());
+      setSubmitError(null);
+      
+      // Show save notification
+      setShowSaveNotification(true);
+      setTimeout(() => setShowSaveNotification(false), 3000);
+    } catch (error) {
+      console.error('Error saving contact information:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Failed to save contact information');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Debounced auto-save
+  const debouncedAutoSave = useCallback(
+    debounce((data: ContactFormData) => autoSave(data), 1000),
+    [debounce]
+  );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const keys = name.split('.');
@@ -191,47 +243,12 @@ const ContactManager: React.FC = () => {
       }
       
       current[keys[keys.length - 1]] = value;
+      
+      // Auto-save after change
+      debouncedAutoSave(newData);
+      
       return newData;
     });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${getApiBaseUrl()}/admin/contact`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save contact information');
-      }
-
-      await refetch();
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error saving contact information:', error);
-      setSubmitError(error instanceof Error ? error.message : 'Failed to save contact information');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const cancelEdit = () => {
-    if (contactInfo) {
-      setFormData(contactInfo);
-    }
-    setIsEditing(false);
-    setSubmitError(null);
   };
 
   if (loading) {
@@ -265,396 +282,280 @@ const ContactManager: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-xl font-semibold text-gray-900">Contact Information</h3>
-          <p className="text-gray-600">Manage your business contact details and information</p>
+          <p className="text-gray-600">Edit any field - changes are saved automatically</p>
         </div>
-        {!isEditing ? (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Save className="w-4 h-4" />
-            Edit Contact Info
-          </button>
-        ) : (
-          <div className="flex gap-2">
-            <button
-              onClick={cancelEdit}
-              className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  Save Changes
-                </>
-              )}
-            </button>
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          {isSubmitting && (
+            <div className="flex items-center text-blue-600">
+              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+              <span className="text-sm">Saving...</span>
+            </div>
+          )}
+          {lastSaved && !isSubmitting && (
+            <div className="text-sm text-green-600">
+              Last saved: {lastSaved.toLocaleTimeString()}
+            </div>
+          )}
+          {submitError && (
+            <div className="text-sm text-red-600">
+              Save failed
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Contact Information Form */}
+      {/* Save Notification Toast */}
+      {showSaveNotification && (
+        <div className="fixed top-4 right-4 z-50">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center animate-slide-in-right">
+            <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center mr-3">
+              <Save className="w-3 h-3 text-green-500" />
+            </div>
+            <div>
+              <p className="font-medium">Contact information saved!</p>
+              <p className="text-green-100 text-sm">Changes updated successfully</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auto-Save Contact Information Form */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <form onSubmit={handleSubmit}>
-          <div className="p-6 space-y-8">
-            {submitError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <div className="flex items-center gap-2 text-red-800">
-                  <AlertCircle className="w-5 h-5" />
-                  <span className="font-medium">Error</span>
-                </div>
-                <p className="text-red-700 mt-1">{submitError}</p>
+        <div className="p-6 space-y-6">
+          {submitError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-red-800">
+                <AlertCircle className="w-5 h-5" />
+                <span className="font-medium">Error</span>
               </div>
-            )}
+              <p className="text-red-700 mt-1">{submitError}</p>
+            </div>
+          )}
 
-            {/* Company Information */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <Building className="w-4 h-4 text-gray-600" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">Company Information</h4>
-                  <p className="text-sm text-gray-500">Basic company details and branding</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Company Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="company.name"
-                      value={formData.company.name}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="e.g., Zeo Tourism"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Tagline
-                    </label>
-                    <input
-                      type="text"
-                      name="company.tagline"
-                      value={formData.company.tagline}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="e.g., Embrace the Journey"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Description
-                  </label>
-                  <textarea
-                    name="company.description"
-                    value={formData.company.description}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                    placeholder="Brief description of your company"
-                  />
-                </div>
+          {/* Essential Contact Information */}
+          <div className="space-y-6">
+            {/* Company Info */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Company Information</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="company.name"
+                  value={formData.company.name}
+                  onChange={handleInputChange}
+                  placeholder="Company Name"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="text"
+                  name="company.tagline"
+                  value={formData.company.tagline}
+                  onChange={handleInputChange}
+                  placeholder="Company Tagline"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
             </div>
 
-            {/* Contact Details */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-gray-600" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">Contact Details</h4>
-                  <p className="text-sm text-gray-500">Phone numbers, email addresses, and location</p>
-                </div>
+            {/* Company Description */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Company Description</h4>
+              <textarea
+                name="company.description"
+                value={formData.company.description}
+                onChange={handleInputChange}
+                rows={3}
+                placeholder="Company Description"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              />
+            </div>
+
+            {/* Additional Email Addresses */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Additional Email Addresses</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="email"
+                  name="contact.email.admin"
+                  value={formData.contact.email.admin}
+                  onChange={handleInputChange}
+                  placeholder="Admin Email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="email"
+                  name="contact.email.support"
+                  value={formData.contact.email.support}
+                  onChange={handleInputChange}
+                  placeholder="Support Email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
+            </div>
 
-              <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
-                {/* Phone Numbers */}
-                <div>
-                  <h5 className="text-md font-semibold text-gray-900 mb-4">Phone Numbers</h5>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Primary Phone *</label>
-                      <input
-                        type="tel"
-                        name="contact.phone.primary"
-                        value={formData.contact.phone.primary}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="+977-985-123-4567"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Phone</label>
-                      <input
-                        type="tel"
-                        name="contact.phone.secondary"
-                        value={formData.contact.phone.secondary}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="+977-1-4123456"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Display Format</label>
-                      <input
-                        type="text"
-                        name="contact.phone.display"
-                        value={formData.contact.phone.display}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="+977 985 123 4567"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Email Addresses */}
-                <div>
-                  <h5 className="text-md font-semibold text-gray-900 mb-4">Email Addresses</h5>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Primary Email *</label>
-                      <input
-                        type="email"
-                        name="contact.email.primary"
-                        value={formData.contact.email.primary}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="info@zeotourism.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Booking Email</label>
-                      <input
-                        type="email"
-                        name="contact.email.booking"
-                        value={formData.contact.email.booking}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="booking@zeotourism.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Admin Email</label>
-                      <input
-                        type="email"
-                        name="contact.email.admin"
-                        value={formData.contact.email.admin}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="admin@zeotourism.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Support Email</label>
-                      <input
-                        type="email"
-                        name="contact.email.support"
-                        value={formData.contact.email.support}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="support@zeotourism.com"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div>
-                  <h5 className="text-md font-semibold text-gray-900 mb-4">Address Information</h5>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
-                      <input
-                        type="text"
-                        name="contact.address.street"
-                        value={formData.contact.address.street}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="Thamel, Kathmandu"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                      <input
-                        type="text"
-                        name="contact.address.city"
-                        value={formData.contact.address.city}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="Kathmandu"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">State/Province</label>
-                      <input
-                        type="text"
-                        name="contact.address.state"
-                        value={formData.contact.address.state}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="Bagmati Province"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Country *</label>
-                      <input
-                        type="text"
-                        name="contact.address.country"
-                        value={formData.contact.address.country}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                        placeholder="Nepal"
-                      />
-                    </div>
-                  </div>
-                </div>
+            {/* Additional Address Fields */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Additional Address Information</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="contact.address.state"
+                  value={formData.contact.address.state}
+                  onChange={handleInputChange}
+                  placeholder="State/Province"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="text"
+                  name="contact.address.country"
+                  value={formData.contact.address.country}
+                  onChange={handleInputChange}
+                  placeholder="Country"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
             </div>
 
             {/* Business Hours */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-gray-600" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">Business Hours</h4>
-                  <p className="text-sm text-gray-500">Operating hours and support availability</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Support Availability</label>
-                    <input
-                      type="text"
-                      name="business.support.availability"
-                      value={formData.business.support.availability}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="24/7 Support Available"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Response Time</label>
-                    <input
-                      type="text"
-                      name="business.support.response_time"
-                      value={formData.business.support.response_time}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="Within 2 hours"
-                    />
-                  </div>
-                </div>
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Business Hours</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="business.support.availability"
+                  value={formData.business.support.availability}
+                  onChange={handleInputChange}
+                  placeholder="Support Availability"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="text"
+                  name="business.support.response_time"
+                  value={formData.business.support.response_time}
+                  onChange={handleInputChange}
+                  placeholder="Response Time"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
             </div>
 
             {/* Social Media */}
-            <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <Users className="w-4 h-4 text-gray-600" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">Social Media</h4>
-                  <p className="text-sm text-gray-500">Social media profiles and links</p>
-                </div>
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Social Media</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="url"
+                  name="social.facebook"
+                  value={formData.social.facebook}
+                  onChange={handleInputChange}
+                  placeholder="Facebook URL"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="url"
+                  name="social.instagram"
+                  value={formData.social.instagram}
+                  onChange={handleInputChange}
+                  placeholder="Instagram URL"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="url"
+                  name="social.whatsapp"
+                  value={formData.social.whatsapp}
+                  onChange={handleInputChange}
+                  placeholder="WhatsApp URL"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="url"
+                  name="social.youtube"
+                  value={formData.social.youtube}
+                  onChange={handleInputChange}
+                  placeholder="YouTube URL"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
+            </div>
 
-              <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
-                    <input
-                      type="url"
-                      name="social.facebook"
-                      value={formData.social.facebook}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="https://facebook.com/zeotourism"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
-                    <input
-                      type="url"
-                      name="social.instagram"
-                      value={formData.social.instagram}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="https://instagram.com/zeotourism"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
-                    <input
-                      type="url"
-                      name="social.whatsapp"
-                      value={formData.social.whatsapp}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="https://wa.me/9779851234567"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
-                    <input
-                      type="url"
-                      name="social.youtube"
-                      value={formData.social.youtube}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:bg-gray-50"
-                      placeholder="https://youtube.com/@zeotourism"
-                    />
-                  </div>
-                </div>
+            {/* Contact Numbers */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Phone Numbers</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  type="tel"
+                  name="contact.phone.primary"
+                  value={formData.contact.phone.primary}
+                  onChange={handleInputChange}
+                  placeholder="Primary Phone"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="tel"
+                  name="contact.phone.secondary"
+                  value={formData.contact.phone.secondary}
+                  onChange={handleInputChange}
+                  placeholder="Secondary Phone"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="tel"
+                  name="contact.phone.whatsapp"
+                  value={formData.contact.phone.whatsapp}
+                  onChange={handleInputChange}
+                  placeholder="WhatsApp Number"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Email Addresses */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Email Addresses</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="email"
+                  name="contact.email.primary"
+                  value={formData.contact.email.primary}
+                  onChange={handleInputChange}
+                  placeholder="Primary Email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="email"
+                  name="contact.email.booking"
+                  value={formData.contact.email.booking}
+                  onChange={handleInputChange}
+                  placeholder="Booking Email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Address</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="contact.address.street"
+                  value={formData.contact.address.street}
+                  onChange={handleInputChange}
+                  placeholder="Street Address"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
+                <input
+                  type="text"
+                  name="contact.address.city"
+                  value={formData.contact.address.city}
+                  onChange={handleInputChange}
+                  placeholder="City"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

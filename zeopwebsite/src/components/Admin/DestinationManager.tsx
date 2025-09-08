@@ -11,10 +11,15 @@ import {
   AlertCircle,
   Upload,
   Image as ImageIcon,
-  MapPin
+  MapPin,
+  Search,
+  Filter
 } from 'lucide-react';
 import { useDestinations } from '../../hooks/useApi';
 import Toggle from '../UI/Toggle';
+import SearchableSelect from '../UI/SearchableSelect';
+// @ts-ignore
+import { getData } from 'country-list';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -53,6 +58,8 @@ const DestinationManager: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [countryFilter, setCountryFilter] = useState('');
 
   const [formData, setFormData] = useState<DestinationFormData>({
     slug: '',
@@ -139,6 +146,25 @@ const DestinationManager: React.FC = () => {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
+
+  // Handle country selection from SearchableSelect
+  const handleCountryChange = (value: string) => {
+    setFormData(prev => ({ ...prev, country: value }));
+  };
+
+  // Get all countries from the library and add custom entries
+  const allCountries = getData();
+  const countryOptions = [
+    // Add custom entries first
+    { value: 'Tibet', label: 'Tibet' },
+    // Then add all countries from the library
+    ...allCountries.map((country: any) => ({
+      value: country.name,
+      label: country.name
+    })),
+    // Add other custom entries
+    { value: 'Other', label: 'Other' }
+  ].sort((a, b) => a.label.localeCompare(b.label));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -308,19 +334,35 @@ const DestinationManager: React.FC = () => {
     );
   }
 
-  // Filter destinations based on active tab
+  // Enhanced filtering with search and country filter
   const filteredDestinations = destinations?.filter(destination => {
     const country = (destination as any).country || '';
     const type = (destination as any).type || '';
+    const name = (destination as any).name || (destination as any).title || '';
+    const region = (destination as any).region || '';
     
-    console.log('Filtering destination:', destination.name, 'Country:', country, 'Type:', type, 'Active tab:', activeTab);
-    
+    // Tab filter
+    let tabMatch = false;
     if (activeTab === 'nepal') {
-      return country === 'Nepal' || type === 'nepal';
+      tabMatch = country === 'Nepal' || type === 'nepal';
     } else {
-      return country !== 'Nepal' && type === 'international';
+      tabMatch = country !== 'Nepal' && type === 'international';
     }
+    
+    // Search filter
+    const searchMatch = searchTerm === '' ||
+      name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      region.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Country filter
+    const countryMatch = countryFilter === '' || country === countryFilter;
+    
+    return tabMatch && searchMatch && countryMatch;
   }) || [];
+
+  // Get unique countries for filter dropdown
+  const availableCountries = destinations ? [...new Set(destinations.map(d => (d as any).country).filter(Boolean))] : [];
 
   console.log('Filtered destinations for', activeTab, ':', filteredDestinations.map(d => d.name));
 
@@ -339,6 +381,52 @@ const DestinationManager: React.FC = () => {
           <Plus className="w-4 h-4" />
           Add Destination
         </button>
+      </div>
+
+      {/* Search and Filter Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Search */}
+          <div className="md:col-span-2">
+            <div className="relative">
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search destinations by name, country, or region..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Country Filter */}
+          <div>
+            <select
+              value={countryFilter}
+              onChange={(e) => setCountryFilter(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Countries</option>
+              {availableCountries.map(country => (
+                <option key={country} value={country}>{country}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Clear Filters */}
+          <div>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setCountryFilter('');
+              }}
+              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Tab Navigation */}
@@ -549,18 +637,13 @@ const DestinationManager: React.FC = () => {
                             <label className="block text-sm font-medium text-gray-900 mb-2">
                               Country *
                             </label>
-                            <select
-                              name="country"
+                            <SearchableSelect
+                              options={countryOptions}
                               value={formData.country}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                            >
-                              <option value="Nepal">Nepal</option>
-                              <option value="Tibet">Tibet</option>
-                              <option value="Bhutan">Bhutan</option>
-                              <option value="India">India</option>
-                            </select>
+                              onChange={handleCountryChange}
+                              placeholder="Select a country"
+                              name="country"
+                            />
                             <p className="text-xs text-gray-500 mt-1">Select the country where this destination is located</p>
                           </div>
                           <div>

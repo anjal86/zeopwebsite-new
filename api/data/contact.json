@@ -6,28 +6,28 @@
   },
   "contact": {
     "phone": {
-      "primary": "+977-985-123-4567",
-      "secondary": "+977-1-4123456",
-      "display": "+977 985 123 4567"
+      "primary": "+9779705246799",
+      "secondary": "+97714500064",
+      "whatsapp": "+9779705246799"
     },
     "email": {
-      "primary": "info@zeotourism.com",
-      "booking": "booking@zeotourism.com",
+      "primary": "sales@zeotourism.com",
+      "booking": "sales@zeotourism.com",
       "admin": "admin@zeotourism.com",
-      "support": "support@zeotourism.com"
+      "support": "sales@zeotourism.com"
     },
     "address": {
-      "street": "Thamel, Kathmandu",
+      "street": "Baluwatar-4, Kathmandu",
       "city": "Kathmandu",
       "state": "Bagmati Province",
       "country": "Nepal",
       "postal_code": "44600",
-      "full": "Thamel, Kathmandu 44600, Nepal"
+      "full": "Baluwatar-4, Kathmandu, Nepal"
     },
     "location": {
       "coordinates": {
         "latitude": 27.7172,
-        "longitude": 85.3240
+        "longitude": 85.324
       },
       "timezone": "Asia/Katmandu",
       "display": "Kathmandu, Nepal"
@@ -56,7 +56,8 @@
     "twitter": "https://twitter.com/zeotourism",
     "youtube": "https://youtube.com/@zeotourism",
     "linkedin": "https://linkedin.com/company/zeotourism",
-    "whatsapp": "https://wa.me/9779851234567"
+    "whatsapp": "https://wa.me/9779705246799",
+    "website": "www.zeotourism.com"
   },
   "legal": {
     "registration": "Tourism License: 1234/078-79",

@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   Menu, X, Phone, Mail, MapPin, Calendar, LogIn
 } from 'lucide-react';
+import { useContact } from '../../hooks/useApi';
 
 interface NavItem {
   label: string;
@@ -11,6 +12,7 @@ interface NavItem {
 }
 
 const Navigation: React.FC = () => {
+  const { data: contactInfo } = useContact();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -83,26 +85,26 @@ const Navigation: React.FC = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-6">
               <motion.a
-                href="mailto:info@zeotourism.com"
+                href={`mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}`}
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center hover:text-secondary transition-colors duration-300"
               >
                 <Mail className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">info@zeotourism.com</span>
+                <span className="hidden sm:inline font-medium">{contactInfo?.contact.email.primary || 'info@zeotourism.com'}</span>
               </motion.a>
               <motion.a
-                href="tel:+9779851234567"
+                href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`}
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center hover:text-secondary transition-colors duration-300"
               >
                 <Phone className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">+977 985-123-4567</span>
+                <span className="hidden sm:inline font-medium">{contactInfo?.contact.phone.primary || '+9779851234567'}</span>
               </motion.a>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
                 <MapPin className="w-3 h-3 mr-2 text-secondary" />
-                <span className="font-medium">Kathmandu, Nepal</span>
+                <span className="font-medium">{contactInfo?.contact.address.street || 'Baluwatar-4, Kathmandu'}</span>
               </div>
               {/* Login Text in Top Bar */}
               <Link to="/admin/login">
@@ -249,7 +251,7 @@ const Navigation: React.FC = () => {
                 <div className="mt-6 pt-6 border-t space-y-3 border-gray-200">
                   <div className="flex items-center justify-center gap-2 py-2 text-gray-600">
                     <Phone className="w-4 h-4" />
-                    <span className="text-sm">+977 985-123-4567</span>
+                    <span className="text-sm">{contactInfo?.contact.phone.primary || '+9779851234567'}</span>
                   </div>
                   
                   {/* Mobile Plan Your Trip Button */}

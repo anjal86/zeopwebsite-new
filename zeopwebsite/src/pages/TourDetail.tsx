@@ -51,6 +51,7 @@ const TourDetail: React.FC = () => {
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [showFloatingButton, setShowFloatingButton] = useState(true);
   const enquirySectionRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   
   // Find the tour by slug
   const tour = allTours?.find(t => t.slug === tourSlug);
@@ -136,11 +137,17 @@ const TourDetail: React.FC = () => {
       if (!enquirySectionRef.current) return;
       
       const enquirySection = enquirySectionRef.current;
-      const rect = enquirySection.getBoundingClientRect();
+      const enquiryRect = enquirySection.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Hide floating button when enquiry section is visible or passed
-      if (rect.top <= windowHeight && rect.bottom >= 0) {
+      // Check if we're near the bottom of the page (footer area)
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeightFull = window.innerHeight;
+      const distanceFromBottom = documentHeight - (scrollTop + windowHeightFull);
+      
+      // Hide floating button when enquiry section is visible, passed, or near footer (bottom 200px)
+      if ((enquiryRect.top <= windowHeight && enquiryRect.bottom >= 0) || distanceFromBottom < 200) {
         setShowFloatingButton(false);
       } else {
         setShowFloatingButton(true);
@@ -296,43 +303,44 @@ const TourDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Floating Enquiry Button for Mobile */}
+      {/* Floating Enquiry Button Bar for Mobile */}
       {showFloatingButton && (
-        <div className="fixed bottom-4 right-4 z-40 lg:hidden">
-          <div className="flex flex-col gap-2">
-            {/* Main Enquiry Button */}
-            <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              onClick={handleFloatingEnquiry}
-              className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <Send className="w-6 h-6" />
-            </motion.button>
-            
-            {/* WhatsApp Button */}
-            <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              onClick={handleFloatingWhatsApp}
-              className="bg-green-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <MessageCircle className="w-5 h-5" />
-            </motion.button>
-            
-            {/* Email Button */}
-            <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              onClick={handleFloatingEmail}
-              className="bg-gray-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <Mail className="w-5 h-5" />
-            </motion.button>
-          </div>
+        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            className="bg-white border-t border-gray-200 shadow-lg"
+          >
+            <div className="grid grid-cols-3 gap-0">
+              {/* Main Enquiry Button */}
+              <button
+                onClick={handleFloatingEnquiry}
+                className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+              >
+                <Send className="w-5 h-5 mb-1" />
+                <span className="text-xs font-medium">Enquiry</span>
+              </button>
+              
+              {/* WhatsApp Button */}
+              <button
+                onClick={handleFloatingWhatsApp}
+                className="bg-green-500 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+              >
+                <MessageCircle className="w-5 h-5 mb-1" />
+                <span className="text-xs font-medium">WhatsApp</span>
+              </button>
+              
+              {/* Email Button */}
+              <button
+                onClick={handleFloatingEmail}
+                className="bg-gray-600 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+              >
+                <Mail className="w-5 h-5 mb-1" />
+                <span className="text-xs font-medium">Email</span>
+              </button>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>

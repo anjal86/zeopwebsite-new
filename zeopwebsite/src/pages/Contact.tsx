@@ -9,8 +9,8 @@ const ContactPage: React.FC = () => {
   return (
     <div className="contact-page">
       <PageHeader
-        title="Start Your Adventure Today"
-        subtitle="Ready to explore? Fill out the form below or reach out directly. Our travel experts are here to help you plan the perfect journey."
+        title={contactInfo?.company.tagline || "Embrace the Journey"}
+        subtitle={contactInfo?.company.description || "Your trusted partner for authentic Himalayan adventures and spiritual journeys. Get in touch with our travel experts to plan your perfect journey."}
         breadcrumb="Contact"
         backgroundImage="https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070"
       />
