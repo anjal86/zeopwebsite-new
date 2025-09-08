@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Send, MessageCircle, Mail } from 'lucide-react';
 import TourCard from '../components/Tours/TourCard';
 import TourImageSlider from '../components/Tours/TourImageSlider';
 import TourEnquiryButton from '../components/Tours/TourEnquiryButton';
-import TourEnquiryModal, { type EnquiryFormData } from '../components/Tours/TourEnquiryModal';
 import TourHeader from '../components/Tours/TourHeader';
 import TourTabs, { type ItineraryDay } from '../components/Tours/TourTabs';
 import { useTours, useDestinations, useActivities } from '../hooks/useApi';
@@ -49,7 +49,8 @@ const TourDetail: React.FC = () => {
   
   const [tourDetails, setTourDetails] = useState<TourDetails | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [showFloatingButton, setShowFloatingButton] = useState(true);
+  const enquirySectionRef = useRef<HTMLDivElement>(null);
   
   // Find the tour by slug
   const tour = allTours?.find(t => t.slug === tourSlug);
@@ -128,13 +129,47 @@ const TourDetail: React.FC = () => {
         : []
   ).filter(Boolean) : [];
 
-  // Handle enquiry form submission
-  const handleEnquirySubmit = async (formData: EnquiryFormData) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // Handle floating button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!enquirySectionRef.current) return;
+      
+      const enquirySection = enquirySectionRef.current;
+      const rect = enquirySection.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Hide floating button when enquiry section is visible or passed
+      if (rect.top <= windowHeight && rect.bottom >= 0) {
+        setShowFloatingButton(false);
+      } else {
+        setShowFloatingButton(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial position
     
-    // Here you would typically send the data to your backend
-    console.log('Enquiry submitted:', formData);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // WhatsApp and Email handlers for floating button
+  const handleFloatingWhatsApp = () => {
+    const message = `Hi! I'm interested in the ${tourDetails?.title || 'tour'}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/9779851234567?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleFloatingEmail = () => {
+    const subject = `Enquiry about ${tourDetails?.title || 'Tour'}`;
+    const body = `Hi,\n\nI'm interested in the ${tourDetails?.title || 'tour'}. Could you please provide more details?\n\nThank you!`;
+    const emailUrl = `mailto:info@zeotourism.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = emailUrl;
+  };
+
+  const handleFloatingEnquiry = () => {
+    // Scroll to enquiry section
+    enquirySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   if (loading || detailsLoading) {
@@ -184,7 +219,7 @@ const TourDetail: React.FC = () => {
 
       {/* Slider and Tour Details Section - Side by Side */}
       <section className="bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Image Slider */}
             <div className="lg:col-span-2">
@@ -210,6 +245,7 @@ const TourDetail: React.FC = () => {
                   description={tourDetails.description}
                   highlights={tourDetails.highlights}
                   inclusions={tourDetails.inclusions}
+                  exclusions={tourDetails.exclusions}
                   whatToBring={tourDetails.what_to_bring}
                   itinerary={tourDetails.itinerary}
                   activities={tourActivities}
@@ -220,23 +256,16 @@ const TourDetail: React.FC = () => {
             </div>
 
             {/* Right Column - Enquiry Button */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1" ref={enquirySectionRef}>
               <TourEnquiryButton
                 price={tourDetails.price}
-                onEnquiryClick={() => setShowEnquiryModal(true)}
+                tourTitle={tourDetails.title}
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enquiry Modal */}
-      <TourEnquiryModal
-        isOpen={showEnquiryModal}
-        onClose={() => setShowEnquiryModal(false)}
-        tourTitle={tourDetails.title}
-        onSubmit={handleEnquirySubmit}
-      />
 
       {/* Related Tours */}
       {relatedTours.length > 0 && (
@@ -265,6 +294,46 @@ const TourDetail: React.FC = () => {
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating Enquiry Button for Mobile */}
+      {showFloatingButton && (
+        <div className="fixed bottom-4 right-4 z-40 lg:hidden">
+          <div className="flex flex-col gap-2">
+            {/* Main Enquiry Button */}
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              onClick={handleFloatingEnquiry}
+              className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <Send className="w-6 h-6" />
+            </motion.button>
+            
+            {/* WhatsApp Button */}
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              onClick={handleFloatingWhatsApp}
+              className="bg-green-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <MessageCircle className="w-5 h-5" />
+            </motion.button>
+            
+            {/* Email Button */}
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              onClick={handleFloatingEmail}
+              className="bg-gray-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <Mail className="w-5 h-5" />
+            </motion.button>
+          </div>
+        </div>
       )}
     </div>
   );

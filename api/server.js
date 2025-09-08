@@ -275,6 +275,7 @@ let slidersData = loadData('sliders.json');
 let usersData = loadData('users.json');
 let contactData = loadData('contact.json');
 let testimonialsData = loadData('testimonials.json');
+let enquiriesData = loadData('enquiries.json');
 let tourDetails = loadTourDetails();
 
 // Extract arrays from the loaded data
@@ -285,6 +286,7 @@ let sliders = slidersData.sliders || slidersData || [];
 let users = usersData.users || usersData || [];
 let contact = contactData || {};
 let testimonials = testimonialsData.testimonials || testimonialsData || [];
+let enquiries = enquiriesData.enquiries || enquiriesData || [];
 
 // Helper functions
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -1160,6 +1162,211 @@ app.put('/api/admin/contact', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating contact information:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// ==================== CONTACT ENQUIRIES API ====================
+
+// Submit contact enquiry (public endpoint)
+app.post('/api/contact/enquiry', async (req, res) => {
+  try {
+    console.log('Submitting new contact enquiry...');
+    console.log('Request body:', req.body);
+    
+    const { name, email, phone, destination, tour_title, travelers, date, message } = req.body;
+    
+    // Validate required fields
+    if (!name || !email || !destination || !message) {
+      return res.status(400).json({ error: 'Name, email, destination, and message are required' });
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Please provide a valid email address' });
+    }
+    
+    // Generate tour title from destination if not provided
+    const getTourTitle = (destination) => {
+      const titleMap = {
+        'everest': 'Everest Base Camp Trek',
+        'kailash': 'Kailash Mansarovar Yatra',
+        'annapurna': 'Annapurna Circuit Trek',
+        'kathmandu': 'Kathmandu Valley Tour',
+        'langtang': 'Langtang Valley Trek',
+        'pokhara': 'Pokhara City Tour',
+        'other': 'Custom Tour Package'
+      };
+      return titleMap[destination.toLowerCase()] || `${destination.charAt(0).toUpperCase() + destination.slice(1)} Tour`;
+    };
+    
+    const newEnquiry = {
+      id: Math.max(...enquiries.map(e => e.id), 0) + 1,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone?.trim() || '',
+      destination: destination.trim(),
+      tour_title: tour_title?.trim() || getTourTitle(destination),
+      travelers: travelers?.trim() || '1',
+      date: date?.trim() || '',
+      message: message.trim(),
+      assigned_to: null,
+      notes: '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      responded_at: null,
+      source: 'website_contact_form'
+    };
+    
+    enquiries.push(newEnquiry);
+    const saved = saveData('enquiries.json', { enquiries });
+    
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    console.log('Contact enquiry submitted successfully');
+    res.status(201).json({
+      success: true,
+      message: 'Your enquiry has been submitted successfully. We will get back to you soon!',
+      enquiry: {
+        id: newEnquiry.id,
+        name: newEnquiry.name,
+        destination: newEnquiry.destination,
+        created_at: newEnquiry.created_at
+      }
+    });
+  } catch (error) {
+    console.error('Error submitting contact enquiry:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// ==================== ADMIN CONTACT ENQUIRIES API ====================
+
+// Admin: Get all enquiries
+app.get('/api/admin/enquiries', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    let filteredEnquiries = [...enquiries];
+    
+    // Sort by date (newest first)
+    filteredEnquiries.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    res.json(filteredEnquiries);
+  } catch (error) {
+    console.error('Error fetching admin enquiries:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Get enquiry by ID
+app.get('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    const enquiryId = parseInt(req.params.id);
+    const enquiry = enquiries.find(e => e.id === enquiryId);
+    
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Enquiry not found'
+      });
+    }
+    
+    res.json(enquiry);
+  } catch (error) {
+    console.error('Error fetching enquiry:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Update enquiry
+app.put('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating enquiry with ID:', req.params.id);
+    console.log('Request body:', req.body);
+    
+    const { id } = req.params;
+    const updateData = req.body;
+    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
+    
+    if (enquiryIndex === -1) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    const existingEnquiry = enquiries[enquiryIndex];
+    
+    // Update enquiry data
+    enquiries[enquiryIndex] = {
+      ...existingEnquiry,
+      ...updateData,
+      updated_at: new Date().toISOString()
+    };
+    
+    const saved = saveData('enquiries.json', { enquiries });
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    console.log('Enquiry updated successfully');
+    res.json(enquiries[enquiryIndex]);
+  } catch (error) {
+    console.error('Error updating enquiry:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Delete enquiry
+app.delete('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
+    
+    if (enquiryIndex === -1) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    enquiries.splice(enquiryIndex, 1);
+    const saved = saveData('enquiries.json', { enquiries });
+    
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    res.json({ message: 'Enquiry deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting enquiry:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Mark enquiry as responded
+app.patch('/api/admin/enquiries/:id/respond', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
+    
+    if (enquiryIndex === -1) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    enquiries[enquiryIndex].responded_at = new Date().toISOString();
+    enquiries[enquiryIndex].updated_at = new Date().toISOString();
+    
+    const saved = saveData('enquiries.json', { enquiries });
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    res.json({
+      success: true,
+      message: 'Enquiry marked as responded',
+      enquiry: enquiries[enquiryIndex]
+    });
+  } catch (error) {
+    console.error('Error marking enquiry as responded:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

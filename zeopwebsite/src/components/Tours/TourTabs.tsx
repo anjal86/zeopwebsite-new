@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Info, FileText, Camera, Activity, Bed, Utensils } from 'lucide-react';
+import { Check, Info, FileText, Camera, Activity, Bed, Utensils, X } from 'lucide-react';
 
 interface ItineraryDay {
   day: number;
@@ -13,6 +13,7 @@ interface TourTabsProps {
   description: string;
   highlights?: string[];
   inclusions?: string[];
+  exclusions?: string[];
   whatToBring?: string[];
   itinerary?: ItineraryDay[];
   activities: Array<{ id: number; name: string; image: string }>;
@@ -24,6 +25,7 @@ const TourTabs: React.FC<TourTabsProps> = ({
   description,
   highlights,
   inclusions,
+  exclusions,
   whatToBring,
   itinerary,
   activities,
@@ -194,24 +196,44 @@ const TourTabs: React.FC<TourTabsProps> = ({
 
         {/* Inclusions Tab */}
         {activeTab === 'inclusions' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Inclusions */}
-            {inclusions && inclusions.length > 0 && (
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Check className="w-5 h-5 text-green-600 mr-2" />
-                  What's Included
-                </h3>
-                <ul className="space-y-2">
-                  {inclusions.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                      <Check className="w-4 h-4 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Inclusions */}
+              {inclusions && inclusions.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <Check className="w-5 h-5 text-green-600 mr-2" />
+                    What's Included
+                  </h3>
+                  <ul className="space-y-2">
+                    {inclusions.map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <Check className="w-4 h-4 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Exclusions */}
+              {exclusions && exclusions.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <X className="w-5 h-5 text-red-600 mr-2" />
+                    What's Not Included
+                  </h3>
+                  <ul className="space-y-2">
+                    {exclusions.map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <X className="w-4 h-4 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
             {/* What to Bring */}
             <div>
@@ -219,35 +241,37 @@ const TourTabs: React.FC<TourTabsProps> = ({
                 <Info className="w-5 h-5 text-blue-600 mr-2" />
                 What to Bring
               </h3>
-              <ul className="space-y-2">
-                {whatToBring && whatToBring.length > 0 ? (
-                  whatToBring.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                      <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    <li className="flex items-start">
-                      <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Comfortable walking shoes</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Weather-appropriate clothing</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Camera for memories</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Personal medications</span>
-                    </li>
-                  </>
-                )}
-              </ul>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ul className="space-y-2">
+                  {whatToBring && whatToBring.length > 0 ? (
+                    whatToBring.map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{item}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <>
+                      <li className="flex items-start">
+                        <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">Comfortable walking shoes</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">Weather-appropriate clothing</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">Camera for memories</span>
+                      </li>
+                      <li className="flex items-start">
+                        <Info className="w-4 h-4 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">Personal medications</span>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
         )}

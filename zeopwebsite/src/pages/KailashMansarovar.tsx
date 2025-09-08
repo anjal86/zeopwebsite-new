@@ -95,7 +95,7 @@ const KailashMansarovarPage: React.FC = () => {
   }, []);
 
   // Remove hardcoded data - now using API
-  const kailashToursOld: Tour[] = [
+  // const kailashToursOld: Tour[] = [
     {
       id: 1,
       slug: 'kailash-sacred-journey',

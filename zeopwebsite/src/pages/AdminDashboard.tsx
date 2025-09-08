@@ -10,12 +10,14 @@ import {
   Menu,
   X,
   Image as ImageIcon,
-  MessageSquare
+  MessageSquare,
+  Mail
 } from 'lucide-react';
 import DestinationManager from '../components/Admin/DestinationManager';
 import TourManager from '../components/Admin/TourManager';
 import SliderManager from '../components/Admin/SliderManager';
 import ContactManager from '../components/Admin/ContactManager';
+import ContactEnquiryManager from '../components/Admin/ContactEnquiryManager';
 import TestimonialManager from '../components/Admin/TestimonialManager';
 
 interface User {
@@ -25,7 +27,7 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'testimonials' | 'users' | 'settings';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'enquiries' | 'testimonials' | 'users' | 'settings';
 
 const AdminDashboard: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -70,6 +72,7 @@ const AdminDashboard: React.FC = () => {
     { id: 'destinations', label: 'Destinations', icon: Mountain },
     { id: 'tours', label: 'Tours', icon: Backpack },
     { id: 'sliders', label: 'Hero Sliders', icon: ImageIcon },
+    { id: 'enquiries', label: 'Contact Enquiries', icon: Mail },
     { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -85,6 +88,8 @@ const AdminDashboard: React.FC = () => {
         return <TourManager />;
       case 'sliders':
         return <SliderManager />;
+      case 'enquiries':
+        return <ContactEnquiryManager />;
       case 'testimonials':
         return <TestimonialManager />;
       case 'users':

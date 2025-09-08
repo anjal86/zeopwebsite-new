@@ -1,0 +1,55 @@
+{
+  "enquiries": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1-555-0123",
+      "destination": "everest",
+      "tour_title": "Everest Base Camp Trek",
+      "travelers": "2",
+      "date": "2024-05-15",
+      "message": "We are interested in the Everest Base Camp trek. Could you provide more details about the itinerary and what's included?",
+      "assigned_to": null,
+      "notes": "",
+      "created_at": "2024-01-15T10:30:00.000Z",
+      "updated_at": "2025-09-08T10:21:05.016Z",
+      "responded_at": "2025-09-08T10:21:05.016Z",
+      "source": "website_contact_form"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "email": "sarah.j@example.com",
+      "phone": "+44-20-7946-0958",
+      "destination": "annapurna",
+      "tour_title": "Annapurna Circuit Trek",
+      "travelers": "4",
+      "date": "2024-06-20",
+      "message": "Planning a family trip to Nepal. Looking for moderate difficulty treks suitable for teenagers.",
+      "assigned_to": "admin",
+      "notes": "Sent initial itinerary options. Waiting for response.",
+      "created_at": "2024-01-10T14:20:00.000Z",
+      "updated_at": "2024-01-12T09:15:00.000Z",
+      "responded_at": "2024-01-11T16:45:00.000Z",
+      "source": "website_contact_form"
+    },
+    {
+      "id": 3,
+      "name": "Dipak B K",
+      "email": "superadmin@brandspire.com.np",
+      "phone": "+9779801319979",
+      "destination": "annapurna",
+      "tour_title": "Annapurna Circuit Trek",
+      "travelers": "2",
+      "date": "2025-09-02",
+      "message": "asdasd",
+      "assigned_to": null,
+      "notes": "",
+      "created_at": "2025-09-08T11:03:00.210Z",
+      "updated_at": "2025-09-08T11:03:00.210Z",
+      "responded_at": null,
+      "source": "website_contact_form"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, MessageSquare, Send, Clock, Globe, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageSquare, Send, Clock, Globe, CheckCircle, AlertCircle } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
 
 const Contact: React.FC = () => {
@@ -17,6 +17,8 @@ const Contact: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -28,12 +30,29 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setShowError(false);
+    setErrorMessage('');
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/contact/enquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit enquiry');
+      }
+
+      // Success
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 5000);
+      
+      // Reset form
       setFormData({
         name: '',
         email: '',
@@ -43,7 +62,14 @@ const Contact: React.FC = () => {
         date: '',
         message: ''
       });
-    }, 2000);
+    } catch (error) {
+      console.error('Error submitting enquiry:', error);
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to submit enquiry. Please try again.');
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactDetails = [
@@ -286,6 +312,21 @@ const Contact: React.FC = () => {
                   <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
                   <p className="text-green-800">
                     Thank you for your inquiry! We'll contact you soon.
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Error Message */}
+              {showError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="mt-6 p-4 bg-red-100 border border-red-300 rounded-xl flex items-center"
+                >
+                  <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
+                  <p className="text-red-800">
+                    {errorMessage}
                   </p>
                 </motion.div>
               )}
