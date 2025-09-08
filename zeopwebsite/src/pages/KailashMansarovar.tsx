@@ -14,21 +14,13 @@ import {
   GiMeditation,
   GiShield,
   GiHeartWings,
-  GiDiamonds,
-  GiSunrise,
   GiWaterDrop,
   GiTempleGate
 } from 'react-icons/gi';
 import {
   FaMountain,
-  FaPray,
-  FaHeart,
-  FaShieldAlt,
-  FaUsers
+  FaPray
 } from 'react-icons/fa';
-import {
-  IoMdHeart
-} from 'react-icons/io';
 import PageHeader from '../components/PageHeader/PageHeader';
 import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
