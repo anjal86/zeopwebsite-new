@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Grid, List, SortAsc, SortDesc, Filter } from 'lucide-react';
+import { Grid, List } from 'lucide-react';
 import TourCard from './TourCard';
 import EmptyState from '../UI/EmptyState';
 import type { Tour } from '../../services/api';

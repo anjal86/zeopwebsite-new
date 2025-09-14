@@ -953,7 +953,6 @@ const TourEditor: React.FC = () => {
                         {destinations?.map((destination) => {
                           const isPrimary = formData.primary_destination_id === destination.id;
                           const isSecondary = formData.secondary_destination_ids?.includes(destination.id);
-                          const isSelected = isPrimary || isSecondary;
                           
                           return (
                             <div

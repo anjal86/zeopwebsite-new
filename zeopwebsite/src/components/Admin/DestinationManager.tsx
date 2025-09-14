@@ -7,16 +7,12 @@ import {
   Save,
   X,
   Globe,
-  Star,
   AlertCircle,
-  Upload,
   Image as ImageIcon,
   MapPin,
-  Search,
-  Filter
+  Search
 } from 'lucide-react';
 import { useDestinations } from '../../hooks/useApi';
-import Toggle from '../UI/Toggle';
 import SearchableSelect from '../UI/SearchableSelect';
 // @ts-ignore
 import { getData } from 'country-list';

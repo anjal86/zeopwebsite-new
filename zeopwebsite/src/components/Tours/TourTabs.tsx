@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Check, Info, FileText, Camera, Activity, Bed, Utensils, X } from 'lucide-react';
+import { Check, Info, FileText, Activity, Bed, Utensils, X } from 'lucide-react';
 
 interface ItineraryDay {
   day: number;
@@ -29,8 +29,6 @@ const TourTabs: React.FC<TourTabsProps> = ({
   whatToBring,
   itinerary,
   activities,
-  images,
-  title
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [hasHiddenTabs, setHasHiddenTabs] = useState(false);

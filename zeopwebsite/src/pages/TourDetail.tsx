@@ -51,7 +51,6 @@ const TourDetail: React.FC = () => {
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [showFloatingButton, setShowFloatingButton] = useState(true);
   const enquirySectionRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
   
   // Find the tour by slug
   const tour = allTours?.find(t => t.slug === tourSlug);

@@ -1,5 +1,47 @@
 import { useState, useEffect, useCallback } from 'react';
-import api, { type Tour, type Contact } from '../services/api';
+import api, { type Tour } from '../services/api';
+
+// Generic hook for API calls with URL endpoint
+export function useApi<T = any>(url: string) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (isMounted) {
+          setData(result);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [url]);
+
+  return { data, loading, error };
+}
 
 // Generic hook for API calls with loading and error states
 export function useApiCall<T>(

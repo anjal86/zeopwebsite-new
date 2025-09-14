@@ -1,0 +1,110 @@
+{
+  "gallery": [
+    {
+      "id": 1,
+      "title": "Sacred Kailash Peak",
+      "image": "/uploads/kailash-gallery/kailash_1757792733584_1757792733527_envato-labs-image-edit__1_.png",
+      "alt": "Majestic view of Mount Kailash peak",
+      "gridSpan": "col-span-2 row-span-3",
+      "order": 1,
+      "isActive": true,
+      "uploadedAt": "2025-09-13T19:45:33.917Z"
+    },
+    {
+      "id": 2,
+      "title": "Mansarovar Lake",
+      "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070",
+      "alt": "Sacred waters of Lake Mansarovar",
+      "gridSpan": "col-span-1 row-span-2",
+      "order": 2,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:05:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Prayer Flags",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+      "alt": "Colorful prayer flags fluttering in mountain winds",
+      "gridSpan": "col-span-1 row-span-2",
+      "order": 3,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:10:00Z"
+    },
+    {
+      "id": 4,
+      "title": "Mountain Vista",
+      "image": "https://images.unsplash.com/photo-1464822759844-d150f4e1c0fb?q=80&w=2070",
+      "alt": "Breathtaking Himalayan mountain vista",
+      "gridSpan": "col-span-2 row-span-2",
+      "order": 4,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:15:00Z"
+    },
+    {
+      "id": 5,
+      "title": "Pilgrimage Path",
+      "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2070",
+      "alt": "Sacred pilgrimage path around Mount Kailash",
+      "gridSpan": "col-span-1 row-span-2",
+      "order": 5,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:20:00Z"
+    },
+    {
+      "id": 6,
+      "title": "Sacred Journey",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+      "alt": "Pilgrims on their sacred journey",
+      "gridSpan": "col-span-1 row-span-1",
+      "order": 6,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:25:00Z"
+    },
+    {
+      "id": 7,
+      "title": "Himalayan Peaks",
+      "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2070",
+      "alt": "Snow-capped Himalayan peaks",
+      "gridSpan": "col-span-1 row-span-1",
+      "order": 7,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": 8,
+      "title": "Divine Light",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070",
+      "alt": "Divine light illuminating the sacred mountain",
+      "gridSpan": "col-span-2 row-span-1",
+      "order": 8,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:35:00Z"
+    },
+    {
+      "id": 9,
+      "title": "Sacred Waters",
+      "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070",
+      "alt": "Sacred waters reflecting the mountain",
+      "gridSpan": "col-span-1 row-span-1",
+      "order": 9,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:40:00Z"
+    },
+    {
+      "id": 10,
+      "title": "Holy Mountain",
+      "image": "https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070",
+      "alt": "The holy mountain in all its glory",
+      "gridSpan": "col-span-1 row-span-1",
+      "order": 10,
+      "isActive": true,
+      "uploadedAt": "2024-01-15T10:45:00Z"
+    }
+  ],
+  "metadata": {
+    "totalPhotos": 10,
+    "lastUpdated": "2025-09-13T19:45:33.917Z",
+    "pageTitle": "Kailash Mansarovar",
+    "pageSubtitle": "Sacred Journey Gallery"
+  }
+}

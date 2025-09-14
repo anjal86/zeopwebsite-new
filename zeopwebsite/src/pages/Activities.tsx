@@ -5,7 +5,6 @@ import PageHeader from '../components/PageHeader/PageHeader';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
 import { useActivities } from '../hooks/useApi';
-import type { Activity } from '../services/api';
 
 const ActivitiesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'adventure' | 'cultural'>('adventure');
@@ -119,7 +118,7 @@ const ActivitiesPage: React.FC = () => {
                   whileHover={{ scale: 1.03 }}
                   className="group cursor-pointer"
                 >
-                  <Link to={`/activities/${activity.slug}`} className="block">
+                  <Link to={`/tours?activity=${activity.name}`} className="block">
                     <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                       <img
                         src={activity.image}

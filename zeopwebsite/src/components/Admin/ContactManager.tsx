@@ -1,22 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import {
   Save,
-  X,
-  Phone,
-  Mail,
-  MapPin,
-  Globe,
-  Clock,
-  Shield,
-  AlertCircle,
-  Building,
-  Users,
-  Plus,
-  Trash2
+  AlertCircle
 } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
-import Toggle from '../UI/Toggle';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "npm run generate-sitemap && tsc -b && vite build",
     "build:no-sitemap": "tsc -b && vite build",
     "generate-sitemap": "node scripts/generateSitemap.cjs",

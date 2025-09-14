@@ -10,14 +10,9 @@ import {
   MessageSquare,
   Star,
   AlertCircle,
-  Check,
-  Clock,
   User,
-  Mail,
   MapPin,
-  Calendar,
-  Eye,
-  EyeOff
+  Calendar
 } from 'lucide-react';
 import Toggle from '../UI/Toggle';
 

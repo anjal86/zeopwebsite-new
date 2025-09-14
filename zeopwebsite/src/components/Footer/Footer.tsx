@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Mountain, Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart, ExternalLink } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
 
 const Footer: React.FC = () => {
@@ -11,24 +11,17 @@ const Footer: React.FC = () => {
       { name: 'Everest Base Camp', href: '/tours/everest-base-camp-trek' },
       { name: 'Kailash Mansarovar', href: '/kailash-mansarovar' },
       { name: 'Annapurna Circuit', href: '/tours/annapurna-circuit-trek' },
-      { name: 'Langtang Valley', href: '/tours/langtang-valley-trek' },
-      { name: 'Chitwan Safari', href: '/tours/chitwan-safari-adventure' },
       { name: 'All Destinations', href: '/destinations' }
     ],
     company: [
       { name: 'About Us', href: '/about' },
-      { name: 'Our Tours', href: '/tours' },
-      { name: 'Activities', href: '/activities' },
-      { name: 'Destinations', href: '/destinations' },
+      { name: 'Tours', href: '/tours' },
       { name: 'Contact', href: '/contact' }
     ],
     support: [
-      { name: 'Tour Packages', href: '/tours' },
-      { name: 'Holiday Planning', href: '/contact' },
-      { name: 'Travel Tips', href: '/about' },
-      { name: 'Booking Help', href: '/contact' },
-      { name: 'Customer Support', href: '/contact' },
-      { name: 'Travel Insurance', href: '/contact' }
+      { name: 'Trip Planning', href: '/trip-planning' },
+      { name: 'Activities', href: '/activities' },
+      { name: 'Help Center', href: '/contact' }
     ]
   };
 
@@ -50,10 +43,10 @@ const Footer: React.FC = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Main Footer Content */}
-        <div className="py-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="py-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Brand Section */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-1">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -64,48 +57,48 @@ const Footer: React.FC = () => {
                   <img
                     src="/logo/zeo-logo-white.png"
                     alt="Zeo Tourism Logo"
-                    className="h-12 w-auto"
+                    className="h-10 w-auto"
                   />
                 </Link>
-                <p className="text-gray-400 mb-6 max-w-sm">
-                  {contactInfo?.company.description || 'Your trusted partner for Nepal tours, travel packages, and holiday experiences. Specializing in cultural tours, adventure travel, and spiritual journeys since 2000.'}
+                <p className="text-gray-400 mb-6 max-w-sm text-sm">
+                  Your trusted partner for Nepal tours and spiritual journeys since 2000.
                 </p>
                 
                 {/* Contact Info */}
-                <div className="space-y-3 mb-6">
-                  <a href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
+                <div className="space-y-2 mb-6">
+                  <a href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors text-sm">
                     <Phone className="w-4 h-4 mr-2" />
-                    {contactInfo?.contact.phone.display || '+977 985 123 4567'}
+                    {contactInfo?.contact.phone.primary || '+977 985 123 4567'}
                   </a>
-                  <a href={`mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors">
+                  <a href={`mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors text-sm">
                     <Mail className="w-4 h-4 mr-2" />
                     {contactInfo?.contact.email.primary || 'info@zeotourism.com'}
                   </a>
-                  <div className="flex items-center text-gray-400">
+                  <div className="flex items-center text-gray-400 text-sm">
                     <MapPin className="w-4 h-4 mr-2" />
                     {contactInfo?.contact.address.full || 'Thamel, Kathmandu, Nepal'}
                   </div>
                 </div>
 
                 {/* Social Links */}
-                <div className="flex space-x-4">
+                <div className="flex space-x-3">
                   {socialLinks.map((social, index) => (
                     <motion.a
                       key={index}
                       href={social.href}
                       aria-label={social.label}
-                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
-                      className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-sky-blue transition-all duration-300"
+                      className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-sky-blue transition-all duration-300"
                     >
-                      <social.icon className="w-5 h-5" />
+                      <social.icon className="w-4 h-4" />
                     </motion.a>
                   ))}
                 </div>
               </motion.div>
             </div>
 
-            {/* Destinations Links */}
+            {/* Popular Destinations */}
             <div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -113,7 +106,7 @@ const Footer: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <h4 className="text-lg font-semibold mb-4">Popular Destinations</h4>
+                <h4 className="text-lg font-semibold mb-4">Popular Tours</h4>
                 <ul className="space-y-2">
                   {footerLinks.destinations.map((link, index) => (
                     <li key={index}>
@@ -141,21 +134,12 @@ const Footer: React.FC = () => {
                 <ul className="space-y-2">
                   {footerLinks.company.map((link, index) => (
                     <li key={index}>
-                      {link.href.startsWith('/') ? (
-                        <Link
-                          to={link.href}
-                          className="text-gray-400 hover:text-sky-blue transition-colors duration-300 text-sm"
-                        >
-                          {link.name}
-                        </Link>
-                      ) : (
-                        <a
-                          href={link.href}
-                          className="text-gray-400 hover:text-sky-blue transition-colors duration-300 text-sm"
-                        >
-                          {link.name}
-                        </a>
-                      )}
+                      <Link
+                        to={link.href}
+                        className="text-gray-400 hover:text-sky-blue transition-colors duration-300 text-sm"
+                      >
+                        {link.name}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -188,53 +172,44 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="py-8 border-t border-gray-800"
-        >
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Stay Updated</h3>
-              <p className="text-gray-400">Get the latest travel tips and exclusive offers delivered to your inbox</p>
-            </div>
-            <form className="flex gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-sky-blue transition-all duration-300"
-              />
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-sky-blue to-sky-blue-dark px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300"
-              >
-                Subscribe
-              </motion.button>
-            </form>
-          </div>
-        </motion.div>
-
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div className="py-4 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
               © 2024 {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved. | Crafted with{' '}
               <Heart className="w-4 h-4 inline text-red-500 fill-current" /> in Nepal
             </p>
-            <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-sky-blue transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-sky-blue transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-sky-blue transition-colors">
-                Cookie Policy
+            <div className="flex items-center text-gray-400 text-sm">
+              <span>Developed by</span>
+              <a
+                href="https://brandspire.com.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center ml-2 hover:text-sky-blue transition-colors group"
+              >
+                <img
+                  src="https://www.google.com/s2/favicons?domain=brandspire.com.np&sz=16"
+                  alt="Brandspire Favicon"
+                  className="w-4 h-4 mr-2"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    // Try alternative favicon URLs
+                    if (img.src.includes('google.com')) {
+                      img.src = 'https://brandspire.com.np/favicon.ico';
+                    } else if (img.src.includes('favicon.ico')) {
+                      img.src = 'https://brandspire.com.np/assets/favicon.png';
+                    } else {
+                      // Create a simple icon as final fallback
+                      img.style.display = 'none';
+                      const fallback = document.createElement('div');
+                      fallback.className = 'w-4 h-4 mr-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-sm flex items-center justify-center flex-shrink-0';
+                      fallback.innerHTML = '<span class="text-white text-xs font-bold">B</span>';
+                      img.parentNode?.insertBefore(fallback, img);
+                    }
+                  }}
+                />
+                <span className="font-medium">Brandspire Creatives</span>
+                <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
             </div>
           </div>

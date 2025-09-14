@@ -18,6 +18,7 @@ import TourDetail from './pages/TourDetail';
 import ActivitiesPage from './pages/Activities';
 import ActivityDetail from './pages/ActivityDetail';
 import KailashMansarovarPage from './pages/KailashMansarovar';
+import TripPlanning from './pages/TripPlanning';
 import AboutPage from './pages/About';
 import ContactPage from './pages/Contact';
 import NotFound from './pages/NotFound';
@@ -110,6 +111,7 @@ function App() {
             <Route path="/activities" element={<ActivitiesPage />} />
             <Route path="/activities/:activityName" element={<ActivityDetail />} />
             <Route path="/kailash-mansarovar" element={<KailashMansarovarPage />} />
+            <Route path="/plan-your-trip" element={<TripPlanning />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             

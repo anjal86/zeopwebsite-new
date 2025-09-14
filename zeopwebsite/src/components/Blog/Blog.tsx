@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, User, ArrowRight, BookOpen, Clock, Tag } from 'lucide-react';
+import { Calendar, User, ArrowRight, BookOpen, Clock } from 'lucide-react';
 
 interface BlogPost {
   id: number;

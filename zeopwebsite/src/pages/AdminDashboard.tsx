@@ -11,7 +11,8 @@ import {
   X,
   Image as ImageIcon,
   MessageSquare,
-  Mail
+  Mail,
+  Camera
 } from 'lucide-react';
 import DestinationManager from '../components/Admin/DestinationManager';
 import TourManager from '../components/Admin/TourManager';
@@ -19,6 +20,7 @@ import SliderManager from '../components/Admin/SliderManager';
 import ContactManager from '../components/Admin/ContactManager';
 import ContactEnquiryManager from '../components/Admin/ContactEnquiryManager';
 import TestimonialManager from '../components/Admin/TestimonialManager';
+import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
 
 interface User {
   id: number;
@@ -27,7 +29,7 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'enquiries' | 'testimonials' | 'users' | 'settings';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'users' | 'settings';
 
 const AdminDashboard: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,6 +74,7 @@ const AdminDashboard: React.FC = () => {
     { id: 'destinations', label: 'Destinations', icon: Mountain },
     { id: 'tours', label: 'Tours', icon: Backpack },
     { id: 'sliders', label: 'Hero Sliders', icon: ImageIcon },
+    { id: 'kailash-gallery', label: 'Kailash Gallery', icon: Camera },
     { id: 'enquiries', label: 'Contact Enquiries', icon: Mail },
     { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
     { id: 'users', label: 'Users', icon: Users },
@@ -88,6 +91,8 @@ const AdminDashboard: React.FC = () => {
         return <TourManager />;
       case 'sliders':
         return <SliderManager />;
+      case 'kailash-gallery':
+        return <KailashGalleryManager />;
       case 'enquiries':
         return <ContactEnquiryManager />;
       case 'testimonials':

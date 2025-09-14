@@ -9,9 +9,57 @@ const Hero: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const [videoErrors, setVideoErrors] = useState<Set<string>>(new Set());
+  const [preloadedVideos, setPreloadedVideos] = useState<Set<string>>(new Set());
   
   // Fetch sliders from API
   const { data: slides, loading, error } = useSliders();
+
+  // Preload videos for faster loading
+  useEffect(() => {
+    if (!slides || slides.length === 0) return;
+
+    const preloadVideos = async () => {
+      slides.forEach((slide, index) => {
+        if (slide.video && !preloadedVideos.has(slide.video)) {
+          const video = document.createElement('video');
+          video.preload = 'metadata';
+          video.muted = true;
+          video.playsInline = true;
+          
+          const videoUrl = slide.video.startsWith('http')
+            ? slide.video
+            : `${window.location.protocol}//${window.location.host}${slide.video}`;
+          
+          video.src = videoUrl;
+          
+          video.addEventListener('loadedmetadata', () => {
+            const videoUrl = slide.video;
+            if (videoUrl) {
+              setPreloadedVideos(prev => new Set([...prev, videoUrl]));
+              console.log(`Video ${index + 1} preloaded:`, videoUrl);
+            }
+          });
+          
+          video.addEventListener('error', (e) => {
+            console.error(`Failed to preload video ${index + 1}:`, slide.video, e);
+            const videoUrl = slide.video;
+            if (videoUrl) {
+              setVideoErrors(prev => new Set([...prev, videoUrl]));
+            }
+          });
+          
+          // Start preloading
+          video.load();
+        }
+      });
+    };
+
+    // Start preloading after a short delay to not block initial render
+    const timer = setTimeout(preloadVideos, 500);
+    return () => clearTimeout(timer);
+  }, [slides, preloadedVideos]);
 
   // Enhanced Parallax scroll effects - All hooks must be at the top level
   const { scrollY } = useScroll();
@@ -55,7 +103,17 @@ const Hero: React.FC = () => {
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    // Enable user interaction on any click/touch
+    const enableInteraction = () => setUserInteracted(true);
+    document.addEventListener('click', enableInteraction);
+    document.addEventListener('touchstart', enableInteraction);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      document.removeEventListener('click', enableInteraction);
+      document.removeEventListener('touchstart', enableInteraction);
+    };
   }, []);
 
 
@@ -88,6 +146,7 @@ const Hero: React.FC = () => {
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setUserInteracted(true);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
@@ -196,70 +255,38 @@ const Hero: React.FC = () => {
             className="relative w-full h-full"
             style={{ scale: backgroundScale }}
           >
-            {slides[currentSlide].video ? (
-              <>
-                <video
-                  key={`${slides[currentSlide].id}-${slides[currentSlide].video}`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    width: '110vw',
-                    height: '100vh',
-                    minWidth: '110%',
-                    minHeight: '100%',
-                    transform: 'scale(1.1)',
-                    transformOrigin: 'center center',
-                    left: '-5vw'
-                  }}
-                  autoPlay
-                  muted={isMuted}
-                  loop
-                  playsInline
-                  preload="auto"
-                  controls={false}
-                  disablePictureInPicture
-                  disableRemotePlayback
-                  poster={
-                    !slides[currentSlide].image || slides[currentSlide].image === ''
-                      ? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop'
-                      : slides[currentSlide].image.startsWith('blob:') || slides[currentSlide].image.startsWith('http')
-                        ? slides[currentSlide].image
-                        : `http://localhost:3000${slides[currentSlide].image}`
+            {slides[currentSlide].video && !videoErrors.has(slides[currentSlide].video) ? (
+              <video
+                key={`video-${currentSlide}-${slides[currentSlide].id}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay={!isMobile || userInteracted}
+                muted
+                loop
+                playsInline
+                controls={false}
+                preload="none"
+                onLoadedData={(e) => {
+                  const video = e.target as HTMLVideoElement;
+                  if (slides[currentSlide].video_start_time) {
+                    video.currentTime = slides[currentSlide].video_start_time;
                   }
-                  src={slides[currentSlide].video.startsWith('blob:') || slides[currentSlide].video.startsWith('http') ? slides[currentSlide].video : `http://localhost:3000${slides[currentSlide].video}`}
-                  onLoadedData={(e) => {
-                    // Start video from configured start time
-                    const video = e.target as HTMLVideoElement;
-                    const startTime = slides[currentSlide].video_start_time || 14;
-                    video.currentTime = startTime;
-                  }}
-                  onError={(e) => {
-                    console.error('Video loading error:', slides[currentSlide].video, e);
-                    // Hide video and show fallback image
-                    (e.target as HTMLVideoElement).style.display = 'none';
-                    const fallbackImg = (e.target as HTMLVideoElement).nextElementSibling as HTMLImageElement;
-                    if (fallbackImg) {
-                      fallbackImg.style.display = 'block';
-                    }
-                  }}
-                />
-                <img
-                  src={
-                    !slides[currentSlide].image || slides[currentSlide].image === ''
-                      ? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop'
-                      : slides[currentSlide].image.startsWith('blob:') || slides[currentSlide].image.startsWith('http')
-                        ? slides[currentSlide].image
-                        : `http://localhost:3000${slides[currentSlide].image}`
+                  if (isMobile && userInteracted) {
+                    video.play().catch(console.error);
                   }
-                  alt={slides[currentSlide].title}
-                  className="w-full h-full object-cover"
-                  style={{ display: 'none' }}
-                  onError={(e) => {
-                    console.error('Fallback image loading error:', slides[currentSlide].image);
-                    // Show a default fallback image
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
-                  }}
+                }}
+                onError={(e) => {
+                  console.error('Video loading error:', slides[currentSlide].video, e);
+                  const videoUrl = slides[currentSlide].video;
+                  if (videoUrl) {
+                    setVideoErrors(prev => new Set([...prev, videoUrl]));
+                  }
+                }}
+              >
+                <source
+                  src={slides[currentSlide].video.startsWith('http') ? slides[currentSlide].video : `${window.location.protocol}//${window.location.host}${slides[currentSlide].video}`}
+                  type="video/mp4"
                 />
-              </>
+              </video>
             ) : (
               <img
                 src={
@@ -267,17 +294,17 @@ const Hero: React.FC = () => {
                     ? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop'
                     : slides[currentSlide].image.startsWith('blob:') || slides[currentSlide].image.startsWith('http')
                       ? slides[currentSlide].image
-                      : `http://localhost:3000${slides[currentSlide].image}`
+                      : `${window.location.protocol}//${window.location.host}${slides[currentSlide].image}`
                 }
                 alt={slides[currentSlide].title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  console.error('Image loading error:', slides[currentSlide].image);
-                  // Show a default fallback image
-                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
-                }}
-                onLoad={() => {
-                  console.log('Image loaded successfully:', slides[currentSlide].image);
+                  console.error('Image loading error:', slides[currentSlide].image, e);
+                  // Fallback to default image if current image fails
+                  const img = e.target as HTMLImageElement;
+                  if (img.src !== 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop') {
+                    img.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
+                  }
                 }}
               />
             )}

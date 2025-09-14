@@ -160,7 +160,7 @@ const TestimonialsSlider: React.FC = () => {
               className="flex transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {testimonials.map((testimonial, index) => (
+              {testimonials.map((testimonial) => (
                 <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
                   <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg border border-gray-100 mx-auto max-w-4xl">
                     <div className="text-center">

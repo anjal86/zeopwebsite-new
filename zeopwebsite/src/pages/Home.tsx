@@ -9,7 +9,6 @@ import {
   Star,
   Target,
   ArrowRight,
-  Quote,
   Phone,
   Mail,
   Clock3
@@ -19,9 +18,7 @@ import Hero from '../components/Hero/Hero';
 import FeaturedDestinations from '../components/FeaturedDestinations/FeaturedDestinations';
 import TestimonialsSlider from '../components/Testimonials/TestimonialsSlider';
 import { useCountUp } from '../hooks/useCountUp';
-import { useDestinations, useContact } from '../hooks/useApi';
-import LoadingSpinner from '../components/UI/LoadingSpinner';
-import ErrorMessage from '../components/UI/ErrorMessage';
+import { useContact } from '../hooks/useApi';
 import { createOrganizationSchema, createWebSiteSchema, createLocalBusinessSchema } from '../utils/schema';
 
 // Animated Counter Component
@@ -315,7 +312,7 @@ const Home: React.FC = () => {
               <div className="grid md:grid-cols-3 gap-6 text-white/80">
                 <div className="flex items-center justify-center">
                   <Phone className="w-5 h-5 mr-2" />
-                  <span>{contactInfo?.contact.phone.display || '+977-1-4123456'}</span>
+                  <span>{contactInfo?.contact.phone.primary || '+977-1-4123456'}</span>
                 </div>
                 <div className="flex items-center justify-center">
                   <Mail className="w-5 h-5 mr-2" />
