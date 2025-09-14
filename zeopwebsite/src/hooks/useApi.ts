@@ -102,6 +102,82 @@ export function useTours() {
   return useApiCall(() => api.tours.getAll());
 }
 
+// Paginated tours hook with infinite scrolling support
+export function usePaginatedTours(filters: {
+  search?: string;
+  destination?: string;
+  activity?: string;
+} = {}) {
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 12,
+    totalCount: 0,
+    totalPages: 0,
+    hasNext: false,
+    hasPrevious: false
+  });
+
+  // Load initial tours
+  const loadTours = useCallback(async (page: number = 1, append: boolean = false) => {
+    try {
+      if (page === 1) {
+        setLoading(true);
+        setTours([]);
+      } else {
+        setLoadingMore(true);
+      }
+      setError(null);
+
+      const apiFilters = {
+        ...(filters.search && { search: filters.search }),
+        ...(filters.destination && { location: filters.destination }),
+        ...(filters.activity && { search: filters.activity }) // Use search for activity filtering
+      };
+
+      const result = await api.tours.getPaginated(page, 12, apiFilters);
+      
+      if (append && page > 1) {
+        setTours(prevTours => [...prevTours, ...result.tours]);
+      } else {
+        setTours(result.tours);
+      }
+      
+      setPagination(result.pagination);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [filters.search, filters.destination, filters.activity]);
+
+  // Load more tours (for infinite scrolling)
+  const loadMore = useCallback(() => {
+    if (pagination.hasNext && !loadingMore) {
+      loadTours(pagination.page + 1, true);
+    }
+  }, [pagination.hasNext, pagination.page, loadingMore, loadTours]);
+
+  // Reset and reload when filters change
+  useEffect(() => {
+    loadTours(1, false);
+  }, [loadTours]);
+
+  return {
+    tours,
+    loading,
+    loadingMore,
+    error,
+    pagination,
+    loadMore,
+    refetch: () => loadTours(1, false)
+  };
+}
+
 export function useTour(id: number) {
   return useApiCall(() => api.tours.getById(id), [id]);
 }

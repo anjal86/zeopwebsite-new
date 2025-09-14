@@ -473,6 +473,3786 @@
         "group_discounts": "Available for 6+ people",
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       }
+    },
+    {
+      "id": 5,
+      "slug": "trek-to-pikey-peak-9n10d",
+      "title": "Trek to Pikey Peak 9N/10D",
+      "category": "Trekking",
+      "description": "Outline Itinerary Day DAY 1: Arrival in Kathmandu and transfer to hotel Day DAY 2: : Drive from Kathmandu to Dhap Bazaar (2850m) – 8 Hours Day DAY 3: ...",
+      "location": "Nepal",
+      "price": 795,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.3",
+      "reviews": 73,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Pikey-Peak-Everest-View-Point_1.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/pikey-base-camp-trek.webp",
+        "https://gurutravelsltd.com/uploads/package/images/pikey-peak-treks.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day DAY",
+          "description": "1: Arrival in Kathmandu and transfer to hotel Begin your trek in Nepal with a warm welcome in Kathmandu, the cultural and historical heart of the region of Nepal. Upon landing at Tribhuvan International Airport, a representative will assist you with your Nepal entry visa and transfer to your hotel. Enjoy the rest of the day exploring Thamel and preparing for your Pikey Peak adventure.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day DAY",
+          "description": "2: : Drive from Kathmandu to Dhap Bazaar (2850m) – 8 Hours The drive from Kathmandu to Dhap takes you along scenic roads tracing the Sunkoshi River, leading to the beautiful village of Dhap Bazaar. This marks the start of the trekking trail in the Everest region. This drive from Kathmandu gives you the first glimpse of Nepal's countryside, terraced fields, and mountain views.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day DAY",
+          "description": "3: Trek from Dhap to Japre (2815m) – 14 km / 4-5 Hours Today your real trekking experience begins as you trek from Dhap to Japre, passing through remote trails and scenic ridges. This trekking route offers initial views of Everest and Numbur Himal, and your altitude gradually increases. The village of Japre features a beautiful monastery and panoramic scenery.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day DAY",
+          "description": "4: Trek from Jhapre to Pikey Peak Base Camp (3640m) – 13.7 km / 5-6 Hours The trek from Jhapre to Pikey offers forested paths, yak pastures, and mani walls, leading to Pikey Peak Base Camp. As you reach Pikey base, soak in the tranquil atmosphere and prepare for the summit of Pikey Peak the next morning. This day provides the perfect mix of nature and spiritual landmarks.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day DAY",
+          "description": "5: Hike to Pikey Peak (4065m) and Descend to Jase Bhanjyang – 5 km Rise early for the hike to Pikey Peak, the highest point of the journey. At the top of Pikey Peak, enjoy the stunning sunrise and the iconic view from Pikey Peak. From here, you can see Mount Everest, Kanchenjunga, Dhaulagiri, Mera Peak, and many other Himalayan giants. The panorama from Pikey Peak is truly breathtaking.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3762m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 6,
+      "slug": "muktinath-bike-tour-11n12d",
+      "title": "Muktinath Bike Tour-11N/12D",
+      "category": "Trekking",
+      "description": "Ride to Mustang: 12-Day Himalayan Motorbike Adventure from KathmanduThe Journey of a LifetimeImagine this: you’re cruising through Nepal’s ever-changi...",
+      "location": "Nepal",
+      "price": 1000,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.6",
+      "reviews": 107,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/royal-enfield-himalayan-hire-in-nepal.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/royal-enfield-himalayan-launch.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/pokhara_D7XZpIW.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/1650535635.sidetrackimagebandi.jpg"
+      ],
+      "highlights": [
+        "Each turn brings new sights, sounds, and stories",
+        "Reach the spiritual site of Muktinath at nearly 3,800 meters"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Day 1: Welcome to Kathmandu (1,400m) As your flight descends into the Kathmandu Valley, you’ll already sense the contrast—lush green hills ring the ancient city, and the chaos of Kathmandu pulses below. Our representative will greet you at Tribhuvan International Airport and transfer you to your hotel in the heart of the capital. Depending on your arrival time, you can explore the vibrant Thamel neighborhood or rest and recover from your journey. In the evening, join the team for a welcome dinner and a detailed briefing about your upcoming adventure — the route, safety protocols, and what to expect on the road.\n📍Overnight: Kathmandu 🍽 Meals: Welcome Dinner",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Day 2: Kathmandu Heritage Ride & Bike Preparation Today’s all about orientation — both cultural and practical. After breakfast, join your guide for a short ride around Kathmandu’s cultural gems like Swayambhunath Stupa (Monkey Temple), the sacred Pashupatinath Temple, and Boudhanath Stupa. It’s a chance to ease into riding mode while soaking in Nepal’s rich spiritual heritage. In the afternoon, finalize your paperwork, check your gear, and get fitted to your motorbike. A mechanic will help you do a full technical check. Later, the group will gather for a pre-departure talk with your road captain.\n📍Overnight: Kathmandu 🍽 Meals: Breakfast",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Kathmandu to Bandipur Distance: ~145 km | Ride Time: 5–6 hours\nStart your engines! After an early breakfast, you’ll ride out of Kathmandu and hit the Prithvi Highway. The route follows the Trishuli River, with rolling hills and terraced fields keeping you company. Take a break midway for lunch before the road winds upward to the beautifully preserved hill town of Bandipur. Once a bustling trade hub between Tibet and India, Bandipur still exudes old-world charm with its cobbled streets, restored homes, and panoramic views of Manaslu and the Annapurna range. It’s the perfect first stop to ease into the journey.\n📍Overnight: Bandipur 🍽 Meals: Breakfast, Dinner",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Bandipur to Kusma Distance: ~100 km |  Ride Time: 4–5 hours\nThe ride from Bandipur to Kusma is relatively short but rich in local flavor. Pass through picturesque villages, terraced farms, and mid-hill settlements. As you approach Kusma, the landscape becomes more dramatic, with deep gorges and hanging bridges. In fact, Kusma is known for having one of the world’s highest suspension bridges, stretching over the Kaligandaki Gorge. The town is calm and lesser explored, offering a peaceful overnight stop with stunning views and cultural charm.\n📍Overnight: Kusma 🍽 Meals: Breakfast, Dinner",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Kusma to Lete Distance: ~110 km |  Ride Time: 5–6 hours\nNow the adventure intensifies. After breakfast, ride through Beni — the gateway to Mustang — and gradually ascend alongside the Kali Gandaki River. The tarmac gives way to gravel as the air grows thinner. This stretch offers thrilling off-road riding and raw, untouched scenery. You’ll ride under cascading waterfalls, across wooden bridges, and past wild cliffs as you approach Lete, a small settlement nestled beneath Nilgiri and Dhaulagiri. This is true Himalayan wilderness.\n📍Overnight: Lete 🍽 Meals: Breakfast, Dinner",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3196m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 7,
+      "slug": "kathmandu-pokhara-muktinath-7n8d",
+      "title": "Kathmandu, Pokhara & Muktinath-7N/8D",
+      "category": "Cultural",
+      "description": "Outline Itinerary Day 1: Arrival at Kathmandu Day 2: Kathmandu sightseeing Day 3: Drive to Pokhara and sightseeing Day 4: Drive to Muktinath Day 5: Mu...",
+      "location": "Pokhara",
+      "price": 890,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.7",
+      "reviews": 142,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/jomsom-muktinath-.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GetPaidStock.com-667a95ce3515a_qpbgf4D.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/boudha_XgZLVZt.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/pashni_3fWfIW8.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival at Kathmandu Meet up at the arrival and heading towards\nHotel Our office representative will brief you\nabout the tour activities and transfer to\nhotel. Overnight at Hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Kathmandu sightseeing After Breakfast proceed for the sightseeing\ntour of Pasuptinath Temple, Bouddhanath\nStupa After that we will be going to Patan\ndurbar Square which are the three-world\nheritage site of Kathmandu. Overnight at\nKathmandu.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Drive to Pokhara and sightseeing After Breakfast, Head towards Kathmandu\nWhich will take around 7 to 8 hours.\n(Enroute Manakamana Temple which you\ncan visit) Overnight at Pokhara.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Drive to Muktinath After breakfast we will be heading towards\nMustang which will take around 7 to 8\nhours experiencing the breathtaking\nlandscape and enroute Rupse fall visit and\nMarpha and at the evening time you can go\nfor the Muktinath temple aarti.\nOvernight at Muktinath.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Muktinath Visit & Drive back to Kathmandu Early morning visit to Muktinath Temple\nand Breakfast at hotel and we will be driving\ntowards pokhara which will take around 7 to\n8 hours.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4789m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 8,
+      "slug": "haleshi-mahadev-temple-tour-1n2d",
+      "title": "Haleshi Mahadev temple Tour-1N/2D",
+      "category": "Cultural",
+      "description": "Setting out from Kathmandu in the early morning, embark on a picturesque 12-14 hour journey to reach the sacred destination of Haleshi Mahadev. Upon a...",
+      "location": "Nepal",
+      "price": 890,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.5",
+      "reviews": 132,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/halesi-img_we1LJyT.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/halesi-mahadev.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/241919150_5320447457988004_5803493248696345463_n.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/Haleshi-Mahadev-Temple-Entry-Point-on-Night--px2rdkxqyvlh4d5evm1ovnqpo6p3_oTbNylA.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Haleshi Mahadev Depart from Kathmandu early in the morning (around 6:00 AM) by private vehicle or public bus to Haleshi Mahadev, Khotang. The journey by road takes approximately 12-14 hours, depending on road conditions and traffic. Along the way, you'll pass through beautiful landscapes, small towns, and winding mountain roads. Arrive at Haleshi Mahadev in the evening. Check-in at a guesthouse or hotel near Haleshi Mahadev temple. Spend the evening exploring the area and visiting the temple.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Explore Haleshi Mahadev  and Departure Kathmandu Wake up early and visit Haleshi Mahadev temple for morning prayers and meditation. After breakfast, explore the surroundings and visit other nearby attractions such as Maratika Cave (Halesi Cave) and Siddha Baba Mandir. Depart from Haleshi Mahadev by midday for the return journey to Kathmandu. Arrive back in Kathmandu in the late evening.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3736m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 9,
+      "slug": "paragliding-hot-air-balloon-and-bungee-in-pokhara-1n2d",
+      "title": "Paragliding , Hot Air Balloon and Bungee in Pokhara-1N/2D",
+      "category": "Cultural",
+      "description": "Embarking on an adventure-packed journey, the itinerary begins with a morning flight from Kathmandu to Pokhara. Day one unfolds with exhilarating acti...",
+      "location": "Pokhara",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.3",
+      "reviews": 131,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-final_1RCHFjn.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-macha_vqdnqGK.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-phewa_lake_AsTPd4J.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-night.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Pokhara Depart from Kathmandu early in the morning for your domestic flight to Pokhara. Enjoy the short and scenic flight, taking in aerial views of the majestic Himalayas and lush landscapes below. Mid-morning: Arrival in Pokhara\nArrive in Pokhara and transfer to your hotel near Pokhara Lakeside. Check into your accommodation and take some time to freshen up before starting your day's adventures. Late Morning/Early Afternoon: Paragliding and Hot Air Balloon Ride\nHead to Sarangkot for your thrilling paragliding adventure. Meet your experienced pilot and take off for a tandem flight over Pokhara Valley, enjoying panoramic views of the surrounding mountains and Phewa Lake. After paragliding, indulge in a serene hot air balloon ride over Pokhara, drifting gently through the sky and capturing breathtaking views of the city and its surroundings. Afternoon: Explore Pokhara\nSpend the afternoon exploring Pokhara at your leisure. Visit attractions such as Phewa Lake, where you can enjoy a boat ride or simply relax by the lakeside. Explore the colorful streets of Lakeside, dotted with shops, cafes, and souvenir stalls. Optionally, visit the International Mountain Museum to learn about the culture, history, and wildlife of the Himalayas. Evening: Dinner and Leisure Time\nEnjoy dinner at one of the many restaurants in Pokhara, offering a variety of cuisines ranging from Nepali to international. After dinner, you can relax at a lakeside cafe or take a leisurely stroll along the shore of Phewa Lake, soaking in the serene atmosphere.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Bungee Jumping and Departure from Pokhara Start your day with an adrenaline-pumping bungee jumping experience at the High Ground Bungee in Pokhara. Feel the thrill of free-falling from a height of 70 meters and bouncing back up, surrounded by stunning natural scenery. After bungee jumping, return to your hotel to freshen up and check out.\nMidday: Road Journey from Pokhara to Kathmandu via Bandipur\nDepart from Pokhara around midday for your road journey back to Kathmandu. En route, stop in Bandipur, a charming hilltop town known for its preserved Newari architecture and panoramic views of the Himalayas. Explore Bandipur's historic streets, visit cultural landmarks such as the Khadga Devi Temple and Tundikhel viewpoint, and enjoy lunch at a local eatery. Afternoon: Continue Journey to Kathmandu\nResume your journey to Kathmandu after exploring Bandipur. Arrive in Kathmandu by late afternoon or early evening, depending on traffic and road conditions.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4403m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 10,
+      "slug": "kulekhani-dam-markhu-and-chitlang-1n2d",
+      "title": "Kulekhani Dam, Markhu, and Chitlang-1N/2D",
+      "category": "Cultural",
+      "description": "OverviewThis 2-day escape to Kulekhani Dam, Markhu, and Chitlang Trip is perfect for travelers seeking peace, culture, and nature without the crowds. ...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.5",
+      "reviews": 144,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-last.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-boat.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-sheep.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL4.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu → Kulekhani Dam → Markhu Start your day with a scenic drive from Kathmandu, departing at 7:00 AM in a private vehicle. As you leave the city behind, enjoy the views of terraced farms, winding rivers, and misty hills. By 10:30 AM, you'll arrive at Kulekhani Dam, Nepal's first hydropower project, where you can take in the impressive surroundings.\nFor lunch, head to a lakeside restaurant around 1:00 PM and indulge in local delicacies like freshly caught fried fish from Kulekhani Lake or a comforting plate of dal bhat (rice with lentils). After lunch, drive 30 minutes to Markhu, a charming village nestled beside the lake, where you'll arrive by 2:00 PM.\nIn the evening, check into a cozy guesthouse or homestay around 5:30 PM. As the golden hour approaches, take in a breathtaking sunset that paints the lake and surrounding hills in warm hues. For dinner, enjoy traditional dishes like gundruk (fermented greens) or sel roti (sweet rice bread) around 7:00 PM. Fall asleep to the sound of crickets and wake up to stunning mountain views the next morning.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Markhu → Chitlang → Kathmandu Start your morning with a hearty breakfast at 7:00 AM, featuring fresh milk, eggs, or roti (flatbread) to fuel you for the day. By 8:00 AM, embark on a one-hour drive to Chitlang, a historic Newari village rich in culture and tradition.\nFor lunch, around 12:30 PM, indulge in Newari specialties like bara (lentil pancake) or yomari (sweet rice dumplings), which offer a delicious taste of the local cuisine. After lunch, at 2:00 PM, begin your return journey to Kathmandu. As you drive back, enjoy the beautiful scenery of villages, forests, and rivers, with the sun setting behind the hills, creating a serene atmosphere.\nBy 6:00 PM, you’ll arrive in Kathmandu, feeling refreshed and full of memories from your peaceful and scenic adventure.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4446m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 11,
+      "slug": "annapurna-basecamp-trek-for-indian-10days9nights",
+      "title": "Annapurna Basecamp Trek For Indian -10Days/9Nights",
+      "category": "Trekking",
+      "description": "Annapurna Base Camp Trek - 10N/9DTrip Overview: Are you looking to explore the stunning Annapurna Base Camp but don't have much time? Don't worry! We'...",
+      "location": "Annapurna",
+      "price": 795,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.8",
+      "reviews": 75,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/abc_dnCCfiH.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/Screenshot_7.png"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 01",
+          "description": ": Arrival at Kathmandu and sightseeing As per flight time, our representative will be there at airport  for pick up and drop you to the hotel. After refreshment  proceed for the sightseeing tour of Pasupatinath Temple \nand Swyambhunath stupa. During Free time you can roam  around Thamel market for shopping. Overnight at Kathmandu. \nMeals: Dinner\nAccommodation: 3-star Hotel",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 02",
+          "description": ": Drive to Pokhara or fly to Pokhara (820m) Today you will be received by a driver and will be driving to  Pokhara. Upon arrival we will be checking-in in the property reserved. After a short refreshment in the property you will have \nthe rest of the day to yourself during which you can walk around Lakeside or enjoy the nightlife of Pokhara. Meals: Dinner\nAccommodation: 3-star Hotel",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 03",
+          "description": ": Drive to Naya pool and trek to Ghandurk (1,940m) After morning breakfast, we will drive to Naya Pool (2 – 3 hour approx). We will take a short break have a meal, stretch up and get going. Being the first day we will be doing a short trek to \nget use to the terrain. After a trek of approximately an hour or two we will be able to get to Ghandruk, a beautiful village mostly inhabited by the Gurung community. We will be staying the night at Ghandruk homestay.\nMeals: Breakfast, Lunch and Dinner\nAccommodation: Teahouse",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 04",
+          "description": ": Trek to Chhomrong (2,170m) After a refreshing breakfast we will continue our trek. We descend for a while before making a pleasant ascent to  Chhomrong from Kimrong Khola after another arduous trek to Chere Danda. Great views of Gangapurna, Hiunchuli, Fishtail Mountain (Machhapuchhre), and Annapurna South are available as we travel. We make a rapid descent to reach the Kimrong Khola. Meals: Breakfast, Lunch, and Dinner\nAccommodation: Teahouse",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 05",
+          "description": ": Trek from Chhomrong to Dovan (2,820m) We move through a wet, damp bamboo woodland before making a steady ascent with a few steep stretches. The forest only opens up and we are  once more outside in the sunshine with \nbreathtaking views of the glacier river below once we reach Himalaya Hotel.\nMeals: Breakfast, Lunch, and Dinner\nAccommodation: Teahouse",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3125m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 12,
+      "slug": "ama-yangri-2-days1-night",
+      "title": "Ama Yangri-2 Days/1 Night",
+      "category": "Trekking",
+      "description": "Ama Yangri is located something about 90km north of Kathmandu Valley which is highest peak that is nearest from the Captial City Kathmandu. Ama Yangri...",
+      "location": "Nepal",
+      "price": 7500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.7",
+      "reviews": 104,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/ama-yangri-trek-860x450.jpg",
+      "gallery": [],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Drive from Kathmandu to Chumothang Resort Early Morning Gather at one location our vehicle will pick up and we will be further Heading towards Chumothang Resort which takes you around 7-8 hours . after refreshment you will have camp fire and enjoy with your friend. Dinner will be serve at Hotel. Overnight at Hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Trek to Ama yangri and drive back to Kathmandu Early Morning, Before sunrise Hike to Ama yangri top to Witness the  mesmerizing sunrise with the views of Langtang Mountains range, Manasalu, and others various peak. Later hike down to Hotel have breakfast and Proceed further towards kathmandu.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4101m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.441Z",
+      "updated_at": "2025-09-14T08:17:38.441Z"
+    },
+    {
+      "id": 13,
+      "slug": "thailand-bali-tour-package-8n-9d",
+      "title": "Thailand & Bali Tour Package 8N/ 9D",
+      "category": "Cultural",
+      "description": "Thailand & Bali Tour Package Overview 8N/ 9D Experience the tropical wonders of Southeast Asia with our carefully crafted Thailand & Bali 8 Nights / 9...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.7",
+      "reviews": 59,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/anurag_2.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/anurag5.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/anurag_3.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/anurag1.jpg"
+      ],
+      "highlights": [
+        "Then, fly to Bali, Indonesia, a land steeped in spirituality and natural beauty"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day DAY",
+          "description": "1: Arrival in Thailand (DMK Airport ) we flew from Kathmandu and landed at DMK International airport at Bangkok after Arrival we all check inn at hotel near khao san or riverside and took a nice bath at hotel or enjoying sauna or deep tissue message at our own beside this we explore Wat pho Wat Arun at sunset while enjoying street food in china town and Tuk-Tuk ride around the night scene.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day DAY",
+          "description": "2: Bangkok Cultural Tour we wake up early in the morning and have a delicious breakfast at Hotel and then we  heads outs to see historical places at Bangkok for examples Grand Places & phra Kaew after clicking some pictures with your loved once & it time for another adventure at chao Phraya River while doing Long-tail boat tour and visit nearby floating market.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day DAY",
+          "description": "3: Day Trip at Ayutthaya Another historical day in Bangkok Another historical day in Bangkok at Ayutthaya you all enjoy the architecture Thailand and gaining lot more about their rulers and get exposure with their historical monuments at Ayutthaya  which is one of the part of UNSECO heritage sites on top of that you can explores extra places like kanchanaburi, Kwai & Erawan Falls in the afternoon.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day DAY",
+          "description": "4: Transfer to  chai mai or phuket (With Lunch) you have two option either you can go to chai mai & explore Wat Chedi Luang & stroll Old City; enjoy khao soi either you can go for phuket & Relax at Patong/Karon beach, visit Big Buddha while enjoying complementary meal more over if there is free time you can even explore the night life of Thailand in Chiang Mai or local market/street food in Phuket.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day DAY",
+          "description": "5: Fight to Bali Fly to CNX or HKT via Bangkok to DPS (Bali) and in the afternoon you Arrive at Ubud & check inn into your hotel and relax over there for at least a hour after that in the Evening and explore ubud places and market more over there is a option for unwind with spa session by your own connivence.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4516m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 14,
+      "slug": "manila-tour-4n5d",
+      "title": "Manila Tour 4N/5D",
+      "category": "Cultural",
+      "description": "Upon arrival in Manila, you will be greeted and transferred to your hotel for check-in and relaxation. The following day, take a flight to Tagbilaran,...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.3",
+      "reviews": 138,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-city_manila.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-Manila_city.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL_-Manila_tour_eGNcNcs.jpg"
+      ],
+      "highlights": [
+        "Day 4 is at leisure, giving you time to unwind and enjoy the resort's amenities"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrive in Manila Arrive in Manila from Kathmandu. Meet and greet at the airport, then transfer to your hotel. Check-in and unwind in your Superior Room. Enjoy a peaceful evening at leisure.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Manila to Tagbilaran After breakfast, transfer to the airport for your flight to Tagbilaran. Upon arrival, enjoy a scenic transfer to your beachfront resort. Check-in and relax in your Deluxe Room.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Countryside Tour in Bohol Start your day with a hearty breakfast, then embark on an exciting countryside tour. Visit Baclayon Church, the Tarsier Sanctuary, and the famous Chocolate Hills. Enjoy a scenic Loboc River Cruise with a delicious Filipino lunch onboard. Return to your resort for a relaxing evening.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Leisure Day in Tagbilaran Spend the day at leisure, whether you want to relax on the beach, enjoy the resort amenities, or explore the surroundings. Overnight in your Deluxe Room.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Return to Manila & Depature After breakfast, transfer to the airport for your flight back to Manila. Upon arrival, connect to your international flight back to Kathmandu.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3820m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 15,
+      "slug": "bali-singapore-tour-package-6n7d",
+      "title": "Bali & Singapore Tour Package-6N/7D",
+      "category": "Adventure",
+      "description": "This 7-day itinerary takes you from Bali’s vibrant culture to Singapore’s modern attractions, blending relaxation and excitement. Start in Bali with v...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.2",
+      "reviews": 93,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Bali.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL_-_singapore.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Bali Welcome to Bali! After clearing immigration and customs, you’ll be transferred to your hotel. Once checked in, relax and enjoy the rest of the day at leisure. Overnight stay at the hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Barong Kintamani Tour After breakfast, depart around 8:30 a.m. for an exciting Barong Dance performance at Batubulan, a traditional dance that tells the story of good versus evil through unique costumes and masks. Next, travel to Kintamani for breathtaking views of Mount Batur and Lake Batur, where you’ll also enjoy lunch. In the afternoon, visit the famous Goa Gajah, or \"Elephant Cave.\" Return to the hotel in the evening.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Water Sports & Tanah Lot Temple Begin the day with breakfast, followed by a thrilling water sports session at Tanjung Benoa. Try parasailing, a banana boat ride, and jet skiing (accompanied by an instructor for safety). After refreshing back at the hotel, visit the iconic Tanah Lot Temple on Bali’s west coast. Enjoy the sunset view over the ocean before returning to the hotel for an overnight stay.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Arrival in Singapore After breakfast, transfer to the airport for your flight to Singapore. Upon arrival, you’ll be taken to your hotel. Spend the rest of the day exploring Singapore’s vibrant sights at your own pace.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Singapore City Tour & Sentosa Island Start the day with breakfast, then embark on a half-day city tour of Singapore. Visit Gardens by the Bay, with its incredible indoor Cloud Forest and Flower Dome. Continue to the iconic Merlion Statue for photos with the Marina Bay backdrop, and explore China Town for unique souvenirs. In the afternoon, head to Sentosa Island for the ultimate experience, including SEA Aquarium, Skyride and Luge, and a dazzling “Wings of Time” laser and fireworks show.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4259m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 16,
+      "slug": "rotary-convention-canada-2025",
+      "title": "Rotary Convention Canada 2025",
+      "category": "Cultural",
+      "description": "Ultimate Canada Rotary Tour (11N/12D) Explore Calgary, Banff & Jasper with Guru Travels Ltd.Embark on an extraordinary journey with Guru Travels Ltd. ...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.2",
+      "reviews": 144,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Calageryy.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL_-_city_tower.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-_jasper.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL_-_banff.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Friday, June 20, 2025 – Arrival in Calgary Arrive at Calgary Airport and transfer to the Best Western Premier Freeport Inn Calgary Airport. After checking in, enjoy a relaxing evening with dinner at an Indian restaurant. This is a great time to unwind after your flight and settle in for the adventure ahead. Overnight stay at the hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Saturday, June 21, 2025 – Calgary City Tour Begin the day with breakfast at the hotel, followed by a guided tour of Calgary, exploring the city’s major landmarks. You'll have free time for lunch on your own, allowing you to sample local flavors. The day concludes with dinner at an Indian restaurant and a comfortable overnight stay at the hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Sunday, June 22, 2025 – Rotary Convention After breakfast, head to the Rotary Convention for a full day of events and networking. Lunch will be on your own during the convention, with plenty of options available. In the evening, gather for dinner at an Indian restaurant before returning to the hotel for the night.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Monday, June 23, 2025 – Calgary Stampede & Calgary Tower Following breakfast, spend the day at Calgary Stampede, one of the most iconic events in Canada. Later, visit the Calgary Tower for a stunning view of the city. Afterward, enjoy dinner at an Indian restaurant before settling in for the night at the hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Tuesday, June 24, 2025 – Heritage Village & Gasoline Alley Museum Start with breakfast at the hotel, then head to Heritage Park Historical Village and the Gasoline Alley Museum. These sites offer a glimpse into Canada’s history and heritage. After exploring, have lunch on your own before dinner at an Indian restaurant, followed by another overnight stay in Calgary.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4865m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 17,
+      "slug": "lhasa-city-tour-3n4d",
+      "title": "Lhasa City Tour -3N/4D",
+      "category": "Cultural",
+      "description": "Experience the magic of Tibet in our 4 Days Lhasa City Tour. Begin with a scenic flight from Kathmandu to Lhasa, where you'll explore iconic sites suc...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.4",
+      "reviews": 118,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-_lhasa_city.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL_-_Lhasa.jpg"
+      ],
+      "highlights": [
+        "Experience the magic of Tibet in our 4 Days Lhasa City Tour"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu – Lhasa Depart from Katmandu by air to Lhasa . Arrival at Gonggar Airport . Transfer to a hotel in Lhasa (2hrs). Time at leisure. Overnight Lhasa",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Lhasa Sightseeing Full day city tour of The Potala Palace, The Jokhang Temple, and Barkhor Street\nThe Potala Palace : Perched upon the Marpo Ri Hill, 130 meters above the Lhasa valley, it is the greatest monumental structure in Tibet .\nThe Jokhang Temple : The Jokhang is the most celebrated temple in Tibet . Because the temple is not controlled by a particular sect of Tibetan Buddhism it attracts adherents of all the sects as well as followers of Bon-Po , Tibet ‘s indigenous religion Barkhor Street : The Barkhor is the oldest street in Lhasa as well as the center of old Lhasa and remains very traditional. It is a place where Tibetan culture, economy, religion and arts are assembled.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Lhasa Sightseeing and city tour Full day city tour of Sera Monastery, Trupeng Monastery, Norbulingka, and visit The Carpet Factory. Sera Monastery It is known as one of the three greatest monasteries of Tibet .\nDrupeng Monastery : It is one of the biggest monasteries in Tibet .\nNorbulingka : Norbulingka means ” Jeweled Garden “. It was constructed as a summer palace for the Dalai Lama and later served the whole governmental administration.\nThe Carpet Factory : The highland of Tibet is the actual home of the oriental carpets. By visiting Carpet Factory you will have a general idea how carpets are produced",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Lhasa- Kathmandu In the morning after breakfast, transfer to airport 02 hrs. Drive-Representative will assist you. Flight Lhasa/Kathmandu lasts for an hour. During the flight you will see the various beauties likeYarlung Tsangpo River , Lake Yamdrok , Mt. Kanchenjunga (8586m) and Mt. Makalu (8463m) and Mt.Everest (8848m). It too depends upon the weather.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3344m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 18,
+      "slug": "sri-lanka-tour-4n5d",
+      "title": "Sri-Lanka Tour - 4N/5D",
+      "category": "Cultural",
+      "description": "Enjoy a 4-night, 5-day trip from Kathmandu to Sri Lanka, starting in Colombo with visits to Galle Face Green and Gangaramaya Temple. Head to Kandy to ...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.1",
+      "reviews": 89,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-templee.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-sir_lanka_beach.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-sri_lanka_ll.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-sri_lanka.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Colombo Start your adventure by departing from Tribhuvan International Airport in Kathmandu and flying to Bandaranaike International Airport in Colombo. Upon arrival, transfer to your hotel and spend the afternoon exploring Colombo’s vibrant sights. Visit notable landmarks such as Galle Face Green, Gangaramaya Temple, and Independence Memorial Hall. Don’t forget to check out Pettah Market for some local shopping. In the evening, enjoy a delicious dinner at a local Sri Lankan restaurant before relaxing at your hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Colombo to Kandy After a hearty breakfast at the hotel, embark on a scenic drive to Kandy, which takes about 3.5 hours. En route, visit the Pinnawala Elephant Orphanage, where you can see elephants up close. Upon arriving in Kandy, check in to your hotel and head to the Temple of the Sacred Tooth Relic, a UNESCO World Heritage site. In the evening, immerse yourself in Sri Lankan culture by watching a traditional dance performance. Enjoy dinner at a local restaurant and unwind at your hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Kandy to Nuwara Eliya On Day 3, after breakfast, travel to Nuwara Eliya, known as \"Little England,\" which is approximately a 2.5-hour drive. Stop by a tea plantation and factory along the way to learn about Sri Lanka’s famous Ceylon tea production. After checking in at your hotel in Nuwara Eliya, explore Gregory Lake and Victoria Park, both celebrated for their picturesque landscapes. Spend the evening relaxing and enjoying the colonial charm of the town, followed by dinner at your hotel or a nearby restaurant.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Nuwara Eliya to Bentota On the fourth day, enjoy breakfast before departing for Bentota, a stunning coastal town famous for its beaches and water sports (approximately 5 hours away). Take in the scenic views and perhaps stop to admire waterfalls along the route. Upon arrival in Bentota, check in to your beachfront resort and spend the afternoon relaxing on the beach. In the evening, consider a sunset cruise on the Bentota River or enjoy dinner at a seaside restaurant.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Bentota to Colombo & Departure On your final day, savor a leisurely breakfast and enjoy some free time at the beach. If time allows, visit a turtle hatchery before starting your journey back to Colombo, which takes around 2 hours. After reaching Colombo, transfer to Bandaranaike International Airport for your flight back to Kathmandu, bringing your memorable Sri Lanka trip to a close.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4766m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 19,
+      "slug": "baku-tour-6n7d",
+      "title": "Baku Tour - 6N/7D",
+      "category": "Cultural",
+      "description": "Baku's seven-day itinerary offers a rich blend of history and modernity. Start with a leisurely exploration of Baku Boulevard and the Carpet Museum, f...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.6",
+      "reviews": 122,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/img_119157_baku_flame_tower.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/2.jpg"
+      ],
+      "highlights": [
+        "Baku's seven-day itinerary offers a rich blend of history and modernity",
+        "Conclude your journey with shopping and relaxing walks before your departure"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival and Initial Exploration - Afternoon: Arrive in Baku, check into your hotel, and freshen up.\n- Evening: Stroll along Baku Boulevard, visit the Carpet Museum, and dine at a local restaurant.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Old City (Icherisheher) - Morning: Explore the Maiden Tower and the Palace of the Shirvanshahs.\n- Afternoon: Wander the narrow streets of Icherisheher, visit the Miniature Books Museum.\n- Evening: Enjoy dinner at a traditional restaurant within the Old City.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Modern Baku and Flame Towers - Morning: Visit the Heydar Aliyev Center and the Baku Museum of Modern Art.\n- Afternoon: Explore the Flame Towers and enjoy views from Upland Park.\n- Evening: Dinner at a trendy restaurant, followed by exploring Baku’s nightlife.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Cultural and Historical Sites - Morning: Tour the Azerbaijan National Carpet Museum and the Nizami Museum of Azerbaijani Literature.\n- Afternoon: Visit the Azerbaijan State Museum of History and stroll around Fountain Square.\n- Evening: Attend a performance at the Azerbaijan State Academic Opera and Ballet Theater.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Day Trip to Gobustan - Morning: Guided tour to Gobustan National Park to see ancient rock carvings and mud volcanoes.\n- Afternoon: Visit the Gobustan Museum and return to Baku.\n- Evening: Relax at your hotel or enjoy an evening walk along the Caspian Sea.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4412m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 20,
+      "slug": "vietnam-tour-7n8d",
+      "title": "Vietnam Tour- 7N/8D",
+      "category": "Cultural",
+      "description": "Embark on a captivating journey through Vietnam, beginning with the vibrant streets of Hanoi and a night train adventure to Da Nang. Discover the ench...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.7",
+      "reviews": 94,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GettyImages-520483268-5a8001f5d8fdd50037283bae.jpg",
+      "gallery": [],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Ha hoi Arrival- Transfer to Da Nang City by night train Arrival at Noi Bai Airport, immigration procedures. Transfer to city center. Overnight in Hanoi.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": DA NANG – FREE YOUR LEISUR Transfer to station for SE1 train to Da Nang (20:55 – 12:30 next day). Overnight on train.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": DA NANG – BA NA HILLS – DA NANG (B) Check-in hotel upon arrival in Da Nang.  Visit Ba Na Hills: Cable Car, Le Jardin D’Amour Flower Garden, Golden Bridge, Linh Ung Pagoda, French Square, and Fantasy Park. Overnight in Da Nang.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": DA NANG - CITY TOUR - HOI AN ANCIENT TOWN (B) Explore Da Nang: Love Bridge, Dragon Bridge, Han Bridge, Tran Thi Ly Bridge, Son Tra Peninsula, My Khe Beach, and Linh Ung Bai But Pagoda. Visit Hoi An Ancient Town. Overnight in Da Nang.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": DA NANG – FLIGHT TO HA NOI (B) Free time in Da Nang until transfer to airport.  Flight to Hanoi. Transfer to city center upon arrival. Overnight in Hanoi.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3084m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 21,
+      "slug": "cultural-heritage-tour-of-nepal",
+      "title": "CULTURAL & HERITAGE TOUR OF NEPAL",
+      "category": "Cultural",
+      "description": "Highlights:“A cultural tour around Kathmandu valley visiting ancient religious sitesFascinating world heritage monuments of immense interest and livel...",
+      "location": "Nepal",
+      "price": 890,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.3",
+      "reviews": 114,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/ashok-acharya-aNU8MnzWhKo-unsplash_1.jpg",
+      "gallery": [],
+      "highlights": [
+        "Day 2: Tour of Kathmandu around places of interest",
+        "Day 3: Drive to Dhulikhel and visit Namodbuddha holy sites",
+        "Day 4: Drive to Chitwan National park for jungle safari"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrive in Kathmandu meet our staff and transfer to hotel. On arrival in Kathmandu international airport via respective airlines where Guru travels staff receives you with warm welcome and then transfer to your hotel around Thamel area in the hub of Kathmandu.\nThamel an interesting place with many shops and stores and international standard restaurants including shops-stores, Guru Travel guide will brief you with details and information of the hotels and Cultural & Heritage Tour of Nepal with welcome dinner in a nice Nepali restaurant includes folk culture program.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Tour of Kathmandu around places of interest. These two days you will engrossed with interesting and delightful tour around Kathmandu and Patan cities. \nMorning starts with tour around Kathmandu, steeped with ancient heritage sites and monuments of both Hindu and Buddhist, morning after breakfast our tours starts with a short drive to Swayambhunath, a popular and famous pilgrimage sites for Buddhist and Hindu as well. \nAn ancient Chaitiya of Asia and a major symbol of Nepal’s Buddhist heritage, Swayambhunath represents Primordial Buddha or Adi-Buddha. \nThe hill top where Swayambhunath Chaitiya is built is called Padmagiri, Vajrakuta, Gosringa, Gopuchha, Samhegu, and Simbhu and listed as UNESCO World Heritage Site. \nSwayambhunath area offers grand views of whole Kathmandu valley with distant snow capped peaks.\nAfter Swayambhunath visit Patan or Lalitpur City, which is close to Kathmandu and an adjoining city located south of Kathmandu on the other side of Bagmati River, an historical and cultural area with old palace buildings, artistic courtyard. \nAfter Patan tour leads to Bouddhanath, an important Buddhist pilgrimage and heritage sites in Nepal.  The story and history mentions that this Stupa contains relics of Buddha Kashyapa, with 176 miniature stupas and paintings of Tibetan Buddhist pantheons cover the walls that surround the Stupa at Bouddhanath. \nBouddhanath Stupa is an important pilgrimage site for Tibetans which is mentioned in Tibetan classical texts such as Biography of Yeshe Tshogyal (A.D. 8-9) and Padma Ka’thang (A.D.14).",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Drive to Dhulikhel and visit Namodbuddha holy sites. Located beyond the eastern rim of Kathmandu valley on the Tibet / China & Nepal Friendship Highway an hour drive where one can stay for overnight or more.\nDhulikhel at 1,440 meters, this beautiful spot offers panorama of High Mountain from Manaslu, Ganesh Himal in the far west to Langtang, Jugal Himal towards central north and as far to eastern horizon Gaurishankar, Melungatse Himal to Everest on clear fine day, Dhulikhel famous for Newari culture and popular as for resorts on route to Tibet and Jiri. \nHere with time in the afternoon visit to holy Namobuddha, which is near south of Dhulikhel just 20 minutes drive within pristine environment, a holy place for Buddhist, the old history belief is that Buddha on the path of learning-offered his own body without regret to a tigress suffering.\nOne of the unsurpassable supreme sacred sites known as the Three Stupas in Nepal is Tagmo Lüjin (lit \"The place where the future Buddha sacrificed his body to a tigress\"). It is the very sacred place where our teachers, the perfect and supreme Buddhafrom great hunger. What follows is a history of this supreme and distinguished sacred site, whose location is unmistaken based on the clear identification given in the Sutra Requested by the Tigress and so forth.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Drive to Chitwan National park for jungle safari. After breakfast an overland drive to low land of Nepal called Terai around warm semi-tropical areas, where deep dense jungles are located.\nAfter a scenic driving past many villages and towns reaching at outskirt of Chitwan National Park where all nice hotels-lodge and resorts are placed, at Chitwan using the best hotels or resort for 2 overnight stops, after lunch a short introductory tour or nature walks with dinner accompanied by local Tharu culture dance programs.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": In Chitwan full jungle activities and elephant safari. Full day jungle and nature programs starting early morning before breakfast with varieties of\nactivities includes elephant safari (morning or late afternoon) jungle / nature walks-bird watch tour, canoe ride to see crocodile and water birds, jungle drive with enjoyable elephant bathing and briefing, afternoon Jungle drive / Jungle or Nature walks or elephant safari (if not done earlier).",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4945m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 22,
+      "slug": "8-days-culture-wildlife-and-heritage-of-nepal",
+      "title": "8 Days Culture, Wildlife and Heritage of Nepal",
+      "category": "Trekking",
+      "description": "A Journey Through Nepal’s Living Heritage, Timeless Temples, and Breathtaking LandscapesOverview of JourneyIf you are dreaming of a once-in-a-lifetime...",
+      "location": "Nepal",
+      "price": 699,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.1",
+      "reviews": 73,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/chtwn2.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/pkr2.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/ptn1.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/swoyam2.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Day 1: Welcome to Kathmandu (1,400m) Arrive at Tribhuvan International Airport where our representative welcomes guests with a traditional Tika and flower garland. After a comfortable transfer and hotel check-in, guests have some time to relax. In the evening, enjoy a welcome dinner at a heritage-style restaurant, featuring authentic Nepali cuisine and a classical live cultural dance performance, introducing Nepal’s rich artistic traditions.Dinner at Hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 02",
+          "description": ": UNESCO Heritage Sites of Kathmandu After breakfast, explore Kathmandu’s key UNESCO World Heritage Sites. Visit Swayambhunath Stupa (Monkey Temple), a 2,000-year-old Buddhist shrine with stunning valley views. Proceed to Pashupatinath Temple, the sacred Hindu temple on the banks of the Bagmati River. Then, walk around the serene Boudhanath Stupa, a major center for Tibetan Buddhism. In the afternoon, explore Kathmandu Durbar Square, once the royal palace, where guests can see intricately carved temples, courtyards, and the Kumari Ghar (home of the Living Goddess).  Dinner at Hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 03",
+          "description": ": Kathmandu to Chitwan – Tharu Culture Experience Depart from Kathmandu to Pokhara by flight after breakfast in the morning. Upon arrival, guests are welcomed with drinks and settle into a comfortable resort. In the late afternoon, explore a nearby Tharu village and visit the Tharu Cultural Museum to learn about their indigenous lifestyle and history. In the evening, canoeing at Rapti river then a tharu stick dance performance, showcasing unique traditions of this ethnic group. Dinner is served at the resort.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 04",
+          "description": ": Chitwan to Pokhara – Journey to the Lake City After breakfast, enjoy jeep safari at Chitwan National park. Take a flight from Bharatpur airport. Welcome to a picturesque city famous for its natural beauty and Himalayan views. Upon arrival, check in at a lakeside hotel. In the evening, enjoy a serene boat ride on Phewa Lake and visit the Tal Barahi Temple on the lake’s island, a place of local spiritual importance. Rest of the evening is free to enjoy the lakeside ambience. Dinner at Hotel",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 05",
+          "description": ": Pokhara Sightseeing – Culture, Spirituality and transfer to Ghandruk Optional early morning drive to Sarangkot to witness sunrise over the Annapurna and Machhapuchhre (Fishtail) mountains. Return for breakfast and begin a full-day Pokhara tour: visit the International Mountain Museum, explore Bindhyabasini Temple, and the sacred Gupteshwor Cave with nearby Devi's Fall. Drive toward Ghandruk. Reach in the evening and enjoy traditional Gurung Culture with cultural food. Enjoy music and traditional instruments. Dinner at local homestay.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3774m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 23,
+      "slug": "annapurna-circuit-trek-with-tilicho-lake-and-north-base-camp",
+      "title": "Annapurna circuit trek with Tilicho lake and North base camp",
+      "category": "Trekking",
+      "description": "Annapurna circuit trek with tilicho lake and north base camp is one of the high altitude trek in Nepal where you will circulate world's 10'th highest ...",
+      "location": "Annapurna",
+      "price": 1050,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Challenging",
+      "rating": "4.8",
+      "reviews": 133,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/3-Tilicho-Lake.jpg",
+      "gallery": [],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Drive Kathmandu to beshisahar Our official member will meet you at thamel and lead you to tourist bus station and take a tourist bus drive from kathmandu to beshisahar. After reaching beshisahar guide will give you overall brefing and buy missing items. Beshisahar is a market place in lamjung district and also a gate way to annapurna circuit trek where you can find a essential items for trek as well. Drive distance-  Approx 180km",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Drive from Besisahar (760m) to Chame (2,670m) On this day after breakfast at hotel we will take jeep and drive to chame. A thrilling jeep ride takes you from Besisahar to Chame, the headquarters of Manang district. The rough road climbs steeply along cliffs, waterfalls, and narrow gorges. As you ascend, you'll notice the change in vegetation from subtropical forests to pine and fir trees. Chame (2,670m) offers stunning views of Lamjung Himal and Annapurna II. Altitude: 1310m Distance:65km Note: Road is rough and mostly landslide in monsoon.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Trek from Chame to Upper Pisang (3,300m) Your trek officially begins today, covering 14–15 km through pine forests and rocky ridges. The trail offers panoramic views of Annapurna II and Pisang Peak. You’ll pass the majestic Paungda Danda rock face before reaching the ancient village of Upper Pisang, known for its traditional Tibetan architecture. Altitude Gain: 630m\nDistance: 14km\nLandscape: Forests, rivers, apple orchards, cliffs",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Trek from Upper Pisang to Manang (3,540m) via Ghyaru & Ngawal On this day after breakfast we will start a trek through the high route via Ghyaru and Ngawal, we will gain roughly 800m in elevation before descending to Manang. You will be able to view panoramic views of Annapurna III, Gangapurna, and Tilicho Peak. The trail is steep and exposed in places but culturally rich. Altitude Gain: 240m\nDistance: 15KM\nLandscape: Arid alpine terrain, old Buddhist monasteries\nNote: Dry air and altitude can cause headaches—hydrate well.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Acclimatization Day in Manang (Optional hike to Ice Lake or Gangapurna  Lake) This day will be your acclimatization day. You can take an optional hike to Ice Lake (~4,600m) or Gangapurna Lake, which helps your body adjust in high altitude. Manang is also one of the most beautiful village around the trek. Visit the Himalayan Rescue Association for AMS information. Note: Highly recommended to hike higher and sleep lower.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3308m",
+        "acclimatization_days": 2,
+        "difficulty_level": "Challenging"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 24,
+      "slug": "api-base-camp-trek-12nights13days",
+      "title": "Api Base Camp Trek-12Nights/13Days",
+      "category": "Trekking",
+      "description": "OverviewApi Base Camp Trek is a hidden gem in the remote far-western region of Nepal, offering anunparalleled trekking experience through pristine lan...",
+      "location": "Nepal",
+      "price": 750,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Challenging",
+      "rating": "4.3",
+      "reviews": 92,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GetPaidStock.com-67cfc6b3a3d10.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GetPaidStock.com-67cfc61e6bfe7.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-API_base_camp_yU0eOyO.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-API_base_camp.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Kathmandu (1,400m) Upon arrival in Kathmandu, you will be greeted by our team and transferred to your hotel. The\nvibrant capital city of Nepal is rich in history, culture, and architectural wonders. You can explore\nUNESCO World Heritage Sites such as Swayambhunath (Monkey Temple), Boudhanath Stupa,\nand the sacred Hindu temple of Pashupatinath. Strolling through the bustling streets of Thamel,\nyou can experience Nepal’s lively atmosphere, shop for trekking gear, and enjoy authentic\nNepali cuisine. In the evening, a short briefing about the trek will be provided, ensuring you are\nwell-prepared for the adventure ahead.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Flight to Dhangadhi & Drive to Gokuleshwar (850m) A scenic flight from Kathmandu to Dhangadhi offers breathtaking views of the lush Terai plains\nand distant Himalayan ranges. Upon landing, we embark on a long yet rewarding drive to\nGokuleshwar, passing through charming villages, forests, and winding mountain roads. The\ndrive provides a glimpse into rural Nepalese life, where terraced fields and local bazaars\nshowcase the region’s traditional lifestyle. Gokuleshwar, a small town nestled in the hills, serves\nas our first overnight stop before heading deeper into the remote regions of the trek.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Drive to Latinath and Trek to Makarigaad (1,800m) After breakfast, a short drive takes us to Latinath, a town known for its ancient Hindu shrines.\nFrom here, we start our trek towards Makarigaad, following a scenic trail through terraced\nfarmlands and small settlements. The path gradually ascends, offering magnificent views of the\nsurrounding hills and the Mahakali River valley. As we walk through traditional villages, we have\nthe opportunity to interact with the friendly locals, learning about their unique customs and way\nof life. The day ends in Makarigaad, where we set up camp or stay in a local teahouse,\nsurrounded by the serene beauty of the Himalayas.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Trek from Makarigaad to Siti (2,200m) The trail from Makarigaad to Siti takes us through lush pine and rhododendron forests, where\nthe chirping of birds and rustling of leaves provide a peaceful trekking experience. As we gain\nelevation, the views become even more spectacular, revealing snow-capped peaks in the\ndistance. The region is home to diverse wildlife, and if lucky, we might spot Himalayan blue\nsheep or musk deer. Siti is a small settlement with traditional stone houses, where the warm\nhospitality of the locals makes us feel at home. The day’s trek provides an excellent balance of\nnatural beauty and cultural immersion.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Trek from Siti to Domal (2,900m) Leaving Siti, we follow a rugged trail that leads us into higher altitudes. The landscape\ntransitions from dense forests to vast alpine meadows, where yaks graze peacefully. Domal is a\nsacred site for both Hindus and Buddhists, attracting pilgrims from nearby villages. This spiritual\nsignificance adds a mystical touch to the trek, as prayer flags flutter in the crisp mountain air.\nThe presence of ancient shrines and stone cairns along the path gives insight into the\ndeep-rooted beliefs of the local communities. We spent the night in Domal, preparing for the\nchallenging journey ahead.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3801m",
+        "acclimatization_days": 2,
+        "difficulty_level": "Challenging"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 25,
+      "slug": "kailash-mansarovar-yatra-10days11nights",
+      "title": "Kailash Mansarovar Yatra - 10Days/11Nights",
+      "category": "Trekking",
+      "description": "Kailash Mansarovar Yatra – 9N/10D via Kathmandu (For Nepali Citizens)Organized by Guru Travels Limited Tour Overview:Join a spiritually transformative...",
+      "location": "Nepal",
+      "price": 890,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.1",
+      "reviews": 129,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GetPaidStock.com-67cea5a501d6b.jpg",
+      "gallery": [],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Drive from Kathmandu to Kyirong Your journey begins with a scenic drive from Kathmandu to Kyirong. As you travel, you’ll be treated to breathtaking views of lush valleys, traditional villages, and the majestic Himalayas. After crossing the Nepal-Tibet border at Rasuwagadhi, you’ll arrive in Kyirong, a peaceful Tibetan town surrounded by stunning landscapes. Overnight stay in Kyirong.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Drive from Kyirong to Saga Today, you’ll drive to Saga, a vibrant town located along the banks of the Brahmaputra River. The journey takes you through the rugged beauty of the Tibetan Plateau, showcasing vast plains and striking mountain views. Saga serves as an important stop for pilgrims and travelers. Overnight stay in Saga.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Drive from Saga to Mansarovar This day brings you to Lake Mansarovar, one of the holiest and most scenic lakes in the world. As you drive, Mount Kailash begins to appear on the horizon, offering a glimpse of its sacred splendor. Upon arrival, take in the pristine beauty of Mansarovar, revered for its spiritual significance and serene ambiance. Spend the night by the lakeside.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Explore Mansarovar and Drive to Darchen Begin the day with a tranquil exploration of Lake Mansarovar. Take in the spiritual energy and stunning vistas as you enjoy some quiet time by the lake. Afterward, embark on a short drive to Darchen, the base camp for Mount Kailash. Spend the rest of the day acclimatizing and preparing for the next phase of your journey.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Drive from Darchen to Saga Retrace your steps as you journey back to Saga. The drive offers another opportunity to enjoy the rugged terrain of Tibet. Upon arrival, unwind and reflect on the incredible experiences of the past few days.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4726m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 26,
+      "slug": "mani-rimdu-festival-in-everest-region-11n12d",
+      "title": "Mani Rimdu Festival in Everest Region-11N/12D",
+      "category": "Trekking",
+      "description": "OverviewNepal is rich in cultural heritage, foods and festivals along with its UNESCO Heritage Site such as Everest Region. The Mani Rimdu Festival is...",
+      "location": "Everest",
+      "price": 1100,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.7",
+      "reviews": 146,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-manirimdu-festival-trek.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/gtl-Mani_Rimdu_festival.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-mani-rimdu-festival-trek.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-Mani-Rimdu-Festival-Trek-.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Kathmandu Upon arrival at Tribhuvan International Airport, you will be greeted by Guru Travel's\nrepresentative and transferred to your hotel. After a short rest, you will attend a briefing about\nthe trek and the Rimdu Festival. Depending on your arrival time, you can explore UNESCO\nheritage sites such as Swayambhunath (Monkey Temple), Pashupatinath, or Kathmandu\nDurbar Square to experience Nepal’s rich cultural heritage. Enjoy a traditional Nepali dinner\nand prepare for the adventure ahead.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Fly to Lukla (2,840m) & Trek to Phakding (2,610m) [3-4 hrs] An early morning scenic flight to Lukla, the gateway to Everest, offers breathtaking views of the\nHimalayas. After landing, we began our trek towards Phakding, a beautiful village situated\nalongside the Dudh Koshi River. The trek passes through small Sherpa settlements and lush\ngreen landscapes, with teahouses offering delicious foods in Everest region such as Sherpa\nstew, Tibetan bread, and momos.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Trek to Namche Bazaar (3,440m) [5-6 hrs] Today, we continue trekking along the Dudh Koshi River, crossing several suspension bridges\nand entering Sagarmatha National Park, a UNESCO-listed site. The trail gradually ascends to\nNamche Bazaar, the commercial hub of the Khumbu region. Here, trekkers can explore lively\nmarkets, bakeries, and traditional Sherpa museums. The first glimpse of Mount Everest can be\nseen from Namche.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Acclimatization in Namche Bazaar Today, we continue trekking along the Dudh Koshi River, crossing several suspension bridges\nand entering Sagarmatha National Park, a UNESCO-listed site. The trail gradually ascends to\nNamche Bazaar, the commercial hub of the Khumbu region. Here, trekkers can explore lively\nmarkets, bakeries, and traditional Sherpa museums. The first glimpse of Mount Everest can be\nseen from Namche.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Trek to Tengboche (3,860m) [5-6 hrs] The trail ascends through rhododendron forests, passing small villages with stunning\nmountain backdrops. We reach Tengboche Monastery, the largest monastery in the Everest\nregion, where the Rimdu Festival takes place. Upon arrival, we witness monks preparing for\nthe grand ceremonies.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3225m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 27,
+      "slug": "buddhist-pilgrimage-tour-6n7d",
+      "title": "Buddhist Pilgrimage Tour-6N/7D",
+      "category": "Cultural",
+      "description": "Trip OverviewOne of the most sacred on a spiritually enriching 7-day Buddhist pilgrimage across Nepal andIndia, tracing the footsteps of Lord Buddha t...",
+      "location": "Nepal",
+      "price": 599,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.1",
+      "reviews": 129,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL_-BODHGAYA.webp",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-Bodhgaya.webp",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-varanasi-india-.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/GTL-ckushinagar-tourist-guide-qpr.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Bhairahawa & Lumbini Exploration Upon arrival at Bhairahawa International Airport, the group will be welcomed and transferred to\nLumbini, the birthplace of Lord Buddha. A full day of exploration includes the Sacred Garden,\nMaya Devi Temple, Ashoka Pillar, World Peace Pagoda, and the International Monastic Zone,\nfeaturing temples from various Buddhist traditions worldwide. After a serene day in Lumbini, the\ngroup will check into a 4-star hotel for an overnight stay.\nAccommodation: Nanc Hotel or Similar (4-Star)",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Kapilvastu Exploration & Transfer to Bhairahawa After breakfast, the group will travel to Kapilvastu, the ancient kingdom of Prince Siddhartha.\nThe visit includes Tilaurakot, Kudan, Gotihawa, and Niglihawa, all significant locations linked to\nBuddha’s early life.\nAccommodation: Nanc Hotel or Similar (4-Star)",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Transfer to Sunauli Border & Travel to Bodhgaya The journey to India begins with an early morning border crossing at Sunauli. From Gorakhpur,\nthe group will board a train to Gaya, followed by a road transfer to Bodhgaya, a journey of about\n8-9 hours. Upon arrival, they will check into their 3-star hotel and rest overnight.\nAccommodation: 3-Star Hotel in Bodhgaya",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Bodhgaya Sightseeing A full day of spiritual exploration in Bodhgaya, the place where Buddha attained enlightenment.\nThe group will visit the Mahabodhi Temple, Bodhi Tree, Great Buddha Statue, Thai Monastery,\nNiranjana River, and Sujata Village, where Buddha received his final meal before enlightenment.\nAccommodation: 3-Star Hotel in Bodhgaya",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Travel to Kushinagar After breakfast, the group will travel 6-7 hours to Kushinagar, the site of Buddha’s\nMahaparinirvana (final enlightenment). They will visit the Mahaparinirvana Temple, Rambhar\nStupa, and Meditation Park, before checking into the hotel for an overnight stay.\nAccommodation: 3-Star Hotel in Kushinagar",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4169m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 28,
+      "slug": "tirupati-balaji-south-india-tour",
+      "title": "Tirupati Balaji South India Tour",
+      "category": "Cultural",
+      "description": "Outline Itinerary Day 1: Arrival in Chennai – Transfer to Tirupati Day 2: Tirupati – Tirumala Darshan Day 3: Tirupati to Pondicherry Day 4: Pondicherr...",
+      "location": "Nepal",
+      "price": 890,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.3",
+      "reviews": 55,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/GTL-tirupati.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/GTL-kanyakumari.webp"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Chennai – Transfer to Tirupati Your journey begins with your arrival at Chennai airport or railway station, where you will be\ngreeted and assisted for your onward drive to Tirupati, the sacred town famous for the Lord\nVenkateshwara Temple. After reaching Tirupati, check into your hotel and relax after the journey.\nTake this day to unwind or explore the surroundings at your leisure. Enjoy dinner and an\novernight stay at Tirupati .",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Tirupati – Tirumala Darshan Start your day with a hearty breakfast at the hotel before heading to the Tirumala Hills, where\nyou will visit the renowned Lord Venkateshwara Temple. Experience the divine atmosphere and\nseek blessings at this iconic pilgrimage site, often referred to as the “Temple of Seven Hills.”\nSpend the day immersed in spiritual activities and return to your hotel in the evening for dinner\nand an overnight stay.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Tirupati to Pondicherry After breakfast, check out and proceed to Pondicherry, a charming coastal town known for its\nFrench colonial architecture and serene ambiance. Upon arrival, begin your exploration with\nvisits to the Manakula Vinayagar Temple, Auroville Matrimandir, and the Sri Aurobindo Ashram,\neach offering a unique spiritual and cultural experience. Later, enjoy the tranquil backwaters at\nChunnambar and relax at Paradise Beach and Promenade Beach, soaking in the beauty of the\ncoastline. Return to your hotel for an overnight stay in Pondicherry.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Pondicherry to Madurai Post breakfast, check out and drive to Madurai, a historic city and one of India’s oldest\ncontinuously inhabited places. Upon arrival, check into your hotel and freshen up. Begin your\nsightseeing with a visit to the Thirumalai Nayak Palace, known for its stunning Dravidian and\nRajput architectural fusion. Later, visit the magnificent Meenakshi Amman Temple, a\nmasterpiece of South Indian temple architecture. End your day with dinner and an overnight\nstay in Madurai.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Madurai to Rameshwaram After breakfast, check out and proceed to Rameshwaram, a significant pilgrimage destination\nand part of the Char Dham Yatra. En route, stop to admire the engineering marvels of the\nPamban Bridge and Pamban Rail Scissors Bridge, which connect the island of Rameshwaram\nto the mainland. On arrival, check into your hotel and relax. Spend the evening exploring the\ntown or preparing for the next day’s temple visits. Overnight stay in Rameshwaram.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4047m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 29,
+      "slug": "lumbini-pilgrimage-tour-package2n3d",
+      "title": "Lumbini Pilgrimage Tour Package2N/3D",
+      "category": "Cultural",
+      "description": "Lumbini Pilgrimage Tour from Kathmandu (2N/3D): Journey to the Birthplace of BuddhaIntroductionStep into peace and spirituality with the Lumbini Pilgr...",
+      "location": "Lumbini",
+      "price": 200,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.4",
+      "reviews": 126,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/AOTCA_SPECIAL_PACAKAGE_4_y8ANQNm.png",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/Screenshot_3_cNqxDwI_zgeBdwr.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/peace-eternal-flame-lumbini-600n.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/world-peace-pagoda-lumbini-nepal.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu ➝ Lumbini | Arrival & Evening Walk Morning flight/drive from Kathmandu to Bhairahawa. Transfer to hotel in Lumbini, welcome drink & check-in. After a short rest, evening walk around the Sacred Garden for a peaceful start. Dinner & overnight stay.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Full-Day Lumbini Exploration | Sacred Sites & Monasteries After breakfast, begin a guided tour of Maya Devi Temple, Ashoka Pillar, Sacred Pond, and Monastic Zone where monasteries built by Thailand, Myanmar, Japan, Germany, and others showcase unique Buddhist architecture. After lunch, visit the World Peace Pagoda and Lumbini Museum. Optional evening meditation session can be arranged. Dinner & overnight at hotel.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Tilaurakot Excursion ➝ Kathmandu Morning visit to Tilaurakot, the ancient palace ruins where Prince Siddhartha spent his early life before enlightenment. Return for breakfast, check-out, and transfer to Bhairahawa for flight/drive back to Kathmandu with blessings of peace.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4292m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 30,
+      "slug": "everest-from-plane",
+      "title": "Everest From Plane",
+      "category": "Trekking",
+      "description": "Everest From Plane tours are a unique way to witness the world’s highest peaks without the physical demands of trekking. Flying over the majestic Hima...",
+      "location": "Everest",
+      "price": 170,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "5.0",
+      "reviews": 111,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Screenshot_3_Ocpzqyo.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/airport-lukla-plane-mountains-be.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/mt-everest-on-mountain-plane-fli.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/aeroplane-cockpit-flying-towards.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Everest by Plane Early in the morning, you will be picked up from your hotel and transferred to Tribhuvan International Airport (Domestic Terminal). After check-in, board a one-hour mountain flight that takes you close to the majestic Himalayas. During the journey, you’ll witness stunning panoramic views of Mount Everest (8,848 m) along with other famous peaks such as Lhotse, Makalu, Cho Oyu, and Gaurishankar. Each passenger gets a window seat, and the crew will point out the mountains as you fly past.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4209m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 31,
+      "slug": "full-day-kathmandu-sightseeing-1-day",
+      "title": "Full day Kathmandu Sightseeing- 1 Day",
+      "category": "Trekking",
+      "description": "Kathmandu Tour is a journey through Nepal’s vibrant capital city, where history, culture, and modern life intersect. From centuries-old temples and pa...",
+      "location": "Kathmandu",
+      "price": 55,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.3",
+      "reviews": 68,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Screenshot_3_pU7qbsM.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/nepal-april-20-2018-garden-dream.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/nepal-january-2020-beautiful-vie_070eH3i.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/sweeping-view-boudhanath-stupa-c.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu Valley Sightseeing Your tour begins with a warm welcome from your guide at your hotel, who will escort you to the Bouddhanath Stupa, one of the holiest sites for both Buddhists and Hindus. As you explore the vast stupa, you'll be surrounded by the hum of prayer wheels and the sight of pilgrims making their offerings. The iconic Buddha eyes watching over the square create a serene atmosphere. Next, you'll visit Pashupatinath Temple, an important Hindu temple dedicated to Lord Shiva. Located along the Bagmati River, it’s a powerful spiritual site where you can observe daily rituals and the sacred cremation ghats. Finally, your tour will take you to Bhaktapur Durbar Square, a UNESCO World Heritage Site filled with magnificent pagoda-style temples, the ornate 55-Window Palace, and vibrant market streets. Here, you’ll get a glimpse into the rich history and culture of Nepal, with beautiful architecture and bustling local life.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3105m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 32,
+      "slug": "pokhara-and-sarangkot-tour-2n3d",
+      "title": "Pokhara and Sarangkot Tour 2N/3D",
+      "category": "Trekking",
+      "description": "Pokhara & Sarangkot Tour from Kathmandu: A Journey to Nepal’s SerenityWhen it comes to travel in Nepal, Pokhara and Sarangkot remain timeless favorite...",
+      "location": "Pokhara",
+      "price": 190,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.5",
+      "reviews": 84,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/Screenshot_3_cNqxDwI.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/sunrise-nepal-sarangkot-view-poi.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/pokhara-lake-panorama-sarangkot.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/paragliding-nepal-paraglider-on.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrive in the beautiful city of Pokhara arrive in the beautiful city of Pokhara after a scenic drive or short flight from Kathmandu. After hotel check-in, spend your afternoon exploring the calm surroundings of Phewa Lake with a relaxing boat ride to Tal Barahi Temple, followed by a visit to Davis Falls and the mystical Gupteshwor Cave. In the evening, enjoy a peaceful stroll along Lakeside, filled with lively cafés, shops, and a vibrant atmosphere.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Drive to Sarangkot Wake up early for a drive or cable car ride to Sarangkot, where you’ll witness a breathtaking sunrise over the snow-capped peaks of Annapurna, Dhaulagiri, and Machhapuchhre. After returning for breakfast, continue with a half-day sightseeing tour covering the Bindhyabasini Temple, the International Mountain Museum, and the serene World Peace Pagoda, offering panoramic views of the valley. Adventure lovers can also add paragliding or zip-lining from Sarangkot for an extra thrill.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Boating experience and Return to Kathmandu Enjoy a leisurely breakfast and perhaps a final walk or boating experience at Phewa Lake before bidding farewell to Pokhara. You will then depart for Kathmandu or your onward destination, carrying with you unforgettable memories of Pokhara’s natural beauty and Sarangkot’s magical sunrise.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4359m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 33,
+      "slug": "chitwan-national-park-2n3d",
+      "title": "Chitwan National Park 2N/3D",
+      "category": "Cultural",
+      "description": "Chitwan National Park Tour from Kathmandu: A Wildlife Adventure in NepalEscape the hustle and bustle of Kathmandu and step into the wild with the Chit...",
+      "location": "Chitwan",
+      "price": 250,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.0",
+      "reviews": 61,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/AOTCA_SPECIAL_PACAKAGE_4_yjbA0ri.png",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/nepal-chitwan-national-park-clos_OFYZI30.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/national-bird-india-peacock-fore.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/chitwan-nepal-600nw-385377652.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu to  Chitwan Morning drive/fly from Kathmandu to Chitwan. On arrival, welcome drink and check-in. After lunch, relax at the resort. Late afternoon, stroll to the riverside for sunset views. In the evening, enjoy Tharu Cultural Dance with folk music and storytelling. Dinner & overnight at the resort.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Full-Day Jungle Activities Early breakfast, then head for Jeep Safari inside the national park to spot one-horned rhino, deer, wild boar, monkeys, and if lucky, the elusive Bengal tiger. Later, a peaceful canoe ride along the Rapti/Riu rivers to see crocodiles and water birds, followed by a short guided jungle walk and birdwatching. Visit the Elephant Breeding Center (observational/educational). Return to resort, free time, dinner & overnight.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Chitwan ➝ Kathmandu Wake up to birdsong; optional short village walk. Breakfast, check-out, and drive/fly back to Kathmandu with wonderful memories.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4153m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 34,
+      "slug": "annapurna-base-camp-trek-7n8d",
+      "title": "Annapurna Base Camp Trek (7N/8D)",
+      "category": "Trekking",
+      "description": "The Annapurna Base Camp (ABC) Trek is one of Nepal’s most iconic adventures, combining stunning Himalayan scenery, cultural richness, and rewarding tr...",
+      "location": "Annapurna",
+      "price": 570,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Challenging",
+      "rating": "4.6",
+      "reviews": 116,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/AOTCA_SPECIAL_PACAKAGE_4.png",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/day-8-ebc-trek-600nw-531630214_wzBd4YJ.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/view-mount-annapurna-hiker-round.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/annapurna-base-camp-trek-kaski-n.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Kathmandu to Pokhara (820m | 6–7 hrs drive / 25 min flight) Your journey begins with a scenic drive or a short flight from Kathmandu to Pokhara. If you choose to drive, the route takes you along winding roads with views of hills, rivers, and countryside settlements, while the flight offers breathtaking glimpses of the Himalayan range in just 25 minutes. Upon reaching Pokhara, you’ll settle into your hotel and have the evening free to explore Lakeside, where the calm waters of Phewa Lake beautifully reflect Machhapuchhre (Fishtail) and Annapurna South. Overnight stay at Pokhara.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Pokhara to Ghandruk via Nayapul (1,940m | 1.5 hr drive + 5–6 hrs trek) After breakfast, a short drive takes you to Nayapul, the starting point of your trek. From here, you begin your journey on foot, passing terraced fields, rivers, and charming villages. The trail gradually ascends as you make your way to the traditional Gurung village of Ghandruk, famous for its rich culture and warm hospitality. Along the way and especially from the village itself, you’ll be rewarded with stunning views of Annapurna South, Hiunchuli, and Machhapuchhre (Fishtail). Overnight in Ghandruk.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Ghandruk to Chhomrong (2,170m | 5–6 hrs trek) Today’s trek begins with a descent through stone-paved paths towards Kimrong Khola, followed by a steady climb uphill through lush forests of oak and rhododendron. The trail then levels out as you reach Chhomrong, a large Gurung settlement nestled on the lap of the Annapurna range. From here, you’ll have majestic, close-up views of Annapurna South and Machhapuchhre, making Chhomrong one of the most scenic villages along the route. Overnight in Chhomrong.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Chhomrong to Bamboo (2,310m | 5–6 hrs trek) From Chhomrong, you descend a series of stone steps to the Chhomrong Khola and cross a suspension bridge. The trail then climbs steadily through thick forests of bamboo, oak, and rhododendron until you reach a small settlement aptly named Bamboo. The air here is cooler and fresher, with the forest canopy surrounding you, offering a peaceful trekking experience. Overnight in Bamboo.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Bamboo to Deurali (3,230m | 5–6 hrs trek) The trail today passes through dense forests, gradually opening up to reveal the rugged landscapes of the Annapurna region. You’ll climb past Dovan and Himalaya villages, with waterfalls cascading along the trail. As you approach Deurali, the vegetation begins to thin, and the valley widens with dramatic cliffs on both sides. From this point, you start to see glimpses of Machhapuchhre and Hiunchuli peeking through the ridges. Overnight in Deurali.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3389m",
+        "acclimatization_days": 2,
+        "difficulty_level": "Challenging"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 35,
+      "slug": "ghorepani-poon-hill-trek-4n-5d",
+      "title": "Ghorepani Poon Hill Trek 4N/ 5D",
+      "category": "Trekking",
+      "description": "IntroductionThe Ghorepani Poon Hill Trek is the ultimate short Himalayan journey for those who wish to experience breathtaking mountain views, charmin...",
+      "location": "Nepal",
+      "price": 400,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.3",
+      "reviews": 149,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/AOTCA_SPECIAL_PACAKAGE_4_D8c1ewx.png",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/ghorepani-nepal-october-28th-202.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/cairn-rock-formation-along-trail.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/yellow-signpost-arrow-on-village.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": kathmandu to pokhara Begin your journey with a scenic drive (or flight) from Kathmandu to Pokhara, Nepal’s picturesque lake city. Along the way, enjoy views of rivers, terraced fields, and rolling hills. Upon arrival in Pokhara, you can explore the lakeside area with stunning Himalayan backdrops.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": pokhara to ghorepani vai ulleri After breakfast, drive to Nayapul and start your trek. Passing through lush forests, small villages, and stone steps at Ulleri, the trail gradually ascends towards Ghorepani. The day offers beautiful landscapes and glimpses of local Gurung and Magar culture. Overnight stay at Ghorepani with magnificent mountain views.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": morning poon hill sunrise, trek to ghandruk Early morning hike to Poon Hill (3,210m) for a breathtaking sunrise over Annapurna and Dhaulagiri ranges. After capturing the magical panorama, trek down to Ghorepani for breakfast and continue your journey through rhododendron forests and traditional villages before reaching the charming Gurung village of Ghandruk. Overnight at Ghandruk with close-up views of Annapurna South, Hiunchuli, and Machhapuchhre (Fishtail).",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": ghandruk to pokhara Wake up to serene mountain views, explore Ghandruk’s traditional Gurung culture, and then descend towards Nayapul. From there, drive back to Pokhara, where the trek concludes. Spend the evening relaxing by Phewa Lake or exploring the vibrant lakeside.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4893m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 36,
+      "slug": "kenya-safari-7-nights-8-days",
+      "title": "Kenya Safari 7 Nights 8 Days",
+      "category": "Cultural",
+      "description": "Dreaming of the ultimate African wildlife adventure? Our Kenya Safari 7 Nights 8 Days package is crafted to immerse you in the heart of East Africa’s ...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "5.0",
+      "reviews": 60,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/8888.jpg",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/22222_6tF8Ngn.jpg",
+        "https://gurutravelsltd.com/uploads/package/images/.jpg_gIQzKyP",
+        "https://gurutravelsltd.com/uploads/package/images/hotel_idD1tKt.jpg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrival in Nairobi from Kathmandu Your journey begins with an international flight from Kathmandu to Nairobi. On arrival at Jomo Kenyatta International Airport, our representative will welcome you and transfer you to your hotel. Depending on arrival time, you may enjoy a short evening city orientation or relax at the hotel before your safari adventure begins. Overnight in Nairobi.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Nairobi – Lake Nakuru National Park After breakfast, drive to Lake Nakuru National Park, famous for its pink-hued flamingos, pelicans, and rhinos. En route, enjoy scenic views of the Great Rift Valley. In the afternoon, embark on a game drive where you can spot white and black rhinos, giraffes, lions, and diverse birdlife. Overnight stay in a lodge inside or near the park, with dinner included.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Lake Nakuru – Maasai Mara Game Reserve Depart for the world-renowned Maasai Mara Game Reserve, a highlight of the Kenya Safari 7N/8D itinerary. Arrive in time for lunch, followed by an evening game drive. Spot herds of wildebeest, elephants, zebras, and predators roaming the vast grasslands. Overnight in a luxury safari camp or lodge in Maasai Mara.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Full-Day Maasai Mara Safari Experience Spend a full day exploring the Maasai Mara, home to Africa’s “Big Five.” Morning and afternoon game drives offer opportunities to spot lions on the hunt, elephants grazing, and cheetahs sprinting across the plains. During migration season (July–October), witness the spectacular Great Wildebeest Migration across the Mara River. A picnic lunch will be served in the wilderness. Optional activity: hot air balloon safari at sunrise for a bird’s-eye view of the savannah. Overnight in Maasai Mara.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Maasai Mara – Lake Naivasha After breakfast, drive towards Lake Naivasha, a freshwater lake surrounded by lush greenery and wildlife. In the afternoon, enjoy a peaceful boat safari to see hippos, fish eagles, and exotic bird species. Optional guided walk on Crescent Island, where giraffes, zebras, and antelopes roam freely without predators. Overnight in a lakeside lodge.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3273m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 37,
+      "slug": "thailand-vietnam-8-nights-9-days-tour-package",
+      "title": "Thailand & Vietnam 8 Nights / 9 Days Tour Package",
+      "category": "Cultural",
+      "description": "Tour Package OverviewDiscover the vibrant culture, scenic beauty, and diverse experiences of Thailand and Vietnam with our specially curated 8 Nights ...",
+      "location": "Nepal",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Easy",
+      "rating": "4.3",
+      "reviews": 147,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/package/images/WEbsite_image_8_K2GFc0f.png",
+      "gallery": [
+        "https://gurutravelsltd.com/uploads/package/images/WEbsite_image_12_LyyaCy2.png",
+        "https://gurutravelsltd.com/uploads/package/images/WEbsite_image_14_Fl8oiBT.png",
+        "https://gurutravelsltd.com/uploads/package/images/WEbsite_image_15_Nwh8QU7.png"
+      ],
+      "highlights": [
+        "Complete your journey with a full day exploration of Hanoi’s cultural landmarks"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Day 1",
+          "description": ": Arrive at Don Mueang Airport (DMK) – Transfer to Pattaya Upon arrival at Bangkok’s Don Mueang Airport, you will be warmly welcomed by our representative. Transfer by private vehicle to Pattaya, a lively beach destination known for its entertainment, shopping, and water sports. After hotel check-in, you can rest from your journey or take an evening stroll along Pattaya Beach. Enjoy the vibrant nightlife or simply relax and prepare for the adventures ahead.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Day 2",
+          "description": ": Pattaya Coral Island Tour with Lunch After breakfast, set off on an exciting boat ride to Coral Island, also known as Koh Larn. The island is famous for its white sandy beaches, crystal clear waters, and opportunities for water sports like parasailing and jet skiing. Spend time swimming, relaxing under beach umbrellas, or exploring the island’s local shops. Enjoy a freshly prepared lunch before returning to Pattaya in the afternoon for leisure time.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Day 3",
+          "description": ": Pattaya to Bangkok & Half Day City Tour Check out from your Pattaya hotel and transfer to Bangkok. On arrival, start a guided city tour covering Bangkok’s iconic landmarks such as the Grand Palace, Wat Pho, and bustling street markets. Learn about the city’s history and culture from your guide. In the evening, enjoy free time to explore Bangkok’s shopping districts or taste delicious Thai street food.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Day 4",
+          "description": ": Free Day in Bangkok This day is reserved for you to explore Bangkok at your own pace. You might choose to shop at world class malls like MBK and Siam Paragon, visit floating markets, or indulge in a relaxing Thai massage. Optional tours such as the DANONE Sadako Floating Market or Ayutthaya Historical Park can also be arranged. Spend your evening enjoying the city’s lively atmosphere.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Day 5",
+          "description": ": Flight to Hanoi After breakfast, check out from your hotel and transfer to the airport for your flight to Hanoi, Vietnam. Upon arrival, our local representative will meet and assist you with your transfer to the hotel. Spend the rest of the day exploring Hanoi’s Old Quarter, where you can sample local Vietnamese coffee and street food. Take in the city’s charm with its mix of French colonial architecture and ancient temples.",
+          "accommodation": "Tea house/Lodge",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "4994m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Easy"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 38,
+      "slug": "langtang-valley-trek-the-hidden-gem-of-nepal-complete-guide-",
+      "title": "Langtang Valley Trek – The Hidden Gem of Nepal: Complete Guide for Adventurers and Nature Lovers.",
+      "category": "Trekking",
+      "description": "The Langtang Valley Trek offers a unique Himalayan experience close to Kathmandu, combining stunning mountain views with rich cultural immersion. It i...",
+      "location": "Langtang",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Moderate",
+      "rating": "4.2",
+      "reviews": 105,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/organization/images/gurulogo.jpeg",
+      "gallery": [
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/calls.svg",
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/location1.svg",
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/user.svg"
+      ],
+      "highlights": [],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3449m",
+        "acclimatization_days": 1,
+        "difficulty_level": "Moderate"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
+    },
+    {
+      "id": 39,
+      "slug": "experience-everest-base-camp-during-dashain-tihar-festival-2",
+      "title": "Experience Everest Base Camp During Dashain Tihar Festival 2025: A Local's Guide.",
+      "category": "Trekking",
+      "description": "Dashain Tihar festival creates the perfect backdrop for one of the world's most iconic treks. Autumn 2025 offers a rare opportunity to experience Nepa...",
+      "location": "Everest",
+      "price": 500,
+      "duration": "9 nights 10 days",
+      "group_size": "2-12 people",
+      "difficulty": "Challenging",
+      "rating": "5.0",
+      "reviews": 129,
+      "best_time": "March-May, September-November",
+      "featured": false,
+      "image": "https://gurutravelsltd.com/uploads/organization/images/gurulogo.jpeg",
+      "gallery": [
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/calls.svg",
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/location1.svg",
+        "https://gurutravelsltd.com/staticfiles/frontend/img/logo/user.svg"
+      ],
+      "highlights": [
+        "This period also coincides with Nepal's most significant cultural events"
+      ],
+      "inclusions": [
+        "Airport transfers",
+        "Accommodation in Kathmandu",
+        "Experienced guide",
+        "All meals during trek",
+        "Permits and fees",
+        "Porter service",
+        "Transportation to trek start",
+        "First aid kit"
+      ],
+      "exclusions": [
+        "International flights",
+        "Nepal visa fees",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips for guide and porter",
+        "Extra meals in Kathmandu",
+        "Personal trekking equipment"
+      ],
+      "activities": [
+        {
+          "name": "Trekking",
+          "description": "Experience trekking through beautiful landscapes"
+        },
+        {
+          "name": "Cultural Experience",
+          "description": "Immerse in local culture and traditions"
+        },
+        {
+          "name": "Mountain Views",
+          "description": "Enjoy breathtaking mountain panoramas"
+        }
+      ],
+      "itinerary": [],
+      "what_to_bring": [
+        "Comfortable trekking boots",
+        "Warm clothing layers",
+        "Rain gear",
+        "Sleeping bag",
+        "Personal first aid kit",
+        "Water purification tablets",
+        "Headlamp and batteries",
+        "Sunglasses and sunscreen"
+      ],
+      "fitness_requirements": "Moderate physical fitness required. Regular walking exercise recommended.",
+      "altitude_profile": {
+        "max_altitude": "3643m",
+        "acclimatization_days": 2,
+        "difficulty_level": "Challenging"
+      },
+      "booking_info": {
+        "advance_booking": "21 days recommended",
+        "group_discounts": "Available for 6+ people",
+        "cancellation_policy": "Free cancellation up to 15 days before departure"
+      },
+      "created_at": "2025-09-14T08:17:38.442Z",
+      "updated_at": "2025-09-14T08:17:38.442Z"
     }
   ]
 }

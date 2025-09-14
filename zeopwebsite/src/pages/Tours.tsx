@@ -5,7 +5,7 @@ import TourFilters from '../components/Tours/TourFilters';
 import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
-import { useFilteredTours } from '../hooks/useApi';
+import { usePaginatedTours } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 
 const ToursPage: React.FC = () => {
@@ -21,8 +21,8 @@ const ToursPage: React.FC = () => {
     };
   });
 
-  // Use API hook to fetch and filter tours
-  const { tours, loading, error, totalCount, filteredCount } = useFilteredTours(filters);
+  // Use paginated API hook to fetch tours
+  const { tours, loading, loadingMore, error, pagination, loadMore } = usePaginatedTours(filters);
 
   const handleTourBook = (tour: Tour) => {
     console.log('Booking tour:', tour.title);
@@ -50,8 +50,8 @@ const ToursPage: React.FC = () => {
         <div className="section-container">
           <TourFilters
             onFiltersChange={setFilters}
-            totalTours={totalCount}
-            filteredCount={filteredCount}
+            totalTours={pagination.totalCount}
+            filteredCount={tours.length}
           />
         </div>
       </div>
@@ -78,6 +78,10 @@ const ToursPage: React.FC = () => {
               filters={filters}
               onTourBook={handleTourBook}
               onTourView={handleTourView}
+              loadingMore={loadingMore}
+              hasMore={pagination.hasNext}
+              onLoadMore={loadMore}
+              totalCount={pagination.totalCount}
             />
           )}
         </div>

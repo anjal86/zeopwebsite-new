@@ -664,7 +664,7 @@ const updateDestinationRelationships = (tourId, newPrimaryDestId, newSecondaryDe
 app.get('/api/tours', async (req, res) => {
   await delay(300);
   
-  const { category, location, search, featured } = req.query;
+  const { category, location, search, featured, page, limit } = req.query;
   
   // Merge basic tours with detailed tours, prioritizing detailed tours
   const allTours = [...tourDetails];
@@ -678,7 +678,6 @@ app.get('/api/tours', async (req, res) => {
   });
   
   let filteredTours = [...allTours];
-
 
   // Filter by category
   if (category) {
@@ -706,7 +705,44 @@ app.get('/api/tours', async (req, res) => {
     );
   }
 
-  res.json(filteredTours);
+  // Sort tours consistently by ID to maintain order across pages
+  filteredTours.sort((a, b) => {
+    // First sort by featured status (featured tours first)
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    
+    // Then sort by rating (highest first)
+    const ratingDiff = (b.rating || 0) - (a.rating || 0);
+    if (ratingDiff !== 0) return ratingDiff;
+    
+    // Finally sort by ID for consistent ordering
+    return a.id - b.id;
+  });
+
+  // Pagination support
+  const totalCount = filteredTours.length;
+  let paginatedTours = filteredTours;
+  
+  if (page && limit) {
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 12;
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = startIndex + limitNum;
+    
+    paginatedTours = filteredTours.slice(startIndex, endIndex);
+    
+    // Add pagination metadata to response headers
+    res.set({
+      'X-Total-Count': totalCount.toString(),
+      'X-Page': pageNum.toString(),
+      'X-Limit': limitNum.toString(),
+      'X-Total-Pages': Math.ceil(totalCount / limitNum).toString(),
+      'X-Has-Next': (endIndex < totalCount).toString(),
+      'X-Has-Previous': (pageNum > 1).toString()
+    });
+  }
+
+  res.json(paginatedTours);
 });
 
 // Admin: Create new tour with relationship management

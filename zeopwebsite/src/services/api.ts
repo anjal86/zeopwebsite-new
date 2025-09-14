@@ -397,6 +397,58 @@ export const toursApi = {
     return tours.map(convertTourImageUrls);
   },
 
+  // Get tours with pagination
+  async getPaginated(page: number = 1, limit: number = 12, filters?: {
+    category?: string;
+    location?: string;
+    search?: string;
+    featured?: boolean;
+  }): Promise<{
+    tours: Tour[];
+    pagination: {
+      page: number;
+      limit: number;
+      totalCount: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrevious: boolean;
+    };
+  }> {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(filters?.category && { category: filters.category }),
+      ...(filters?.location && { location: filters.location }),
+      ...(filters?.search && { search: filters.search }),
+      ...(filters?.featured && { featured: filters.featured.toString() })
+    });
+
+    const response = await fetch(`${API_BASE_URL}/tours?${params}`);
+    if (!response.ok) {
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const tours = await response.json();
+    
+    // Extract pagination info from headers
+    const totalCount = parseInt(response.headers.get('X-Total-Count') || '0');
+    const totalPages = parseInt(response.headers.get('X-Total-Pages') || '1');
+    const hasNext = response.headers.get('X-Has-Next') === 'true';
+    const hasPrevious = response.headers.get('X-Has-Previous') === 'true';
+
+    return {
+      tours: tours.map(convertTourImageUrls),
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages,
+        hasNext,
+        hasPrevious
+      }
+    };
+  },
+
   // Get tour by ID
   async getById(id: number): Promise<Tour | null> {
     try {

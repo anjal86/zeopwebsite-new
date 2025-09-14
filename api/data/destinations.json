@@ -4,7 +4,7 @@
     "name": "Annapurna",
     "country": "Nepal",
     "image": "/uploads/destinations/annapurna/annapurna.JPG",
-    "tourCount": 2,
+    "tourCount": 5,
     "href": "/destinations/annapurna",
     "type": "nepal",
     "description": "Discover the beauty and culture of Annapurna in Nepal.",
@@ -19,7 +19,10 @@
     "difficulty": "Moderate to Challenging",
     "relatedTours": [
       2,
-      3
+      3,
+      11,
+      23,
+      34
     ],
     "relatedActivities": [
       1
@@ -32,7 +35,7 @@
     "name": "Everest",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 1,
+    "tourCount": 4,
     "href": "/destinations/everest",
     "type": "nepal",
     "description": "Home to the world's highest peak, the Everest region offers legendary trekking routes through Sherpa villages and Buddhist monasteries.",
@@ -46,7 +49,10 @@
     "altitude": "5,364m",
     "difficulty": "Challenging",
     "relatedTours": [
-      1
+      1,
+      26,
+      30,
+      39
     ],
     "relatedActivities": [
       1,
@@ -58,7 +64,7 @@
     "name": "Langtang",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1586523969132-b25453ec8ff5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 1,
+    "tourCount": 2,
     "href": "/destinations/langtang",
     "type": "nepal",
     "description": "Known as the 'Valley of Glaciers', Langtang offers stunning mountain views, rich Tamang culture, and the famous yak cheese factory.",
@@ -72,7 +78,8 @@
     "altitude": "3,870m",
     "difficulty": "Moderate",
     "relatedTours": [
-      4
+      4,
+      38
     ],
     "relatedActivities": [
       1,
@@ -108,7 +115,7 @@
     "name": "Pokhara",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1540882082344-b273b04e2c2f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 0,
+    "tourCount": 3,
     "href": "/destinations/pokhara",
     "type": "nepal",
     "description": "Nepal's adventure capital, offering stunning lake views, mountain panoramas, and thrilling activities like paragliding and bungee jumping.",
@@ -121,7 +128,11 @@
     "bestTime": "Sep-May",
     "altitude": "822m",
     "difficulty": "Easy",
-    "relatedTours": [],
+    "relatedTours": [
+      7,
+      9,
+      32
+    ],
     "relatedActivities": [
       3
     ]
@@ -131,7 +142,7 @@
     "name": "Kathmandu",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1565537714828-9bbde8c42c3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 0,
+    "tourCount": 1,
     "href": "/destinations/kathmandu",
     "type": "nepal",
     "description": "The cultural heart of Nepal, home to ancient temples, bustling markets, and UNESCO World Heritage sites showcasing centuries of history.",
@@ -144,7 +155,9 @@
     "bestTime": "Year-round",
     "altitude": "1,400m",
     "difficulty": "Easy",
-    "relatedTours": [],
+    "relatedTours": [
+      31
+    ],
     "relatedActivities": [
       5
     ]
@@ -154,7 +167,7 @@
     "name": "Chitwan",
     "country": "Nepal",
     "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 0,
+    "tourCount": 1,
     "href": "/destinations/chitwan",
     "type": "nepal",
     "description": "Nepal's first national park, famous for its wildlife including one-horned rhinoceros, Bengal tigers, and diverse bird species.",
@@ -167,7 +180,9 @@
     "bestTime": "Oct-Mar",
     "altitude": "150m",
     "difficulty": "Easy",
-    "relatedTours": [],
+    "relatedTours": [
+      33
+    ],
     "relatedActivities": [
       4,
       5
@@ -340,5 +355,158 @@
       5,
       4
     ]
+  },
+  {
+    "id": 15,
+    "name": "Nepal",
+    "country": "Nepal",
+    "image": "https://gurutravelsltd.com/uploads/package/images/Pikey-Peak-Everest-View-Point_1.jpg",
+    "tourCount": 22,
+    "href": "/destinations/nepal",
+    "type": "nepal",
+    "description": "Discover the beauty and adventure of Nepal in Nepal.",
+    "highlights": [],
+    "bestTime": "Mar-May, Sep-Nov",
+    "altitude": "Varies",
+    "difficulty": "Moderate",
+    "relatedTours": [
+      5,
+      6,
+      8,
+      10,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      24,
+      25,
+      27,
+      28,
+      35,
+      36,
+      37
+    ],
+    "relatedActivities": []
+  },
+  {
+    "id": 16,
+    "name": "Lumbini",
+    "country": "Nepal",
+    "image": "https://gurutravelsltd.com/uploads/package/images/AOTCA_SPECIAL_PACAKAGE_4_y8ANQNm.png",
+    "tourCount": 1,
+    "href": "/destinations/lumbini",
+    "type": "nepal",
+    "description": "Discover the beauty and adventure of Lumbini in Nepal.",
+    "highlights": [],
+    "bestTime": "Mar-May, Sep-Nov",
+    "altitude": "Varies",
+    "difficulty": "Easy",
+    "relatedTours": [
+      29
+    ],
+    "relatedActivities": []
+  },
+  {
+    "id": 17,
+    "name": "Vietnam",
+    "country": "Vietnam",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/vietnam",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Vietnam.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
+  },
+  {
+    "id": 18,
+    "name": "Indonesia",
+    "country": "Indonesia",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/indonesia",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Indonesia.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
+  },
+  {
+    "id": 19,
+    "name": "Philippines",
+    "country": "Philippines",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/philippines",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Philippines.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
+  },
+  {
+    "id": 20,
+    "name": "Azerbaijan",
+    "country": "Azerbaijan",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/azerbaijan",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Azerbaijan.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
+  },
+  {
+    "id": 21,
+    "name": "Kenya",
+    "country": "Kenya",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/kenya",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Kenya.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
+  },
+  {
+    "id": 22,
+    "name": "Canada",
+    "country": "Canada",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 0,
+    "href": "/destinations/canada",
+    "type": "international",
+    "description": "Discover the beauty and adventure of Canada.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
   }
 ]

@@ -89,9 +89,7 @@ const Hero: React.FC = () => {
   const particle7Y = useTransform(scrollY, [0, 800], [0, -110]);
   const particle8Y = useTransform(scrollY, [0, 800], [0, -120]);
   
-  const shape1Y = useTransform(scrollY, [0, 600], [0, -80]);
-  const shape2Y = useTransform(scrollY, [0, 600], [0, -100]);
-  const shape3Y = useTransform(scrollY, [0, 600], [0, -70]);
+  // Shape transform variables removed
 
   // Pre-create array of particle transforms
   const particleTransforms = [particle1Y, particle2Y, particle3Y, particle4Y, particle5Y, particle6Y, particle7Y, particle8Y];
@@ -545,27 +543,7 @@ const Hero: React.FC = () => {
             ))}
           </div>
 
-          {/* Geometric Shapes */}
-          <div className="absolute inset-0 pointer-events-none">
-            <motion.div
-              className="absolute top-1/4 left-10 w-32 h-32 border border-white/10 rounded-full"
-              style={{ y: shape1Y }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.div
-              className="absolute top-1/3 right-16 w-24 h-24 border border-white/15 rounded-lg"
-              style={{ y: shape2Y }}
-              animate={{ rotate: -360 }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.div
-              className="absolute bottom-1/3 left-1/3 w-16 h-16 bg-white/5 rounded-full"
-              style={{ y: shape3Y }}
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
+          {/* Geometric Shapes section removed */}
         </>
       )}
     </section>

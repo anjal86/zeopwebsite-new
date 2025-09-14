@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Grid, List } from 'lucide-react';
 import TourCard from './TourCard';
@@ -14,86 +14,64 @@ interface TourGridProps {
   };
   onTourBook?: (tour: Tour) => void;
   onTourView?: (tour: Tour) => void;
+  loadingMore?: boolean;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  totalCount?: number;
 }
 
 type SortOption = 'price-low' | 'price-high' | 'rating' | 'duration' | 'popularity';
 type ViewMode = 'grid' | 'list';
 
-const TourGrid: React.FC<TourGridProps> = ({ 
-  tours, 
-  filters, 
-  onTourBook, 
-  onTourView 
+const TourGrid: React.FC<TourGridProps> = ({
+  tours,
+  filters,
+  onTourBook,
+  onTourView,
+  loadingMore = false,
+  hasMore = false,
+  onLoadMore,
+  totalCount = 0
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
   const [isLoading, setIsLoading] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Filter tours based on filters
-  const filteredTours = useMemo(() => {
-    return tours.filter(tour => {
-      // Search filter
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        const matchesSearch =
-          tour.title.toLowerCase().includes(searchTerm) ||
-          tour.description.toLowerCase().includes(searchTerm) ||
-          tour.location.toLowerCase().includes(searchTerm) ||
-          tour.category.toLowerCase().includes(searchTerm) ||
-          tour.highlights.some((h: string) => h.toLowerCase().includes(searchTerm));
-        
-        if (!matchesSearch) return false;
+  // Intersection Observer for automatic infinite scrolling
+  useEffect(() => {
+    if (!hasMore || loadingMore || !onLoadMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          onLoadMore();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px' // Start loading 100px before the element comes into view
       }
+    );
 
-      // Destination filter
-      if (filters.destination && tour.location.toLowerCase() !== filters.destination.toLowerCase()) {
-        return false;
-      }
-
-      // Activity filter
-      if (filters.activity) {
-        const activityTerm = filters.activity.toLowerCase();
-        const matchesActivity =
-          tour.highlights.some((h: string) => h.toLowerCase().includes(activityTerm)) ||
-          tour.category.toLowerCase().includes(activityTerm) ||
-          tour.description.toLowerCase().includes(activityTerm) ||
-          tour.inclusions.some((i: string) => i.toLowerCase().includes(activityTerm));
-        
-        if (!matchesActivity) return false;
-      }
-
-      return true;
-    });
-  }, [tours, filters]);
-
-  // Sort tours
-  const sortedTours = useMemo(() => {
-    const sorted = [...filteredTours];
-    
-    switch (sortBy) {
-      case 'price-low':
-        return sorted.sort((a, b) => a.price - b.price);
-      case 'price-high':
-        return sorted.sort((a, b) => b.price - a.price);
-      case 'rating':
-        return sorted.sort((a, b) => b.rating - a.rating);
-      case 'duration':
-        return sorted.sort((a, b) => {
-          const aDays = parseInt(a.duration.split(' ')[0]);
-          const bDays = parseInt(b.duration.split(' ')[0]);
-          return aDays - bDays;
-        });
-      case 'popularity':
-        return sorted.sort((a, b) => {
-          // Sort by featured first, then by reviews count
-          if (a.featured && !b.featured) return -1;
-          if (!a.featured && b.featured) return 1;
-          return b.reviews - a.reviews;
-        });
-      default:
-        return sorted;
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
-  }, [filteredTours, sortBy]);
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, onLoadMore]);
+
+  // Since filtering is now handled by the API, we use tours directly
+  const filteredTours = tours;
+
+  // Use tours as-is since API handles sorting and pagination
+  const sortedTours = filteredTours;
 
   const sortOptions = [
     { value: 'popularity', label: 'Most Popular' },
@@ -116,7 +94,7 @@ const TourGrid: React.FC<TourGridProps> = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <div className="flex items-center gap-4">
           <span className="text-sm font-medium text-gray-700">
-            {sortedTours.length} tour{sortedTours.length !== 1 ? 's' : ''} found
+            {totalCount} tour{totalCount !== 1 ? 's' : ''} found
           </span>
           
           {/* View Mode Toggle */}
@@ -214,29 +192,36 @@ const TourGrid: React.FC<TourGridProps> = ({
         </AnimatePresence>
       )}
 
-      {/* Load More Button (for pagination) */}
-      {!isLoading && sortedTours.length > 0 && sortedTours.length >= 9 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center pt-8"
+      {/* Infinite Scroll Trigger */}
+      {hasMore && (
+        <div
+          ref={loadMoreRef}
+          className="flex items-center justify-center py-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300"
-          >
-            Load More Tours
-          </motion.button>
-        </motion.div>
+          {loadingMore ? (
+            <div className="flex items-center space-x-2 text-gray-600">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-blue"></div>
+              <span>Loading more tours...</span>
+            </div>
+          ) : (
+            <div className="text-gray-400 text-sm">
+              Scroll down to load more tours
+            </div>
+          )}
+        </div>
       )}
 
       {/* Results Summary */}
       {!isLoading && sortedTours.length > 0 && (
         <div className="text-center text-sm text-gray-500 pt-4 border-t border-gray-200">
-          Showing {sortedTours.length} of {tours.length} tours
+          Showing {sortedTours.length} of {totalCount} tours
           {Object.values(filters).some(f => f !== '') && (
             <span> • Filters applied</span>
+          )}
+          {!hasMore && (
+            <div className="mt-2 text-xs text-gray-400">
+              All tours loaded
+            </div>
           )}
         </div>
       )}
