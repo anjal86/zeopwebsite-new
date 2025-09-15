@@ -55,13 +55,11 @@ const DestinationManager: React.FC = () => {
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
   const [searchTerm, setSearchTerm] = useState('');
-  const [countryFilter, setCountryFilter] = useState('');
 
   const [formData, setFormData] = useState<DestinationFormData>({
     slug: '',
     title: '',
     country: 'Nepal',
-    region: '',
     image: '',
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -86,7 +84,6 @@ const DestinationManager: React.FC = () => {
       slug: '',
       title: '',
       country: 'Nepal',
-      region: '',
       image: ''
     });
     setEditingDestination(null);
@@ -111,7 +108,6 @@ const DestinationManager: React.FC = () => {
         slug: (destination as any).slug || generateSlug((destination as any).name || ''),
         title: (destination as any).title || (destination as any).name || '',
         country: destination.country || 'Nepal',
-        region: (destination as any).region || '',
         image: destination.image || '',
       };
       console.log('Opening modal with destination:', destination);
@@ -219,7 +215,6 @@ const DestinationManager: React.FC = () => {
         slug: formData.slug,
         title: formData.title,
         country: formData.country,
-        region: formData.region,
         image: imageUrl, // This should be the new uploaded image URL
       };
       
@@ -330,7 +325,7 @@ const DestinationManager: React.FC = () => {
     );
   }
 
-  // Enhanced filtering with search and country filter
+  // Enhanced filtering with search
   const filteredDestinations = destinations?.filter(destination => {
     const country = (destination as any).country || '';
     const type = (destination as any).type || '';
@@ -351,14 +346,8 @@ const DestinationManager: React.FC = () => {
       country.toLowerCase().includes(searchTerm.toLowerCase()) ||
       region.toLowerCase().includes(searchTerm.toLowerCase());
     
-    // Country filter
-    const countryMatch = countryFilter === '' || country === countryFilter;
-    
-    return tabMatch && searchMatch && countryMatch;
+    return tabMatch && searchMatch;
   }) || [];
-
-  // Get unique countries for filter dropdown
-  const availableCountries = destinations ? [...new Set(destinations.map(d => (d as any).country).filter(Boolean))] : [];
 
   console.log('Filtered destinations for', activeTab, ':', filteredDestinations.map(d => d.name));
 
@@ -379,9 +368,9 @@ const DestinationManager: React.FC = () => {
         </button>
       </div>
 
-      {/* Search and Filter Section */}
+      {/* Search Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="md:col-span-2">
             <div className="relative">
@@ -396,26 +385,11 @@ const DestinationManager: React.FC = () => {
             </div>
           </div>
 
-          {/* Country Filter */}
-          <div>
-            <select
-              value={countryFilter}
-              onChange={(e) => setCountryFilter(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Countries</option>
-              {availableCountries.map(country => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-          </div>
-
           {/* Clear Filters */}
           <div>
             <button
               onClick={() => {
                 setSearchTerm('');
-                setCountryFilter('');
               }}
               className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
             >
@@ -628,35 +602,18 @@ const DestinationManager: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-2">
-                              Country *
-                            </label>
-                            <SearchableSelect
-                              options={countryOptions}
-                              value={formData.country}
-                              onChange={handleCountryChange}
-                              placeholder="Select a country"
-                              name="country"
-                            />
-                            <p className="text-xs text-gray-500 mt-1">Select the country where this destination is located</p>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-2">
-                              Region *
-                            </label>
-                            <input
-                              type="text"
-                              name="region"
-                              value={formData.region}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                              placeholder="e.g., Khumbu"
-                            />
-                            <p className="text-xs text-gray-500 mt-1">Specific region or area within the country</p>
-                          </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-900 mb-2">
+                            Country *
+                          </label>
+                          <SearchableSelect
+                            options={countryOptions}
+                            value={formData.country}
+                            onChange={handleCountryChange}
+                            placeholder="Select a country"
+                            name="country"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">Select the country where this destination is located</p>
                         </div>
                       </div>
                     </div>

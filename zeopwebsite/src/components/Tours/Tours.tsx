@@ -7,6 +7,7 @@ import { useTours } from '../../hooks/useApi';
 import type { Tour } from '../../services/api';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
+import { formatDuration } from '../../utils/formatDuration';
 
 const Tours: React.FC = () => {
   // Use API hook to fetch tours
@@ -160,31 +161,12 @@ const Tours: React.FC = () => {
                         {tour.title}
                       </h3>
 
-                      {/* Rating */}
-                      <div className="flex items-center mb-3">
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(tour.rating)
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="ml-2 text-sm text-gray-600">
-                          {tour.rating} ({tour.reviews} reviews)
-                        </span>
-                      </div>
-
                       {/* Tour Details */}
                       <div className="space-y-2 mb-4">
                         <div className="flex items-center justify-between text-sm">
                           <span className="flex items-center text-gray-600">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {tour.duration}
+                            {formatDuration(tour.duration)}
                           </span>
                           <span className="flex items-center text-gray-600">
                             <Users className="w-4 h-4 mr-1" />

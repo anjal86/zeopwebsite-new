@@ -9,6 +9,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import type { Tour } from '../../services/api';
+import { formatDuration } from '../../utils/formatDuration';
 
 interface TourCardProps {
   tour: Tour;
@@ -62,24 +63,6 @@ const TourCard: React.FC<TourCardProps> = ({
           {/* Content Area - Right Side */}
           <div className="flex-1 p-6 flex flex-col justify-between">
             <div>
-              {/* Star Rating */}
-              <div className="flex items-center mb-3">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < Math.floor(tour.rating)
-                          ? 'text-orange-400 fill-current'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="ml-2 text-sm font-medium text-gray-700">
-                  ({tour.rating}) • {tour.reviews} reviews
-                </span>
-              </div>
 
               {/* Title */}
               <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">
@@ -96,7 +79,7 @@ const TourCard: React.FC<TourCardProps> = ({
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4 text-sm text-gray-600">
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-2 text-gray-400" />
-                  <span>{tour.duration}</span>
+                  <span>{formatDuration(tour.duration)}</span>
                 </div>
                 <div className="flex items-center">
                   <Users className="w-4 h-4 mr-2 text-gray-400" />
@@ -172,24 +155,6 @@ const TourCard: React.FC<TourCardProps> = ({
 
       {/* Content Area */}
       <div className="p-6">
-        {/* Star Rating */}
-        <div className="flex items-center mb-3">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-4 h-4 ${
-                  i < Math.floor(tour.rating)
-                    ? 'text-orange-400 fill-current'
-                    : 'text-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="ml-2 text-sm font-medium text-gray-700">
-            ({tour.rating})
-          </span>
-        </div>
 
         {/* Title */}
         <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">
@@ -206,7 +171,7 @@ const TourCard: React.FC<TourCardProps> = ({
         <div className="grid grid-cols-3 gap-4 mb-4 text-sm text-gray-600">
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
-            <span>{tour.duration}</span>
+            <span>{formatDuration(tour.duration)}</span>
           </div>
           <div className="flex items-center">
             <Users className="w-4 h-4 mr-2 text-gray-400" />

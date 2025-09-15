@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Clock, Users, Calendar, Activity } from 'lucide-react';
+import { formatDuration } from '../../utils/formatDuration';
 
 interface TourHeaderProps {
   title: string;
@@ -71,7 +72,7 @@ const TourHeader: React.FC<TourHeaderProps> = ({
           <div className="bg-gray-50 p-4 rounded-lg text-center">
             <Clock className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <div className="text-sm text-gray-600">Duration</div>
-            <div className="font-semibold text-gray-900">{duration}</div>
+            <div className="font-semibold text-gray-900">{formatDuration(duration)}</div>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg text-center">
             <Users className="w-6 h-6 text-green-600 mx-auto mb-2" />

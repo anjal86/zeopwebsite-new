@@ -53,6 +53,8 @@ interface TourDetails {
   slug: string;
   title: string;
   description: string;
+  location?: string;
+  category?: string;
   price: number;
   duration: string;
   group_size: string;
@@ -87,9 +89,34 @@ const TourEditor: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Fetch destinations and activities for relationship management
-  const { data: destinations } = useDestinations();
-  const { data: activities } = useActivities();
+  // Simple fetch for destinations and activities
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [destResponse, actResponse] = await Promise.all([
+          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/destinations`),
+          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/activities`)
+        ]);
+        
+        if (destResponse.ok) {
+          const destData = await destResponse.json();
+          setDestinations(destData);
+        }
+        
+        if (actResponse.ok) {
+          const actData = await actResponse.json();
+          setActivities(actData);
+        }
+      } catch (error) {
+        console.error('Error fetching reference data:', error);
+      }
+    };
+    
+    fetchData();
+  }, []);
   
   // Progress modal state
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -156,6 +183,182 @@ const TourEditor: React.FC = () => {
     }
   }, [tourId, isEditing, navigate]);
 
+  // Auto-detect relationships when all data is loaded
+  useEffect(() => {
+    console.log('=== AUTO-DETECTION TRIGGER ===');
+    console.log('Conditions check:', {
+      isEditing,
+      hasFormDataId: !!formData.id,
+      hasFormDataTitle: !!formData.title,
+      hasDestinations: !!destinations,
+      hasActivities: !!activities,
+      destinationsCount: destinations?.length || 0,
+      activitiesCount: activities?.length || 0
+    });
+
+    if (isEditing && formData.id && formData.title && destinations && activities &&
+        destinations.length > 0 && activities.length > 0) {
+      
+      console.log('=== AUTO-DETECTION STARTING ===');
+      console.log('Tour data:', {
+        id: formData.id,
+        title: formData.title,
+        location: formData.location,
+        category: formData.category
+      });
+      console.log('Available destinations:', destinations.map((d: any) => ({ id: d.id, name: d.name })));
+      console.log('Available activities:', activities.map((a: any) => ({ id: a.id, name: a.name })));
+      
+      // Run auto-detection
+      const autoDetectedDestinations = autoDetectDestinations(formData);
+      const autoDetectedActivities = autoDetectActivities(formData);
+      
+      console.log('Auto-detection results:', {
+        destinations: autoDetectedDestinations,
+        activities: autoDetectedActivities
+      });
+      
+      // Apply auto-detected relationships if we found any
+      if (autoDetectedDestinations.primary || autoDetectedDestinations.secondary.length > 0 ||
+          autoDetectedActivities.ids.length > 0) {
+        
+        console.log('=== APPLYING AUTO-DETECTED RELATIONSHIPS ===');
+        
+        setFormData(prev => {
+          const updated = {
+            ...prev,
+            primary_destination_id: autoDetectedDestinations.primary || prev.primary_destination_id,
+            secondary_destination_ids: autoDetectedDestinations.secondary.length > 0 ? autoDetectedDestinations.secondary : prev.secondary_destination_ids || [],
+            activity_ids: autoDetectedActivities.ids.length > 0 ? autoDetectedActivities.ids : prev.activity_ids || [],
+            related_destinations: autoDetectedDestinations.names.length > 0 ? autoDetectedDestinations.names : prev.related_destinations || [],
+            related_activities: autoDetectedActivities.names.length > 0 ? autoDetectedActivities.names : prev.related_activities || []
+          };
+          
+          console.log('Updated form data with relationships:', updated);
+          return updated;
+        });
+      } else {
+        console.log('=== NO MATCHES FOUND ===');
+      }
+    } else {
+      console.log('=== AUTO-DETECTION SKIPPED - CONDITIONS NOT MET ===');
+    }
+  }, [destinations, activities, formData.id, formData.title, formData.location, formData.category, isEditing]);
+
+  // Auto-detect destinations based on tour location
+  const autoDetectDestinations = (tourDetails: any) => {
+    if (!destinations || destinations.length === 0) return { primary: undefined, secondary: [], names: [] };
+    
+    const location = tourDetails.location?.toLowerCase() || '';
+    const title = tourDetails.title?.toLowerCase() || '';
+    
+    let primaryDestination: number | undefined = undefined;
+    const secondaryDestinations: number[] = [];
+    const destinationNames: string[] = [];
+    
+    console.log('Auto-detecting destinations for:', { location, title });
+    
+    // Find matching destinations based on location or title
+    destinations.forEach((dest: any) => {
+      const destName = dest.name.toLowerCase();
+      const destCountry = (dest as any).country?.toLowerCase() || '';
+      
+      // More flexible matching with specific keyword detection
+      const locationParts = location.split(',').map((part: string) => part.trim().toLowerCase());
+      const titleWords = title.split(' ').map((word: string) => word.toLowerCase());
+      
+      const isMatch =
+        location.includes(destName) || title.includes(destName) ||
+        location.includes(destCountry) || title.includes(destCountry) ||
+        locationParts.some((part: string) => part.includes(destName) || destName.includes(part)) ||
+        titleWords.some((word: string) => word.includes(destName) || destName.includes(word)) ||
+        // Special cases for common destination mappings
+        (location.includes('kailash') && destName === 'tibet') ||
+        (location.includes('tibet') && destName === 'tibet') ||
+        (location.includes('everest') && destName === 'everest') ||
+        (location.includes('annapurna') && destName === 'annapurna') ||
+        (location.includes('langtang') && destName === 'langtang') ||
+        (location.includes('pokhara') && destName === 'pokhara') ||
+        (location.includes('kathmandu') && destName === 'kathmandu') ||
+        (location.includes('chitwan') && destName === 'chitwan');
+      
+      console.log(`Checking ${dest.name} (${destCountry}):`, {
+        isMatch,
+        destName,
+        destCountry,
+        locationParts,
+        titleWords
+      });
+      
+      if (isMatch) {
+        if (primaryDestination === undefined) {
+          primaryDestination = dest.id;
+          destinationNames.push(dest.name);
+          console.log(`Set as primary: ${dest.name}`);
+        } else {
+          secondaryDestinations.push(dest.id);
+          destinationNames.push(dest.name);
+          console.log(`Set as secondary: ${dest.name}`);
+        }
+      }
+    });
+    
+    console.log('Auto-detected destinations:', { primaryDestination, secondaryDestinations, destinationNames });
+    
+    return {
+      primary: primaryDestination,
+      secondary: secondaryDestinations,
+      names: destinationNames
+    };
+  };
+
+  // Auto-detect activities based on tour category and description
+  const autoDetectActivities = (tourDetails: any) => {
+    if (!activities || activities.length === 0) return { ids: [], names: [] };
+    
+    const category = tourDetails.category?.toLowerCase() || '';
+    const description = tourDetails.description?.toLowerCase() || '';
+    const title = tourDetails.title?.toLowerCase() || '';
+    
+    const activityIds: number[] = [];
+    const activityNames: string[] = [];
+    
+    console.log('Auto-detecting activities for:', { category, title });
+    
+    // Find matching activities based on category, title, or description
+    activities.forEach((activity: any) => {
+      const activityName = activity.name.toLowerCase();
+      const activityType = (activity as any).type?.toLowerCase() || '';
+      
+      // More flexible matching for activities
+      const isMatch =
+        category.includes(activityName) || category.includes(activityType) ||
+        title.includes(activityName) || description.includes(activityName) ||
+        title.includes(activityType) || description.includes(activityType) ||
+        activityName.includes(category) || activityType.includes(category) ||
+        // Special cases for common activity mappings
+        (category.includes('pilgrimage') && activityName.includes('spiritual')) ||
+        (category.includes('luxury') && activityName.includes('cultural')) ||
+        (category.includes('trek') && activityName.includes('trekking')) ||
+        (category.includes('cultural') && activityName.includes('cultural'));
+      
+      console.log(`Checking ${activity.name} (${activityType}):`, { isMatch, activityName, activityType });
+      
+      if (isMatch) {
+        activityIds.push(activity.id);
+        activityNames.push(activity.name);
+        console.log(`Matched activity: ${activity.name}`);
+      }
+    });
+    
+    console.log('Auto-detected activities:', { activityIds, activityNames });
+    
+    return {
+      ids: activityIds,
+      names: activityNames
+    };
+  };
+
   const fetchTourDetails = async () => {
     if (!tourId || tourId === 'new') return;
 
@@ -177,14 +380,18 @@ const TourEditor: React.FC = () => {
         console.log('Tour details received:', details);
         console.log('Setting form data...');
         
+        // Auto-detect destinations and activities if not already set
+        const autoDetectedDestinations = autoDetectDestinations(details);
+        const autoDetectedActivities = autoDetectActivities(details);
+        
         // Ensure relationship fields are properly initialized
         const formattedDetails = {
           ...details,
-          primary_destination_id: details.primary_destination_id || details.destination_id || details.destination_ids?.[0] || undefined,
-          secondary_destination_ids: details.secondary_destination_ids || [],
-          activity_ids: details.activity_ids || [],
-          related_destinations: details.related_destinations || [],
-          related_activities: details.related_activities || [],
+          primary_destination_id: details.primary_destination_id || details.destination_id || details.destination_ids?.[0] || autoDetectedDestinations.primary,
+          secondary_destination_ids: details.secondary_destination_ids || autoDetectedDestinations.secondary,
+          activity_ids: details.activity_ids || autoDetectedActivities.ids,
+          related_destinations: details.related_destinations || autoDetectedDestinations.names,
+          related_activities: details.related_activities || autoDetectedActivities.names,
           gallery: details.gallery || [],
           highlights: details.highlights || [],
           inclusions: details.inclusions || [],
@@ -195,7 +402,7 @@ const TourEditor: React.FC = () => {
         };
         
         setFormData(formattedDetails);
-        console.log('Form data set successfully with relationships:', formattedDetails);
+        console.log('Form data set successfully with auto-detected relationships:', formattedDetails);
       } else {
         const errorText = await response.text();
         console.error('API Error:', response.status, errorText);
@@ -950,7 +1157,7 @@ const TourEditor: React.FC = () => {
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {destinations?.map((destination) => {
+                        {destinations?.map((destination: any) => {
                           const isPrimary = formData.primary_destination_id === destination.id;
                           const isSecondary = formData.secondary_destination_ids?.includes(destination.id);
                           
@@ -1052,7 +1259,7 @@ const TourEditor: React.FC = () => {
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {activities?.map((activity) => {
+                        {activities?.map((activity: any) => {
                           const isSelected = formData.activity_ids?.includes(activity.id) ||
                                            formData.related_activities?.includes(activity.name);
                           return (
@@ -1129,7 +1336,7 @@ const TourEditor: React.FC = () => {
                           <div className="space-y-1">
                             {formData.primary_destination_id ? (
                               <div className="text-sm text-gray-600 bg-primary/10 border border-primary/20 px-3 py-1 rounded-full inline-block mr-2 mb-1">
-                                <span className="text-primary font-medium">P</span> {destinations?.find(d => d.id === formData.primary_destination_id)?.name}
+                                <span className="text-primary font-medium">P</span> {destinations?.find((d: any) => d.id === formData.primary_destination_id)?.name}
                               </div>
                             ) : (
                               <p className="text-sm text-gray-500">No primary destination selected</p>
@@ -1142,7 +1349,7 @@ const TourEditor: React.FC = () => {
                           <div className="space-y-1">
                             {formData.secondary_destination_ids?.length ? (
                               formData.secondary_destination_ids.map((destId) => {
-                                const dest = destinations?.find(d => d.id === destId);
+                                const dest = destinations?.find((d: any) => d.id === destId);
                                 return dest ? (
                                   <div key={destId} className="text-sm text-gray-600 bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-full inline-block mr-2 mb-1">
                                     <span className="text-secondary font-medium">S</span> {dest.name}

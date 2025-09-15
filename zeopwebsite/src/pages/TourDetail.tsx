@@ -9,6 +9,7 @@ import TourHeader from '../components/Tours/TourHeader';
 import TourTabs, { type ItineraryDay } from '../components/Tours/TourTabs';
 import { useTours, useDestinations, useActivities } from '../hooks/useApi';
 import type { Tour } from '../services/api';
+import { formatDuration } from '../utils/formatDuration';
 
 // Extended tour interface for detailed data
 interface TourDetails extends Tour {
@@ -235,7 +236,7 @@ const TourDetail: React.FC = () => {
               <div className="mt-8">
                 <TourHeader
                   title={tourDetails.title}
-                  duration={tourDetails.duration}
+                  duration={formatDuration(tourDetails.duration)}
                   groupSize={tourDetails.group_size}
                   bestTime={tourDetails.best_time}
                   activities={tourActivities}

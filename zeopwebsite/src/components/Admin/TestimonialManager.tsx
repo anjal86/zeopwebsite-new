@@ -15,6 +15,8 @@ import {
   Calendar
 } from 'lucide-react';
 import Toggle from '../UI/Toggle';
+import DeleteModal from '../UI/DeleteModal';
+import { useDeleteModal } from '../../hooks/useDeleteModal';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -79,6 +81,31 @@ const TestimonialManager: React.FC = () => {
     image: '',
     is_featured: false,
     is_approved: true,
+  });
+
+  // Delete testimonial function for the hook
+  const deleteTestimonial = async (testimonial: Testimonial) => {
+    const token = localStorage.getItem('adminToken');
+    const response = await fetch(`${getApiBaseUrl()}/admin/testimonials/${testimonial.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to delete testimonial');
+    }
+
+    await fetchTestimonials();
+  };
+
+  // Delete modal hook
+  const deleteModal = useDeleteModal<Testimonial>({
+    onDelete: deleteTestimonial,
+    getItemName: (testimonial) => testimonial.title,
+    getItemId: (testimonial) => testimonial.id
   });
 
   // Fetch testimonials
@@ -203,26 +230,9 @@ const TestimonialManager: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this testimonial? This action cannot be undone.')) {
-      return;
-    }
-
+  const handleDeleteClick = async (testimonial: Testimonial) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${getApiBaseUrl()}/admin/testimonials/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete testimonial');
-      }
-
-      await fetchTestimonials();
+      deleteModal.openModal(testimonial);
     } catch (error) {
       console.error('Error deleting testimonial:', error);
       alert('Failed to delete testimonial: ' + (error instanceof Error ? error.message : 'Unknown error'));
@@ -433,7 +443,7 @@ const TestimonialManager: React.FC = () => {
                   </button>
                   
                   <button
-                    onClick={() => handleDelete(testimonial.id)}
+                    onClick={() => handleDeleteClick(testimonial)}
                     className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
                     title="Delete testimonial"
                   >
@@ -713,6 +723,15 @@ const TestimonialManager: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Delete Modal */}
+      <DeleteModal
+        {...deleteModal.modalProps}
+        title="Delete Testimonial"
+        message="Are you sure you want to delete this testimonial? This will permanently remove the testimonial and cannot be undone."
+        confirmText="Delete Testimonial"
+        variant="danger"
+      />
     </div>
   );
 };
