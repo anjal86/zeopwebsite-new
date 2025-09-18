@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import {
   Trash2,
-  Plus,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  X,
+  Plus
 } from 'lucide-react';
 
 interface GalleryPhoto {
@@ -19,10 +21,21 @@ const KailashGalleryManager: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   useEffect(() => {
     fetchGalleryData();
   }, []);
+
+  // Cleanup blob URLs on component unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const fetchGalleryData = async () => {
     try {
@@ -46,6 +59,57 @@ const KailashGalleryManager: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to load gallery');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check if it's an image
+      if (!file.type.startsWith('image/')) {
+        setError('Please select an image file');
+        return;
+      }
+
+      // Clean up previous blob URL if it exists
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+
+      setSelectedFile(file);
+      const newPreviewUrl = URL.createObjectURL(file);
+      setPreviewUrl(newPreviewUrl);
+      setError(null);
+    }
+  };
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      
+      // Create a fake event object to reuse existing logic
+      const fakeEvent = {
+        target: {
+          files: [file]
+        }
+      } as any;
+      
+      handleFileChange(fakeEvent);
     }
   };
 
@@ -83,6 +147,7 @@ const KailashGalleryManager: React.FC = () => {
 
       // Reset form and refresh data
       setSelectedFile(null);
+      setPreviewUrl(null);
       await fetchGalleryData();
       setError(null);
     } catch (err) {
@@ -117,6 +182,14 @@ const KailashGalleryManager: React.FC = () => {
     }
   };
 
+  const clearSelection = () => {
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setSelectedFile(null);
+    setPreviewUrl(null);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -129,9 +202,11 @@ const KailashGalleryManager: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Kailash Gallery</h2>
-        <p className="text-gray-600 mt-1">Upload and manage gallery photos</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Kailash Gallery</h2>
+          <p className="text-gray-600 mt-1">Upload and manage gallery photos</p>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -143,79 +218,186 @@ const KailashGalleryManager: React.FC = () => {
         </div>
       )}
 
-      {/* Upload Section */}
-      <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload New Photo</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
+      {/* Upload Section - Inspired by SliderManager */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-gradient-to-r from-orange-50 to-red-50 px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900">Photo Upload</h4>
+              <p className="text-sm text-gray-600">Add new photos to the Kailash gallery</p>
+            </div>
           </div>
-          
-          <button
-            onClick={handlePhotoUpload}
-            disabled={uploading || !selectedFile}
-            className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+        </div>
+
+        <div className="p-6">
+          {/* Enhanced Upload Zone */}
+          <div
+            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
+              isDragOver
+                ? 'border-orange-500 bg-gradient-to-br from-orange-50 to-orange-100 scale-[1.02] shadow-lg'
+                : 'border-gray-300 hover:border-orange-400 hover:bg-gray-50'
+            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
           >
-            {uploading ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                Uploading...
-              </>
-            ) : (
-              <>
-                <Upload className="w-4 h-4 mr-2" />
-                Upload Photo
-              </>
-            )}
-          </button>
+            <div className="flex flex-col items-center gap-4">
+              {/* Animated Icon */}
+              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                isDragOver
+                  ? 'bg-orange-200 scale-110 rotate-3'
+                  : 'bg-gradient-to-br from-gray-100 to-gray-200 hover:from-orange-50 hover:to-orange-100'
+              }`}>
+                {isDragOver ? (
+                  <svg className="w-8 h-8 text-orange-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                ) : (
+                  <ImageIcon className="w-8 h-8 text-gray-600" />
+                )}
+              </div>
+              
+              {/* Upload Text */}
+              <div className="space-y-2">
+                <h4 className={`text-lg font-semibold transition-colors ${
+                  isDragOver ? 'text-orange-700' : 'text-gray-800'
+                }`}>
+                  {isDragOver ? 'Drop your image here!' : 'Upload Photo'}
+                </h4>
+                
+                <p className="text-sm text-gray-500">
+                  Drag & drop or click to browse
+                </p>
+              </div>
+              
+              {/* File Input Button */}
+              <label className="relative cursor-pointer">
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                  Choose Image
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* Preview */}
+          {previewUrl && (
+            <div className="mt-6">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div className="relative">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-lg border"
+                  />
+                  <button
+                    type="button"
+                    onClick={clearSelection}
+                    className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors text-xs"
+                    title="Remove"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <div className="mt-4 flex justify-center">
+                  <button
+                    onClick={handlePhotoUpload}
+                    disabled={uploading || !selectedFile}
+                    className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Photo
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Photos List */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Gallery Photos ({photos.length})
-          </h3>
-          
+      {/* Photos List - Inspired by SliderManager */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between">
+            <h4 className="text-lg font-semibold text-gray-900">Gallery Photos</h4>
+            <div className="text-sm text-gray-500">
+              {photos.length} photo{photos.length !== 1 ? 's' : ''} total
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4">
           {photos.length === 0 ? (
-            <div className="text-center py-8">
-              <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No photos uploaded yet</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ImageIcon className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Photos Found</h3>
+              <p className="text-gray-600 mb-4">Upload your first photo to get started</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {photos.map((photo) => (
+              {photos.map((photo, index) => (
                 <div
                   key={photo.id}
-                  className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200"
                 >
-                  <img
-                    src={photo.image}
-                    alt={photo.title}
-                    className="w-16 h-16 object-cover rounded-md"
-                  />
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900">{photo.title}</h4>
-                    <p className="text-sm text-gray-500">
-                      Uploaded: {new Date(photo.uploadedAt).toLocaleDateString()}
-                    </p>
+                  <div className="flex items-center gap-4 p-4">
+                    {/* Order Number */}
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-medium text-gray-700">
+                        {index + 1}
+                      </span>
+                    </div>
+
+                    {/* Preview */}
+                    <div className="relative w-20 h-12 flex-shrink-0">
+                      <img
+                        src={photo.image}
+                        alt={photo.title}
+                        className="w-full h-full object-cover rounded-lg border"
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-lg font-semibold text-gray-900 truncate">
+                        {photo.title}
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Uploaded: {new Date(photo.uploadedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-1 border-l border-gray-200 pl-3">
+                      <button
+                        onClick={() => handleDeletePhoto(photo.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete photo"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => handleDeletePhoto(photo.id)}
-                    className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors flex items-center text-sm"
-                  >
-                    <Trash2 className="w-4 h-4 mr-1" />
-                    Delete
-                  </button>
                 </div>
               ))}
             </div>
