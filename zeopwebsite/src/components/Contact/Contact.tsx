@@ -343,7 +343,7 @@ const Contact: React.FC = () => {
             </div>
             <div className="h-[500px]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.1234567890123!2d85.3240!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDQzJzAyLjAiTiA4NcKwMTknMjYuNCJF!5e0!3m2!1sen!2snp!4v1234567890123!5m2!1sen!2snp"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3531.7366808721567!2d85.3314607!3d27.725415299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f625c6408f%3A0xa14006f9fceeea6a!2sZeo%20Tourism%20Pvt.Ltd!5e0!3m2!1sen!2snp!4v1758182142914!5m2!1sen!2snp"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -359,7 +359,7 @@ const Contact: React.FC = () => {
                   <strong>{contactInfo?.company.name || 'Zeo Tourism'}</strong> - {contactInfo?.contact.address.full || 'Thamel, Kathmandu, Nepal'}
                 </div>
                 <a
-                  href="https://maps.app.goo.gl/vYt97pRgnnN9CVXS8"
+                  href={(contactInfo?.contact.location as any)?.maps_url || "https://maps.app.goo.gl/6ee4i6HGNKX9qdar8"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sky-blue hover:text-sky-blue-dark font-medium text-sm transition-colors"

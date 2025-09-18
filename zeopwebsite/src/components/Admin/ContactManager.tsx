@@ -50,6 +50,7 @@ interface ContactFormData {
       };
       timezone: string;
       display: string;
+      maps_url?: string;
     };
   };
   business: {
@@ -123,7 +124,8 @@ const ContactManager: React.FC = () => {
           longitude: 85.3240
         },
         timezone: 'Asia/Katmandu',
-        display: 'Kathmandu, Nepal'
+        display: 'Kathmandu, Nepal',
+        maps_url: 'https://maps.app.goo.gl/vYt97pRgnnN9CVXS8'
       }
     },
     business: {
@@ -539,6 +541,57 @@ const ContactManager: React.FC = () => {
                   placeholder="City"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
+              </div>
+            </div>
+
+            {/* Location & Maps */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">Location & Maps</h4>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="number"
+                    name="contact.location.coordinates.latitude"
+                    value={formData.contact.location.coordinates.latitude}
+                    onChange={handleInputChange}
+                    step="any"
+                    placeholder="Latitude"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  />
+                  <input
+                    type="number"
+                    name="contact.location.coordinates.longitude"
+                    value={formData.contact.location.coordinates.longitude}
+                    onChange={handleInputChange}
+                    step="any"
+                    placeholder="Longitude"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="url"
+                    name="contact.location.maps_url"
+                    value={formData.contact.location.maps_url || ''}
+                    onChange={handleInputChange}
+                    placeholder="Google Maps URL (e.g., https://maps.app.goo.gl/...)"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  />
+                  <input
+                    type="text"
+                    name="contact.location.display"
+                    value={formData.contact.location.display}
+                    onChange={handleInputChange}
+                    placeholder="Location Display Name"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  />
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>How to get Google Maps URL:</strong><br/>
+                    Go to Google Maps, find your location, click "Share" → "Copy link"
+                  </p>
+                </div>
               </div>
             </div>
           </div>

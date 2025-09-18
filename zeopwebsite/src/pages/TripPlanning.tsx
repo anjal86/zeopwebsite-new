@@ -11,9 +11,13 @@ import {
   ArrowLeft,
   CheckCircle,
   Sparkles,
-  Mountain
+  Mountain,
+  Phone,
+  Mail,
+  MessageCircle,
+  X
 } from 'lucide-react';
-import { useApi } from '../hooks/useApi';
+import { useApi, useContact } from '../hooks/useApi';
 
 interface Destination {
   id: number;
@@ -97,6 +101,7 @@ const TripPlanning: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const { data: destinationsData, loading: destinationsLoading } = useApi('/api/trip-planning/destinations');
   const { data: activitiesData, loading: activitiesLoading } = useApi('/api/trip-planning/activities');
@@ -224,6 +229,7 @@ const TripPlanning: React.FC = () => {
         return true;
     }
   };
+
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -696,6 +702,11 @@ const TripPlanning: React.FC = () => {
         url="https://zeotourism.com/plan-your-trip"
       />
 
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
+
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 py-12">
         <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
@@ -708,9 +719,19 @@ const TripPlanning: React.FC = () => {
                 Plan Your Perfect Trip
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Tell us about your travel preferences and we'll create a personalized itinerary 
+                Tell us about your travel preferences and we'll create a personalized itinerary
                 with the best destinations, activities, and tours just for you.
               </p>
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                onClick={() => setShowContactModal(true)}
+                className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors font-medium"
+              >
+                <MessageCircle className="w-5 h-5" />
+                Enquire Now
+              </motion.button>
             </motion.div>
           </div>
 

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Menu, X, Phone, Mail, MapPin, Calendar, LogIn
+  Menu, X, Phone, Mail, MapPin, MessageCircle, LogIn
 } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
+import ContactModal from '../UI/ContactModal';
 
 interface NavItem {
   label: string;
@@ -15,6 +16,7 @@ const Navigation: React.FC = () => {
   const { data: contactInfo } = useContact();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const location = useLocation();
 
   const navItems: NavItem[] = [
@@ -190,11 +192,12 @@ const Navigation: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => setShowContactModal(true)}
                 className="bg-gradient-to-r from-secondary via-secondary-light to-secondary px-4 py-2 rounded-full text-white font-semibold hover:shadow-2xl transition-all duration-300 flex items-center gap-2 relative overflow-hidden group whitespace-nowrap text-sm"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-secondary-light to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <Calendar className="w-4 h-4 relative z-10" />
-                <span className="relative z-10">Plan Your Trip</span>
+                <MessageCircle className="w-4 h-4 relative z-10" />
+                <span className="relative z-10">Enquire Now</span>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-white/30 rounded-full animate-ping"></div>
               </motion.button>
             </div>
@@ -250,14 +253,18 @@ const Navigation: React.FC = () => {
                     <span className="text-sm">{contactInfo?.contact.phone.primary || '+9779851234567'}</span>
                   </div>
                   
-                  {/* Mobile Plan Your Trip Button */}
+                  {/* Mobile Enquire Now Button */}
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setShowContactModal(true);
+                      setIsMobileMenuOpen(false);
+                    }}
                     className="bg-gradient-to-r from-secondary to-secondary-light px-6 py-3 rounded-full text-white font-semibold hover:shadow-lg transition-all duration-300 w-full flex items-center justify-center gap-2"
                   >
-                    <Calendar className="w-4 h-4" />
-                    Plan Your Trip
+                    <MessageCircle className="w-4 h-4" />
+                    Enquire Now
                   </motion.button>
                 </div>
               </div>
@@ -265,6 +272,12 @@ const Navigation: React.FC = () => {
           )}
         </AnimatePresence>
       </motion.nav>
+
+      {/* Contact Modal */}
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </>
   );
 };
