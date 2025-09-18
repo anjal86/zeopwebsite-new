@@ -12,12 +12,10 @@ import {
   CheckCircle,
   Sparkles,
   Mountain,
-  Phone,
-  Mail,
-  MessageCircle,
-  X
+  MessageCircle
 } from 'lucide-react';
-import { useApi, useContact } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
+import ContactModal from '../components/UI/ContactModal';
 
 interface Destination {
   id: number;
