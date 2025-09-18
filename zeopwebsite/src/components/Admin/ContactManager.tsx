@@ -51,6 +51,7 @@ interface ContactFormData {
       timezone: string;
       display: string;
       maps_url?: string;
+      embed_url?: string;
     };
   };
   business: {
@@ -120,12 +121,13 @@ const ContactManager: React.FC = () => {
       },
       location: {
         coordinates: {
-          latitude: 27.7172,
-          longitude: 85.3240
+          latitude: 27.725415,
+          longitude: 85.3314607
         },
         timezone: 'Asia/Katmandu',
         display: 'Kathmandu, Nepal',
-        maps_url: 'https://maps.app.goo.gl/vYt97pRgnnN9CVXS8'
+        maps_url: 'https://maps.app.goo.gl/vYt97pRgnnN9CVXS8',
+        embed_url: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2738.8293499738834!2d85.33145348661431!3d27.72530994398019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f625c6408f%3A0xa14006f9fceeea6a!2sZeo%20Tourism%20Pvt.Ltd!5e0!3m2!1sen!2snp!4v1758183095926!5m2!1sen!2snp'
       }
     },
     business: {
@@ -586,10 +588,19 @@ const ContactManager: React.FC = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
+                <textarea
+                  name="contact.location.embed_url"
+                  value={formData.contact.location.embed_url || ''}
+                  onChange={handleInputChange}
+                  rows={3}
+                  placeholder="Google Maps Embed URL (iframe src)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                />
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-800">
-                    <strong>How to get Google Maps URL:</strong><br/>
-                    Go to Google Maps, find your location, click "Share" → "Copy link"
+                    <strong>How to get Google Maps URLs:</strong><br/>
+                    1. <strong>Maps URL:</strong> Go to Google Maps, find your location, click "Share" → "Copy link"<br/>
+                    2. <strong>Embed URL:</strong> Click "Share" → "Embed a map" → Copy the src URL from the iframe code
                   </p>
                 </div>
               </div>

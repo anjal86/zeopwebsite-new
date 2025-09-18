@@ -343,7 +343,7 @@ const Contact: React.FC = () => {
             </div>
             <div className="h-[500px]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3531.7366808721567!2d85.3314607!3d27.725415299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f625c6408f%3A0xa14006f9fceeea6a!2sZeo%20Tourism%20Pvt.Ltd!5e0!3m2!1sen!2snp!4v1758182142914!5m2!1sen!2snp"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2738.8293499738834!2d85.33145348661431!3d27.72530994398019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f625c6408f%3A0xa14006f9fceeea6a!2sZeo%20Tourism%20Pvt.Ltd!5e0!3m2!1sen!2snp!4v1758183095926!5m2!1sen!2snp"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -356,7 +356,7 @@ const Contact: React.FC = () => {
             <div className="p-4 bg-gray-50">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-600">
-                  <strong>{contactInfo?.company.name || 'Zeo Tourism'}</strong> - {contactInfo?.contact.address.full || 'Thamel, Kathmandu, Nepal'}
+                  <strong>{contactInfo?.company.name || 'Zeo Tourism'}</strong> - {contactInfo?.contact.address.full || 'Baluwatar-4, Kathmandu, Nepal'}
                 </div>
                 <a
                   href={(contactInfo?.contact.location as any)?.maps_url || "https://maps.app.goo.gl/6ee4i6HGNKX9qdar8"}

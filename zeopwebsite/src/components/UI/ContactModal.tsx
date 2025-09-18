@@ -44,8 +44,8 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
         if (contact?.location && (contact.location as any)?.maps_url) {
           window.open((contact.location as any).maps_url, '_blank');
         } else {
-          const lat = contact?.location?.coordinates?.latitude || 27.7172;
-          const lng = contact?.location?.coordinates?.longitude || 85.324;
+          const lat = contact?.location?.coordinates?.latitude || 27.725415;
+          const lng = contact?.location?.coordinates?.longitude || 85.3314607;
           window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
         }
         break;
