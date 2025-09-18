@@ -85,7 +85,7 @@ const AdminDashboard: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <OverviewContent />;
+        return <OverviewContent onTabChange={handleTabChange} />;
       case 'destinations':
         return <DestinationManager />;
       case 'tours':
@@ -103,7 +103,7 @@ const AdminDashboard: React.FC = () => {
       case 'settings':
         return <SettingsContent />;
       default:
-        return <OverviewContent />;
+        return <OverviewContent onTabChange={handleTabChange} />;
     }
   };
 
@@ -210,7 +210,7 @@ const AdminDashboard: React.FC = () => {
 };
 
 // Overview Content Component
-const OverviewContent: React.FC = () => {
+const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ onTabChange }) => {
   const { data: destinations } = useApi('/api/destinations');
   const { data: tours } = useApi('/api/tours');
   const { data: users } = useApi('/api/users');
@@ -280,27 +280,49 @@ const OverviewContent: React.FC = () => {
 
       <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            onClick={() => onTabChange('destinations')}
+            className="p-4 border border-slate-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors text-left group"
+          >
             <div className="mb-2">
-              <Mountain className="w-8 h-8 text-blue-600" />
+              <Mountain className="w-8 h-8 text-blue-600 group-hover:scale-110 transition-transform" />
             </div>
-            <h4 className="font-medium text-slate-900">Add New Destination</h4>
-            <p className="text-sm text-slate-600">Create a new travel destination</p>
+            <h4 className="font-medium text-slate-900">Manage Destinations</h4>
+            <p className="text-sm text-slate-600">Add or edit travel destinations</p>
           </button>
-          <button className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left">
+          
+          <button
+            onClick={() => onTabChange('tours')}
+            className="p-4 border border-slate-200 rounded-lg hover:bg-green-50 hover:border-green-300 transition-colors text-left group"
+          >
             <div className="mb-2">
-              <Backpack className="w-8 h-8 text-green-600" />
+              <Backpack className="w-8 h-8 text-green-600 group-hover:scale-110 transition-transform" />
             </div>
-            <h4 className="font-medium text-slate-900">Add New Tour</h4>
-            <p className="text-sm text-slate-600">Create a new tour package</p>
+            <h4 className="font-medium text-slate-900">Manage Tours</h4>
+            <p className="text-sm text-slate-600">Add or edit tour packages</p>
           </button>
-          <button className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left">
+          
+          <button
+            onClick={() => onTabChange('sliders')}
+            className="p-4 border border-slate-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 transition-colors text-left group"
+          >
             <div className="mb-2">
-              <BarChart3 className="w-8 h-8 text-purple-600" />
+              <ImageIcon className="w-8 h-8 text-purple-600 group-hover:scale-110 transition-transform" />
             </div>
-            <h4 className="font-medium text-slate-900">View Analytics</h4>
-            <p className="text-sm text-slate-600">Check performance metrics</p>
+            <h4 className="font-medium text-slate-900">Manage Sliders</h4>
+            <p className="text-sm text-slate-600">Update hero section sliders</p>
+          </button>
+          
+          <button
+            onClick={() => onTabChange('enquiries')}
+            className="p-4 border border-slate-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors text-left group"
+          >
+            <div className="mb-2">
+              <Mail className="w-8 h-8 text-orange-600 group-hover:scale-110 transition-transform" />
+            </div>
+            <h4 className="font-medium text-slate-900">View Enquiries</h4>
+            <p className="text-sm text-slate-600">Check customer enquiries</p>
           </button>
         </div>
       </div>
