@@ -14,6 +14,7 @@ import {
   Mail,
   Camera
 } from 'lucide-react';
+import { useApi } from '../hooks/useApi';
 import DestinationManager from '../components/Admin/DestinationManager';
 import TourManager from '../components/Admin/TourManager';
 import SliderManager from '../components/Admin/SliderManager';
@@ -210,6 +211,13 @@ const AdminDashboard: React.FC = () => {
 
 // Overview Content Component
 const OverviewContent: React.FC = () => {
+  const { data: destinations } = useApi('/api/destinations');
+  const { data: tours } = useApi('/api/tours');
+  const { data: users } = useApi('/api/users');
+  const { data: bookings } = useApi('/api/bookings');
+  const { data: enquiries } = useApi('/api/contact/enquiries');
+  const { data: testimonials } = useApi('/api/testimonials');
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -217,7 +225,9 @@ const OverviewContent: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-slate-600">Total Destinations</p>
-              <p className="text-2xl font-bold text-slate-900">5</p>
+              <p className="text-2xl font-bold text-slate-900">
+                {destinations ? destinations.length : '...'}
+              </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <Mountain className="w-6 h-6 text-blue-600" />
@@ -229,7 +239,9 @@ const OverviewContent: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-slate-600">Total Tours</p>
-              <p className="text-2xl font-bold text-slate-900">8</p>
+              <p className="text-2xl font-bold text-slate-900">
+                {tours ? tours.length : '...'}
+              </p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
               <Backpack className="w-6 h-6 text-green-600" />
@@ -240,11 +252,13 @@ const OverviewContent: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Total Users</p>
-              <p className="text-2xl font-bold text-slate-900">3</p>
+              <p className="text-sm font-medium text-slate-600">Contact Enquiries</p>
+              <p className="text-2xl font-bold text-slate-900">
+                {enquiries ? enquiries.length : '...'}
+              </p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Users className="w-6 h-6 text-purple-600" />
+              <Mail className="w-6 h-6 text-purple-600" />
             </div>
           </div>
         </div>
@@ -252,11 +266,13 @@ const OverviewContent: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-slate-600">Total Bookings</p>
-              <p className="text-2xl font-bold text-slate-900">12</p>
+              <p className="text-sm font-medium text-slate-600">Testimonials</p>
+              <p className="text-2xl font-bold text-slate-900">
+                {testimonials ? testimonials.length : '...'}
+              </p>
             </div>
             <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-6 h-6 text-orange-600" />
+              <MessageSquare className="w-6 h-6 text-orange-600" />
             </div>
           </div>
         </div>
