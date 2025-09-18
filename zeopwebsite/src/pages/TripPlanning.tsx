@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../components/SEO/SEO';
 import {
   MapPin,
   Users,
@@ -689,10 +689,12 @@ const TripPlanning: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Plan Your Trip - Zeo Tourism</title>
-        <meta name="description" content="Create your perfect trip with our personalized trip planning service. Get expert recommendations for destinations, activities, and tours." />
-      </Helmet>
+      <SEO
+        title="Plan Your Trip - Zeo Tourism"
+        description="Create your perfect trip with our personalized trip planning service. Get expert recommendations for destinations, activities, and tours."
+        keywords="trip planning, Nepal travel, custom itinerary, travel recommendations, personalized tours"
+        url="https://zeotourism.com/plan-your-trip"
+      />
 
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 py-12">
         <div className="max-w-6xl mx-auto px-4">
