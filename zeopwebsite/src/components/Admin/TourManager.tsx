@@ -6,9 +6,6 @@ import {
   Trash2,
   MapPin,
   Calendar,
-  DollarSign,
-  Users,
-  Star,
   AlertCircle,
   Search,
   Eye,
@@ -81,14 +78,32 @@ const TourManager: React.FC = () => {
   const fetchTours = async () => {
     try {
       setLoading(true);
-      const filters = {
+      const token = localStorage.getItem('adminToken');
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
         ...(searchTerm && { search: searchTerm }),
         ...(destinationFilter && { location: destinationFilter })
-      };
+      });
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/tours?${params}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tours');
+      }
+
+      const tours = await response.json();
       
-      const response = await toursApi.getPaginated(currentPage, itemsPerPage, filters);
-      setTours(response.tours);
-      setTotalItems(response.pagination.totalCount);
+      // Extract pagination info from headers
+      const totalCount = parseInt(response.headers.get('X-Total-Count') || '0');
+      
+      setTours(tours);
+      setTotalItems(totalCount);
     } catch (error) {
       console.error('Error fetching tours:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch tours');
@@ -317,9 +332,6 @@ const TourManager: React.FC = () => {
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
                           {tour.title}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          ID: {tour.id}
                         </div>
                       </div>
                     </div>

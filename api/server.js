@@ -677,6 +677,93 @@ app.get('/api/tours', async (req, res) => {
     }
   });
   
+  // Filter out unlisted tours for public API (only show explicitly listed tours or tours without listed field)
+  let filteredTours = allTours.filter(tour => tour.listed !== false);
+
+  // Filter by category
+  if (category) {
+    filteredTours = filteredTours.filter(tour =>
+      tour.category.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  // Filter by location
+  if (location) {
+    filteredTours = filteredTours.filter(tour =>
+      tour.location.toLowerCase() === location.toLowerCase()
+    );
+  }
+
+  // Search filter
+  if (search) {
+    const searchTerm = search.toLowerCase();
+    filteredTours = filteredTours.filter(tour =>
+      tour.title.toLowerCase().includes(searchTerm) ||
+      tour.description.toLowerCase().includes(searchTerm) ||
+      tour.location.toLowerCase().includes(searchTerm) ||
+      tour.category.toLowerCase().includes(searchTerm) ||
+      (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
+    );
+  }
+
+  // Sort tours consistently by ID to maintain order across pages
+  filteredTours.sort((a, b) => {
+    // First sort by featured status (featured tours first)
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    
+    // Then sort by rating (highest first)
+    const ratingDiff = (b.rating || 0) - (a.rating || 0);
+    if (ratingDiff !== 0) return ratingDiff;
+    
+    // Finally sort by ID for consistent ordering
+    return a.id - b.id;
+  });
+
+  // Pagination support
+  const totalCount = filteredTours.length;
+  let paginatedTours = filteredTours;
+  
+  if (page && limit) {
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 12;
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = startIndex + limitNum;
+    
+    paginatedTours = filteredTours.slice(startIndex, endIndex);
+    
+    // Add pagination metadata to response headers
+    res.set({
+      'X-Total-Count': totalCount.toString(),
+      'X-Page': pageNum.toString(),
+      'X-Limit': limitNum.toString(),
+      'X-Total-Pages': Math.ceil(totalCount / limitNum).toString(),
+      'X-Has-Next': (endIndex < totalCount).toString(),
+      'X-Has-Previous': (pageNum > 1).toString()
+    });
+  }
+
+  res.json(paginatedTours);
+});
+
+// Admin: Get all tours including unlisted ones
+app.get('/api/admin/tours', authenticateToken, async (req, res) => {
+  await delay(300);
+  
+  const { category, location, search, featured, page, limit } = req.query;
+  
+  // Merge basic tours with detailed tours, prioritizing detailed tours
+  const allTours = [...tourDetails];
+  
+  // Add basic tours that don't have detailed versions
+  tours.forEach(basicTour => {
+    const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
+    if (!hasDetailedVersion) {
+      allTours.push(basicTour);
+    }
+  });
+  
+  // For admin, show ALL tours (including unlisted ones)
   let filteredTours = [...allTours];
 
   // Filter by category
@@ -948,7 +1035,21 @@ app.patch('/api/admin/tours/:id/listing', authenticateToken, async (req, res) =>
         updated_at: new Date().toISOString()
       };
       
-      // Save detailed tours
+      // Also update the individual tour detail file
+      const tourSlug = tourDetails[tourIndex].slug;
+      if (tourSlug) {
+        const tourDetailFilePath = path.join(__dirname, 'data', 'tour-details', `${tourSlug}.json`);
+        if (fs.existsSync(tourDetailFilePath)) {
+          try {
+            fs.writeFileSync(tourDetailFilePath, JSON.stringify(tourDetails[tourIndex], null, 2));
+            console.log(`Updated individual tour detail file: ${tourSlug}.json`);
+          } catch (error) {
+            console.error(`Error updating individual tour detail file: ${error.message}`);
+          }
+        }
+      }
+      
+      // Save detailed tours to main file
       const saved = saveData('tours.json', tourDetails);
       if (!saved) {
         throw new Error('Failed to save tour data to file');
@@ -992,7 +1093,7 @@ app.get('/api/tours/:id', async (req, res) => {
     tour = tours.find(t => t.id === tourId);
   }
   
-  if (!tour) {
+  if (!tour || tour.listed === false) {
     return res.status(404).json({
       success: false,
       message: 'Tour not found'
@@ -1016,7 +1117,7 @@ app.get('/api/tours/slug/:slug', async (req, res) => {
     tour = tours.find(t => t.slug === slug);
   }
   
-  if (!tour) {
+  if (!tour || tour.listed === false) {
     return res.status(404).json({
       success: false,
       message: 'Tour not found'
