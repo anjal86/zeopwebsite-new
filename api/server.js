@@ -916,6 +916,68 @@ app.delete('/api/admin/tours/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// Admin: Update tour listing status
+app.patch('/api/admin/tours/:id/listing', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating tour listing status for ID:', req.params.id);
+    console.log('Request body:', req.body);
+    
+    const { id } = req.params;
+    const { listed } = req.body;
+    const tourId = parseInt(id);
+    
+    // Find tour in detailed tours first
+    let tourIndex = tourDetails.findIndex(t => t.id === tourId);
+    let isDetailedTour = true;
+    
+    // If not found in detailed tours, check basic tours
+    if (tourIndex === -1) {
+      tourIndex = tours.findIndex(t => t.id === tourId);
+      isDetailedTour = false;
+    }
+    
+    if (tourIndex === -1) {
+      return res.status(404).json({ error: 'Tour not found' });
+    }
+    
+    // Update the listing status
+    if (isDetailedTour) {
+      tourDetails[tourIndex] = {
+        ...tourDetails[tourIndex],
+        listed: listed,
+        updated_at: new Date().toISOString()
+      };
+      
+      // Save detailed tours
+      const saved = saveData('tours.json', tourDetails);
+      if (!saved) {
+        throw new Error('Failed to save tour data to file');
+      }
+      
+      console.log(`Tour ${tourId} listing status updated in detailed tours`);
+      res.json(tourDetails[tourIndex]);
+    } else {
+      tours[tourIndex] = {
+        ...tours[tourIndex],
+        listed: listed,
+        updated_at: new Date().toISOString()
+      };
+      
+      // Save basic tours
+      const saved = saveData('tours.json', tours);
+      if (!saved) {
+        throw new Error('Failed to save tour data to file');
+      }
+      
+      console.log(`Tour ${tourId} listing status updated in basic tours`);
+      res.json(tours[tourIndex]);
+    }
+  } catch (error) {
+    console.error('Error updating tour listing status:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
 // Get tour by ID (check detailed tours first, then basic tours)
 app.get('/api/tours/:id', async (req, res) => {
   await delay(200);

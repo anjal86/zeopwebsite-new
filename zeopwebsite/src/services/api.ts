@@ -43,6 +43,7 @@ export interface Tour {
   description: string;
   inclusions: string[];
   best_time: string; // SQLite uses best_time instead of bestTime
+  listed?: boolean; // Controls whether tour is visible to public
   // Additional SQLite fields
   slug?: string;
   destination_id?: number;
@@ -477,6 +478,19 @@ export const toursApi = {
   async search(query: string): Promise<Tour[]> {
     const tours = await apiCall<Tour[]>(`/tours?search=${encodeURIComponent(query)}`);
     return tours.map(convertTourImageUrls);
+  },
+
+  // Update tour listing status
+  async updateListingStatus(id: number, listed: boolean): Promise<Tour> {
+    const token = localStorage.getItem('adminToken');
+    return apiCall<Tour>(`/admin/tours/${id}/listing`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ listed })
+    });
   }
 };
 
