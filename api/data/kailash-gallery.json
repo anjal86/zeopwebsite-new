@@ -31,16 +31,6 @@
       "uploadedAt": "2024-01-15T10:10:00Z"
     },
     {
-      "id": 4,
-      "title": "Mountain Vista",
-      "image": "https://images.unsplash.com/photo-1464822759844-d150f4e1c0fb?q=80&w=2070",
-      "alt": "Breathtaking Himalayan mountain vista",
-      "gridSpan": "col-span-2 row-span-2",
-      "order": 4,
-      "isActive": true,
-      "uploadedAt": "2024-01-15T10:15:00Z"
-    },
-    {
       "id": 5,
       "title": "Pilgrimage Path",
       "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2070",
@@ -89,21 +79,11 @@
       "order": 9,
       "isActive": true,
       "uploadedAt": "2024-01-15T10:40:00Z"
-    },
-    {
-      "id": 10,
-      "title": "Holy Mountain",
-      "image": "https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070",
-      "alt": "The holy mountain in all its glory",
-      "gridSpan": "col-span-1 row-span-1",
-      "order": 10,
-      "isActive": true,
-      "uploadedAt": "2024-01-15T10:45:00Z"
     }
   ],
   "metadata": {
-    "totalPhotos": 10,
-    "lastUpdated": "2025-09-13T19:45:33.917Z",
+    "totalPhotos": 8,
+    "lastUpdated": "2025-09-18T09:17:22.322Z",
     "pageTitle": "Kailash Mansarovar",
     "pageSubtitle": "Sacred Journey Gallery"
   }
