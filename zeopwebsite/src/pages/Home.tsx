@@ -37,10 +37,10 @@ const AnimatedCounter: React.FC<{
 
   return (
     <div ref={ref} className="group">
-      <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
+      <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300">
         {count}
       </div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-sm sm:text-base text-gray-600">{label}</div>
     </div>
   );
 };
@@ -68,37 +68,37 @@ const Home: React.FC = () => {
         <Hero />
       
       {/* Quick Services Section */}
-      <section className="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      <section className="py-8 sm:py-12 md:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 left-0 w-64 sm:w-96 h-64 sm:h-96 bg-primary rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-secondary rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
         </div>
         
-        <div className="section-container relative z-10 px-4 sm:px-6">
-          <div className="text-center mb-8 md:mb-16">
-            <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Star className="w-4 h-4 mr-2" />
+        <div className="section-container relative z-10 px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-6 sm:mb-8 md:mb-16">
+            <div className="inline-flex items-center bg-primary/10 text-primary px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               Start Your Journey
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4 md:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6 px-2">
               Plan Your Perfect <span className="text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Adventure</span>
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2 sm:px-4">
               From majestic mountain peaks to sacred spiritual journeys, discover Nepal's most extraordinary experiences with our expert guidance
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
             <div className="group relative">
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
-                <div className="absolute -top-4 md:-top-6 left-6 md:left-8">
-                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary to-primary-dark rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <MapPin className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
+                <div className="absolute -top-3 sm:-top-4 md:-top-6 left-4 sm:left-6 md:left-8">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary to-primary-dark rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <MapPin className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                   </div>
                 </div>
-                <div className="pt-4 md:pt-6 flex flex-col flex-grow">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Explore Destinations</h3>
+                <div className="pt-3 sm:pt-4 md:pt-6 flex flex-col flex-grow">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Explore Destinations</h3>
                   <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed flex-grow">Discover breathtaking locations from the towering peaks of Everest to the sacred valleys of ancient Nepal</p>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
                     <Link to="/destinations" className="inline-flex items-center text-primary font-semibold hover:text-primary-dark transition-colors group text-sm md:text-base">
@@ -112,14 +112,14 @@ const Home: React.FC = () => {
             </div>
             
             <div className="group relative">
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
-                <div className="absolute -top-4 md:-top-6 left-6 md:left-8">
-                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-secondary to-secondary-dark rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Clock className="w-6 h-6 md:w-8 md:h-8 text-white" />
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
+                <div className="absolute -top-3 sm:-top-4 md:-top-6 left-4 sm:left-6 md:left-8">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-br from-secondary to-secondary-dark rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                   </div>
                 </div>
-                <div className="pt-4 md:pt-6 flex flex-col flex-grow">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Book Tours</h3>
+                <div className="pt-3 sm:pt-4 md:pt-6 flex flex-col flex-grow">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Book Tours</h3>
                   <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed flex-grow">Choose from expertly crafted tours and adventures designed to create memories that last a lifetime</p>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
                     <Link to="/tours" className="inline-flex items-center text-secondary font-semibold hover:text-secondary-dark transition-colors group text-sm md:text-base">
@@ -132,15 +132,15 @@ const Home: React.FC = () => {
               </div>
             </div>
             
-            <div className="group relative">
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
-                <div className="absolute -top-4 md:-top-6 left-6 md:left-8">
-                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary to-primary-dark rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <MessageCircle className="w-6 h-6 md:w-8 md:h-8 text-white" />
+            <div className="group relative sm:col-span-2 lg:col-span-1">
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
+                <div className="absolute -top-3 sm:-top-4 md:-top-6 left-4 sm:left-6 md:left-8">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-br from-primary to-primary-dark rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                   </div>
                 </div>
-                <div className="pt-4 md:pt-6 flex flex-col flex-grow">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Expert Consultation</h3>
+                <div className="pt-3 sm:pt-4 md:pt-6 flex flex-col flex-grow">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-3">Expert Consultation</h3>
                   <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 leading-relaxed flex-grow">Connect with our travel experts for personalized planning and insider knowledge of Nepal's hidden gems</p>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
                     <Link to="/contact" className="inline-flex items-center text-primary font-semibold hover:text-primary-dark transition-colors group text-sm md:text-base">
@@ -159,28 +159,28 @@ const Home: React.FC = () => {
       {/* Featured Destinations Preview */}
       <FeaturedDestinations />
       {/* Why Choose Us */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-48 sm:w-64 h-48 sm:h-64 bg-secondary rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-48 sm:w-64 h-48 sm:h-64 bg-primary rounded-full blur-3xl"></div>
         </div>
         
-        <div className="section-container relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Star className="w-4 h-4 mr-2" />
+        <div className="section-container relative z-10 px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <div className="inline-flex items-center bg-primary/10 text-primary px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               Why Choose Us
             </div>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4 sm:mb-6 px-2">
               Why Choose <span className="text-gradient bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Zeo Tourism</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2 sm:px-4">
               With decades of experience and deep-rooted connections to Nepal's mountains and culture, we deliver authentic adventures that exceed expectations
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {[
               {
                 icon: Mountain,
@@ -212,34 +212,34 @@ const Home: React.FC = () => {
               }
             ].map((feature, index) => (
               <div key={index} className="group relative">
-                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full">
                   {/* Icon with gradient background */}
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <feature.icon className="w-8 h-8 text-white" />
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br ${feature.color} rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <feature.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                   </div>
                   
                   {/* Stat Badge */}
-                  <div className="text-center mb-4">
-                    <div className={`inline-block bg-gradient-to-r ${feature.color} text-white px-3 py-1 rounded-full text-sm font-bold`}>
+                  <div className="text-center mb-3 sm:mb-4">
+                    <div className={`inline-block bg-gradient-to-r ${feature.color} text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold`}>
                       {feature.stat}
                     </div>
                   </div>
                   
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">{feature.title}</h3>
+                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{feature.description}</p>
                   </div>
                   
                   {/* Hover effect border */}
-                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                  <div className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
                 </div>
               </div>
             ))}
           </div>
           
           {/* Trust Indicators */}
-          <div className="mt-16 pt-12 border-t border-gray-200">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 md:pt-12 border-t border-gray-200">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
               <AnimatedCounter
                 end={1500}
                 suffix="+"
@@ -273,52 +273,52 @@ const Home: React.FC = () => {
       <TestimonialsSlider />
 
       {/* Call to Action Section */}
-      <section className="py-20 bg-gradient-to-r from-primary via-primary-dark to-secondary relative overflow-hidden">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-primary via-primary-dark to-secondary relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-full h-full bg-black/20"></div>
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-white/10 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="section-container relative z-10 text-center">
+        <div className="section-container relative z-10 text-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-white mb-4 sm:mb-6 px-2">
               Ready for Your Next <span className="text-secondary-light">Adventure?</span>
             </h2>
-            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 md:mb-10 leading-relaxed px-2">
               Join thousands of adventurers who have discovered the magic of Nepal with Zeo Tourism. Your extraordinary journey awaits.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
               <Link
                 to="/destinations"
-                className="bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl min-w-[200px]"
+                className="w-full sm:w-auto bg-white text-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl min-w-[200px] text-center"
               >
                 Start Planning
               </Link>
               <Link
                 to="/contact"
-                className="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300 transform hover:scale-105 min-w-[200px]"
+                className="w-full sm:w-auto border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white hover:text-primary transition-all duration-300 transform hover:scale-105 min-w-[200px] text-center"
               >
                 Get Free Consultation
               </Link>
             </div>
 
             {/* Contact Info */}
-            <div className="mt-12 pt-8 border-t border-white/20">
-              <div className="grid md:grid-cols-3 gap-6 text-white/80">
-                <div className="flex items-center justify-center">
-                  <Phone className="w-5 h-5 mr-2" />
-                  <span>{contactInfo?.contact.phone.primary || '+977-1-4123456'}</span>
+            <div className="mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-white/20">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-white/80">
+                <div className="flex items-center justify-center text-sm sm:text-base">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                  <span className="truncate">{contactInfo?.contact.phone.primary || '+977-1-4123456'}</span>
                 </div>
-                <div className="flex items-center justify-center">
-                  <Mail className="w-5 h-5 mr-2" />
-                  <span>{contactInfo?.contact.email.primary || 'info@zeotourism.com'}</span>
+                <div className="flex items-center justify-center text-sm sm:text-base">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                  <span className="truncate">{contactInfo?.contact.email.primary || 'info@zeotourism.com'}</span>
                 </div>
-                <div className="flex items-center justify-center">
-                  <Clock3 className="w-5 h-5 mr-2" />
-                  <span>{contactInfo?.business.support.availability || '24/7 Support Available'}</span>
+                <div className="flex items-center justify-center text-sm sm:text-base">
+                  <Clock3 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                  <span className="truncate">{contactInfo?.business.support.availability || '24/7 Support Available'}</span>
                 </div>
               </div>
             </div>
