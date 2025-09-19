@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Plus,
@@ -31,7 +31,7 @@ const TourManager: React.FC = () => {
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(20); // Increased from 10 to 20 to show more tours
   const [totalItems, setTotalItems] = useState(0);
 
   const deleteTour = async (tour: Tour) => {
@@ -57,10 +57,19 @@ const TourManager: React.FC = () => {
     getItemId: (tour) => tour.id
   });
 
+  // Debounced search effect
   useEffect(() => {
-    fetchTours();
-    fetchDestinations();
+    const timeoutId = setTimeout(() => {
+      fetchTours();
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(timeoutId);
   }, [currentPage, searchTerm, destinationFilter]);
+
+  // Fetch destinations only once
+  useEffect(() => {
+    fetchDestinations();
+  }, []);
 
   const fetchDestinations = async () => {
     try {
@@ -100,7 +109,15 @@ const TourManager: React.FC = () => {
       const tours = await response.json();
       
       // Extract pagination info from headers
-      const totalCount = parseInt(response.headers.get('X-Total-Count') || '0');
+      const totalCount = parseInt(response.headers.get('X-Total-Count') || tours.length.toString());
+      
+      console.log('Pagination Debug:', {
+        totalCount,
+        toursLength: tours.length,
+        itemsPerPage,
+        currentPage,
+        totalPages: Math.ceil(totalCount / itemsPerPage)
+      });
       
       setTours(tours);
       setTotalItems(totalCount);
@@ -218,33 +235,34 @@ const TourManager: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h3 className="text-xl font-semibold text-slate-900">Tours</h3>
-          <p className="text-slate-600">Manage your tour packages and itineraries</p>
+          <p className="text-slate-600 text-sm sm:text-base">Manage your tour packages and itineraries</p>
         </div>
         <button
           onClick={() => navigate('/admin/tours/new')}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
         >
           <Plus className="w-4 h-4" />
-          Add Tour
+          <span className="hidden sm:inline">Add Tour</span>
+          <span className="sm:hidden">Add</span>
         </button>
       </div>
 
       {/* Search Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Search */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search tours by title, location, category, or description..."
+                placeholder="Search tours..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
               />
             </div>
           </div>
@@ -254,7 +272,7 @@ const TourManager: React.FC = () => {
             <select
               value={destinationFilter}
               onChange={(e) => handleDestinationFilterChange(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             >
               <option value="">All Destinations</option>
               {destinations.map(destination => (
@@ -267,7 +285,7 @@ const TourManager: React.FC = () => {
           <div>
             <button
               onClick={handleClearFilters}
-              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm"
             >
               Clear Filters
             </button>
@@ -275,31 +293,31 @@ const TourManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Tours Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {/* Tours Table - Desktop */}
+      <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="w-full table-fixed divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/3 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Tour
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-24 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Location
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Duration
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-16 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Price
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Listed
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-16 px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -311,11 +329,11 @@ const TourManager: React.FC = () => {
                   className="hover:bg-gray-50 transition-colors cursor-pointer"
                   onClick={() => navigate(`/admin/tours/${tour.slug}`)}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-4">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-12 w-12">
+                      <div className="flex-shrink-0 h-10 w-10">
                         <img
-                          className="h-12 w-12 rounded-lg object-cover"
+                          className="h-10 w-10 rounded-lg object-cover"
                           src={
                             tour.image
                               ? (tour.image.startsWith('http')
@@ -329,34 +347,34 @@ const TourManager: React.FC = () => {
                           }}
                         />
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
+                      <div className="ml-3 min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900 truncate" title={tour.title}>
                           {tour.title}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <td className="px-3 py-4">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 truncate">
                       {tour.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div className="flex items-center">
-                      <MapPin className="w-4 h-4 text-gray-400 mr-1" />
-                      {tour.location}
+                  <td className="px-3 py-4 text-sm text-gray-900">
+                    <div className="flex items-center min-w-0">
+                      <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                      <span className="truncate" title={tour.location}>{tour.location}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 text-gray-400 mr-1" />
-                      {formatDuration(tour.duration)}
+                  <td className="px-3 py-4 text-sm text-gray-900">
+                    <div className="flex items-center min-w-0">
+                      <Calendar className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                      <span className="truncate">{formatDuration(tour.duration)}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-3 py-4 text-sm text-gray-900">
                     <span className="font-semibold text-green-600">${tour.price}</span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-3 py-4" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center">
                       <Toggle
                         checked={tour.listed ?? true}
@@ -364,33 +382,33 @@ const TourManager: React.FC = () => {
                         disabled={updatingTours.has(tour.id)}
                         size="sm"
                       />
-                      <span className="ml-2 text-sm text-gray-600">
+                      <span className="ml-2 text-xs text-gray-600 hidden xl:block">
                         {tour.listed ?? true ? (
                           <span className="flex items-center text-green-600">
-                            <Eye className="w-4 h-4 mr-1" />
+                            <Eye className="w-3 h-3 mr-1" />
                             Listed
                           </span>
                         ) : (
                           <span className="flex items-center text-gray-500">
-                            <EyeOff className="w-4 h-4 mr-1" />
+                            <EyeOff className="w-3 h-3 mr-1" />
                             Unlisted
                           </span>
                         )}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-end space-x-2">
+                  <td className="px-3 py-4 text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end space-x-1">
                       <button
                         onClick={() => navigate(`/admin/tours/${tour.slug}`)}
-                        className="text-blue-600 hover:text-blue-900 transition-colors"
+                        className="text-blue-600 hover:text-blue-900 transition-colors p-1"
                         title="Edit tour"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(tour)}
-                        className="text-red-600 hover:text-red-900 transition-colors"
+                        className="text-red-600 hover:text-red-900 transition-colors p-1"
                         title="Delete tour"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -404,31 +422,137 @@ const TourManager: React.FC = () => {
         </div>
       </div>
 
+      {/* Tours Cards - Mobile & Tablet */}
+      <div className="lg:hidden space-y-4">
+        {tours.map((tour: Tour) => (
+          <div
+            key={tour.id}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => navigate(`/admin/tours/${tour.slug}`)}
+          >
+            <div className="flex items-start space-x-4">
+              <div className="flex-shrink-0">
+                <img
+                  className="h-16 w-16 rounded-lg object-cover"
+                  src={
+                    tour.image
+                      ? (tour.image.startsWith('http')
+                          ? tour.image
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${tour.image}`)
+                      : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
+                  }
+                  alt={tour.title}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                  }}
+                />
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                      {tour.title}
+                    </h3>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                        {tour.category}
+                      </span>
+                      {tour.featured && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                          ★ Featured
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 ml-2" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => navigate(`/admin/tours/${tour.slug}`)}
+                      className="text-blue-600 hover:text-blue-900 transition-colors p-1"
+                      title="Edit tour"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(tour)}
+                      className="text-red-600 hover:text-red-900 transition-colors p-1"
+                      title="Delete tour"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-500">
+                  <div className="flex items-center">
+                    <MapPin className="w-3 h-3 mr-1" />
+                    <span className="truncate">{tour.location}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="w-3 h-3 mr-1" />
+                    <span className="truncate">{formatDuration(tour.duration)}</span>
+                  </div>
+                </div>
+                
+                <div className="mt-2 flex items-center justify-between">
+                  <div className="text-sm font-semibold text-green-600">
+                    ${tour.price}
+                  </div>
+                  
+                  <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+                    <Toggle
+                      checked={tour.listed ?? true}
+                      onChange={() => handleToggleListing(tour)}
+                      disabled={updatingTours.has(tour.id)}
+                      size="sm"
+                    />
+                    <span className="ml-2 text-xs text-gray-600">
+                      {tour.listed ?? true ? (
+                        <span className="flex items-center text-green-600">
+                          <Eye className="w-3 h-3 mr-1" />
+                          Listed
+                        </span>
+                      ) : (
+                        <span className="flex items-center text-gray-500">
+                          <EyeOff className="w-3 h-3 mr-1" />
+                          Unlisted
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Pagination */}
-      {totalItems > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm text-gray-700">
+      {(totalItems > itemsPerPage || tours.length >= itemsPerPage) && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 px-4 lg:px-6 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center text-xs sm:text-sm text-gray-700">
               <span>
                 Showing <span className="font-medium">{startItem}</span> to{' '}
                 <span className="font-medium">{endItem}</span> of{' '}
                 <span className="font-medium">{totalItems}</span> results
               </span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center sm:justify-end space-x-1 sm:space-x-2">
               <button
                 onClick={handlePreviousPage}
                 disabled={currentPage === 1}
                 className={`
-                  inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium
+                  inline-flex items-center px-2 sm:px-3 py-2 border border-gray-300 rounded-md text-xs sm:text-sm font-medium
                   ${currentPage === 1
                     ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
                     : 'text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'
                   }
                 `}
               >
-                <ChevronLeft className="w-4 h-4 mr-1" />
-                Previous
+                <ChevronLeft className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Previous</span>
               </button>
               
               <div className="flex items-center space-x-1">
@@ -449,7 +573,7 @@ const TourManager: React.FC = () => {
                       key={pageNumber}
                       onClick={() => handlePageChange(pageNumber)}
                       className={`
-                        inline-flex items-center px-3 py-2 border text-sm font-medium rounded-md
+                        inline-flex items-center px-2 sm:px-3 py-2 border text-xs sm:text-sm font-medium rounded-md
                         ${currentPage === pageNumber
                           ? 'border-blue-500 bg-blue-50 text-blue-600'
                           : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
@@ -466,15 +590,15 @@ const TourManager: React.FC = () => {
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
                 className={`
-                  inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium
+                  inline-flex items-center px-2 sm:px-3 py-2 border border-gray-300 rounded-md text-xs sm:text-sm font-medium
                   ${currentPage === totalPages
                     ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
                     : 'text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'
                   }
                 `}
               >
-                Next
-                <ChevronRight className="w-4 h-4 ml-1" />
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight className="w-4 h-4 sm:ml-1" />
               </button>
             </div>
           </div>

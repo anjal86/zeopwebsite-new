@@ -4,7 +4,7 @@
   "title": "Everest Base Camp Trek",
   "category": "Trekking",
   "description": "Experience the ultimate adventure with our Everest Base Camp trek. Journey through the heart of the Himalayas and witness breathtaking mountain views.",
-  "location": "Everest Regions",
+  "location": "Everest Region",
   "price": 2500,
   "duration": "13 nights 14 days",
   "group_size": "2-12 people",
@@ -13,9 +13,11 @@
   "reviews": 156,
   "best_time": "March-May, September-November",
   "featured": true,
+  "listed": true,
   "image": "/uploads/destinations/tours/tours-pic-1.webp",
   "gallery": [
-    "/uploads/destinations/tours/tours-pic-5.webp"
+    "/uploads/destinations/tours/tours-pic-1.webp",
+    "/uploads/destinations/tours/tours-pic-2.webp"
   ],
   "highlights": [
     "Reach Everest Base Camp at 5,364m",
@@ -58,8 +60,6 @@
       "description": "Immerse in authentic Sherpa culture"
     }
   ],
-  "created_at": "2025-08-24T13:52:18.549Z",
-  "updated_at": "2025-08-25T06:52:57.340Z",
   "itinerary": [
     {
       "day": 1,
@@ -73,27 +73,6 @@
       "title": "Fly to Lukla, Trek to Phakding",
       "description": "Early morning flight to Lukla (2,840m). Begin trek to Phakding (2,610m). Walking time: 3-4 hours.",
       "accommodation": "Tea house in Phakding",
-      "meals": "Breakfast, Lunch, Dinner"
-    },
-    {
-      "day": 3,
-      "title": "Trek to Namche Bazaar",
-      "description": "Trek to Namche Bazaar (3,440m), the gateway to Everest. Cross suspension bridges and enter Sagarmatha National Park.",
-      "accommodation": "Tea house in Namche Bazaar",
-      "meals": "Breakfast, Lunch, Dinner"
-    },
-    {
-      "day": 4,
-      "title": "Acclimatization Day in Namche",
-      "description": "Rest day for acclimatization. Optional hike to Everest View Hotel or visit local markets.",
-      "accommodation": "Tea house in Namche Bazaar",
-      "meals": "Breakfast, Lunch, Dinner"
-    },
-    {
-      "day": 5,
-      "title": "Trek to Tengboche",
-      "description": "Trek to Tengboche (3,860m). Visit the famous Tengboche Monastery with stunning mountain views.",
-      "accommodation": "Tea house in Tengboche",
       "meals": "Breakfast, Lunch, Dinner"
     }
   ],
@@ -117,5 +96,7 @@
     "advance_booking": "30 days recommended",
     "group_discounts": "Available for 6+ people",
     "cancellation_policy": "Free cancellation up to 15 days before departure"
-  }
+  },
+  "created_at": "2025-08-24T13:52:18.549Z",
+  "updated_at": "2025-08-25T06:52:57.340Z"
 }

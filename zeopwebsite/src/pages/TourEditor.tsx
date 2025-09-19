@@ -367,12 +367,18 @@ const TourEditor: React.FC = () => {
       // Check if tourId is a number (ID) or string (slug)
       const isNumericId = /^\d+$/.test(tourId);
       const endpoint = isNumericId
-        ? `/api/tours/${tourId}`
-        : `/api/tours/slug/${tourId}`;
+        ? `/api/admin/tours/${tourId}`
+        : `/api/admin/tours/slug/${tourId}`;
       
       console.log('Fetching tour details for:', tourId, 'using endpoint:', endpoint);
       
-      const response = await fetch(endpoint);
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(endpoint, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       console.log('Response status:', response.status);
       
       if (response.ok) {

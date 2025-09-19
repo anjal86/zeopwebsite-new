@@ -483,7 +483,12 @@
     "href": "/destinations/mustang-region",
     "type": "nepal",
     "description": "Discover the ancient kingdom of Mustang with its unique Tibetan culture, dramatic landscapes, and historic monasteries.",
-    "highlights": ["Upper Mustang", "Lo Manthang", "Muktinath Temple", "Tibetan Culture"],
+    "highlights": [
+      "Upper Mustang",
+      "Lo Manthang",
+      "Muktinath Temple",
+      "Tibetan Culture"
+    ],
     "bestTime": "Mar-Nov",
     "altitude": "3,800m",
     "difficulty": "Moderate",
@@ -503,7 +508,12 @@
     "href": "/destinations/khotang-region",
     "type": "nepal",
     "description": "Explore the sacred Khotang region, home to Haleshi Mahadev temple and rich spiritual heritage.",
-    "highlights": ["Haleshi Mahadev Temple", "Maratika Cave", "Spiritual Sites", "Local Culture"],
+    "highlights": [
+      "Haleshi Mahadev Temple",
+      "Maratika Cave",
+      "Spiritual Sites",
+      "Local Culture"
+    ],
     "bestTime": "Year-round",
     "altitude": "1,200m",
     "difficulty": "Easy",
@@ -523,7 +533,12 @@
     "href": "/destinations/far-western-region",
     "type": "nepal",
     "description": "Discover Nepal's remote far western region with pristine wilderness, Api Base Camp, and untouched natural beauty.",
-    "highlights": ["Api Base Camp", "Remote Wilderness", "Pristine Nature", "Adventure Trekking"],
+    "highlights": [
+      "Api Base Camp",
+      "Remote Wilderness",
+      "Pristine Nature",
+      "Adventure Trekking"
+    ],
     "bestTime": "Mar-May, Sep-Nov",
     "altitude": "4,000m+",
     "difficulty": "Challenging",

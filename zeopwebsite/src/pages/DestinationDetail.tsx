@@ -15,21 +15,6 @@ const DestinationDetail: React.FC = () => {
   const { data: destinations } = useDestinations();
   const { data: allTours } = useTours();
   
-  // Find the destination by name from the destinations list
-  const destination = destinations?.find(dest => {
-    const destName = dest.name.toLowerCase();
-    const paramName = destinationName?.toLowerCase();
-    
-    return destName === paramName ||
-           dest.href === `/destinations/${destinationName}` ||
-           destName.includes(paramName || '') ||
-           (paramName && destName.replace(/\s+/g, '-') === paramName);
-  });
-  
-  // Get tours that are linked to this destination via relatedTours array
-  const tours = (destination as any)?.relatedTours ?
-    allTours?.filter(tour => (destination as any).relatedTours.includes(tour.id)) || [] : [];
-
   // Legacy destination data for fallback (can be removed once all destinations are in the new system)
   const legacyDestinationData: Record<string, any> = {
     annapurna: {
@@ -174,6 +159,40 @@ const DestinationDetail: React.FC = () => {
     }
   };
 
+  // Find the destination by name from the destinations list
+  const destination = destinations?.find(dest => {
+    const destName = dest.name.toLowerCase();
+    const paramName = destinationName?.toLowerCase();
+    
+    return destName === paramName ||
+           dest.href === `/destinations/${destinationName}` ||
+           destName.includes(paramName || '') ||
+           (paramName && destName.replace(/\s+/g, '-') === paramName);
+  });
+  
+  // Fallback to legacy data if destination not found in new system
+  const legacyDestination = destinationName ? legacyDestinationData[destinationName] : null;
+  const finalDestination = destination || legacyDestination;
+
+  // Get tours that match this destination by location
+  const tours = allTours?.filter(tour => {
+    if (!tour.location || !destinationName) return false;
+    
+    const tourLocation = tour.location.toLowerCase();
+    const destName = destinationName.toLowerCase();
+    const destTitle = (finalDestination?.title || finalDestination?.name || '').toLowerCase();
+    
+    // Match by various location patterns
+    return tourLocation.includes(destName) ||
+           tourLocation.includes(destTitle) ||
+           (destName === 'annapurna' && (tourLocation.includes('annapurna') || tourLocation.includes('abc'))) ||
+           (destName === 'everest' && (tourLocation.includes('everest') || tourLocation.includes('ebc'))) ||
+           (destName === 'langtang' && tourLocation.includes('langtang')) ||
+           (destName === 'chitwan' && tourLocation.includes('chitwan')) ||
+           (destName === 'pokhara' && tourLocation.includes('pokhara')) ||
+           (destName === 'kathmandu' && tourLocation.includes('kathmandu')) ||
+           (destName === 'manaslu' && tourLocation.includes('manaslu'));
+  }) || [];
 
   // Loading state
   if (!destinations || !allTours) {
@@ -193,9 +212,6 @@ const DestinationDetail: React.FC = () => {
     );
   }
 
-  // Fallback to legacy data if destination not found in new system
-  const legacyDestination = destinationName ? legacyDestinationData[destinationName] : null;
-  const finalDestination = destination || legacyDestination;
 
   if (!finalDestination) {
     return (

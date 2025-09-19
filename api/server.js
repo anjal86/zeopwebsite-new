@@ -279,6 +279,18 @@ let enquiriesData = loadData('enquiries.json');
 let kailashGalleryData = loadData('kailash-gallery.json');
 let tourDetails = loadTourDetails();
 
+// Hot reload function for tour data
+const reloadTourData = () => {
+  console.log('🔄 Hot reloading tour data...');
+  tourDetails = loadTourDetails();
+  console.log(`✅ Reloaded ${tourDetails.length} tours from individual files`);
+};
+
+// Auto-reload tour data every 10 seconds (for development)
+if (process.env.NODE_ENV !== 'production') {
+  setInterval(reloadTourData, 10000);
+}
+
 // Extract arrays from the loaded data
 let tours = toursData.tours || toursData || [];
 let destinations = destinationsData.destinations || destinationsData || [];
@@ -666,16 +678,8 @@ app.get('/api/tours', async (req, res) => {
   
   const { category, location, search, featured, page, limit } = req.query;
   
-  // Merge basic tours with detailed tours, prioritizing detailed tours
+  // Use only detailed tours as primary data source
   const allTours = [...tourDetails];
-  
-  // Add basic tours that don't have detailed versions
-  tours.forEach(basicTour => {
-    const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
-    if (!hasDetailedVersion) {
-      allTours.push(basicTour);
-    }
-  });
   
   // Filter out unlisted tours for public API (only show explicitly listed tours or tours without listed field)
   let filteredTours = allTours.filter(tour => tour.listed !== false);
@@ -752,16 +756,8 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
   
   const { category, location, search, featured, page, limit } = req.query;
   
-  // Merge basic tours with detailed tours, prioritizing detailed tours
+  // Use only detailed tours as primary data source
   const allTours = [...tourDetails];
-  
-  // Add basic tours that don't have detailed versions
-  tours.forEach(basicTour => {
-    const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
-    if (!hasDetailedVersion) {
-      allTours.push(basicTour);
-    }
-  });
   
   // For admin, show ALL tours (including unlisted ones)
   let filteredTours = [...allTours];
@@ -825,7 +821,8 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
       'X-Limit': limitNum.toString(),
       'X-Total-Pages': Math.ceil(totalCount / limitNum).toString(),
       'X-Has-Next': (endIndex < totalCount).toString(),
-      'X-Has-Previous': (pageNum > 1).toString()
+      'X-Has-Previous': (pageNum > 1).toString(),
+      'Access-Control-Expose-Headers': 'X-Total-Count, X-Page, X-Limit, X-Total-Pages, X-Has-Next, X-Has-Previous'
     });
   }
 
@@ -849,6 +846,12 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
     // Add to tours array
     tourDetails.push(newTour);
     
+    // Save individual tour file
+    if (newTour.slug) {
+      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${newTour.slug}.json`);
+      fs.writeFileSync(tourFilePath, JSON.stringify(newTour, null, 2));
+    }
+    
     // Update destination relationships
     if (newTour.primary_destination_id || (newTour.secondary_destination_ids && newTour.secondary_destination_ids.length > 0)) {
       updateDestinationRelationships(
@@ -856,12 +859,6 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
         newTour.primary_destination_id,
         newTour.secondary_destination_ids || []
       );
-    }
-    
-    // Save tour data
-    const saved = saveData('tours.json', { tours: tourDetails });
-    if (!saved) {
-      throw new Error('Failed to save tour data to file');
     }
     
     console.log('Tour created successfully with relationships');
@@ -882,47 +879,32 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
     const tourData = req.body;
     const tourId = parseInt(id);
     
-    // Find tour in detailed tours first
-    let tourIndex = tourDetails.findIndex(t => t.id === tourId);
-    let isDetailedTour = true;
-    
-    // If not found in detailed tours, check basic tours
-    if (tourIndex === -1) {
-      tourIndex = tours.findIndex(t => t.id === tourId);
-      isDetailedTour = false;
-    }
+    // Find tour in detailed tours
+    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
     }
     
-    const existingTour = isDetailedTour ? tourDetails[tourIndex] : tours[tourIndex];
+    const existingTour = tourDetails[tourIndex];
     const oldPrimaryDestId = existingTour.primary_destination_id || existingTour.destination_id || null;
     const oldSecondaryDestIds = existingTour.secondary_destination_ids || [];
     const newPrimaryDestId = tourData.primary_destination_id || null;
     const newSecondaryDestIds = tourData.secondary_destination_ids || [];
     
-    // Update tour data in the appropriate array
+    // Update tour data
     const updatedTour = {
       ...existingTour,
       ...tourData,
       updated_at: new Date().toISOString()
     };
     
-    if (isDetailedTour) {
-      tourDetails[tourIndex] = updatedTour;
-      // Save detailed tours
-      const saved = saveData('tours.json', { tours: tourDetails });
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
-      }
-    } else {
-      tours[tourIndex] = updatedTour;
-      // Save basic tours
-      const saved = saveData('tours.json', tours);
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
-      }
+    tourDetails[tourIndex] = updatedTour;
+    
+    // Save individual tour file
+    if (updatedTour.slug) {
+      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${updatedTour.slug}.json`);
+      fs.writeFileSync(tourFilePath, JSON.stringify(updatedTour, null, 2));
     }
     
     // Update destination relationships
@@ -934,7 +916,7 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
       oldSecondaryDestIds
     );
     
-    console.log(`Tour ${tourId} updated successfully in ${isDetailedTour ? 'detailed' : 'basic'} tours with relationships`);
+    console.log(`Tour ${tourId} updated successfully in individual file with relationships`);
     res.json(updatedTour);
   } catch (error) {
     console.error('Error updating tour:', error);
@@ -948,21 +930,14 @@ app.delete('/api/admin/tours/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     const tourId = parseInt(id);
     
-    // Find tour in detailed tours first
-    let tourIndex = tourDetails.findIndex(t => t.id === tourId);
-    let isDetailedTour = true;
-    
-    // If not found in detailed tours, check basic tours
-    if (tourIndex === -1) {
-      tourIndex = tours.findIndex(t => t.id === tourId);
-      isDetailedTour = false;
-    }
+    // Find tour in detailed tours
+    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
     }
     
-    const tour = isDetailedTour ? tourDetails[tourIndex] : tours[tourIndex];
+    const tour = tourDetails[tourIndex];
     
     // Remove tour from destination relationships
     const primaryDestId = tour.primary_destination_id || tour.destination_id || null;
@@ -978,24 +953,19 @@ app.delete('/api/admin/tours/:id', authenticateToken, async (req, res) => {
       );
     }
     
-    // Remove tour from the appropriate array
-    if (isDetailedTour) {
-      tourDetails.splice(tourIndex, 1);
-      // Save detailed tours
-      const saved = saveData('tours.json', { tours: tourDetails });
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
-      }
-    } else {
-      tours.splice(tourIndex, 1);
-      // Save basic tours
-      const saved = saveData('tours.json', tours);
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
+    // Remove individual tour file
+    if (tour.slug) {
+      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${tour.slug}.json`);
+      if (fs.existsSync(tourFilePath)) {
+        fs.unlinkSync(tourFilePath);
+        console.log(`Deleted individual tour file: ${tour.slug}.json`);
       }
     }
     
-    console.log(`Tour ${tourId} deleted successfully from ${isDetailedTour ? 'detailed' : 'basic'} tours`);
+    // Remove tour from memory array
+    tourDetails.splice(tourIndex, 1);
+    
+    console.log(`Tour ${tourId} deleted successfully from individual file`);
     res.json({ message: 'Tour deleted successfully' });
   } catch (error) {
     console.error('Error deleting tour:', error);
@@ -1013,66 +983,34 @@ app.patch('/api/admin/tours/:id/listing', authenticateToken, async (req, res) =>
     const { listed } = req.body;
     const tourId = parseInt(id);
     
-    // Find tour in detailed tours first
-    let tourIndex = tourDetails.findIndex(t => t.id === tourId);
-    let isDetailedTour = true;
-    
-    // If not found in detailed tours, check basic tours
-    if (tourIndex === -1) {
-      tourIndex = tours.findIndex(t => t.id === tourId);
-      isDetailedTour = false;
-    }
+    // Find tour in detailed tours
+    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
     }
     
     // Update the listing status
-    if (isDetailedTour) {
-      tourDetails[tourIndex] = {
-        ...tourDetails[tourIndex],
-        listed: listed,
-        updated_at: new Date().toISOString()
-      };
-      
-      // Also update the individual tour detail file
-      const tourSlug = tourDetails[tourIndex].slug;
-      if (tourSlug) {
-        const tourDetailFilePath = path.join(__dirname, 'data', 'tour-details', `${tourSlug}.json`);
-        if (fs.existsSync(tourDetailFilePath)) {
-          try {
-            fs.writeFileSync(tourDetailFilePath, JSON.stringify(tourDetails[tourIndex], null, 2));
-            console.log(`Updated individual tour detail file: ${tourSlug}.json`);
-          } catch (error) {
-            console.error(`Error updating individual tour detail file: ${error.message}`);
-          }
-        }
+    tourDetails[tourIndex] = {
+      ...tourDetails[tourIndex],
+      listed: listed,
+      updated_at: new Date().toISOString()
+    };
+    
+    // Update the individual tour detail file
+    const tourSlug = tourDetails[tourIndex].slug;
+    if (tourSlug) {
+      const tourDetailFilePath = path.join(__dirname, 'data', 'tour-details', `${tourSlug}.json`);
+      try {
+        fs.writeFileSync(tourDetailFilePath, JSON.stringify(tourDetails[tourIndex], null, 2));
+        console.log(`Updated individual tour detail file: ${tourSlug}.json`);
+      } catch (error) {
+        console.error(`Error updating individual tour detail file: ${error.message}`);
       }
-      
-      // Save detailed tours to main file
-      const saved = saveData('tours.json', tourDetails);
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
-      }
-      
-      console.log(`Tour ${tourId} listing status updated in detailed tours`);
-      res.json(tourDetails[tourIndex]);
-    } else {
-      tours[tourIndex] = {
-        ...tours[tourIndex],
-        listed: listed,
-        updated_at: new Date().toISOString()
-      };
-      
-      // Save basic tours
-      const saved = saveData('tours.json', tours);
-      if (!saved) {
-        throw new Error('Failed to save tour data to file');
-      }
-      
-      console.log(`Tour ${tourId} listing status updated in basic tours`);
-      res.json(tours[tourIndex]);
     }
+    
+    console.log(`Tour ${tourId} listing status updated in individual file`);
+    res.json(tourDetails[tourIndex]);
   } catch (error) {
     console.error('Error updating tour listing status:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
@@ -1085,13 +1023,8 @@ app.get('/api/tours/:id', async (req, res) => {
   
   const tourId = parseInt(req.params.id);
   
-  // First check detailed tours
+  // Find tour in detailed tours only
   let tour = tourDetails.find(t => t.id === tourId);
-  
-  // If not found, check basic tours
-  if (!tour) {
-    tour = tours.find(t => t.id === tourId);
-  }
   
   if (!tour || tour.listed === false) {
     return res.status(404).json({
@@ -1109,15 +1042,29 @@ app.get('/api/tours/slug/:slug', async (req, res) => {
   
   const { slug } = req.params;
   
-  // First check detailed tours
+  // Find tour in detailed tours only
   let tour = tourDetails.find(t => t.slug === slug);
   
-  // If not found in detailed tours, check basic tours
-  if (!tour) {
-    tour = tours.find(t => t.slug === slug);
+  if (!tour || tour.listed === false) {
+    return res.status(404).json({
+      success: false,
+      message: 'Tour not found'
+    });
   }
   
-  if (!tour || tour.listed === false) {
+  res.json(tour);
+});
+
+// Admin: Get tour by slug (including unlisted tours)
+app.get('/api/admin/tours/slug/:slug', authenticateToken, async (req, res) => {
+  await delay(200);
+  
+  const { slug } = req.params;
+  
+  // Find tour in detailed tours only (including unlisted ones)
+  let tour = tourDetails.find(t => t.slug === slug);
+  
+  if (!tour) {
     return res.status(404).json({
       success: false,
       message: 'Tour not found'
@@ -2719,6 +2666,28 @@ app.patch('/api/admin/kailash-gallery/reorder', authenticateToken, async (req, r
   } catch (error) {
     console.error('Error reordering gallery photos:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Reload tour data endpoint
+app.post('/api/admin/reload-tours', authenticateToken, (req, res) => {
+  try {
+    console.log('Reloading tour data from individual files...');
+    
+    // Reload tour details from individual files
+    tourDetails = loadTourDetails();
+    
+    console.log(`Reloaded ${tourDetails.length} tours from individual files`);
+    
+    res.json({
+      success: true,
+      message: 'Tour data reloaded successfully',
+      toursCount: tourDetails.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error reloading tour data:', error);
+    res.status(500).json({ error: 'Failed to reload tour data' });
   }
 });
 

@@ -2,24 +2,50 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
-import { useDestinations } from '../../hooks/useApi';
+import { useDestinations, useTours } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
 
 const Destinations: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
 
-  // Use API hook to fetch destinations
+  // Use API hooks to fetch destinations and tours
   const { data: destinations, loading, error } = useDestinations();
+  const { data: allTours } = useTours();
 
-  // Filter destinations based on country since SQLite data doesn't have 'type' field
+  // Calculate tour count for each destination based on listed tours
+  const getDestinationTourCount = (destinationName: string) => {
+    if (!allTours) return 0;
+    
+    return allTours.filter(tour => {
+      if (!tour.location || tour.listed === false) return false;
+      
+      const tourLocation = tour.location.toLowerCase();
+      const destName = destinationName.toLowerCase();
+      
+      // Match by various location patterns
+      return tourLocation.includes(destName) ||
+             (destName === 'annapurna' && (tourLocation.includes('annapurna') || tourLocation.includes('abc'))) ||
+             (destName === 'everest' && (tourLocation.includes('everest') || tourLocation.includes('ebc'))) ||
+             (destName === 'langtang' && tourLocation.includes('langtang')) ||
+             (destName === 'chitwan' && tourLocation.includes('chitwan')) ||
+             (destName === 'pokhara' && tourLocation.includes('pokhara')) ||
+             (destName === 'kathmandu' && tourLocation.includes('kathmandu')) ||
+             (destName === 'manaslu' && tourLocation.includes('manaslu'));
+    }).length;
+  };
+
+  // Filter destinations based on country and add calculated tour counts
   const filteredDestinations = destinations?.filter(destination => {
     if (activeTab === 'nepal') {
       return destination.country === 'Nepal';
     } else {
       return destination.country !== 'Nepal';
     }
-  }) || [];
+  }).map(destination => ({
+    ...destination,
+    tourCount: getDestinationTourCount(destination.name)
+  })).filter(destination => destination.tourCount > 0) || []; // Only show destinations with available tours
 
   const containerVariants = {
     hidden: { opacity: 0 },
