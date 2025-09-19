@@ -6,10 +6,6 @@ import { useContact } from '../../hooks/useApi';
 const Contact: React.FC = () => {
   const { data: contactInfo, loading: contactLoading, error: contactError } = useContact();
   
-  // Debug logging
-  console.log('Contact component - contactInfo:', contactInfo);
-  console.log('Contact component - loading:', contactLoading);
-  console.log('Contact component - error:', contactError);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -68,7 +64,6 @@ const Contact: React.FC = () => {
         message: ''
       });
     } catch (error) {
-      console.error('Error submitting enquiry:', error);
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit enquiry. Please try again.');
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);

@@ -326,7 +326,6 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
 
   try {
     const url = `${API_BASE_URL}${endpoint}`;
-    console.log(`🌐 API Call: ${url}`);
     
     const defaultOptions: RequestInit = {
       method: 'GET',
@@ -344,26 +343,21 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      console.error(`❌ API Error: ${response.status} ${response.statusText} for ${url}`);
       throw new Error(`API call failed: ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
-    console.log(`✅ API Success: ${url}`, result);
     return result;
   } catch (error) {
     clearTimeout(timeoutId);
     
     if (error instanceof Error) {
       if (error.name === 'AbortError') {
-        console.error(`⏰ API Timeout: ${endpoint}`);
         throw new Error('Request timeout - please check your connection');
       }
-      console.error(`🚨 API Error: ${endpoint}`, error.message);
       throw error;
     }
     
-    console.error(`🚨 Unknown API Error: ${endpoint}`, error);
     throw new Error('Unknown API error occurred');
   }
 };
@@ -377,7 +371,6 @@ const apiCallWithRetry = async <T>(endpoint: string, maxRetries: number = 3): Pr
       return await apiCall<T>(endpoint);
     } catch (error) {
       lastError = error as Error;
-      console.warn(`🔄 API Retry ${attempt}/${maxRetries} for ${endpoint}:`, error);
       
       if (attempt < maxRetries) {
         // Exponential backoff: 1s, 2s, 4s
@@ -456,7 +449,6 @@ export const toursApi = {
       const tour = await apiCall<Tour>(`/tours/${id}`);
       return tour ? convertTourImageUrls(tour) : null;
     } catch (error) {
-      console.warn(`Tour ${id} not found:`, error);
       return null;
     }
   },
@@ -506,7 +498,6 @@ export const destinationsApi = {
     try {
       return await apiCall<Destination>(`/destinations/${id}`);
     } catch (error) {
-      console.warn(`Destination ${id} not found:`, error);
       return null;
     }
   },
@@ -516,7 +507,7 @@ export const destinationsApi = {
     try {
       return await apiCall<Destination>(`/destinations/${encodeURIComponent(slug)}`);
     } catch (error) {
-      console.warn(`Destination ${slug} not found:`, error);
+      
       return null;
     }
   },
@@ -536,7 +527,7 @@ export const destinationsApi = {
     try {
       return await apiCall<Destination>(`/destinations/name/${encodeURIComponent(name)}`);
     } catch (error) {
-      console.warn(`Destination ${name} not found:`, error);
+      
       return null;
     }
   }
@@ -554,7 +545,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/${id}`);
     } catch (error) {
-      console.warn(`Activity ${id} not found:`, error);
+      
       return null;
     }
   },
@@ -564,7 +555,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/${encodeURIComponent(slug)}`);
     } catch (error) {
-      console.warn(`Activity ${slug} not found:`, error);
+      
       return null;
     }
   },
@@ -579,7 +570,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/name/${encodeURIComponent(name)}`);
     } catch (error) {
-      console.warn(`Activity ${name} not found:`, error);
+      
       return null;
     }
   }
@@ -612,7 +603,7 @@ export const slidersApi = {
     try {
       return await apiCall<Slider>(`/sliders/${id}`);
     } catch (error) {
-      console.warn(`Slider ${id} not found:`, error);
+      
       return null;
     }
   }
@@ -630,7 +621,7 @@ export const blogsApi = {
     try {
       return await apiCall<Blog>(`/blogs/${encodeURIComponent(slug)}`);
     } catch (error) {
-      console.warn(`Blog ${slug} not found:`, error);
+      
       return null;
     }
   },
@@ -658,7 +649,7 @@ export const usersApi = {
     try {
       return await apiCall<User>(`/users/${id}`);
     } catch (error) {
-      console.warn(`User ${id} not found:`, error);
+      
       return null;
     }
   },
@@ -692,7 +683,7 @@ export const bookingsApi = {
     try {
       return await apiCall<Booking>(`/bookings/${id}`);
     } catch (error) {
-      console.warn(`Booking ${id} not found:`, error);
+      
       return null;
     }
   },
@@ -736,7 +727,7 @@ export const contentDestinationsApi = {
     try {
       return await apiCall<ContentDestination>(`/destinations/${encodeURIComponent(slug)}`);
     } catch (error) {
-      console.warn(`Content destination ${slug} not found:`, error);
+      
       return null;
     }
   },
@@ -806,7 +797,7 @@ export const testimonialsApi = {
     try {
       return await apiCall<Testimonial>(`/testimonials/${id}`);
     } catch (error) {
-      console.warn(`Testimonial ${id} not found:`, error);
+      
       return null;
     }
   },
@@ -863,13 +854,3 @@ const api = {
 };
 
 export default api;
-
-// Debug helper for development
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  console.log('🔧 API Configuration:', {
-    baseUrl: API_BASE_URL,
-    isMobile: isMobileDevice(),
-    hostname: window.location.hostname,
-    protocol: window.location.protocol
-  });
-}

@@ -7,7 +7,6 @@ const TourSearch: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search query:', searchQuery);
     // Handle search logic here
   };
 

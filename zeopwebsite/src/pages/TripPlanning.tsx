@@ -169,7 +169,7 @@ const TripPlanning: React.FC = () => {
         setShowRecommendations(true);
       }
     } catch (error) {
-      console.error('Error fetching recommendations:', error);
+      // Error fetching recommendations
     }
   };
 
@@ -191,11 +191,9 @@ const TripPlanning: React.FC = () => {
       if (data.success) {
         setIsSubmitted(true);
         await getRecommendations();
-      } else {
-        console.error('Error submitting trip plan:', data.error);
       }
     } catch (error) {
-      console.error('Error submitting trip plan:', error);
+      // Error submitting trip plan
     } finally {
       setIsSubmitting(false);
     }

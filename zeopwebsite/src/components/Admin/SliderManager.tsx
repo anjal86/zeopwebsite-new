@@ -140,7 +140,6 @@ const SortableSliderItem: React.FC<{
               alt={slider.title}
               className="w-full h-full object-cover rounded-lg border"
               onError={(e) => {
-                console.error('Image failed to load:', slider.image);
                 (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
               }}
             />
@@ -391,9 +390,6 @@ const SliderManager: React.FC = () => {
         return;
       }
       
-      // Show file size info
-      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      console.log(`Selected ${isVideo ? 'video' : 'image'} file: ${file.name} (${fileSizeMB}MB)`);
       
       setMediaType(isVideo ? 'video' : 'image');
       setFormData(prev => ({ ...prev, mediaFile: file }));
@@ -541,7 +537,6 @@ const SliderManager: React.FC = () => {
       await fetchSliders();
       closeModal();
     } catch (error) {
-      console.error('Error saving slider:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to save slider');
     } finally {
       setIsSubmitting(false);
@@ -570,7 +565,6 @@ const SliderManager: React.FC = () => {
       // Refresh the sliders list
       await fetchSliders();
     } catch (error) {
-      console.error('Error deleting slider:', error);
       alert('Failed to delete slider: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -598,7 +592,6 @@ const SliderManager: React.FC = () => {
       // Refresh the sliders list
       await fetchSliders();
     } catch (error) {
-      console.error('Error updating slider:', error);
       alert('Failed to update slider: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -614,7 +607,6 @@ const SliderManager: React.FC = () => {
       if (oldIndex !== -1 && newIndex !== -1) {
         const newOrder = arrayMove(sortedSliders, oldIndex, newIndex);
         setSliders(newOrder);
-        console.log('Reordering sliders:', newOrder);
       }
     }
   };
@@ -943,8 +935,8 @@ const SliderManager: React.FC = () => {
                                       controls
                                       onLoadedMetadata={handleVideoLoadedMetadata}
                                       onSeeked={handleVideoSeek}
-                                      onError={(e) => {
-                                        console.error('Video preview error:', e);
+                                      onError={() => {
+                                        // Video preview error
                                       }}
                                     />
                                     
@@ -980,7 +972,6 @@ const SliderManager: React.FC = () => {
                                     alt="Preview"
                                     className="w-full h-48 object-cover rounded-lg border"
                                     onError={(e) => {
-                                      console.error('Image preview error:', previewUrl || formData.image);
                                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
                                     }}
                                   />

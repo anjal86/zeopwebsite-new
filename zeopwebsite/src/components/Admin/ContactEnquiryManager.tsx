@@ -76,7 +76,6 @@ const ContactEnquiryManager: React.FC = () => {
       const data = await response.json();
       setEnquiries(data);
     } catch (error) {
-      console.error('Error fetching enquiries:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch enquiries');
     } finally {
       setLoading(false);
@@ -114,7 +113,6 @@ const ContactEnquiryManager: React.FC = () => {
     try {
       deleteModal.openModal(enquiry);
     } catch (error) {
-      console.error('Error deleting enquiry:', error);
       setError(error instanceof Error ? error.message : 'Failed to delete enquiry');
     }
   };

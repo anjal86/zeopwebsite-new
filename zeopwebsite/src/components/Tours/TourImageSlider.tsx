@@ -41,7 +41,6 @@ const TourImageSlider: React.FC<TourImageSliderProps> = ({ images, title }) => {
           alt={`${title} - View ${currentImageIndex + 1}`}
           className="max-w-full max-h-full object-contain"
           onError={(e) => {
-            console.error('Failed to load gallery image:', images[currentImageIndex]);
             (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
           }}
         />

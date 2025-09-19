@@ -84,7 +84,6 @@ const TourEditor: React.FC = () => {
   const tourId = params.tourSlug || params.tourId || params.id || 'new';
   const isEditing = tourId !== 'new';
   
-  console.log('TourEditor params:', params, 'tourId:', tourId, 'isEditing:', isEditing);
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -115,7 +114,7 @@ const TourEditor: React.FC = () => {
           setActivities(actData);
         }
       } catch (error) {
-        console.error('Error fetching reference data:', error);
+        // Error fetching reference data
       }
     };
     
@@ -156,33 +155,23 @@ const TourEditor: React.FC = () => {
     related_activities: []
   });
 
-  // Debug log to see formData changes
-  useEffect(() => {
-    console.log('FormData updated:', formData);
-  }, [formData]);
 
   useEffect(() => {
     // Check authentication and get user data
     const userData = localStorage.getItem('adminUser');
     const token = localStorage.getItem('adminToken');
     
-    console.log('Auth check - userData:', !!userData, 'token:', !!token, 'tourId:', tourId);
-    
     if (userData && token) {
       try {
         setUser(JSON.parse(userData));
-        console.log('User authenticated, isEditing:', isEditing, 'tourId:', tourId);
         
         if (isEditing && tourId && tourId !== 'new') {
-          console.log('Calling fetchTourDetails...');
           fetchTourDetails();
         }
       } catch (error) {
-        console.error('Error parsing user data:', error);
         navigate('/admin/login');
       }
     } else {
-      console.log('No auth data found, redirecting to login');
       navigate('/admin/login');
     }
   }, [tourId, isEditing, navigate]);
@@ -190,9 +179,6 @@ const TourEditor: React.FC = () => {
   // Disabled auto-detection to prevent automatic selection of all destinations and activities
   // Auto-detection was too aggressive and selecting everything
   // Users should manually select destinations and activities
-  useEffect(() => {
-    console.log('Auto-detection disabled to prevent automatic selection of all items');
-  }, [destinations, activities, formData.id, formData.title, formData.location, formData.category, isEditing]);
 
   // Auto-detect destinations based on tour location
   const autoDetectDestinations = (tourDetails: any) => {
@@ -204,8 +190,6 @@ const TourEditor: React.FC = () => {
     let primaryDestination: number | undefined = undefined;
     const secondaryDestinations: number[] = [];
     const destinationNames: string[] = [];
-    
-    console.log('Auto-detecting destinations for:', { location, title });
     
     // Find matching destinations based on location or title
     destinations.forEach((dest: any) => {
@@ -231,28 +215,16 @@ const TourEditor: React.FC = () => {
         (location.includes('kathmandu') && destName === 'kathmandu') ||
         (location.includes('chitwan') && destName === 'chitwan');
       
-      console.log(`Checking ${dest.name} (${destCountry}):`, {
-        isMatch,
-        destName,
-        destCountry,
-        locationParts,
-        titleWords
-      });
-      
       if (isMatch) {
         if (primaryDestination === undefined) {
           primaryDestination = dest.id;
           destinationNames.push(dest.name);
-          console.log(`Set as primary: ${dest.name}`);
         } else {
           secondaryDestinations.push(dest.id);
           destinationNames.push(dest.name);
-          console.log(`Set as secondary: ${dest.name}`);
         }
       }
     });
-    
-    console.log('Auto-detected destinations:', { primaryDestination, secondaryDestinations, destinationNames });
     
     return {
       primary: primaryDestination,
@@ -272,8 +244,6 @@ const TourEditor: React.FC = () => {
     const activityIds: number[] = [];
     const activityNames: string[] = [];
     
-    console.log('Auto-detecting activities for:', { category, title });
-    
     // Find matching activities based on category, title, or description
     activities.forEach((activity: any) => {
       const activityName = activity.name.toLowerCase();
@@ -291,16 +261,11 @@ const TourEditor: React.FC = () => {
         (category.includes('trek') && activityName.includes('trekking')) ||
         (category.includes('cultural') && activityName.includes('cultural'));
       
-      console.log(`Checking ${activity.name} (${activityType}):`, { isMatch, activityName, activityType });
-      
       if (isMatch) {
         activityIds.push(activity.id);
         activityNames.push(activity.name);
-        console.log(`Matched activity: ${activity.name}`);
       }
     });
-    
-    console.log('Auto-detected activities:', { activityIds, activityNames });
     
     return {
       ids: activityIds,
@@ -319,8 +284,6 @@ const TourEditor: React.FC = () => {
         ? `/api/admin/tours/${tourId}`
         : `/api/admin/tours/slug/${tourId}`;
       
-      console.log('Fetching tour details for:', tourId, 'using endpoint:', endpoint);
-      
       const token = localStorage.getItem('adminToken');
       const response = await fetch(endpoint, {
         headers: {
@@ -328,12 +291,9 @@ const TourEditor: React.FC = () => {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Response status:', response.status);
       
       if (response.ok) {
         const details = await response.json();
-        console.log('Tour details received:', details);
-        console.log('Setting form data...');
         
         // Auto-detect destinations and activities if not already set
         const autoDetectedDestinations = autoDetectDestinations(details);
@@ -357,14 +317,11 @@ const TourEditor: React.FC = () => {
         };
         
         setFormData(formattedDetails);
-        console.log('Form data set successfully with auto-detected relationships:', formattedDetails);
       } else {
-        const errorText = await response.text();
-        console.error('API Error:', response.status, errorText);
+        await response.text();
         throw new Error(`Failed to fetch tour details: ${response.status}`);
       }
     } catch (error) {
-      console.error('Error fetching tour details:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch tour details');
     } finally {
       setLoading(false);
@@ -476,17 +433,6 @@ const TourEditor: React.FC = () => {
       
       const method = isEditing && tourId && tourId !== 'new' ? 'PUT' : 'POST';
       
-      console.log('API Request:', {
-        method,
-        url,
-        isEditing,
-        tourId,
-        isNumericId,
-        formDataId: formData.id,
-        hasFormDataId: !!formData.id,
-        actuallyEditing: isEditing && tourId && tourId !== 'new'
-      });
-
       // Step 3: Make API call
       setProgressValue(75);
       setProgressMessage('Generating tour details...');
@@ -503,8 +449,6 @@ const TourEditor: React.FC = () => {
         related_destinations: formData.related_destinations || [],
         related_activities: formData.related_activities || []
       };
-
-      console.log('Saving tour with relationships:', tourData);
 
       const response = await fetch(url, {
         method,
@@ -530,7 +474,6 @@ const TourEditor: React.FC = () => {
       setProgressMessage('Tour saved successfully! What would you like to do next?');
 
     } catch (error) {
-      console.error('Error saving tour:', error);
       setProgressStatus('error');
       setProgressMessage(error instanceof Error ? error.message : 'Failed to save tour');
       setError(error instanceof Error ? error.message : 'Failed to save tour');
@@ -640,7 +583,6 @@ const TourEditor: React.FC = () => {
 
       setUploadProgress(100);
     } catch (error) {
-      console.error('Error uploading image:', error);
       alert('Failed to upload image: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setUploading(false);
@@ -1261,7 +1203,6 @@ const TourEditor: React.FC = () => {
                                 alt="Main tour image preview"
                                 className="w-full h-48 object-cover rounded-xl border border-gray-200 shadow-sm"
                                 onError={(e) => {
-                                  console.error('Failed to load main image:', formData.image);
                                   (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
                                 }}
                               />

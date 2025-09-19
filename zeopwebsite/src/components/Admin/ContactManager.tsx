@@ -208,7 +208,6 @@ const ContactManager: React.FC = () => {
       setShowSaveNotification(true);
       setTimeout(() => setShowSaveNotification(false), 3000);
     } catch (error) {
-      console.error('Error saving contact information:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to save contact information');
     } finally {
       setIsSubmitting(false);

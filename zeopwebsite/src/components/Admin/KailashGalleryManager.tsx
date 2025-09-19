@@ -53,7 +53,6 @@ const KailashGalleryManager: React.FC = () => {
       setPhotos(data.gallery || []);
       setError(null);
     } catch (err) {
-      console.error('Error fetching gallery:', err);
       setError(err instanceof Error ? err.message : 'Failed to load gallery');
     } finally {
       setLoading(false);
@@ -149,7 +148,6 @@ const KailashGalleryManager: React.FC = () => {
       await fetchGalleryData();
       setError(null);
     } catch (err) {
-      console.error('Error uploading photo:', err);
       setError(err instanceof Error ? err.message : 'Failed to upload photo');
     } finally {
       setUploading(false);
@@ -175,7 +173,6 @@ const KailashGalleryManager: React.FC = () => {
       setPhotos(photos.filter(p => p.id !== photoId));
       setError(null);
     } catch (err) {
-      console.error('Error deleting photo:', err);
       setError(err instanceof Error ? err.message : 'Failed to delete photo');
     }
   };

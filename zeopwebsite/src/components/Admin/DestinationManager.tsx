@@ -116,8 +116,6 @@ const DestinationManager: React.FC = () => {
         country: destination.country || 'Nepal',
         image: destination.image || '',
       };
-      console.log('Opening modal with destination:', destination);
-      console.log('Mapped form data:', mappedData);
       setFormData(mappedData);
     } else {
       resetForm();
@@ -208,11 +206,8 @@ const DestinationManager: React.FC = () => {
         if (uploadResponse.ok) {
           const uploadResult = await uploadResponse.json();
           imageUrl = uploadResult.url;
-          console.log('File uploaded successfully:', uploadResult);
-          console.log('New image URL:', imageUrl);
         } else {
           const errorText = await uploadResponse.text();
-          console.error('Upload failed:', errorText);
           throw new Error(`Upload failed: ${errorText}`);
         }
       }
@@ -224,8 +219,6 @@ const DestinationManager: React.FC = () => {
         image: imageUrl, // This should be the new uploaded image URL
       };
       
-      console.log('Sending API data:', apiData);
-
       const url = editingDestination
         ? `${getApiBaseUrl()}/admin/destinations/${editingDestination.slug || editingDestination.id}`
         : `${getApiBaseUrl()}/admin/destinations`;
@@ -248,7 +241,6 @@ const DestinationManager: React.FC = () => {
       }
 
       const savedDestination = await response.json();
-      console.log('Destination saved successfully:', savedDestination);
       
       // Wait a moment for the server to finish processing
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -267,9 +259,7 @@ const DestinationManager: React.FC = () => {
         }
       }));
       
-      console.log('Destination saved and UI refreshed with new image:', savedDestination.image);
     } catch (error) {
-      console.error('Error saving destination:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to save destination');
     } finally {
       setIsSubmitting(false);
@@ -304,7 +294,6 @@ const DestinationManager: React.FC = () => {
     try {
       deleteModal.openModal(destination);
     } catch (error) {
-      console.error('Error deleting destination:', error);
       alert('Failed to delete destination: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -400,8 +389,6 @@ const DestinationManager: React.FC = () => {
     setSearchTerm('');
     setCurrentPage(1);
   };
-
-  console.log('Filtered destinations for', activeTab, ':', filteredDestinations.map(d => d.name));
 
   return (
     <div className="destination-manager">

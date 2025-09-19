@@ -54,7 +54,6 @@ const AdminDashboard: React.FC = () => {
     try {
       setUser(JSON.parse(userData));
     } catch (error) {
-      console.error('Error parsing user data:', error);
       navigate('/admin/login');
     }
   }, [navigate]);

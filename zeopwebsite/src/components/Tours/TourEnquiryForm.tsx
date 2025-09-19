@@ -86,7 +86,6 @@ const TourEnquiryForm: React.FC<TourEnquiryFormProps> = ({
       }, 2000);
       
     } catch (error) {
-      console.error('Error submitting enquiry:', error);
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
     } finally {

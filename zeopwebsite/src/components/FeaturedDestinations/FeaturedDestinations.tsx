@@ -14,8 +14,7 @@ const FeaturedDestinations: React.FC = () => {
 
   // Listen for destination updates from admin interface
   useEffect(() => {
-    const handleDestinationUpdate = (event: CustomEvent) => {
-      console.log('Destination updated, refreshing featured destinations:', event.detail);
+    const handleDestinationUpdate = () => {
       setImageRefreshKey(Date.now());
       refetch();
     };
@@ -118,7 +117,6 @@ const FeaturedDestinations: React.FC = () => {
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     onError={(e) => {
-                      console.error('Image failed to load:', destination.image);
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
                     }}
                   />

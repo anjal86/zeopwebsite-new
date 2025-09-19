@@ -79,7 +79,6 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle 
       });
       
     } catch (error) {
-      console.error('Error submitting enquiry:', error);
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit enquiry. Please try again.');
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);

@@ -223,7 +223,6 @@ const TestimonialManager: React.FC = () => {
       await fetchTestimonials();
       closeModal();
     } catch (error) {
-      console.error('Error saving testimonial:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to save testimonial');
     } finally {
       setIsSubmitting(false);
@@ -234,7 +233,6 @@ const TestimonialManager: React.FC = () => {
     try {
       deleteModal.openModal(testimonial);
     } catch (error) {
-      console.error('Error deleting testimonial:', error);
       alert('Failed to delete testimonial: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -256,7 +254,6 @@ const TestimonialManager: React.FC = () => {
 
       await fetchTestimonials();
     } catch (error) {
-      console.error('Error toggling featured status:', error);
       alert('Failed to toggle featured status: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };

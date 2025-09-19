@@ -21,7 +21,7 @@ const Hero: React.FC = () => {
     if (!slides || slides.length === 0) return;
 
     const preloadVideos = async () => {
-      slides.forEach((slide, index) => {
+      slides.forEach((slide) => {
         if (slide.video && !preloadedVideos.has(slide.video)) {
           const video = document.createElement('video');
           video.preload = 'metadata';
@@ -38,12 +38,10 @@ const Hero: React.FC = () => {
             const videoUrl = slide.video;
             if (videoUrl) {
               setPreloadedVideos(prev => new Set([...prev, videoUrl]));
-              console.log(`Video ${index + 1} preloaded:`, videoUrl);
             }
           });
           
-          video.addEventListener('error', (e) => {
-            console.error(`Failed to preload video ${index + 1}:`, slide.video, e);
+          video.addEventListener('error', () => {
             const videoUrl = slide.video;
             if (videoUrl) {
               setVideoErrors(prev => new Set([...prev, videoUrl]));
@@ -269,11 +267,10 @@ const Hero: React.FC = () => {
                     video.currentTime = slides[currentSlide].video_start_time;
                   }
                   if (isMobile && userInteracted) {
-                    video.play().catch(console.error);
+                    video.play().catch(() => {});
                   }
                 }}
-                onError={(e) => {
-                  console.error('Video loading error:', slides[currentSlide].video, e);
+                onError={() => {
                   const videoUrl = slides[currentSlide].video;
                   if (videoUrl) {
                     setVideoErrors(prev => new Set([...prev, videoUrl]));
@@ -297,7 +294,6 @@ const Hero: React.FC = () => {
                 alt={slides[currentSlide].title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  console.error('Image loading error:', slides[currentSlide].image, e);
                   // Fallback to default image if current image fails
                   const img = e.target as HTMLImageElement;
                   if (img.src !== 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop') {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Plus,
@@ -80,7 +80,7 @@ const TourManager: React.FC = () => {
         setDestinations(uniqueLocations);
       }
     } catch (error) {
-      console.error('Error fetching destinations:', error);
+      // Error fetching destinations
     }
   };
 
@@ -111,18 +111,9 @@ const TourManager: React.FC = () => {
       // Extract pagination info from headers
       const totalCount = parseInt(response.headers.get('X-Total-Count') || tours.length.toString());
       
-      console.log('Pagination Debug:', {
-        totalCount,
-        toursLength: tours.length,
-        itemsPerPage,
-        currentPage,
-        totalPages: Math.ceil(totalCount / itemsPerPage)
-      });
-      
       setTours(tours);
       setTotalItems(totalCount);
     } catch (error) {
-      console.error('Error fetching tours:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch tours');
     } finally {
       setLoading(false);
@@ -133,7 +124,6 @@ const TourManager: React.FC = () => {
     try {
       deleteModal.openModal(tour);
     } catch (error) {
-      console.error('Error deleting tour:', error);
       alert('Failed to delete tour: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
@@ -156,7 +146,6 @@ const TourManager: React.FC = () => {
         )
       );
     } catch (error) {
-      console.error('Error updating tour listing status:', error);
       alert('Failed to update tour listing status: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       // Remove tour ID from updating set
