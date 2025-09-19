@@ -9,7 +9,7 @@ const DestinationsPage: React.FC = () => {
         title="Destinations"
         subtitle="Discover your next adventure"
         breadcrumb="Destinations"
-        backgroundImage="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070"
+        backgroundImage="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070"
       />
       
       <Destinations />
