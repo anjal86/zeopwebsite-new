@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Check, Info, FileText, Activity, Bed, Utensils, X } from 'lucide-react';
+import { Check, Info, FileText, Activity, Bed, Utensils, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ItineraryDay {
   day: number;
@@ -32,7 +32,27 @@ const TourTabs: React.FC<TourTabsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [hasHiddenTabs, setHasHiddenTabs] = useState(false);
+  const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set([1])); // First day expanded by default
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleDay = (dayNumber: number) => {
+    const newExpanded = new Set(expandedDays);
+    if (newExpanded.has(dayNumber)) {
+      newExpanded.delete(dayNumber);
+    } else {
+      newExpanded.add(dayNumber);
+    }
+    setExpandedDays(newExpanded);
+  };
+
+  const expandAll = () => {
+    const allDays = itinerary ? new Set(itinerary.map(day => day.day)) : new Set([1, 2, 3]);
+    setExpandedDays(allDays);
+  };
+
+  const collapseAll = () => {
+    setExpandedDays(new Set());
+  };
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Info },
@@ -148,68 +168,156 @@ const TourTabs: React.FC<TourTabsProps> = ({
         {/* Itinerary Tab */}
         {activeTab === 'itinerary' && (
           <div>
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Detailed Itinerary</h3>
-            <div className="space-y-6">
-              {itinerary && itinerary.length > 0 ? (
-                itinerary.map((day, index) => (
-                  <div key={index} className="border-l-4 border-green-600 pl-6">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4">
-                        {day.day}
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-900">{day.title}</h4>
-                    </div>
-                    <p className="text-gray-600 mb-2">{day.description}</p>
-                    {(day.accommodation || day.meals) && (
-                      <div className="text-sm text-gray-500 space-y-1">
-                        {day.accommodation && (
-                          <div className="flex items-center">
-                            <Bed className="w-4 h-4 mr-2" />
-                            <span>Accommodation: {day.accommodation}</span>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Day-by-Day Itinerary</h3>
+              <div className="flex items-center gap-3">
+                <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                  {itinerary && itinerary.length > 0 ? `${itinerary.length} Days` : '3 Days'}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={expandAll}
+                    className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full hover:bg-primary/20 transition-colors"
+                  >
+                    Expand All
+                  </button>
+                  <button
+                    onClick={collapseAll}
+                    className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
+                  >
+                    Collapse All
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Timeline Container */}
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-primary-dark"></div>
+              
+              <div className="space-y-4">
+                {itinerary && itinerary.length > 0 ? (
+                  itinerary.map((day, index) => (
+                    <div key={index} className="relative">
+                      {/* Timeline Dot */}
+                      <div className="absolute left-4 w-4 h-4 bg-white border-4 border-primary rounded-full shadow-lg z-10"></div>
+                      
+                      {/* Accordion Card */}
+                      <div className="ml-12 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                        {/* Accordion Header */}
+                        <button
+                          onClick={() => toggleDay(day.day)}
+                          className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 rounded-t-xl transition-colors"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="bg-gradient-to-r from-primary to-primary-dark text-white rounded-lg w-10 h-10 flex items-center justify-center text-sm font-bold shadow-md">
+                              {day.day}
+                            </div>
+                            <div>
+                              <h4 className="text-lg font-bold text-gray-900">{day.title}</h4>
+                              <p className="text-sm text-gray-500">Day {day.day} of your journey</p>
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0">
+                            {expandedDays.has(day.day) ? (
+                              <ChevronUp className="w-5 h-5 text-gray-400" />
+                            ) : (
+                              <ChevronDown className="w-5 h-5 text-gray-400" />
+                            )}
+                          </div>
+                        </button>
+                        
+                        {/* Accordion Content */}
+                        {expandedDays.has(day.day) && (
+                          <div className="px-4 pb-4 border-t border-gray-100">
+                            <div className="pt-4">
+                              <p className="text-gray-700 leading-relaxed mb-4">{day.description}</p>
+                              
+                              {/* Day Details */}
+                              {(day.accommodation || day.meals) && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  {day.accommodation && (
+                                    <div className="flex items-center gap-3 bg-blue-50 rounded-lg p-3">
+                                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <Bed className="w-4 h-4 text-blue-600" />
+                                      </div>
+                                      <div>
+                                        <div className="text-sm font-medium text-gray-900">Accommodation</div>
+                                        <div className="text-sm text-gray-600">{day.accommodation}</div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {day.meals && (
+                                    <div className="flex items-center gap-3 bg-orange-50 rounded-lg p-3">
+                                      <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <Utensils className="w-4 h-4 text-orange-600" />
+                                      </div>
+                                      <div>
+                                        <div className="text-sm font-medium text-gray-900">Meals</div>
+                                        <div className="text-sm text-gray-600">{day.meals}</div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
-                        {day.meals && (
-                          <div className="flex items-center">
-                            <Utensils className="w-4 h-4 mr-2" />
-                            <span>Meals: {day.meals}</span>
-                          </div>
-                        )}
                       </div>
-                    )}
-                  </div>
-                ))
-              ) : (
-                // Fallback content if no itinerary is available
-                <>
-                  <div className="border-l-4 border-green-600 pl-6">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4">
-                        1
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-900">Arrival and Preparation</h4>
                     </div>
-                    <p className="text-gray-600">Arrive at the starting point, meet your guide, and prepare for the adventure ahead.</p>
-                  </div>
-                  <div className="border-l-4 border-green-600 pl-6">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4">
-                        2
+                  ))
+                ) : (
+                  // Enhanced fallback content with accordion style
+                  <div className="space-y-4">
+                    {[
+                      { day: 1, title: "Arrival and Preparation", description: "Arrive at the starting point, meet your experienced guide, and prepare for the adventure ahead. Complete necessary preparations and briefings.",  },
+                      { day: 2, title: "Main Adventure", description: "Experience the main highlights of this amazing tour with expert guidance. Explore stunning landscapes and immerse yourself in local culture.",  },
+                      { day: 3, title: "Conclusion and Departure", description: "Wrap up your incredible adventure and return home with unforgettable memories and new friendships that will last a lifetime.",  }
+                    ].map((day, index) => (
+                      <div key={index} className="relative">
+                        {/* Timeline Dot */}
+                        <div className={`absolute left-4 w-4 h-4 bg-white border-4 border-primary rounded-full shadow-lg z-10`}></div>
+                        
+                        {/* Accordion Card */}
+                        <div className="ml-12 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                          {/* Accordion Header */}
+                          <button
+                            onClick={() => toggleDay(day.day)}
+                            className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 rounded-t-xl transition-colors"
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className={`bg-gradient-to-r from-primary to-primary-dark text-white rounded-lg w-10 h-10 flex items-center justify-center text-sm font-bold shadow-md`}>
+                                {day.day}
+                              </div>
+                              <div>
+                                <h4 className="text-lg font-bold text-gray-900">{day.title}</h4>
+                                <p className="text-sm text-gray-500">Day {day.day} of your journey</p>
+                              </div>
+                            </div>
+                            <div className="flex-shrink-0">
+                              {expandedDays.has(day.day) ? (
+                                <ChevronUp className="w-5 h-5 text-gray-400" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-400" />
+                              )}
+                            </div>
+                          </button>
+                          
+                          {/* Accordion Content */}
+                          {expandedDays.has(day.day) && (
+                            <div className="px-4 pb-4 border-t border-gray-100">
+                              <div className="pt-4">
+                                <p className="text-gray-700 leading-relaxed">{day.description}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <h4 className="text-lg font-semibold text-gray-900">Main Adventure</h4>
-                    </div>
-                    <p className="text-gray-600">Experience the main highlights of this amazing tour with expert guidance.</p>
+                    ))}
                   </div>
-                  <div className="border-l-4 border-green-600 pl-6">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4">
-                        3
-                      </div>
-                      <h4 className="text-lg font-semibold text-gray-900">Conclusion</h4>
-                    </div>
-                    <p className="text-gray-600">Wrap up your adventure and return with unforgettable memories.</p>
-                  </div>
-                </>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -6,7 +6,7 @@
   "description": "Setting out from Kathmandu in the early morning, embark on a picturesque 12-14 hour journey to reach the sacred destination of Haleshi Mahadev. Upon a...",
   "location": "Nepal",
   "price": 890,
-  "duration": "10 days",
+  "duration": "2",
   "group_size": "2-12 people",
   "difficulty": "Easy",
   "rating": 4.751259623511732,
@@ -47,7 +47,7 @@
     {
       "day": 1,
       "title": "Day 1",
-      "description": ": Arrival in Haleshi Mahadev\n                                                        \n                                                    \n                                                    \n                                                        \n                                                            Depart from Kathmandu early in the morning (around 6:00 AM) by private vehicle or public bus to Haleshi Mahadev, Khotang. The journey by road takes approximately 12-14 hours, depending on road conditions and traffic. Along the way, you'll pass through beautiful landscapes, small towns, and winding mountain roads. Arrive at Haleshi Mahadev in the evening. Check-in at a guesthouse or hotel near Haleshi Mahadev temple. Spend the evening exploring the area and visiting the temple."
+      "description": ": Arrival in Haleshi Mahadev Depart from Kathmandu early in the morning (around 6:00 AM) by private vehicle or public bus to Haleshi Mahadev, Khotang. The journey by road takes approximately 12-14 hours, depending on road conditions and traffic. Along the way, you'll pass through beautiful landscapes, small towns, and winding mountain roads. Arrive at Haleshi Mahadev in the evening. Check-in at a guesthouse or hotel near Haleshi Mahadev temple. Spend the evening exploring the area and visiting the temple."
     },
     {
       "day": 2,
@@ -74,5 +74,16 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-09-19T04:47:52.535Z"
+  "updated_at": "2025-09-19T07:49:44.818Z",
+  "primary_destination_id": 3,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    5
+  ],
+  "related_destinations": [
+    "Langtang"
+  ],
+  "related_activities": [
+    "Cultural Tours"
+  ]
 }

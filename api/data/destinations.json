@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Annapurna",
     "country": "Nepal",
-    "image": "/uploads/destinations/annapurna/annapurna.JPG",
+    "image": "/uploads/destinations/annapurna/annapurna_1758268396020.jpg",
     "tourCount": 5,
     "href": "/destinations/annapurna",
     "type": "nepal",
@@ -22,7 +22,9 @@
       3,
       11,
       23,
-      34
+      34,
+      24,
+      103
     ],
     "relatedActivities": [
       1
@@ -34,11 +36,11 @@
     "id": 2,
     "name": "Everest",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "/uploads/destinations/everest/everest_1758268423519.webp",
     "tourCount": 4,
     "href": "/destinations/everest",
     "type": "nepal",
-    "description": "Home to the world's highest peak, the Everest region offers legendary trekking routes through Sherpa villages and Buddhist monasteries.",
+    "description": "Discover the beauty and culture of Everest in Nepal.",
     "highlights": [
       "Everest Base Camp",
       "Kala Patthar",
@@ -57,17 +59,18 @@
     "relatedActivities": [
       1,
       2
-    ]
+    ],
+    "title": "Everest"
   },
   {
     "id": 3,
     "name": "Langtang",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1586523969132-b25453ec8ff5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "/uploads/destinations/langtang/langtang_1758268458527.jpg",
     "tourCount": 2,
     "href": "/destinations/langtang",
     "type": "nepal",
-    "description": "Known as the 'Valley of Glaciers', Langtang offers stunning mountain views, rich Tamang culture, and the famous yak cheese factory.",
+    "description": "Discover the beauty and culture of Langtang in Nepal.",
     "highlights": [
       "Kyanjin Gompa",
       "Langtang Valley",
@@ -79,12 +82,14 @@
     "difficulty": "Moderate",
     "relatedTours": [
       4,
-      38
+      38,
+      8
     ],
     "relatedActivities": [
       1,
       5
-    ]
+    ],
+    "title": "Langtang"
   },
   {
     "id": 4,
@@ -114,11 +119,11 @@
     "id": 5,
     "name": "Pokhara",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1540882082344-b273b04e2c2f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "/uploads/destinations/pokhara/pokhara_1758268514571.jpg",
     "tourCount": 3,
     "href": "/destinations/pokhara",
     "type": "nepal",
-    "description": "Nepal's adventure capital, offering stunning lake views, mountain panoramas, and thrilling activities like paragliding and bungee jumping.",
+    "description": "Discover the beauty and culture of Pokhara in Nepal.",
     "highlights": [
       "Phewa Lake",
       "Paragliding",
@@ -135,17 +140,18 @@
     ],
     "relatedActivities": [
       3
-    ]
+    ],
+    "title": "Pokhara"
   },
   {
     "id": 6,
     "name": "Kathmandu",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1565537714828-9bbde8c42c3f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "/uploads/destinations/kathmandu/kathmandu_1758268554199.jpeg",
     "tourCount": 1,
     "href": "/destinations/kathmandu",
     "type": "nepal",
-    "description": "The cultural heart of Nepal, home to ancient temples, bustling markets, and UNESCO World Heritage sites showcasing centuries of history.",
+    "description": "Discover the beauty and culture of Kathmandu in Nepal.",
     "highlights": [
       "Durbar Square",
       "Swayambhunath",
@@ -160,17 +166,18 @@
     ],
     "relatedActivities": [
       5
-    ]
+    ],
+    "title": "Kathmandu"
   },
   {
     "id": 7,
     "name": "Chitwan",
     "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "image": "/uploads/destinations/chitwan/chitwan_1758268583730.jpg",
     "tourCount": 1,
     "href": "/destinations/chitwan",
     "type": "nepal",
-    "description": "Nepal's first national park, famous for its wildlife including one-horned rhinoceros, Bengal tigers, and diverse bird species.",
+    "description": "Discover the beauty and culture of Chitwan in Nepal.",
     "highlights": [
       "Jungle Safari",
       "Elephant Breeding Center",
@@ -186,7 +193,8 @@
     "relatedActivities": [
       4,
       5
-    ]
+    ],
+    "title": "Chitwan"
   },
   {
     "id": 8,
@@ -230,7 +238,9 @@
     "bestTime": "May-Sep",
     "altitude": "3,656m",
     "difficulty": "Moderate to Challenging",
-    "relatedTours": [],
+    "relatedTours": [
+      101
+    ],
     "relatedActivities": [
       6,
       5
@@ -278,7 +288,9 @@
     "bestTime": "Oct-Mar",
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
-    "relatedTours": [],
+    "relatedTours": [
+      18
+    ],
     "relatedActivities": [
       5,
       6

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  Star,
   MapPin,
   Clock,
   Users,
@@ -16,12 +15,14 @@ interface TourCardProps {
   onBookNow?: (tour: Tour) => void;
   onViewDetails?: (tour: Tour) => void;
   variant?: 'grid' | 'list';
+  destinations?: Array<{ id: number; name: string; country?: string }>;
 }
 
 const TourCard: React.FC<TourCardProps> = ({
   tour,
   onViewDetails,
-  variant = 'grid'
+  variant = 'grid',
+  destinations
 }) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -34,6 +35,21 @@ const TourCard: React.FC<TourCardProps> = ({
       navigate(`/tours/${tour.slug}`);
     }
   };
+
+  // Get the primary destination name for this tour
+  const getDestinationName = () => {
+    if (destinations && (tour as any).primary_destination_id) {
+      const primaryDestination = destinations.find(dest => dest.id === (tour as any).primary_destination_id);
+      if (primaryDestination) {
+        return primaryDestination.country ? `${primaryDestination.name}, ${primaryDestination.country}` : primaryDestination.name;
+      }
+    }
+    
+    // Fallback to the location field if no destination relationship exists
+    return tour.location || 'Location not specified';
+  };
+
+  const destinationName = getDestinationName();
 
   // List layout design - horizontal layout
   if (variant === 'list') {
@@ -72,7 +88,7 @@ const TourCard: React.FC<TourCardProps> = ({
               {/* Location */}
               <div className="flex items-center text-gray-600 mb-4">
                 <MapPin className="w-5 h-5 mr-2 text-green-600" />
-                <span className="text-base">{tour.location}</span>
+                <span className="text-base">{destinationName}</span>
               </div>
 
               {/* Tour Details */}
@@ -134,11 +150,11 @@ const TourCard: React.FC<TourCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group w-full"
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group w-full h-full flex flex-col"
       onClick={handleViewDetails}
     >
       {/* Large Image Container */}
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-48 overflow-hidden flex-shrink-0">
         <div className={`absolute inset-0 bg-gray-200 animate-pulse ${imageLoaded ? 'hidden' : 'block'}`} />
         <img
           src={tour.image}
@@ -154,7 +170,7 @@ const TourCard: React.FC<TourCardProps> = ({
       </div>
 
       {/* Content Area */}
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-1">
 
         {/* Title */}
         <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">
@@ -164,11 +180,11 @@ const TourCard: React.FC<TourCardProps> = ({
         {/* Location */}
         <div className="flex items-center text-gray-600 mb-4">
           <MapPin className="w-4 h-4 mr-2 text-green-600" />
-          <span className="text-sm">{tour.location}</span>
+          <span className="text-sm">{destinationName}</span>
         </div>
 
         {/* Tour Details Grid */}
-        <div className="grid grid-cols-3 gap-4 mb-4 text-sm text-gray-600">
+        <div className="grid grid-cols-2 gap-4 mb-4 text-sm text-gray-600">
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
             <span>{formatDuration(tour.duration)}</span>
@@ -177,13 +193,13 @@ const TourCard: React.FC<TourCardProps> = ({
             <Users className="w-4 h-4 mr-2 text-gray-400" />
             <span>{tour.group_size}</span>
           </div>
-          <div className="text-right">
-            <span className="text-xs text-gray-500">{tour.reviews} reviews</span>
-          </div>
         </div>
 
+        {/* Spacer to push price/button to bottom */}
+        <div className="flex-1"></div>
+
         {/* Price and Details Button */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
           <div className="flex items-baseline">
             <span className="text-2xl font-bold text-green-600">
               ${tour.price}

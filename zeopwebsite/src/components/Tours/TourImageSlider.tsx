@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Share2, Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface TourImageSliderProps {
   images: string[];
@@ -9,6 +8,17 @@ interface TourImageSliderProps {
 
 const TourImageSlider: React.FC<TourImageSliderProps> = ({ images, title }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Auto-slide functionality
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => (prev + 1) % images.length);
+    }, 4000); // Change image every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [images]);
 
   if (!images || images.length === 0) {
     return (
@@ -22,29 +32,19 @@ const TourImageSlider: React.FC<TourImageSliderProps> = ({ images, title }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div className="relative h-[350px] md:h-[450px]">
-        <div className="relative w-full h-full overflow-hidden">
-          <motion.div
-            className="flex h-full"
-            animate={{ x: `-${currentImageIndex * 100}%` }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            style={{ width: `${images.length * 100}%` }}
-          >
-            {images.map((image, index) => (
-              <div key={index} className="w-full h-full flex-shrink-0">
-                <img
-                  src={image.startsWith('http') ? image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${image}`}
-                  alt={`${title} - View ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    console.error('Failed to load gallery image:', image);
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                  }}
-                />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+      <div className="relative h-[400px] bg-gray-100 flex items-center justify-center">
+        {/* Simple image display without complex animations */}
+        <img
+          src={images[currentImageIndex]?.startsWith('http')
+            ? images[currentImageIndex]
+            : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${images[currentImageIndex]}`}
+          alt={`${title} - View ${currentImageIndex + 1}`}
+          className="max-w-full max-h-full object-contain"
+          onError={(e) => {
+            console.error('Failed to load gallery image:', images[currentImageIndex]);
+            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+          }}
+        />
 
         {/* Navigation Buttons */}
         {images.length > 1 && (
@@ -77,15 +77,6 @@ const TourImageSlider: React.FC<TourImageSliderProps> = ({ images, title }) => {
           </>
         )}
 
-        {/* Action Buttons */}
-        <div className="absolute top-4 right-4 flex space-x-2">
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all backdrop-blur-sm">
-            <Share2 className="w-4 h-4" />
-          </button>
-          <button className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all backdrop-blur-sm">
-            <Heart className="w-4 h-4" />
-          </button>
-        </div>
       </div>
     </div>
   );

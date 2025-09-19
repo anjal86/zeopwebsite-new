@@ -6,7 +6,7 @@
   "description": "The Annapurna Base Camp (ABC) Trek is one of Nepal’s most iconic adventures, combining stunning Himalayan scenery, cultural richness, and rewarding tr...",
   "location": "Annapurna",
   "price": 570,
-  "duration": "Trek  7N/8D (walking 5–7 hrs daily, moderate difficulty).",
+  "duration": 7,
   "group_size": "2-12 people",
   "difficulty": "Moderate",
   "rating": 4.919492528246888,
@@ -105,5 +105,30 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-09-19T04:47:52.553Z"
+  "updated_at": "2025-09-19T06:02:30.199Z",
+  "primary_destination_id": 1,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "related_destinations": [
+    "Annapurna"
+  ],
+  "related_activities": [
+    "Trekking",
+    "Mountaineering",
+    "Adventure Sports",
+    "Jungle Safari",
+    "Cultural Tours",
+    "Pilgrimage",
+    "Meditation & Healing",
+    "Volunteering"
+  ]
 }

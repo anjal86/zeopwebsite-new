@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
               >
                 <Link to="/" className="flex items-center mb-4 hover:opacity-80 transition-opacity">
                   <img
-                    src="/logo/zeo-logo-white.png"
+                    src="/src/assets/zeo-logo-white.png"
                     alt="Zeo Tourism Logo"
                     className="h-10 w-auto"
                   />

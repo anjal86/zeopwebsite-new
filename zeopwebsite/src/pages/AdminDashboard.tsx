@@ -213,8 +213,6 @@ const AdminDashboard: React.FC = () => {
 const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ onTabChange }) => {
   const { data: destinations } = useApi('/api/destinations');
   const { data: tours } = useApi('/api/tours');
-  const { data: users } = useApi('/api/users');
-  const { data: bookings } = useApi('/api/bookings');
   const { data: enquiries } = useApi('/api/contact/enquiries');
   const { data: testimonials } = useApi('/api/testimonials');
 

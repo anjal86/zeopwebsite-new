@@ -694,7 +694,7 @@ app.get('/api/tours', async (req, res) => {
   // Filter by location
   if (location) {
     filteredTours = filteredTours.filter(tour =>
-      tour.location.toLowerCase() === location.toLowerCase()
+      tour.location && tour.location.toLowerCase() === location.toLowerCase()
     );
   }
 
@@ -702,11 +702,11 @@ app.get('/api/tours', async (req, res) => {
   if (search) {
     const searchTerm = search.toLowerCase();
     filteredTours = filteredTours.filter(tour =>
-      tour.title.toLowerCase().includes(searchTerm) ||
-      tour.description.toLowerCase().includes(searchTerm) ||
-      tour.location.toLowerCase().includes(searchTerm) ||
-      tour.category.toLowerCase().includes(searchTerm) ||
-      (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
+      (tour.title && tour.title.toLowerCase().includes(searchTerm)) ||
+      (tour.description && tour.description.toLowerCase().includes(searchTerm)) ||
+      (tour.location && tour.location.toLowerCase().includes(searchTerm)) ||
+      (tour.category && tour.category.toLowerCase().includes(searchTerm)) ||
+      (tour.highlights && tour.highlights.some(h => h && h.toLowerCase().includes(searchTerm)))
     );
   }
 
@@ -772,7 +772,7 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
   // Filter by location
   if (location) {
     filteredTours = filteredTours.filter(tour =>
-      tour.location.toLowerCase() === location.toLowerCase()
+      tour.location && tour.location.toLowerCase() === location.toLowerCase()
     );
   }
 
@@ -780,11 +780,11 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
   if (search) {
     const searchTerm = search.toLowerCase();
     filteredTours = filteredTours.filter(tour =>
-      tour.title.toLowerCase().includes(searchTerm) ||
-      tour.description.toLowerCase().includes(searchTerm) ||
-      tour.location.toLowerCase().includes(searchTerm) ||
-      tour.category.toLowerCase().includes(searchTerm) ||
-      (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
+      (tour.title && tour.title.toLowerCase().includes(searchTerm)) ||
+      (tour.description && tour.description.toLowerCase().includes(searchTerm)) ||
+      (tour.location && tour.location.toLowerCase().includes(searchTerm)) ||
+      (tour.category && tour.category.toLowerCase().includes(searchTerm)) ||
+      (tour.highlights && tour.highlights.some(h => h && h.toLowerCase().includes(searchTerm)))
     );
   }
 

@@ -13,11 +13,25 @@ const Destinations: React.FC = () => {
   const { data: destinations, loading, error } = useDestinations();
   const { data: allTours } = useTours();
 
-  // Calculate tour count for each destination based on listed tours
-  const getDestinationTourCount = (destinationName: string) => {
+  // Calculate tour count for each destination based on relationship system
+  const getDestinationTourCount = (destinationId: number, destinationName: string) => {
     if (!allTours) return 0;
     
-    return allTours.filter(tour => {
+    // Count tours using relationship-based matching
+    const relationshipTours = allTours.filter(tour => {
+      if (tour.listed === false) return false; // Only count listed tours
+      
+      // Check if this destination is the primary destination for the tour
+      const isPrimaryDestination = (tour as any).primary_destination_id === destinationId;
+      
+      // Check if this destination is in the secondary destinations for the tour
+      const isSecondaryDestination = (tour as any).secondary_destination_ids?.includes(destinationId);
+      
+      return isPrimaryDestination || isSecondaryDestination;
+    });
+    
+    // Fallback to location-based matching for legacy support
+    const locationTours = allTours.filter(tour => {
       if (!tour.location || tour.listed === false) return false;
       
       const tourLocation = tour.location.toLowerCase();
@@ -32,7 +46,17 @@ const Destinations: React.FC = () => {
              (destName === 'pokhara' && tourLocation.includes('pokhara')) ||
              (destName === 'kathmandu' && tourLocation.includes('kathmandu')) ||
              (destName === 'manaslu' && tourLocation.includes('manaslu'));
-    }).length;
+    });
+    
+    // Combine both methods and remove duplicates
+    const allRelatedTours = [...relationshipTours];
+    locationTours.forEach(locationTour => {
+      if (!allRelatedTours.find(tour => tour.id === locationTour.id)) {
+        allRelatedTours.push(locationTour);
+      }
+    });
+    
+    return allRelatedTours.length;
   };
 
   // Filter destinations based on country and add calculated tour counts
@@ -44,7 +68,7 @@ const Destinations: React.FC = () => {
     }
   }).map(destination => ({
     ...destination,
-    tourCount: getDestinationTourCount(destination.name)
+    tourCount: getDestinationTourCount(destination.id, destination.name)
   })).filter(destination => destination.tourCount > 0) || []; // Only show destinations with available tours
 
   const containerVariants = {

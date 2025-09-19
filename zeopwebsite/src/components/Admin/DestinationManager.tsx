@@ -9,11 +9,14 @@ import {
   Globe,
   AlertCircle,
   Image as ImageIcon,
-  MapPin,
-  Search
+  Search,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useDestinations } from '../../hooks/useApi';
 import SearchableSelect from '../UI/SearchableSelect';
+import DeleteModal from '../UI/DeleteModal';
+import { useDeleteModal } from '../../hooks/useDeleteModal';
 // @ts-ignore
 import { getData } from 'country-list';
 
@@ -52,9 +55,12 @@ const DestinationManager: React.FC = () => {
   const [editingDestination, setEditingDestination] = useState<ContentDestination | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const [formData, setFormData] = useState<DestinationFormData>({
     slug: '',
@@ -244,10 +250,6 @@ const DestinationManager: React.FC = () => {
       const savedDestination = await response.json();
       console.log('Destination saved successfully:', savedDestination);
       
-      // Force a complete data reload with cache busting
-      const refreshKey = Date.now();
-      setImageRefreshKey(refreshKey);
-      
       // Wait a moment for the server to finish processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -261,7 +263,7 @@ const DestinationManager: React.FC = () => {
         detail: {
           destinationId: savedDestination.id,
           newImageUrl: savedDestination.image,
-          timestamp: refreshKey
+          timestamp: Date.now()
         }
       }));
       
@@ -274,26 +276,33 @@ const DestinationManager: React.FC = () => {
     }
   };
 
-  const handleDelete = async (slug: string) => {
-    if (!confirm('Are you sure you want to delete this destination? This action cannot be undone.')) {
-      return;
+  const deleteDestination = async (destination: ContentDestination) => {
+    const token = localStorage.getItem('adminToken');
+    const slug = (destination as any).slug || (destination as any).id?.toString() || destination.name || '';
+    const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to delete destination');
     }
 
+    await refetch();
+  };
+
+  const deleteModal = useDeleteModal<ContentDestination>({
+    onDelete: deleteDestination,
+    getItemName: (destination) => (destination as any).title || (destination as any).name || 'Unnamed Destination',
+    getItemId: (destination) => (destination as any).slug || (destination as any).id || destination.name
+  });
+
+  const handleDeleteClick = async (destination: ContentDestination) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug || 'unknown'}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete destination');
-      }
-
-      await refetch();
+      deleteModal.openModal(destination);
     } catch (error) {
       console.error('Error deleting destination:', error);
       alert('Failed to delete destination: ' + (error instanceof Error ? error.message : 'Unknown error'));
@@ -326,7 +335,7 @@ const DestinationManager: React.FC = () => {
   }
 
   // Enhanced filtering with search
-  const filteredDestinations = destinations?.filter(destination => {
+  const allFilteredDestinations = destinations?.filter(destination => {
     const country = (destination as any).country || '';
     const type = (destination as any).type || '';
     const name = (destination as any).name || (destination as any).title || '';
@@ -349,6 +358,49 @@ const DestinationManager: React.FC = () => {
     return tabMatch && searchMatch;
   }) || [];
 
+  // Pagination calculations
+  const totalItems = allFilteredDestinations.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const filteredDestinations = allFilteredDestinations.slice(startIndex, endIndex);
+  
+  const startItem = startIndex + 1;
+  const endItem = Math.min(endIndex, totalItems);
+
+  // Pagination handlers
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Reset to first page when filters change
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: 'nepal' | 'international') => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setCurrentPage(1);
+  };
+
   console.log('Filtered destinations for', activeTab, ':', filteredDestinations.map(d => d.name));
 
   return (
@@ -369,29 +421,39 @@ const DestinationManager: React.FC = () => {
       </div>
 
       {/* Search Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Search */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search destinations by name, country, or region..."
+                placeholder="Search destinations..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
               />
             </div>
+          </div>
+
+          {/* Tab Filter */}
+          <div>
+            <select
+              value={activeTab}
+              onChange={(e) => handleTabChange(e.target.value as 'nepal' | 'international')}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            >
+              <option value="nepal">Nepal Destinations</option>
+              <option value="international">International</option>
+            </select>
           </div>
 
           {/* Clear Filters */}
           <div>
             <button
-              onClick={() => {
-                setSearchTerm('');
-              }}
-              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              onClick={handleClearFilters}
+              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm"
             >
               Clear Filters
             </button>
@@ -399,126 +461,291 @@ const DestinationManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex justify-center mb-8">
-        <div className="bg-gray-100 rounded-full p-1">
-          <button
-            onClick={() => setActiveTab('nepal')}
-            className={`px-8 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'nepal'
-                ? 'bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg'
-                : 'text-gray-600 hover:text-primary'
-            }`}
-          >
-            Nepal Destinations ({destinations?.filter(d => (d as any).country === 'Nepal' || (d as any).type === 'nepal').length || 0})
-          </button>
-          <button
-            onClick={() => setActiveTab('international')}
-            className={`px-8 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'international'
-                ? 'bg-gradient-to-r from-secondary to-secondary-dark text-white shadow-lg'
-                : 'text-gray-600 hover:text-secondary'
-            }`}
-          >
-            International Destinations ({destinations?.filter(d => (d as any).country !== 'Nepal' && (d as any).type !== 'nepal').length || 0})
-          </button>
+      {/* Destinations Table - Desktop */}
+      <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full table-fixed divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="w-1/3 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Destination
+                </th>
+                <th className="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Country
+                </th>
+                <th className="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="w-16 px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredDestinations.map((destination: ContentDestination) => (
+                <tr
+                  key={(destination as any).slug || (destination as any).name || (destination as any).id}
+                  className="hover:bg-gray-50 transition-colors cursor-pointer"
+                  onClick={() => openModal(destination)}
+                >
+                  <td className="px-4 py-4">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img
+                          className="h-10 w-10 rounded-lg object-cover"
+                          src={
+                            destination.image
+                              ? (destination.image.startsWith('http')
+                                  ? destination.image
+                                  : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${destination.image}`)
+                              : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
+                          }
+                          alt={(destination as any).title || (destination as any).name || 'Destination'}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                          }}
+                        />
+                      </div>
+                      <div className="ml-3 min-w-0 flex-1">
+                        <div className="text-sm font-medium text-gray-900 truncate" title={(destination as any).title || (destination as any).name}>
+                          {(destination as any).title || (destination as any).name || 'Unnamed Destination'}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-900">
+                    <div className="flex items-center min-w-0">
+                      <Globe className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                      <span className="truncate" title={destination.country}>{destination.country}</span>
+                    </div>
+                  </td>
+                  <td className="px-3 py-4">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      activeTab === 'nepal'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {activeTab === 'nepal' ? 'Nepal' : 'International'}
+                    </span>
+                  </td>
+                  <td className="px-3 py-4 text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end space-x-1">
+                      <button
+                        onClick={() => openModal(destination)}
+                        className="text-blue-600 hover:text-blue-900 transition-colors p-1"
+                        title="Edit destination"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(destination)}
+                        className="text-red-600 hover:text-red-900 transition-colors p-1"
+                        title="Delete destination"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Destinations Grid */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <div className="flex items-center justify-between">
-            <h4 className="text-lg font-semibold text-gray-900">
-              {activeTab === 'nepal' ? 'Nepal' : 'International'} Destinations
-            </h4>
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-500">
-                {filteredDestinations.length} destination{filteredDestinations.length !== 1 ? 's' : ''}
-                {activeTab === 'nepal' ? ' in Nepal' : ' internationally'}
+      {/* Destinations Cards - Mobile & Tablet */}
+      <div className="lg:hidden space-y-4">
+        {filteredDestinations.map((destination: ContentDestination) => (
+          <div
+            key={(destination as any).slug || (destination as any).name || (destination as any).id}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => openModal(destination)}
+          >
+            <div className="flex items-start space-x-4">
+              <div className="flex-shrink-0">
+                <img
+                  className="h-16 w-16 rounded-lg object-cover"
+                  src={
+                    destination.image
+                      ? (destination.image.startsWith('http')
+                          ? destination.image
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${destination.image}`)
+                      : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
+                  }
+                  alt={(destination as any).title || (destination as any).name || 'Destination'}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                  }}
+                />
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6">
-          <div key={activeTab} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDestinations.map((destination, index) => (
-              <div
-                key={(destination as any).slug || (destination as any).name || (destination as any).id || index}
-                className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 cursor-pointer group"
-                onClick={() => openModal(destination)}
-              >
-                <div className="relative">
-                  <img
-                    key={`${destination.id}-${imageRefreshKey}`}
-                    src={`${destination.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'}?t=${imageRefreshKey}`}
-                    alt={(destination as any).name || (destination as any).title || 'Destination'}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                    }}
-                  />
-                </div>
-                
-                <div className="p-4">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {(destination as any).title || (destination as any).name || 'Unnamed Destination'}
-                  </h4>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      {destination.country}{(destination as any).region ? `, ${(destination as any).region}` : ''}
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                      {(destination as any).title || (destination as any).name || 'Unnamed Destination'}
+                    </h3>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                        activeTab === 'nepal'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {activeTab === 'nepal' ? 'Nepal' : 'International'}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="flex gap-2">
+                  
+                  <div className="flex items-center space-x-2 ml-2" onClick={(e) => e.stopPropagation()}>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openModal(destination);
-                      }}
-                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+                      onClick={() => openModal(destination)}
+                      className="text-blue-600 hover:text-blue-900 transition-colors p-1"
+                      title="Edit destination"
                     >
                       <Edit className="w-4 h-4" />
-                      Edit
                     </button>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete((destination as any).slug || (destination as any).id?.toString() || destination.name || '');
-                      }}
-                      className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center justify-center shadow-sm"
+                      onClick={() => handleDeleteClick(destination)}
+                      className="text-red-600 hover:text-red-900 transition-colors p-1"
                       title="Delete destination"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
+                
+                <div className="mt-2 text-xs text-gray-500">
+                  <div className="flex items-center">
+                    <Globe className="w-3 h-3 mr-1" />
+                    <span className="truncate">{destination.country}</span>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
 
-      {/* Empty State */}
-      {(!destinations || destinations.length === 0) && !loading && (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Globe className="w-8 h-8 text-gray-400" />
+      {/* Pagination */}
+      {(totalItems > itemsPerPage || filteredDestinations.length >= itemsPerPage) && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 px-4 lg:px-6 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center text-xs sm:text-sm text-gray-700">
+              <span>
+                Showing <span className="font-medium">{startItem}</span> to{' '}
+                <span className="font-medium">{endItem}</span> of{' '}
+                <span className="font-medium">{totalItems}</span> results
+              </span>
+            </div>
+            <div className="flex items-center justify-center sm:justify-end space-x-1 sm:space-x-2">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={`
+                  inline-flex items-center px-2 sm:px-3 py-2 border border-gray-300 rounded-md text-xs sm:text-sm font-medium
+                  ${currentPage === 1
+                    ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                    : 'text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'
+                  }
+                `}
+              >
+                <ChevronLeft className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Previous</span>
+              </button>
+              
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNumber;
+                  if (totalPages <= 5) {
+                    pageNumber = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNumber = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNumber = totalPages - 4 + i;
+                  } else {
+                    pageNumber = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => handlePageChange(pageNumber)}
+                      className={`
+                        inline-flex items-center px-2 sm:px-3 py-2 border text-xs sm:text-sm font-medium rounded-md
+                        ${currentPage === pageNumber
+                          ? 'border-blue-500 bg-blue-50 text-blue-600'
+                          : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                        }
+                      `}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`
+                  inline-flex items-center px-2 sm:px-3 py-2 border border-gray-300 rounded-md text-xs sm:text-sm font-medium
+                  ${currentPage === totalPages
+                    ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                    : 'text-gray-700 bg-white hover:bg-gray-50 cursor-pointer'
+                  }
+                `}
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight className="w-4 h-4 sm:ml-1" />
+              </button>
+            </div>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Destinations Found</h3>
-          <p className="text-gray-600 mb-4">Get started by creating your first destination.</p>
-          <button
-            onClick={() => openModal()}
-            className="btn-primary flex items-center gap-2 mx-auto"
-          >
-            <Plus className="w-4 h-4" />
-            Create First Destination
-          </button>
         </div>
       )}
+
+      {filteredDestinations.length === 0 && !loading && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Globe className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {searchTerm ? 'No Destinations Match Your Filters' : 'No Destinations Found'}
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {searchTerm
+                ? `No destinations found matching your search. Try adjusting your search terms.`
+                : 'Get started by creating your first destination.'
+              }
+            </p>
+            {searchTerm ? (
+              <button
+                onClick={handleClearFilters}
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2 mx-auto"
+              >
+                Clear Filters
+              </button>
+            ) : (
+              <button
+                onClick={() => openModal()}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 mx-auto"
+              >
+                <Plus className="w-4 h-4" />
+                Create First Destination
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Delete Modal */}
+      <DeleteModal
+        {...deleteModal.modalProps}
+        title="Delete Destination"
+        message="Are you sure you want to delete this destination? This will permanently remove the destination and all its associated data."
+        confirmText="Delete Destination"
+        variant="danger"
+      />
 
       {/* Modal */}
       <AnimatePresence>

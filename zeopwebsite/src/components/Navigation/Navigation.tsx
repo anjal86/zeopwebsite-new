@@ -151,7 +151,7 @@ const Navigation: React.FC = () => {
             <div className="flex items-center flex-shrink-0">
               <Link to="/" onClick={handleNavClick}>
                 <img
-                  src="/logo/zeo-logo.png"
+                  src="/src/assets/zeo-logo.png"
                   alt="Zeo Tourism Logo"
                   className="h-10 w-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
                 />

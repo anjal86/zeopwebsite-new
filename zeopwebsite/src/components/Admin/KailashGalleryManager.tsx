@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import {
   Trash2,
   Upload,
   Image as ImageIcon,
-  X,
-  Plus
+  X
 } from 'lucide-react';
 
 interface GalleryPhoto {

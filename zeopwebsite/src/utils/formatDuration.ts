@@ -8,8 +8,25 @@
  * "2 weeks" -> "13N/14D"
  * "16 Days" -> "15N/16D"
  */
-export const formatDuration = (duration: string): string => {
-  if (!duration) return '';
+export const formatDuration = (duration: string | number): string => {
+  if (!duration && duration !== 0) return '';
+  
+  // Handle number input (days only)
+  if (typeof duration === 'number') {
+    const days = Math.round(duration); // Ensure it's a whole number
+    const nights = Math.max(0, days - 1);
+    return `${nights}N/${days}D`;
+  }
+  
+  // Handle string that might be a number
+  if (typeof duration === 'string') {
+    const numericValue = parseFloat(duration);
+    if (!isNaN(numericValue) && duration.trim() === numericValue.toString()) {
+      const days = Math.round(numericValue);
+      const nights = Math.max(0, days - 1);
+      return `${nights}N/${days}D`;
+    }
+  }
   
   const durationLower = duration.toLowerCase().trim();
   

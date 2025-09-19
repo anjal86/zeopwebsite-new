@@ -14,6 +14,7 @@ import {
 import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
+import { useDestinations } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 
 interface GalleryPhoto {
@@ -36,6 +37,7 @@ interface GalleryMetadata {
 
 const KailashMansarovarPage: React.FC = () => {
   const navigate = useNavigate();
+  const { data: destinations } = useDestinations();
 
   const [filters] = useState({
     search: '',
@@ -93,7 +95,6 @@ const KailashMansarovarPage: React.FC = () => {
         setGalleryMetadata(data.metadata || galleryMetadata);
         setGalleryError(null);
       } catch (err) {
-        console.error('Error fetching gallery data:', err);
         setGalleryError(err instanceof Error ? err.message : 'Failed to load gallery');
         // Fallback to default photos if API fails
         setGalleryPhotos([
@@ -135,7 +136,7 @@ const KailashMansarovarPage: React.FC = () => {
     }, 8000); // 8 seconds per slide
     
     return () => clearInterval(interval);
-  }, [galleryPhotos, currentSlide]);
+  }, [galleryPhotos]);
 
   // Fetch Kailash packages from tours API
   useEffect(() => {
@@ -165,7 +166,6 @@ const KailashMansarovarPage: React.FC = () => {
         
         setError(null);
       } catch (err) {
-        console.error('Error fetching Kailash packages:', err);
         setError(err instanceof Error ? err.message : 'Failed to load packages');
       } finally {
         setLoading(false);
@@ -260,7 +260,6 @@ const KailashMansarovarPage: React.FC = () => {
                   alt={galleryPhotos[currentSlide]?.alt}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    console.error('Image loading error:', galleryPhotos[currentSlide]?.image);
                     (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
                   }}
                 />
@@ -376,6 +375,7 @@ const KailashMansarovarPage: React.FC = () => {
               filters={filters}
               onTourBook={handleTourBook}
               onTourView={handleTourView}
+              destinations={destinations || undefined}
             />
           )}
         </div>

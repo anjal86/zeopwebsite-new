@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Grid, List } from 'lucide-react';
 import TourCard from './TourCard';
@@ -18,6 +18,7 @@ interface TourGridProps {
   hasMore?: boolean;
   onLoadMore?: () => void;
   totalCount?: number;
+  destinations?: Array<{ id: number; name: string; country?: string }>;
 }
 
 type SortOption = 'price-low' | 'price-high' | 'rating' | 'duration' | 'popularity';
@@ -31,7 +32,8 @@ const TourGrid: React.FC<TourGridProps> = ({
   loadingMore = false,
   hasMore = false,
   onLoadMore,
-  totalCount = 0
+  totalCount = 0,
+  destinations
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
@@ -185,6 +187,7 @@ const TourGrid: React.FC<TourGridProps> = ({
                   variant={viewMode}
                   onBookNow={onTourBook}
                   onViewDetails={onTourView}
+                  destinations={destinations}
                 />
               </motion.div>
             ))}

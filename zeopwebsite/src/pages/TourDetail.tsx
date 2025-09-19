@@ -68,11 +68,9 @@ const TourDetail: React.FC = () => {
           const details = await response.json();
           setTourDetails(details);
         } else {
-          console.warn('Failed to fetch tour details, using basic tour data');
           setTourDetails(tour as TourDetails);
         }
       } catch (error) {
-        console.error('Error fetching tour details:', error);
         setTourDetails(tour as TourDetails);
       } finally {
         setDetailsLoading(false);
@@ -295,6 +293,7 @@ const TourDetail: React.FC = () => {
                   <TourCard
                     tour={relatedTour}
                     onViewDetails={(tour) => navigate(`/tours/${tour.slug}`)}
+                    destinations={destinations || undefined}
                   />
                 </motion.div>
               ))}

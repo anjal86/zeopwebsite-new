@@ -30,10 +30,10 @@ import {
   Eye,
   MapPin,
   Activity,
-  Info
+  Mail,
+  MessageCircle
 } from 'lucide-react';
 import ProgressModal from '../components/UI/ProgressModal';
-import { useDestinations, useActivities } from '../hooks/useApi';
 
 interface ItineraryDay {
   day: number;
@@ -77,10 +77,14 @@ interface TourDetails {
 }
 
 const TourEditor: React.FC = () => {
-  const { tourSlug } = useParams<{ tourSlug: string }>();
-  const tourId = tourSlug; // Use tourSlug as tourId for consistency
+  const params = useParams<{ tourSlug?: string; tourId?: string; id?: string }>();
   const navigate = useNavigate();
+  
+  // Try to get the tour identifier from various possible param names
+  const tourId = params.tourSlug || params.tourId || params.id || 'new';
   const isEditing = tourId !== 'new';
+  
+  console.log('TourEditor params:', params, 'tourId:', tourId, 'isEditing:', isEditing);
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -183,66 +187,11 @@ const TourEditor: React.FC = () => {
     }
   }, [tourId, isEditing, navigate]);
 
-  // Auto-detect relationships when all data is loaded
+  // Disabled auto-detection to prevent automatic selection of all destinations and activities
+  // Auto-detection was too aggressive and selecting everything
+  // Users should manually select destinations and activities
   useEffect(() => {
-    console.log('=== AUTO-DETECTION TRIGGER ===');
-    console.log('Conditions check:', {
-      isEditing,
-      hasFormDataId: !!formData.id,
-      hasFormDataTitle: !!formData.title,
-      hasDestinations: !!destinations,
-      hasActivities: !!activities,
-      destinationsCount: destinations?.length || 0,
-      activitiesCount: activities?.length || 0
-    });
-
-    if (isEditing && formData.id && formData.title && destinations && activities &&
-        destinations.length > 0 && activities.length > 0) {
-      
-      console.log('=== AUTO-DETECTION STARTING ===');
-      console.log('Tour data:', {
-        id: formData.id,
-        title: formData.title,
-        location: formData.location,
-        category: formData.category
-      });
-      console.log('Available destinations:', destinations.map((d: any) => ({ id: d.id, name: d.name })));
-      console.log('Available activities:', activities.map((a: any) => ({ id: a.id, name: a.name })));
-      
-      // Run auto-detection
-      const autoDetectedDestinations = autoDetectDestinations(formData);
-      const autoDetectedActivities = autoDetectActivities(formData);
-      
-      console.log('Auto-detection results:', {
-        destinations: autoDetectedDestinations,
-        activities: autoDetectedActivities
-      });
-      
-      // Apply auto-detected relationships if we found any
-      if (autoDetectedDestinations.primary || autoDetectedDestinations.secondary.length > 0 ||
-          autoDetectedActivities.ids.length > 0) {
-        
-        console.log('=== APPLYING AUTO-DETECTED RELATIONSHIPS ===');
-        
-        setFormData(prev => {
-          const updated = {
-            ...prev,
-            primary_destination_id: autoDetectedDestinations.primary || prev.primary_destination_id,
-            secondary_destination_ids: autoDetectedDestinations.secondary.length > 0 ? autoDetectedDestinations.secondary : prev.secondary_destination_ids || [],
-            activity_ids: autoDetectedActivities.ids.length > 0 ? autoDetectedActivities.ids : prev.activity_ids || [],
-            related_destinations: autoDetectedDestinations.names.length > 0 ? autoDetectedDestinations.names : prev.related_destinations || [],
-            related_activities: autoDetectedActivities.names.length > 0 ? autoDetectedActivities.names : prev.related_activities || []
-          };
-          
-          console.log('Updated form data with relationships:', updated);
-          return updated;
-        });
-      } else {
-        console.log('=== NO MATCHES FOUND ===');
-      }
-    } else {
-      console.log('=== AUTO-DETECTION SKIPPED - CONDITIONS NOT MET ===');
-    }
+    console.log('Auto-detection disabled to prevent automatic selection of all items');
   }, [destinations, activities, formData.id, formData.title, formData.location, formData.category, isEditing]);
 
   // Auto-detect destinations based on tour location
@@ -490,6 +439,12 @@ const TourEditor: React.FC = () => {
       // Step 1: Validate data
       setProgressValue(25);
       setProgressMessage('Validating tour data...');
+      
+      // Simple validation - only check title
+      if (!formData.title.trim()) {
+        throw new Error('Tour title is required.');
+      }
+      
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Step 2: Prepare API call
@@ -497,11 +452,40 @@ const TourEditor: React.FC = () => {
       setProgressMessage('Updating tour information...');
       
       const token = localStorage.getItem('adminToken');
-      const url = isEditing
-        ? `/api/admin/tours/${formData.id}`
-        : `/api/admin/tours`;
       
-      const method = isEditing ? 'PUT' : 'POST';
+      // For editing, we need to determine if we should use slug or ID endpoint
+      // Check if tourId is a number (ID) or string (slug)
+      const isNumericId = /^\d+$/.test(tourId || '');
+      
+      let url;
+      if (isEditing && tourId && tourId !== 'new') {
+        if (formData.id) {
+          // If we have the ID from formData, use it (most reliable)
+          url = `/api/admin/tours/${formData.id}`;
+        } else if (isNumericId) {
+          // Use ID endpoint
+          url = `/api/admin/tours/${tourId}`;
+        } else {
+          // Use slug endpoint for updates
+          url = `/api/admin/tours/slug/${tourId}`;
+        }
+      } else {
+        // Creating new tour
+        url = `/api/admin/tours`;
+      }
+      
+      const method = isEditing && tourId && tourId !== 'new' ? 'PUT' : 'POST';
+      
+      console.log('API Request:', {
+        method,
+        url,
+        isEditing,
+        tourId,
+        isNumericId,
+        formDataId: formData.id,
+        hasFormDataId: !!formData.id,
+        actuallyEditing: isEditing && tourId && tourId !== 'new'
+      });
 
       // Step 3: Make API call
       setProgressValue(75);
@@ -510,6 +494,8 @@ const TourEditor: React.FC = () => {
       // Prepare tour data with relationships
       const tourData = {
         ...formData,
+        // Ensure duration is a string for API compatibility
+        duration: String(formData.duration),
         // Ensure relationships are properly formatted
         primary_destination_id: formData.primary_destination_id || undefined,
         secondary_destination_ids: formData.secondary_destination_ids || [],
@@ -564,17 +550,41 @@ const TourEditor: React.FC = () => {
     navigate('/admin/login');
   };
 
+  // Validation helper functions
+  const hasRequiredDestinations = () => {
+    return formData.primary_destination_id || (formData.secondary_destination_ids && formData.secondary_destination_ids.length > 0);
+  };
+
+  const hasRequiredActivities = () => {
+    return formData.activity_ids && formData.activity_ids.length > 0;
+  };
+
+  const isFormValid = () => {
+    // Simple validation - just check if we have a title (most basic requirement)
+    return formData.title.trim().length > 0;
+  };
+
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: BarChart3, path: '/admin/dashboard?tab=overview' },
     { id: 'destinations', label: 'Destinations', icon: Mountain, path: '/admin/dashboard?tab=destinations' },
     { id: 'tours', label: 'Tours', icon: Backpack, path: '/admin/dashboard?tab=tours' },
+    { id: 'sliders', label: 'Hero Sliders', icon: Image, path: '/admin/dashboard?tab=sliders' },
+    { id: 'kailash-gallery', label: 'Kailash Gallery', icon: Camera, path: '/admin/dashboard?tab=kailash-gallery' },
+    { id: 'enquiries', label: 'Contact Enquiries', icon: Mail, path: '/admin/dashboard?tab=enquiries' },
+    { id: 'testimonials', label: 'Testimonials', icon: MessageCircle, path: '/admin/dashboard?tab=testimonials' },
     { id: 'users', label: 'Users', icon: Users, path: '/admin/dashboard?tab=users' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/admin/dashboard?tab=settings' },
   ];
 
   const tabs = [
     { id: 'basic', label: 'Basic Info', icon: FileText },
-    { id: 'relationships', label: 'Destinations & Activities', icon: MapPin },
+    {
+      id: 'relationships',
+      label: 'Destinations & Activities',
+      icon: MapPin,
+      hasError: !hasRequiredDestinations() || !hasRequiredActivities(),
+      errorCount: (!hasRequiredDestinations() ? 1 : 0) + (!hasRequiredActivities() ? 1 : 0)
+    },
     { id: 'details', label: 'Details', icon: Star },
     { id: 'itinerary', label: 'Itinerary', icon: Calendar },
     { id: 'media', label: 'Media', icon: Camera }
@@ -849,7 +859,12 @@ const TourEditor: React.FC = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={saving}
-                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                  className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    isFormValid()
+                      ? 'bg-green-600 text-white hover:bg-green-700'
+                      : 'bg-gray-400 text-white cursor-not-allowed'
+                  }`}
+                  title={!isFormValid() ? 'Please complete all required fields and select destinations & activities' : ''}
                 >
                   {saving ? (
                     <>
@@ -872,18 +887,28 @@ const TourEditor: React.FC = () => {
             <nav className="flex space-x-8">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
+                const hasError = (tab as any).hasError;
+                const errorCount = (tab as any).errorCount;
+                
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
+                    className={`relative flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                       activeTab === tab.id
                         ? 'border-green-600 text-gray-500'
+                        : hasError
+                        ? 'border-transparent text-red-500 hover:text-red-700 hover:border-red-300'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
+                    {hasError && errorCount > 0 && (
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                        {errorCount}
+                      </div>
+                    )}
                   </button>
                 );
               })}
@@ -964,20 +989,23 @@ const TourEditor: React.FC = () => {
 
                     {/* Category and difficulty are now derived from activities, so these fields are removed */}
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Duration *
+                          Duration (Days) *
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           name="duration"
                           value={formData.duration}
                           onChange={handleInputChange}
                           required
+                          min="1"
+                          max="365"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="e.g., 13 nights 14 days"
+                          placeholder="e.g., 14"
                         />
+                        <p className="text-xs text-gray-500 mt-1">Number of days for the tour</p>
                       </div>
                       
                       <div>
@@ -1009,20 +1037,151 @@ const TourEditor: React.FC = () => {
                           placeholder="e.g., 2-12 people"
                         />
                       </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Best Time *
-                        </label>
-                        <input
-                          type="text"
-                          name="best_time"
-                          value={formData.best_time}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="e.g., March-May, September-November"
-                        />
+                    </div>
+
+                    {/* Best Time Section - Full Width */}
+                    <div className="mt-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        Best Time to Visit *
+                      </label>
+                      <div className="space-y-4">
+                        <p className="text-xs text-gray-500">Click on months to select the best time for this tour</p>
+                        
+                        {/* Month Selection Grid */}
+                        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-2">
+                          {[
+                            'January', 'February', 'March', 'April', 'May', 'June',
+                            'July', 'August', 'September', 'October', 'November', 'December'
+                          ].map((month) => {
+                            const selectedMonths = formData.best_time ? formData.best_time.split(', ').filter(m => m.trim()) : [];
+                            const isSelected = selectedMonths.includes(month);
+                            
+                            return (
+                              <button
+                                key={month}
+                                type="button"
+                                onClick={() => {
+                                  const currentMonths = formData.best_time ? formData.best_time.split(', ').filter(m => m.trim()) : [];
+                                  let newMonths;
+                                  
+                                  if (isSelected) {
+                                    // Remove month
+                                    newMonths = currentMonths.filter(m => m !== month);
+                                  } else {
+                                    // Add month in chronological order
+                                    const allMonths = [
+                                      'January', 'February', 'March', 'April', 'May', 'June',
+                                      'July', 'August', 'September', 'October', 'November', 'December'
+                                    ];
+                                    newMonths = [...currentMonths, month].sort((a, b) =>
+                                      allMonths.indexOf(a) - allMonths.indexOf(b)
+                                    );
+                                  }
+                                  
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    best_time: newMonths.join(', ')
+                                  }));
+                                }}
+                                className={`px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${
+                                  isSelected
+                                    ? 'bg-green-500 text-white border-green-500 shadow-md transform scale-105'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:border-green-400 hover:bg-green-50 hover:text-green-700'
+                                }`}
+                              >
+                                {month.substring(0, 3)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        
+                        {/* Quick selection buttons */}
+                        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                best_time: 'March, April, May'
+                              }));
+                            }}
+                            className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                          >
+                            Spring (Mar-May)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                best_time: 'September, October, November'
+                              }));
+                            }}
+                            className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded-full hover:bg-orange-200 transition-colors"
+                          >
+                            Autumn (Sep-Nov)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                best_time: 'March, April, May, September, October, November'
+                              }));
+                            }}
+                            className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition-colors"
+                          >
+                            Peak Season
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                best_time: ''
+                              }));
+                            }}
+                            className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                          >
+                            Clear All
+                          </button>
+                        </div>
+                        
+                        {/* Selected months display */}
+                        {formData.best_time && (
+                          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Calendar className="w-4 h-4 text-green-600" />
+                              <span className="text-sm font-medium text-green-800">Selected Months:</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {formData.best_time.split(', ').filter(m => m.trim()).map((month, index) => (
+                                <span
+                                  key={index}
+                                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-300"
+                                >
+                                  {month}
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const months = formData.best_time.split(', ').filter(m => m.trim() && m !== month);
+                                      setFormData(prev => ({
+                                        ...prev,
+                                        best_time: months.join(', ')
+                                      }));
+                                    }}
+                                    className="ml-2 text-green-600 hover:text-green-800 hover:bg-green-200 rounded-full p-0.5"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                            {formData.best_time.split(', ').filter(m => m.trim()).length === 0 && (
+                              <p className="text-sm text-gray-500 italic">No months selected</p>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -1156,9 +1315,15 @@ const TourEditor: React.FC = () => {
                         <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                           <Mountain className="w-4 h-4 text-primary" />
                         </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900">Related Destinations</h3>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900">Related Destinations *</h3>
                           <p className="text-sm text-gray-500">Select destinations that this tour visits or relates to</p>
+                          {!hasRequiredDestinations() && (
+                            <div className="mt-2 flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                              <AlertCircle className="w-4 h-4" />
+                              <span className="text-sm font-medium">At least one destination must be selected</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       
@@ -1258,9 +1423,15 @@ const TourEditor: React.FC = () => {
                         <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center">
                           <Activity className="w-4 h-4 text-secondary" />
                         </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900">Related Activities</h3>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900">Related Activities *</h3>
                           <p className="text-sm text-gray-500">Select activities that are part of this tour</p>
+                          {!hasRequiredActivities() && (
+                            <div className="mt-2 flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                              <AlertCircle className="w-4 h-4" />
+                              <span className="text-sm font-medium">At least one activity must be selected</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       
@@ -1466,6 +1637,44 @@ const TourEditor: React.FC = () => {
                       </div>
                     </div>
 
+                    {/* Exclusions */}
+                    <div className="bg-white rounded-lg shadow-sm border p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">What's Not Included</h3>
+                        <button
+                          type="button"
+                          onClick={() => addArrayItem('exclusions')}
+                          className="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700 transition-colors flex items-center gap-1"
+                        >
+                          <Plus className="w-3 h-3" />
+                          Add
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {(formData.exclusions || []).map((exclusion, index) => (
+                          <div key={index} className="flex items-center gap-3">
+                            <input
+                              type="text"
+                              value={exclusion}
+                              onChange={(e) => handleArrayChange('exclusions', index, e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                              placeholder="What's not included..."
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeArrayItem('exclusions', index)}
+                              className="text-red-500 hover:text-red-700 p-1"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                        {(!formData.exclusions || formData.exclusions.length === 0) && (
+                          <p className="text-gray-500 text-sm">No exclusions added yet. Click "Add" to add what's not included.</p>
+                        )}
+                      </div>
+                    </div>
+
                     {/* What to Bring */}
                     <div className="bg-white rounded-lg shadow-sm border p-6">
                       <div className="flex items-center justify-between mb-4">
@@ -1606,10 +1815,13 @@ const TourEditor: React.FC = () => {
                               <textarea
                                 value={day.description}
                                 onChange={(e) => handleItineraryChange(index, 'description', e.target.value)}
-                                rows={4}
-                                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white shadow-sm resize-none transition-all"
+                                rows={8}
+                                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white shadow-sm resize-y transition-all"
                                 placeholder="Describe what happens on this day in detail..."
                               />
+                              <p className="text-xs text-gray-500 mt-1">
+                                {day.description.length} characters
+                              </p>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1683,306 +1895,118 @@ const TourEditor: React.FC = () => {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-8"
+                    className="bg-white rounded-lg shadow-sm border p-6"
                   >
-                    {/* Enhanced Gallery Section */}
-                    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg border border-gray-200 p-8">
-                      <div className="flex items-center justify-between mb-8">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <Camera className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <h2 className="text-2xl font-bold text-gray-900">Gallery Images</h2>
-                            <p className="text-sm text-gray-600">Create a stunning visual gallery for your tour</p>
-                          </div>
+                    <div className="mb-6">
+                      <h2 className="text-xl font-semibold text-gray-900">Gallery Images</h2>
+                      <p className="text-sm text-gray-600 mt-1">Upload images to showcase your tour</p>
+                    </div>
+
+                    {/* Simple Upload Section */}
+                    <div className="mb-6">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
+                        <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">Upload Gallery Images</h3>
+                        <p className="text-gray-600 mb-4">Drag and drop images here or click to browse</p>
+                        
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            files.forEach(file => handleImageUpload(file, true));
+                          }}
+                          className="hidden"
+                          id="gallery-upload"
+                        />
+                        <label
+                          htmlFor="gallery-upload"
+                          className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors cursor-pointer inline-flex items-center gap-2"
+                        >
+                          <Upload className="w-4 h-4" />
+                          Choose Images
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Upload Progress */}
+                    {uploading && (
+                      <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                          <Upload className="w-5 h-5 text-blue-600" />
+                          <span className="font-medium text-gray-900">Uploading...</span>
+                          <span className="text-blue-600 font-bold">{uploadProgress}%</span>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-sm font-medium text-gray-700">
-                              {(formData.gallery || []).length} images
-                            </span>
-                          </div>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={(e) => {
-                              const files = Array.from(e.target.files || []);
-                              files.forEach(file => handleImageUpload(file, true));
-                            }}
-                            className="hidden"
-                            id="gallery-upload"
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-primary h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
                           />
-                          <label
-                            htmlFor="gallery-upload"
-                            className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200 cursor-pointer flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
-                          >
-                            <Upload className="w-5 h-5" />
-                            <span className="font-medium">Add Images</span>
-                          </label>
                         </div>
                       </div>
+                    )}
 
-                      {/* Enhanced Upload Progress */}
-                      {uploading && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6"
-                        >
-                          <div className="flex items-center gap-4 mb-4">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
-                              <Upload className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-gray-900">Uploading Image...</div>
-                              <div className="text-sm text-gray-600">Processing your image for the gallery</div>
-                            </div>
-                            <div className="ml-auto text-2xl font-bold text-blue-600">
-                              {uploadProgress}%
-                            </div>
-                          </div>
-                          <div className="w-full bg-white rounded-full h-4 overflow-hidden shadow-inner">
-                            <motion.div
-                              className="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full relative overflow-hidden"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${uploadProgress}%` }}
-                              transition={{ duration: 0.3 }}
-                            >
-                              <div className="absolute inset-0 bg-white opacity-20 animate-pulse"></div>
-                            </motion.div>
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {/* Enhanced Gallery Grid */}
-                      {(formData.gallery || []).length > 0 ? (
-                        <div className="space-y-6">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {(formData.gallery || []).map((imageUrl, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                transition={{ duration: 0.4, delay: index * 0.1 }}
-                                className="relative group bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                              >
-                                <div className="aspect-square overflow-hidden">
-                                  <img
-                                    src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`}
-                                    alt={`Gallery image ${index + 1}`}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                    onError={(e) => {
-                                      console.error('Failed to load gallery image:', imageUrl);
-                                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                                    }}
-                                  />
-                                </div>
-                                
-                                {/* Enhanced Image Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                  <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
-                                    <div className="text-white">
-                                      <div className="text-sm font-semibold">Image {index + 1}</div>
-                                      <div className="text-xs opacity-80">Gallery Photo</div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <button
-                                        type="button"
-                                        onClick={() => window.open(imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`, '_blank')}
-                                        className="bg-white/20 backdrop-blur-sm text-white p-2.5 rounded-xl hover:bg-white/30 transition-all duration-200 shadow-lg"
-                                        title="View full size"
-                                      >
-                                        <Eye className="w-4 h-4" />
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => removeArrayItem('gallery', index)}
-                                        className="bg-red-500/80 backdrop-blur-sm text-white p-2.5 rounded-xl hover:bg-red-600 transition-all duration-200 shadow-lg"
-                                        title="Remove image"
-                                      >
-                                        <X className="w-4 h-4" />
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Enhanced Image Number Badge */}
-                                <div className="absolute top-3 left-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                                  #{index + 1}
-                                </div>
-
-                                {/* Image Quality Indicator */}
-                                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  <div className="bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-lg">
-                                    ✓ Ready
-                                  </div>
-                                </div>
-                              </motion.div>
-                            ))}
-                            
-                            {/* Enhanced Add More Images Drop Zone */}
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              transition={{ duration: 0.4, delay: (formData.gallery || []).length * 0.1 }}
-                              onDrop={(e) => handleDrop(e, true)}
-                              onDragOver={(e) => e.preventDefault()}
-                              onDragEnter={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.add('border-green-500', 'bg-green-50', 'scale-105');
-                              }}
-                              onDragLeave={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.remove('border-green-500', 'bg-green-50', 'scale-105');
-                              }}
-                              className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center hover:border-green-500 hover:bg-green-50 transition-all duration-300 cursor-pointer group transform hover:scale-105"
-                            >
-                              <div className="text-center">
-                                <div className="w-16 h-16 bg-gradient-to-r from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-green-200 group-hover:to-blue-200 transition-all duration-300 shadow-lg">
-                                  <Plus className="w-8 h-8 text-green-600 group-hover:text-green-700 group-hover:scale-110 transition-all duration-300" />
-                                </div>
-                                <p className="text-sm font-semibold text-gray-700 group-hover:text-green-700 mb-1">Add More Images</p>
-                                <p className="text-xs text-gray-500">Drag & drop or click</p>
-                              </div>
-                            </motion.div>
-                          </div>
-
-                          {/* Enhanced Gallery Actions */}
-                          <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-full">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                <span><strong>Tip:</strong> Drag images to reorder them</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-gray-600 bg-purple-50 px-4 py-2 rounded-full">
-                                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                <span>Supports JPG, PNG, WebP</span>
-                              </div>
-                            </div>
-                            <div className="flex gap-3">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (confirm('Are you sure you want to remove all gallery images?')) {
-                                    setFormData(prev => ({ ...prev, gallery: [] }));
-                                  }
-                                }}
-                                className="text-red-600 hover:text-red-700 px-4 py-2 rounded-xl hover:bg-red-50 transition-all duration-200 text-sm flex items-center gap-2 border border-red-200 hover:border-red-300"
-                                disabled={(formData.gallery || []).length === 0}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                                Clear All
-                              </button>
-                            </div>
-                          </div>
+                    {/* Simple Gallery Grid */}
+                    {(formData.gallery || []).length > 0 && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-lg font-medium text-gray-900">
+                            Gallery ({(formData.gallery || []).length} images)
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (confirm('Remove all gallery images?')) {
+                                setFormData(prev => ({ ...prev, gallery: [] }));
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-700 text-sm flex items-center gap-2"
+                            disabled={(formData.gallery || []).length === 0}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Clear All
+                          </button>
                         </div>
-                      ) : (
-                        /* Enhanced Empty State */
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-center py-16"
-                        >
-                          <div className="relative mb-8">
-                            <div className="w-32 h-32 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
-                              <Camera className="w-16 h-16 text-blue-600" />
-                            </div>
-                            <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                              <Plus className="w-6 h-6 text-white" />
-                            </div>
-                          </div>
-                          
-                          <h3 className="text-3xl font-bold text-gray-900 mb-4">Create Your Gallery</h3>
-                          <p className="text-gray-600 mb-8 max-w-lg mx-auto text-lg leading-relaxed">
-                            Showcase the beauty of your tour with stunning images. Upload multiple photos to give travelers a preview of their adventure.
-                          </p>
-                          
-                          {/* Enhanced Upload Options */}
-                          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-                            <label
-                              htmlFor="gallery-upload"
-                              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-10 py-4 rounded-2xl hover:from-green-700 hover:to-green-800 transition-all duration-200 cursor-pointer flex items-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105"
-                            >
-                              <Upload className="w-6 h-6" />
-                              <span className="font-semibold text-lg">Upload Images</span>
-                            </label>
-                            
-                            <div className="flex items-center gap-3 text-gray-400">
-                              <div className="w-8 h-px bg-gray-300"></div>
-                              <span className="text-sm font-medium">or</span>
-                              <div className="w-8 h-px bg-gray-300"></div>
-                            </div>
-                            
-                            <div
-                              onDrop={(e) => handleDrop(e, true)}
-                              onDragOver={(e) => e.preventDefault()}
-                              onDragEnter={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.add('border-blue-500', 'bg-blue-100', 'scale-105');
-                              }}
-                              onDragLeave={(e) => {
-                                e.preventDefault();
-                                e.currentTarget.classList.remove('border-blue-500', 'bg-blue-100', 'scale-105');
-                              }}
-                              onClick={() => document.getElementById('gallery-upload')?.click()}
-                              className="border-2 border-dashed border-blue-300 bg-blue-50 rounded-2xl px-10 py-4 hover:border-blue-500 hover:bg-blue-100 transition-all duration-300 cursor-pointer transform hover:scale-105"
-                            >
-                              <div className="flex items-center gap-3 text-blue-700">
-                                <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center">
-                                  <Image className="w-5 h-5" />
-                                </div>
-                                <div>
-                                  <div className="font-semibold">Drag & Drop Here</div>
-                                  <div className="text-sm opacity-75">Multiple files supported</div>
-                                </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          {(formData.gallery || []).map((imageUrl, index) => (
+                            <div key={index} className="relative group">
+                              <img
+                                src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`}
+                                alt={`Gallery image ${index + 1}`}
+                                className="w-full h-32 object-cover rounded-lg border border-gray-200"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
+                                }}
+                              />
+                              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button
+                                  type="button"
+                                  onClick={() => removeArrayItem('gallery', index)}
+                                  className="bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                                  title="Remove image"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                              <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                                #{index + 1}
                               </div>
                             </div>
-                          </div>
-                          
-                          {/* Enhanced Upload Guidelines */}
-                          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                            <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                <Info className="w-3 h-3 text-blue-600" />
-                              </div>
-                              Upload Guidelines
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-200">
-                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                  <FileText className="w-4 h-4 text-white" />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-green-800">File Types</div>
-                                  <div className="text-xs text-green-600">JPG, PNG, WebP</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
-                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                  <Upload className="w-4 h-4 text-white" />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-blue-800">File Size</div>
-                                  <div className="text-xs text-blue-600">Max 10MB each</div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-xl border border-purple-200">
-                                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                                  <Image className="w-4 h-4 text-white" />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-purple-800">Resolution</div>
-                                  <div className="text-xs text-purple-600">1920x1080px ideal</div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Empty State */}
+                    {(!formData.gallery || formData.gallery.length === 0) && !uploading && (
+                      <div className="text-center py-8 text-gray-500">
+                        <Image className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg font-medium text-gray-900 mb-2">No images uploaded yet</p>
+                        <p className="text-gray-600">Upload images to create a beautiful gallery for your tour</p>
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </form>

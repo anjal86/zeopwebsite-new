@@ -25,14 +25,12 @@ import { createOrganizationSchema, createWebSiteSchema, createLocalBusinessSchem
 const AnimatedCounter: React.FC<{
   end: number;
   suffix?: string;
-  prefix?: string;
   label: string;
   duration?: number;
-}> = ({ end, suffix = '', prefix = '', label, duration = 2500 }) => {
+}> = ({ end, suffix = '', label, duration = 2500 }) => {
   const { count, ref } = useCountUp({
     end,
     suffix,
-    prefix,
     duration,
     start: 0
   });

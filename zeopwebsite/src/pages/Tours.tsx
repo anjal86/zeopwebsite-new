@@ -5,7 +5,7 @@ import TourFilters from '../components/Tours/TourFilters';
 import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
-import { usePaginatedTours } from '../hooks/useApi';
+import { usePaginatedTours, useDestinations } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 
 const ToursPage: React.FC = () => {
@@ -21,17 +21,16 @@ const ToursPage: React.FC = () => {
     };
   });
 
-  // Use paginated API hook to fetch tours
+  // Use paginated API hook to fetch tours and destinations
   const { tours, loading, loadingMore, error, pagination, loadMore } = usePaginatedTours(filters);
+  const { data: destinations } = useDestinations();
 
   const handleTourBook = (tour: Tour) => {
-    console.log('Booking tour:', tour.title);
     // Navigate to tour detail page for booking
     navigate(`/tours/${tour.slug}`);
   };
 
   const handleTourView = (tour: Tour) => {
-    console.log('Viewing tour details:', tour.title);
     // Navigate to tour detail page
     navigate(`/tours/${tour.slug}`);
   };
@@ -82,6 +81,7 @@ const ToursPage: React.FC = () => {
               hasMore={pagination.hasNext}
               onLoadMore={loadMore}
               totalCount={pagination.totalCount}
+              destinations={destinations || undefined}
             />
           )}
         </div>

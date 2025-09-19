@@ -6,7 +6,7 @@
   "image": "https://images.unsplash.com/photo-1601999109497-ba1c7b6e0cfb?q=80&w=2070",
   "price": 3999,
   "originalPrice": 4999,
-  "duration": "12 Days",
+  "duration": 11,
   "location": "Mount Kailash, Tibet",
   "rating": 4.8,
   "reviews": 156,
@@ -101,5 +101,19 @@
   "createdAt": "2024-01-01T00:00:00.000Z",
   "updatedAt": "2024-01-15T00:00:00.000Z",
   "listed": true,
-  "updated_at": "2025-09-19T04:47:52.512Z"
+  "updated_at": "2025-09-19T06:02:54.420Z",
+  "primary_destination_id": 9,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    6
+  ],
+  "related_destinations": [
+    "Tibet"
+  ],
+  "related_activities": [
+    "Pilgrimage"
+  ],
+  "exclusions": [],
+  "activities": [],
+  "what_to_bring": []
 }
