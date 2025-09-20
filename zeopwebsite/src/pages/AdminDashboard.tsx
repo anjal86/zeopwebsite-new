@@ -12,9 +12,10 @@ import {
   Image as ImageIcon,
   MessageSquare,
   Mail,
-  Camera
+  Camera,
+  Palette
 } from 'lucide-react';
-import { useApi } from '../hooks/useApi';
+import { useApi, useAdminApi } from '../hooks/useApi';
 import DestinationManager from '../components/Admin/DestinationManager';
 import TourManager from '../components/Admin/TourManager';
 import SliderManager from '../components/Admin/SliderManager';
@@ -22,6 +23,7 @@ import ContactManager from '../components/Admin/ContactManager';
 import ContactEnquiryManager from '../components/Admin/ContactEnquiryManager';
 import TestimonialManager from '../components/Admin/TestimonialManager';
 import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
+import LogoManager from '../components/Admin/LogoManager';
 
 interface User {
   id: number;
@@ -30,12 +32,12 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'users' | 'settings';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings';
 
 const AdminDashboard: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   // Get active tab from URL or default to 'overview'
@@ -73,11 +75,10 @@ const AdminDashboard: React.FC = () => {
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'destinations', label: 'Destinations', icon: Mountain },
     { id: 'tours', label: 'Tours', icon: Backpack },
-    { id: 'sliders', label: 'Hero Sliders', icon: ImageIcon },
-    { id: 'kailash-gallery', label: 'Kailash Gallery', icon: Camera },
-    { id: 'enquiries', label: 'Contact Enquiries', icon: Mail },
-    { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
-    { id: 'users', label: 'Users', icon: Users },
+    { id: 'sliders', label: 'Sliders', icon: ImageIcon },
+    { id: 'kailash-gallery', label: 'Gallery', icon: Camera },
+    { id: 'enquiries', label: 'Enquiries', icon: Mail },
+    { id: 'testimonials', label: 'Reviews', icon: MessageSquare },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -97,8 +98,6 @@ const AdminDashboard: React.FC = () => {
         return <ContactEnquiryManager />;
       case 'testimonials':
         return <TestimonialManager />;
-      case 'users':
-        return <UsersContent />;
       case 'settings':
         return <SettingsContent />;
       default:
@@ -116,8 +115,18 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-100 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className={`bg-slate-800 text-white ${sidebarOpen ? 'w-64' : 'w-16'} fixed left-0 top-0 h-full z-30`}>
+      <div className={`bg-slate-800 text-white fixed left-0 top-0 h-full z-30 transition-transform duration-300 ${
+        sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
+      } ${sidebarOpen ? 'md:w-64' : 'md:w-16'}`}>
         {/* Header */}
         <div className="p-4 border-b border-slate-700">
           <div className="flex items-center space-x-3">
@@ -134,19 +143,22 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="mt-6">
+        <nav className="mt-4 px-2">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
             return (
               <button
                 key={item.id}
-                onClick={() => handleTabChange(item.id as ActiveTab)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-slate-700 transition-colors ${
-                  activeTab === item.id ? 'bg-slate-700 border-r-2 border-blue-500' : ''
+                onClick={() => {
+                  handleTabChange(item.id as ActiveTab);
+                  setSidebarOpen(false);
+                }}
+                className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${
+                  activeTab === item.id ? 'bg-slate-700 text-white' : 'text-slate-300'
                 }`}
               >
-                <IconComponent className="w-5 h-5" />
-                {sidebarOpen && <span className="font-medium">{item.label}</span>}
+                <IconComponent className="w-4 h-4 flex-shrink-0" />
+                <span className="font-medium truncate">{item.label}</span>
               </button>
             );
           })}
@@ -154,33 +166,29 @@ const AdminDashboard: React.FC = () => {
 
         {/* User Info */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
               <span className="text-white text-sm font-bold">{user.name.charAt(0)}</span>
             </div>
-            {sidebarOpen && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{user.name}</p>
-                <p className="text-xs text-slate-400 truncate">{user.email}</p>
-              </div>
-            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate text-white">{user.name}</p>
+              <p className="text-xs text-slate-400 truncate">{user.email}</p>
+            </div>
           </div>
-          {sidebarOpen && (
-            <button
-              onClick={handleLogout}
-              className="w-full mt-3 px-3 py-2 text-sm bg-red-600 hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
-          )}
+          <button
+            onClick={handleLogout}
+            className="w-full px-3 py-2 text-sm bg-red-600 hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
+      <div className={`flex-1 flex flex-col ${sidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>
         {/* Top Bar */}
-        <header className="bg-white shadow-sm border-b border-slate-200 px-6 py-4 sticky top-0 z-30">
+        <header className="bg-white shadow-sm border-b border-slate-200 px-4 md:px-6 py-4 sticky top-0 z-30">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
@@ -189,20 +197,80 @@ const AdminDashboard: React.FC = () => {
               >
                 {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
-              <h2 className="text-xl font-semibold text-slate-800 capitalize">{activeTab}</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-slate-800 capitalize">{activeTab}</h2>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-slate-600 hidden sm:block">
                 Welcome back, <span className="font-medium">{user.name}</span>
+              </div>
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center sm:hidden">
+                <span className="text-white text-sm font-bold">{user.name.charAt(0)}</span>
               </div>
             </div>
           </div>
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto pb-20 md:pb-6">
           {renderContent()}
         </main>
+      </div>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-40">
+        <div className="grid grid-cols-4 gap-0">
+          {/* Overview */}
+          <button
+            onClick={() => handleTabChange('overview')}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${
+              activeTab === 'overview'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-600'
+            }`}
+          >
+            <BarChart3 className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Overview</span>
+          </button>
+
+          {/* Tours */}
+          <button
+            onClick={() => handleTabChange('tours')}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${
+              activeTab === 'tours'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-600'
+            }`}
+          >
+            <Backpack className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Tours</span>
+          </button>
+
+          {/* Destinations */}
+          <button
+            onClick={() => handleTabChange('destinations')}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${
+              activeTab === 'destinations'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-600'
+            }`}
+          >
+            <Mountain className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Destinations</span>
+          </button>
+
+          {/* Settings */}
+          <button
+            onClick={() => handleTabChange('settings')}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${
+              activeTab === 'settings'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-600'
+            }`}
+          >
+            <Settings className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Settings</span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -212,7 +280,7 @@ const AdminDashboard: React.FC = () => {
 const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ onTabChange }) => {
   const { data: destinations } = useApi('/api/destinations');
   const { data: tours } = useApi('/api/tours');
-  const { data: enquiries } = useApi('/api/contact/enquiries');
+  const { data: enquiries } = useAdminApi('/api/admin/enquiries');
   const { data: testimonials } = useApi('/api/testimonials');
 
   return (
@@ -327,19 +395,22 @@ const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ 
   );
 };
 
-// Users Content Component
-const UsersContent: React.FC = () => {
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-200">
-      <h3 className="text-lg font-semibold text-slate-900 mb-4">User Management</h3>
-      <p className="text-slate-600">User management functionality will be implemented here.</p>
-    </div>
-  );
-};
 
 // Settings Content Component
 const SettingsContent: React.FC = () => {
-  return <ContactManager />;
+  return (
+    <div className="space-y-8">
+      {/* Logo Management Section */}
+      <div>
+        <LogoManager />
+      </div>
+      
+      {/* Contact Information Section */}
+      <div>
+        <ContactManager />
+      </div>
+    </div>
+  );
 };
 
 export default AdminDashboard;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Shield, Globe, Award, ArrowRight, Play, Users, Star, CheckCircle } from 'lucide-react';
+import { Heart, Shield, Globe, Award, Star, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const About: React.FC = () => {

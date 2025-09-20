@@ -5,6 +5,7 @@ import {
   Menu, X, Phone, Mail, MapPin, MessageCircle, LogIn
 } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
+import { useLogos } from '../../hooks/useLogos';
 import ContactModal from '../UI/ContactModal';
 
 interface NavItem {
@@ -14,6 +15,7 @@ interface NavItem {
 
 const Navigation: React.FC = () => {
   const { data: contactInfo } = useContact();
+  const { logos } = useLogos();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
@@ -141,9 +143,12 @@ const Navigation: React.FC = () => {
             <div className="flex items-center flex-shrink-0">
               <Link to="/" onClick={handleNavClick}>
                 <img
-                  src="/src/assets/zeo-logo.png"
+                  src={logos?.header || "/src/assets/zeo-logo.png"}
                   alt="Zeo Tourism Logo"
                   className="h-10 w-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/src/assets/zeo-logo.png";
+                  }}
                 />
               </Link>
             </div>

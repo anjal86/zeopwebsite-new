@@ -49,6 +49,8 @@ export interface Tour {
   destination_id?: number;
   destination_name?: string;
   destination_slug?: string;
+  primary_destination_id?: number;
+  secondary_destination_ids?: number[];
   created_at?: string;
   updated_at?: string;
   activities?: Activity[];
@@ -834,6 +836,18 @@ export const healthApi = {
   }
 };
 
+// Logos API
+export const logosApi = {
+  // Get all logos (public)
+  async getAll(): Promise<{
+    header: string;
+    footer: string;
+    lastUpdated: string;
+  }> {
+    return apiCallWithRetry('/logos');
+  }
+};
+
 // Export default API object
 const api = {
   tours: toursApi,
@@ -845,6 +859,7 @@ const api = {
   contact: contactApi,
   testimonials: testimonialsApi,
   health: healthApi,
+  logos: logosApi,
   // New hybrid APIs
   blogs: blogsApi,
   users: usersApi,

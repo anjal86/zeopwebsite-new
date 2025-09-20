@@ -27,6 +27,7 @@ const TourManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
   const [destinations, setDestinations] = useState<string[]>([]);
+  const [destinationsMap, setDestinationsMap] = useState<Map<number, string>>(new Map());
   const [updatingTours, setUpdatingTours] = useState<Set<number>>(new Set());
   
   // Pagination state
@@ -78,6 +79,13 @@ const TourManager: React.FC = () => {
         const data = await response.json();
         const uniqueLocations = [...new Set(data.map((dest: any) => dest.name || dest.title).filter(Boolean))] as string[];
         setDestinations(uniqueLocations);
+        
+        // Create a map of destination ID to destination name for quick lookup
+        const destMap = new Map<number, string>();
+        data.forEach((dest: any) => {
+          destMap.set(dest.id, dest.name || dest.title);
+        });
+        setDestinationsMap(destMap);
       }
     } catch (error) {
       // Error fetching destinations
@@ -92,7 +100,7 @@ const TourManager: React.FC = () => {
         page: currentPage.toString(),
         limit: itemsPerPage.toString(),
         ...(searchTerm && { search: searchTerm }),
-        ...(destinationFilter && { location: destinationFilter })
+        ...(destinationFilter && { destination: destinationFilter })
       });
 
       const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/tours?${params}`, {
@@ -295,7 +303,7 @@ const TourManager: React.FC = () => {
                   Category
                 </th>
                 <th className="w-24 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Location
+                  Destination
                 </th>
                 <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Duration
@@ -351,7 +359,9 @@ const TourManager: React.FC = () => {
                   <td className="px-3 py-4 text-sm text-gray-900">
                     <div className="flex items-center min-w-0">
                       <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                      <span className="truncate" title={tour.location}>{tour.location}</span>
+                      <span className="truncate" title={destinationsMap.get(tour.primary_destination_id || 0) || tour.location || 'No destination'}>
+                        {destinationsMap.get(tour.primary_destination_id || 0) || tour.location || 'No destination'}
+                      </span>
                     </div>
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-900">
@@ -476,7 +486,7 @@ const TourManager: React.FC = () => {
                 <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-500">
                   <div className="flex items-center">
                     <MapPin className="w-3 h-3 mr-1" />
-                    <span className="truncate">{tour.location}</span>
+                    <span className="truncate">{destinationsMap.get(tour.primary_destination_id || 0) || tour.location || 'No destination'}</span>
                   </div>
                   <div className="flex items-center">
                     <Calendar className="w-3 h-3 mr-1" />

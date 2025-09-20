@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart, ExternalLink } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
+import { useLogos } from '../../hooks/useLogos';
 
 const Footer: React.FC = () => {
   const { data: contactInfo } = useContact();
+  const { logos } = useLogos();
   const footerLinks = {
     destinations: [
       { name: 'Everest Base Camp', href: '/tours/everest-base-camp-trek' },
@@ -55,9 +57,12 @@ const Footer: React.FC = () => {
               >
                 <Link to="/" className="flex items-center mb-4 hover:opacity-80 transition-opacity">
                   <img
-                    src="/src/assets/zeo-logo-white.png"
+                    src={logos?.footer || "/src/assets/zeo-logo-white.png"}
                     alt="Zeo Tourism Logo"
                     className="h-10 w-auto"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/src/assets/zeo-logo-white.png";
+                    }}
                   />
                 </Link>
                 <p className="text-gray-400 mb-6 max-w-sm text-sm">

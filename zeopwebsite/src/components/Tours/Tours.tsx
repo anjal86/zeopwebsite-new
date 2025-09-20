@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
-import { Calendar, Users, Star, Heart, TrendingUp, Shield, Award } from 'lucide-react';
+import { Calendar, Users, Heart, TrendingUp, Shield, Award } from 'lucide-react';
 import { useTours } from '../../hooks/useApi';
 import type { Tour } from '../../services/api';
 import LoadingSpinner from '../UI/LoadingSpinner';

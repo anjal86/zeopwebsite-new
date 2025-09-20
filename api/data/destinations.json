@@ -188,7 +188,8 @@
     "altitude": "150m",
     "difficulty": "Easy",
     "relatedTours": [
-      33
+      33,
+      3
     ],
     "relatedActivities": [
       4,
@@ -580,8 +581,8 @@
     "altitude": "Sea Level",
     "difficulty": "Easy",
     "relatedTours": [
-      201,
       202,
+      201,
       203
     ],
     "relatedActivities": [

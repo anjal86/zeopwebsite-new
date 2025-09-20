@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Check, Info, FileText, Activity, Bed, Utensils, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ItineraryDay {
@@ -31,9 +31,7 @@ const TourTabs: React.FC<TourTabsProps> = ({
   activities,
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [hasHiddenTabs, setHasHiddenTabs] = useState(false);
   const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set([1])); // First day expanded by default
-  const tabsContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleDay = (dayNumber: number) => {
     const newExpanded = new Set(expandedDays);
@@ -60,20 +58,6 @@ const TourTabs: React.FC<TourTabsProps> = ({
     { id: 'inclusions', label: 'Inclusions', icon: Check }
   ];
 
-  // Check if tabs are clipped/hidden
-  useEffect(() => {
-    const checkScrollable = () => {
-      if (tabsContainerRef.current) {
-        const container = tabsContainerRef.current;
-        const isScrollable = container.scrollWidth > container.clientWidth;
-        setHasHiddenTabs(isScrollable);
-      }
-    };
-
-    checkScrollable();
-    window.addEventListener('resize', checkScrollable);
-    return () => window.removeEventListener('resize', checkScrollable);
-  }, []);
 
   return (
     <div className="bg-white rounded-xl shadow-sm mb-8">
