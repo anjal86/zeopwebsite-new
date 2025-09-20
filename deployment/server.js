@@ -292,6 +292,7 @@ let slidersData = loadData('sliders.json');
 let usersData = loadData('users.json');
 let contactData = loadData('contact.json');
 let testimonialsData = loadData('testimonials.json');
+let logoData = loadData('logos.json');
 let tourDetails = loadTourDetails();
 
 // Extract arrays from the loaded data
@@ -302,6 +303,11 @@ let sliders = slidersData.sliders || slidersData || [];
 let users = usersData.users || usersData || [];
 let contact = contactData || {};
 let testimonials = testimonialsData.testimonials || testimonialsData || [];
+let logos = logoData.logos || logoData || {
+  header: '/src/assets/zeo-logo.png',
+  footer: '/src/assets/zeo-logo-white.png',
+  lastUpdated: new Date().toISOString()
+};
 
 // Helper functions
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -1428,6 +1434,195 @@ app.patch('/api/admin/testimonials/:id/featured', authenticateToken, async (req,
     });
   } catch (error) {
     console.error('Error toggling featured status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== LOGOS API ====================
+
+// Get logos (public endpoint)
+app.get('/api/logos', async (req, res) => {
+  try {
+    await delay(100);
+    res.json(logos);
+  } catch (error) {
+    console.error('Error fetching logos:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== ADMIN LOGOS API ====================
+
+// Admin: Get all logos
+app.get('/api/admin/logos', authenticateToken, async (req, res) => {
+  try {
+    await delay(100);
+    res.json(logos);
+  } catch (error) {
+    console.error('Error fetching admin logos:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Upload logo with file upload
+app.post('/api/admin/logos/upload', authenticateToken, (req, res) => {
+  upload.single('logo')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: err.message });
+    }
+    
+    try {
+      console.log('Uploading logo...');
+      console.log('Request body:', req.body);
+      console.log('Uploaded file:', req.file);
+      
+      const { type } = req.body;
+      const file = req.file;
+      
+      if (!file) {
+        return res.status(400).json({ error: 'No logo file uploaded' });
+      }
+      
+      if (!type) {
+        return res.status(400).json({ error: 'Logo type is required' });
+      }
+      
+      if (!['header', 'footer'].includes(type)) {
+        return res.status(400).json({ error: 'Invalid logo type' });
+      }
+      
+      // Create logos directory
+      const logosDir = path.join(uploadsDir, 'logos');
+      if (!fs.existsSync(logosDir)) {
+        fs.mkdirSync(logosDir, { recursive: true });
+      }
+      
+      // Delete old logo file if it exists and is a local upload
+      const oldLogoPath = logos[type];
+      if (oldLogoPath && oldLogoPath.startsWith('/uploads/')) {
+        const oldFilePath = path.join(__dirname, oldLogoPath);
+        if (fs.existsSync(oldFilePath)) {
+          console.log('Deleting old logo:', oldFilePath);
+          fs.unlinkSync(oldFilePath);
+        }
+      }
+      
+      // Generate filename
+      const timestamp = Date.now();
+      const fileExtension = path.extname(file.originalname);
+      const filename = `${type}_${timestamp}${fileExtension}`;
+      const finalPath = path.join(logosDir, filename);
+      
+      // Compress and save image
+      console.log('Compressing logo image...');
+      const processedFilePath = await compressImage(file.path, finalPath, 90);
+      
+      const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
+      const fileUrl = `/uploads/${relativePath}`;
+      
+      // Update logos object
+      logos[type] = fileUrl;
+      logos.lastUpdated = new Date().toISOString();
+      
+      // Save to file
+      const saved = saveData('logos.json', logos);
+      if (!saved) {
+        throw new Error('Failed to save logo data to file');
+      }
+      
+      console.log(`Logo uploaded successfully: ${type} -> ${fileUrl}`);
+      res.json({
+        success: true,
+        message: `${type} logo uploaded successfully`,
+        logo: {
+          type,
+          url: fileUrl
+        },
+        logos: logos
+      });
+    } catch (error) {
+      console.error('Error uploading logo:', error);
+      res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+  });
+});
+
+// Admin: Update logo URLs (for external URLs)
+app.put('/api/admin/logos', authenticateToken, async (req, res) => {
+  try {
+    console.log('Updating logo URLs...');
+    console.log('Request body:', req.body);
+    
+    const { header, footer } = req.body;
+    
+    if (header) {
+      logos.header = header;
+    }
+    
+    if (footer) {
+      logos.footer = footer;
+    }
+    
+    logos.lastUpdated = new Date().toISOString();
+    
+    const saved = saveData('logos.json', logos);
+    if (!saved) {
+      throw new Error('Failed to save logo data to file');
+    }
+    
+    console.log('Logo URLs updated successfully');
+    res.json({
+      success: true,
+      message: 'Logo URLs updated successfully',
+      logos: logos
+    });
+  } catch (error) {
+    console.error('Error updating logo URLs:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Admin: Reset logo to default
+app.delete('/api/admin/logos/:type', authenticateToken, async (req, res) => {
+  try {
+    const { type } = req.params;
+    
+    if (!['header', 'footer'].includes(type)) {
+      return res.status(400).json({ error: 'Invalid logo type' });
+    }
+    
+    // Delete uploaded file if it exists
+    const logoPath = logos[type];
+    if (logoPath && logoPath.startsWith('/uploads/')) {
+      const filePath = path.join(__dirname, logoPath);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('Deleted logo file:', filePath);
+      }
+    }
+    
+    // Reset to default
+    const defaults = {
+      header: '/src/assets/zeo-logo.png',
+      footer: '/src/assets/zeo-logo-white.png'
+    };
+    
+    logos[type] = defaults[type];
+    logos.lastUpdated = new Date().toISOString();
+    
+    const saved = saveData('logos.json', logos);
+    if (!saved) {
+      throw new Error('Failed to save logo data to file');
+    }
+    
+    res.json({
+      success: true,
+      message: `${type} logo reset to default`,
+      logos: logos
+    });
+  } catch (error) {
+    console.error('Error resetting logo:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
