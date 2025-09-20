@@ -168,3 +168,105 @@
     @apply bg-gray-900 text-white;
   }
 }
+
+/* Mobile-specific responsive improvements */
+@media (max-width: 640px) {
+  /* Ensure touch targets are large enough */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile-optimized text sizes */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  
+  .mobile-text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  
+  /* Mobile-optimized spacing */
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  .mobile-margin {
+    margin: 1rem;
+  }
+  
+  /* Mobile-optimized buttons */
+  .mobile-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Mobile-optimized cards */
+  .mobile-card {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Mobile navigation improvements */
+  .mobile-nav-item {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Reduce animations on mobile for performance */
+  .reduce-motion * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+}
+
+/* Tablet-specific improvements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .tablet-padding {
+    padding: 1.5rem;
+  }
+}
+
+/* Performance optimizations for smaller screens */
+@media (max-width: 768px) {
+  /* Disable complex animations on mobile */
+  .no-mobile-animations * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Optimize images for mobile */
+  .mobile-img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* Mobile-friendly aspect ratios */
+  .mobile-aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .mobile-aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .mobile-aspect-photo {
+    aspect-ratio: 4 / 3;
+  }
+}

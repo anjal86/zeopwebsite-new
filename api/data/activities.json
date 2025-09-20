@@ -126,5 +126,53 @@
     "popularDestinations": ["Kathmandu", "Pokhara", "Rural Villages", "Chitwan"],
     "relatedTours": [],
     "relatedDestinations": [6, 5, 7]
+  },
+  {
+    "id": 8,
+    "name": "City Tours",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 8,
+    "href": "/activities/city-tours",
+    "type": "cultural",
+    "description": "Explore modern cities and urban attractions, from iconic skyscrapers to luxury shopping districts and cultural landmarks.",
+    "highlights": ["Iconic Architecture", "Shopping Districts", "Urban Culture", "Modern Attractions"],
+    "difficulty": "Easy",
+    "bestTime": "Year-round",
+    "duration": "1-7 Days",
+    "popularDestinations": ["Dubai", "Bangkok", "Singapore", "Kuala Lumpur"],
+    "relatedTours": [201],
+    "relatedDestinations": [26, 12]
+  },
+  {
+    "id": 9,
+    "name": "Desert Safari",
+    "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 5,
+    "href": "/activities/desert-safari",
+    "type": "adventure",
+    "description": "Experience the thrill of desert adventures with dune bashing, camel riding, sandboarding, and traditional Bedouin camp experiences.",
+    "highlights": ["Dune Bashing", "Camel Riding", "Sandboarding", "Desert Camping"],
+    "difficulty": "Moderate",
+    "bestTime": "Oct-Apr",
+    "duration": "1-3 Days",
+    "popularDestinations": ["Dubai", "Abu Dhabi", "Oman", "Jordan"],
+    "relatedTours": [202],
+    "relatedDestinations": [26]
+  },
+  {
+    "id": 10,
+    "name": "Luxury Experiences",
+    "image": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 3,
+    "href": "/activities/luxury",
+    "type": "luxury",
+    "description": "Indulge in premium experiences including private tours, fine dining, luxury accommodations, and exclusive access to high-end attractions.",
+    "highlights": ["5-Star Hotels", "Private Tours", "Fine Dining", "Exclusive Access"],
+    "difficulty": "Easy",
+    "bestTime": "Year-round",
+    "duration": "3-10 Days",
+    "popularDestinations": ["Dubai", "Maldives", "Singapore", "Thailand"],
+    "relatedTours": [203],
+    "relatedDestinations": [26, 13, 12]
   }
 ]

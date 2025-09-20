@@ -124,28 +124,18 @@ const Navigation: React.FC = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed left-0 right-0 z-50"
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ease-out ${
+          isScrolled
+            ? 'bg-white shadow-2xl border-b border-gray-200'
+            : 'bg-white shadow-xl mx-4 md:mx-16 rounded-b-2xl'
+        }`}
         style={{
-          top: isScrolled ? '0px' : 'calc(12px + 0.75rem + 16px)',
-          marginLeft: isScrolled ? '0px' : window.innerWidth < 768 ? '16px' : '64px',
-          marginRight: isScrolled ? '0px' : window.innerWidth < 768 ? '16px' : '64px',
-          borderRadius: isScrolled ? '0px' : '0px 0px 16px 16px',
-          backgroundColor: 'rgb(255, 255, 255)',
-          boxShadow: isScrolled
-            ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-            : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          borderBottom: isScrolled ? '1px solid rgb(243, 244, 246)' : 'none',
-          transition: 'all 0.3s ease-out'
+          top: isScrolled ? '0px' : '40px',
         }}
       >
-        <div
-          className="transition-all duration-300 ease-out"
-          style={{
-            paddingLeft: isScrolled ? 'max(1rem, calc(50% - 720px))' : '24px',
-            paddingRight: isScrolled ? 'max(1rem, calc(50% - 720px))' : '24px',
-            minHeight: '60px'
-          }}
-        >
+        <div className={`transition-all duration-300 ease-out ${
+          isScrolled ? 'px-4 lg:px-8' : 'px-6'
+        }`}>
           <div className="flex items-center justify-between h-15 py-3">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0">
@@ -207,7 +197,7 @@ const Navigation: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="max-[1279px]:flex hidden p-1.5 rounded-lg transition-all duration-300 text-gray-900 hover:bg-gray-100 flex-shrink-0"
+              className="xl:hidden flex p-2 rounded-lg transition-all duration-300 text-gray-900 hover:bg-gray-100 flex-shrink-0"
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
@@ -222,9 +212,9 @@ const Navigation: React.FC = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="max-[1279px]:block hidden border-t bg-white border-gray-200"
+              className="xl:block border-t bg-white border-gray-200"
             >
-              <div className="section-container py-6">
+              <div className="px-4 py-6">
                 <nav className="space-y-1">
                   {navItems.map((item) => (
                     <motion.div

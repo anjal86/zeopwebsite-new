@@ -231,7 +231,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-black"
+      className="relative min-h-screen w-full overflow-hidden bg-black pt-16 md:pt-0"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -353,7 +353,7 @@ const Hero: React.FC = () => {
         className="absolute inset-0 z-10 flex items-center justify-center"
         style={{ y: contentY }}
       >
-        <div className="w-full h-full flex items-center justify-center px-4 sm:px-6">
+        <div className="w-full h-full flex items-center justify-center px-4 sm:px-6 pt-20 md:pt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -380,7 +380,7 @@ const Hero: React.FC = () => {
               {/* Main Title with Parallax */}
               <motion.h1
                 variants={textVariants}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-6 leading-tight text-center"
+                className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white mb-4 sm:mb-6 leading-tight text-center px-2"
                 style={{ y: titleY }}
               >
                 {slides[currentSlide].title}
@@ -389,7 +389,7 @@ const Hero: React.FC = () => {
               {/* Subtitle with Parallax */}
               <motion.p
                 variants={textVariants}
-                className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-10 font-light text-center max-w-3xl mx-auto"
+                className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 md:mb-10 font-light text-center max-w-3xl mx-auto px-2"
                 style={{ y: subtitleY }}
               >
                 {slides[currentSlide].subtitle || ''}
@@ -406,7 +406,7 @@ const Hero: React.FC = () => {
                     href={slides[currentSlide].button_url || '#tours'}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-8 py-4 rounded-full text-white font-semibold text-lg hover:shadow-2xl transition-all duration-300 min-w-[200px] inline-block text-center ${
+                    className={`px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-semibold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 min-w-[180px] sm:min-w-[200px] inline-block text-center ${
                       slides[currentSlide].button_style === 'secondary'
                         ? 'bg-gradient-to-r from-blue-500 to-blue-600'
                         : slides[currentSlide].button_style === 'outline'
@@ -431,7 +431,7 @@ const Hero: React.FC = () => {
             onClick={goToPrevSlide}
             whileHover={{ scale: 1.1, x: -2 }}
             whileTap={{ scale: 0.9 }}
-            className="absolute left-2 sm:left-4 md:left-8 top-[55%] sm:top-[58%] md:top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
+            className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:text-sky-blue transition-colors duration-300" />
@@ -442,7 +442,7 @@ const Hero: React.FC = () => {
             onClick={goToNextSlide}
             whileHover={{ scale: 1.1, x: 2 }}
             whileTap={{ scale: 0.9 }}
-            className="absolute right-2 sm:right-4 md:right-8 top-[55%] sm:top-[58%] md:top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
+            className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20 group flex items-center justify-center"
             aria-label="Next slide"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:text-sky-blue transition-colors duration-300" />
@@ -452,19 +452,19 @@ const Hero: React.FC = () => {
 
       {/* Slide Indicators with Parallax */}
       <motion.div
-        className="absolute bottom-8 md:bottom-10 w-full z-20"
+        className="absolute bottom-6 sm:bottom-8 md:bottom-10 w-full z-20"
         style={{ y: indicatorsY }}
       >
         <div className="w-full flex justify-center items-center">
-          <div className="flex space-x-3">
+          <div className="flex space-x-2 sm:space-x-3">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`transition-all duration-300 ${
                   index === currentSlide
-                    ? 'w-8 md:w-12 h-2 bg-sky-blue'
-                    : 'w-2 h-2 bg-white/50 hover:bg-white/70'
+                    ? 'w-6 sm:w-8 md:w-12 h-1.5 sm:h-2 bg-sky-blue'
+                    : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/50 hover:bg-white/70'
                 } rounded-full`}
               />
             ))}
@@ -476,12 +476,12 @@ const Hero: React.FC = () => {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-20 md:bottom-24 w-full z-20"
+        className="absolute bottom-16 sm:bottom-20 md:bottom-24 w-full z-20"
         style={{ y: scrollIndicatorY }}
       >
         <div className="w-full flex justify-center items-center">
           <div className="text-white">
-            <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+            <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
           </div>
         </div>
       </motion.div>
@@ -499,13 +499,13 @@ const Hero: React.FC = () => {
             onClick={toggleMute}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="glass p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20"
+            className="glass p-2 sm:p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-md border border-white/20"
             aria-label={isMuted ? 'Unmute video' : 'Mute video'}
           >
             {isMuted ? (
-              <VolumeX className="w-5 h-5" />
+              <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
             ) : (
-              <Volume2 className="w-5 h-5" />
+              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
             )}
           </motion.button>
         </motion.div>

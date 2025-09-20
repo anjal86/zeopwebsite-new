@@ -75,21 +75,21 @@ const FeaturedDestinations: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-white">
-      <div className="section-container">
+    <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <div className="section-container px-4 sm:px-6 lg:px-8">
         {/* Minimal Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <div className="inline-flex items-center bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Mountain className="w-4 h-4 mr-2" />
             Featured Destinations
           </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900">
             Popular Destinations
           </h2>
         </motion.div>
@@ -100,7 +100,7 @@ const FeaturedDestinations: React.FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
           {featuredDestinations.map((destination) => (
             <motion.div
@@ -110,7 +110,7 @@ const FeaturedDestinations: React.FC = () => {
               className="group cursor-pointer"
             >
               <Link to={destination.href || `/destinations/${destination.name.toLowerCase()}`} className="block">
-                <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden aspect-[4/3] sm:aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                   <img
                     key={`${destination.id}-${imageRefreshKey}`}
                     src={`${destination.image}?t=${imageRefreshKey}`}
@@ -125,12 +125,12 @@ const FeaturedDestinations: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
                   {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                    <div className="flex items-center mb-3 opacity-80">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span className="text-sm">{destination.country}</span>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
+                    <div className="flex items-center mb-2 sm:mb-3 opacity-80">
+                      <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                      <span className="text-xs sm:text-sm">{destination.country}</span>
                     </div>
-                    <h3 className="text-2xl font-bold">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
                       {destination.name}
                     </h3>
                   </div>
@@ -144,13 +144,13 @@ const FeaturedDestinations: React.FC = () => {
         </motion.div>
         
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <Link
             to="/destinations"
-            className="inline-flex items-center bg-gradient-to-r from-primary to-primary-dark text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+            className="inline-flex items-center bg-gradient-to-r from-primary to-primary-dark text-white px-6 sm:px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
           >
             View All Destinations
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
           </Link>
         </div>
       </div>

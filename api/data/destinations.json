@@ -556,5 +556,42 @@
     "difficulty": "Challenging",
     "relatedTours": [],
     "relatedActivities": []
+  },
+  {
+    "id": 26,
+    "name": "Dubai",
+    "country": "UAE",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 3,
+    "href": "/destinations/dubai",
+    "type": "international",
+    "description": "Experience the futuristic city of Dubai with its iconic skyline, luxury shopping, desert adventures, and world-class attractions.",
+    "highlights": [
+      "Burj Khalifa",
+      "Dubai Mall",
+      "Desert Safari",
+      "Palm Jumeirah",
+      "Dubai Marina",
+      "Gold Souk",
+      "Atlantis Resort",
+      "Dubai Fountain"
+    ],
+    "bestTime": "Nov-Mar",
+    "altitude": "Sea Level",
+    "difficulty": "Easy",
+    "relatedTours": [
+      201,
+      202,
+      203
+    ],
+    "relatedActivities": [
+      8,
+      9,
+      10
+    ],
+    "title": "Dubai",
+    "region": "Middle East",
+    "slug": "dubai",
+    "featured": true
   }
 ]

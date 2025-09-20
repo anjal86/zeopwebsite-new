@@ -1,0 +1,192 @@
+[
+  {
+    "id": 201,
+    "title": "Dubai City Explorer - 4 Days",
+    "slug": "dubai-city-explorer-4-days",
+    "destination": "Dubai",
+    "destinationId": 26,
+    "country": "UAE",
+    "duration": "4 days",
+    "price": 899,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-15 people",
+    "bestTime": "Nov-Mar",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "city-tour",
+    "category": "Cultural",
+    "description": "Discover the modern marvels and traditional charm of Dubai in this comprehensive 4-day city tour. Experience iconic landmarks, luxury shopping, and authentic Emirati culture.",
+    "highlights": [
+      "Burj Khalifa observation deck visit",
+      "Dubai Mall shopping experience",
+      "Traditional Gold and Spice Souks",
+      "Dubai Marina cruise",
+      "Old Dubai heritage tour",
+      "Dubai Fountain show"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival & Modern Dubai",
+        "description": "Airport pickup, hotel check-in, Burj Khalifa visit, Dubai Mall exploration"
+      },
+      {
+        "day": 2,
+        "title": "Traditional Dubai",
+        "description": "Dubai Creek, Gold Souk, Spice Souk, Al Fahidi Historical District"
+      },
+      {
+        "day": 3,
+        "title": "Dubai Marina & Beaches",
+        "description": "Dubai Marina walk, JBR Beach, Marina cruise, Palm Jumeirah visit"
+      },
+      {
+        "day": 4,
+        "title": "Departure",
+        "description": "Last-minute shopping, airport transfer"
+      }
+    ],
+    "included": [
+      "4-star hotel accommodation",
+      "Daily breakfast",
+      "Airport transfers",
+      "All entrance fees",
+      "Professional guide",
+      "Transportation"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner",
+      "Personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": 202,
+    "title": "Dubai Desert Adventure - 3 Days",
+    "slug": "dubai-desert-adventure-3-days",
+    "destination": "Dubai",
+    "destinationId": 26,
+    "country": "UAE",
+    "duration": "3 days",
+    "price": 649,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "4-12 people",
+    "bestTime": "Oct-Apr",
+    "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "adventure",
+    "category": "Adventure",
+    "description": "Experience the thrill of the Arabian Desert with dune bashing, camel riding, and traditional Bedouin camp experiences. Perfect for adventure seekers.",
+    "highlights": [
+      "4WD dune bashing adventure",
+      "Camel trekking experience",
+      "Traditional Bedouin camp overnight",
+      "Sandboarding activities",
+      "Falconry demonstration",
+      "Arabian BBQ dinner under stars"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Desert Safari & Camp",
+        "description": "Pickup from Dubai, dune bashing, camel ride, desert camp setup, BBQ dinner"
+      },
+      {
+        "day": 2,
+        "title": "Desert Activities",
+        "description": "Sunrise photography, sandboarding, falconry show, traditional breakfast"
+      },
+      {
+        "day": 3,
+        "title": "Return to Dubai",
+        "description": "Morning desert walk, return to Dubai, city drop-off"
+      }
+    ],
+    "included": [
+      "Desert camp accommodation",
+      "All meals during desert stay",
+      "4WD transportation",
+      "All desert activities",
+      "Professional guide",
+      "Traditional entertainment"
+    ],
+    "excluded": [
+      "Dubai hotel accommodation",
+      "International flights",
+      "Personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": 203,
+    "title": "Dubai Luxury Experience - 5 Days",
+    "slug": "dubai-luxury-experience-5-days",
+    "destination": "Dubai",
+    "destinationId": 26,
+    "country": "UAE",
+    "duration": "5 days",
+    "price": 1899,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-8 people",
+    "bestTime": "Nov-Mar",
+    "image": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "luxury",
+    "category": "Luxury",
+    "description": "Indulge in the ultimate Dubai luxury experience with 5-star accommodations, private tours, fine dining, and exclusive access to premium attractions.",
+    "highlights": [
+      "5-star luxury hotel stay",
+      "Private helicopter tour",
+      "Atlantis Resort day pass",
+      "Private yacht charter",
+      "Fine dining experiences",
+      "VIP shopping assistance",
+      "Spa treatments included"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Luxury Arrival",
+        "description": "VIP airport pickup, 5-star hotel check-in, welcome dinner at Burj Al Arab"
+      },
+      {
+        "day": 2,
+        "title": "Sky High Dubai",
+        "description": "Private helicopter tour, Burj Khalifa VIP experience, luxury shopping"
+      },
+      {
+        "day": 3,
+        "title": "Atlantis Experience",
+        "description": "Atlantis Resort day pass, aquarium visit, water park access, spa treatment"
+      },
+      {
+        "day": 4,
+        "title": "Private Yacht & Desert",
+        "description": "Private yacht charter, luxury desert safari with private camp"
+      },
+      {
+        "day": 5,
+        "title": "Departure",
+        "description": "Final shopping, VIP airport transfer"
+      }
+    ],
+    "included": [
+      "5-star luxury hotel",
+      "All meals at premium restaurants",
+      "Private transportation",
+      "All premium experiences",
+      "Personal concierge service",
+      "Spa treatments"
+    ],
+    "excluded": [
+      "International flights",
+      "Personal shopping",
+      "Additional spa services",
+      "Travel insurance"
+    ]
+  }
+]
