@@ -4,7 +4,6 @@ import {
   BarChart3,
   Mountain,
   Backpack,
-  Users,
   Settings,
   LogOut,
   Menu,
@@ -12,8 +11,7 @@ import {
   Image as ImageIcon,
   MessageSquare,
   Mail,
-  Camera,
-  Palette
+  Camera
 } from 'lucide-react';
 import { useApi, useAdminApi } from '../hooks/useApi';
 import DestinationManager from '../components/Admin/DestinationManager';

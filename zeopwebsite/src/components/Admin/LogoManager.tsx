@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Upload, 
-  Image as ImageIcon, 
-  Trash2, 
-  RefreshCw, 
-  Save, 
-  AlertCircle, 
-  CheckCircle,
-  Eye,
-  EyeOff
+import {
+  Upload,
+  Image as ImageIcon,
+  Trash2,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle
 } from 'lucide-react';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
@@ -99,43 +96,6 @@ const LogoManager: React.FC = () => {
     }
   };
 
-  // Handle URL update
-  const handleUrlUpdate = async (urls: Partial<LogoData>) => {
-    try {
-      setLoading(true);
-      setMessage(null);
-
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch('/api/admin/logos', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(urls)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update logo URLs');
-      }
-
-      const result = await response.json();
-      setLogos(result.logos);
-      setMessage({ type: 'success', text: result.message });
-      
-      // Clear message after 3 seconds
-      setTimeout(() => setMessage(null), 3000);
-    } catch (err) {
-      console.error('Error updating logo URLs:', err);
-      setMessage({ 
-        type: 'error', 
-        text: err instanceof Error ? err.message : 'Failed to update logo URLs' 
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Handle reset to default
   const handleReset = async (type: 'header' | 'footer') => {
