@@ -345,6 +345,13 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
     clearTimeout(timeoutId);
 
     if (!response.ok) {
+      // Handle specific error cases
+      if (response.status === 503) {
+        throw new Error('Server temporarily unavailable - using fallback data');
+      }
+      if (response.status === 404) {
+        throw new Error('API endpoint not found - using fallback data');
+      }
       throw new Error(`API call failed: ${response.status} ${response.statusText}`);
     }
 
@@ -357,6 +364,8 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
       if (error.name === 'AbortError') {
         throw new Error('Request timeout - please check your connection');
       }
+      // Log the error but don't break the app
+      console.warn(`API call to ${endpoint} failed:`, error.message);
       throw error;
     }
     
