@@ -21,7 +21,7 @@ export const useLogos = () => {
     } catch (err) {
       console.error('Error fetching logos:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch logos');
-      // Set default logos on error
+      // Set default logos on error - this ensures the site always works
       setLogos({
         header: '/src/assets/zeo-logo.png',
         footer: '/src/assets/zeo-logo-white.png',
