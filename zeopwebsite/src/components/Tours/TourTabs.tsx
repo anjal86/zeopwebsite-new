@@ -19,6 +19,16 @@ interface TourTabsProps {
   activities: Array<{ id: number; name: string; image: string }>;
   images: string[];
   title: string;
+  goodToKnow?: {
+    main_attractions: string;
+    travel_distances: string;
+    accommodation_standards: string;
+    additional_activities: string;
+  };
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
 }
 
 const TourTabs: React.FC<TourTabsProps> = ({

@@ -188,5 +188,355 @@
       "Additional spa services",
       "Travel insurance"
     ]
+  },
+  {
+    "id": 301,
+    "title": "Mustang Flight & Drive Tour - 5 Days",
+    "slug": "mustang-flight-drive-tour-5-days",
+    "destination": "Mustang",
+    "destinationId": 15,
+    "country": "Nepal",
+    "duration": "5 days",
+    "price": 750,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "2-12 people",
+    "bestTime": "Mar-Nov",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+    "featured": true,
+    "type": "adventure",
+    "category": "Adventure",
+    "description": "Experience the mystical kingdom of Mustang with a perfect combination of flight and drive. Explore ancient monasteries, dramatic landscapes, and unique Tibetan culture in the rain shadow of the Himalayas.",
+    "highlights": [
+      "Flight to Jomsom with mountain views",
+      "Lo Manthang ancient walled city",
+      "Tiji Festival experience (seasonal)",
+      "Unique Tibetan Buddhist culture",
+      "Dramatic desert landscapes",
+      "Ancient monasteries and caves"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Kathmandu to Pokhara to Jomsom",
+        "description": "Early morning flight from Kathmandu to Pokhara, then scenic flight to Jomsom. Explore Jomsom bazaar and acclimatize to the altitude."
+      },
+      {
+        "day": 2,
+        "title": "Jomsom to Charang to Lo Manthang",
+        "description": "Drive through dramatic landscapes to Charang village. Visit Charang monastery and continue to Lo Manthang, the ancient walled capital."
+      },
+      {
+        "day": 3,
+        "title": "Explore Lo Manthang",
+        "description": "Full day exploration of Lo Manthang. Visit Jampa Gompa, Thubchen Gompa, and Choprang Gompa. Experience local Tibetan culture."
+      },
+      {
+        "day": 4,
+        "title": "Lo Manthang to Jomsom",
+        "description": "Return journey to Jomsom via different route. Stop at Ghami village and see the longest mani wall in Nepal."
+      },
+      {
+        "day": 5,
+        "title": "Jomsom to Pokhara to Kathmandu",
+        "description": "Morning flight from Jomsom to Pokhara with stunning mountain views. Connect to Kathmandu flight or extend stay in Pokhara."
+      }
+    ],
+    "included": [
+      "Domestic flights (Kathmandu-Pokhara-Jomsom)",
+      "Private vehicle transportation",
+      "Accommodation in hotels/guesthouses",
+      "All meals during tour",
+      "Professional guide",
+      "Permits and entrance fees"
+    ],
+    "excluded": [
+      "International flights",
+      "Nepal visa fees",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and driver"
+    ]
+  },
+  {
+    "id": 302,
+    "title": "Rara Scenic Tour by Flight & Road - 7 Days",
+    "slug": "rara-scenic-tour-flight-road-7-days",
+    "destination": "Rara",
+    "destinationId": 27,
+    "country": "Nepal",
+    "duration": "7 days",
+    "price": 890,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "2-12 people",
+    "bestTime": "Apr-Nov",
+    "image": "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?q=80&w=2070&auto=format&fit=crop",
+    "featured": true,
+    "type": "adventure",
+    "category": "Adventure", 
+    "description": "Discover Nepal's largest and most beautiful alpine lake in the remote far-western region. This unique tour combines scenic flights and overland journey to explore the pristine Rara National Park.",
+    "highlights": [
+      "Nepal's largest alpine lake",
+      "Pristine Rara National Park",
+      "Scenic mountain flights",
+      "Remote Himalayan villages",
+      "Rich biodiversity and wildlife",
+      "Peaceful mountain environment"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Kathmandu to Nepalgunj",
+        "description": "Morning flight from Kathmandu to Nepalgunj. Rest and prepare for mountain flight next day."
+      },
+      {
+        "day": 2,
+        "title": "Nepalgunj to Talcha Airport, Drive to Rara Lake",
+        "description": "Early morning scenic flight to Talcha Airport. Drive to Rara Lake through beautiful countryside."
+      },
+      {
+        "day": 3,
+        "title": "Explore Rara Lake",
+        "description": "Full day exploration around Rara Lake. Boat ride on the pristine waters, nature walks around the lake."
+      },
+      {
+        "day": 4,
+        "title": "Rara Lake Exploration",
+        "description": "Continue exploring Rara National Park. Wildlife spotting, hiking to viewpoints, photography."
+      },
+      {
+        "day": 5,
+        "title": "Rara to Talcha, Fly to Nepalgunj",
+        "description": "Morning departure from Rara Lake area to Talcha Airport. Flight back to Nepalgunj."
+      },
+      {
+        "day": 6,
+        "title": "Nepalgunj to Kathmandu",
+        "description": "Morning flight from Nepalgunj to Kathmandu. Free time for last-minute shopping or sightseeing."
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "description": "Transfer to international airport for departure or extend your stay in Nepal."
+      }
+    ],
+    "included": [
+      "Domestic flights (Kathmandu-Nepalgunj-Talcha)",
+      "Ground transportation",
+      "Accommodation in lodges/guesthouses",
+      "All meals during tour",
+      "Professional guide",
+      "National park permits"
+    ],
+    "excluded": [
+      "International flights",
+      "Nepal visa fees",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and driver"
+    ]
+  },
+  {
+    "id": 303,
+    "title": "Bardiya Wilderness Experience - 4 Days",
+    "slug": "bardiya-wilderness-experience-4-days",
+    "destination": "Bardiya",
+    "destinationId": 14,
+    "country": "Nepal",
+    "duration": "4 days",
+    "price": 450,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-12 people",
+    "bestTime": "Oct-Apr",
+    "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop",
+    "featured": true,
+    "type": "wildlife",
+    "category": "Wildlife",
+    "description": "Experience Nepal's best kept wildlife secret in Bardiya National Park. Enjoy thrilling jungle safaris, spot Royal Bengal tigers, one-horned rhinos, and diverse wildlife in their natural habitat.",
+    "highlights": [
+      "Royal Bengal tiger spotting",
+      "One-horned rhinoceros sightings",
+      "Elephant safari experience",
+      "Karnali River boat safari",
+      "Bird watching (400+ species)",
+      "Tharu cultural experience"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Bardiya",
+        "description": "Arrive in Bardiya National Park area. Check into jungle lodge. Evening Tharu cultural program."
+      },
+      {
+        "day": 2,
+        "title": "Full Day Jungle Safari",
+        "description": "Early morning jeep safari in search of tigers and rhinos. Afternoon elephant safari. Evening boat safari on Karnali River."
+      },
+      {
+        "day": 3,
+        "title": "Wildlife Activities",
+        "description": "Morning bird watching and nature walk. Visit Tharu village. Afternoon jungle safari with different route."
+      },
+      {
+        "day": 4,
+        "title": "Departure",
+        "description": "Early morning final safari activity. Return to lodge for breakfast and checkout."
+      }
+    ],
+    "included": [
+      "Airport/hotel transfers",
+      "Accommodation in jungle lodge",
+      "All meals during safari",
+      "Professional naturalist guide",
+      "All safari activities",
+      "National park permits"
+    ],
+    "excluded": [
+      "Transportation to/from Bardiya",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guides",
+      "Camera permits"
+    ]
+  },
+  {
+    "id": 304,
+    "title": "Chitwan Jungle Stay - 4 Days",
+    "slug": "chitwan-jungle-stay-4-days",
+    "destination": "Chitwan",
+    "destinationId": 7,
+    "country": "Nepal",
+    "duration": "4 days",
+    "price": 320,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-16 people",
+    "bestTime": "Oct-Mar",
+    "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop",
+    "featured": true,
+    "type": "wildlife",
+    "category": "Wildlife",
+    "description": "Immerse yourself in the heart of Chitwan National Park with an authentic jungle stay experience. Encounter diverse wildlife including rhinos, tigers, elephants and enjoy traditional Tharu culture.",
+    "highlights": [
+      "One-horned rhinoceros encounters",
+      "Tiger tracking expeditions",
+      "Elephant breeding center visit",
+      "Canoe ride on Rapti River",
+      "Tharu village cultural tour",
+      "Jungle walking safari"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival and Tharu Culture",
+        "description": "Arrive in Chitwan and check into jungle resort. Tharu village tour. Evening Tharu cultural dance program."
+      },
+      {
+        "day": 2,
+        "title": "Jungle Safari Adventures",
+        "description": "Early morning jeep safari in core jungle area. Afternoon canoe ride on Rapti River followed by jungle walking safari."
+      },
+      {
+        "day": 3,
+        "title": "Elephant Activities and Nature Walk",
+        "description": "Morning visit to Elephant Breeding Center. Elephant safari through grasslands. Afternoon bird watching and nature walk."
+      },
+      {
+        "day": 4,
+        "title": "Final Safari and Departure",
+        "description": "Early morning final safari opportunity. Return for breakfast and checkout. Departure with unforgettable jungle memories."
+      }
+    ],
+    "included": [
+      "Accommodation in jungle resort",
+      "All meals (breakfast, lunch, dinner)",
+      "Professional nature guide",
+      "All jungle activities",
+      "National park permits",
+      "Transportation within park"
+    ],
+    "excluded": [
+      "Transportation to/from Chitwan",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guides and staff",
+      "Alcoholic beverages"
+    ]
+  },
+  {
+    "id": 305,
+    "title": "Upper Mustang Flight & Drive Tour - 6 Days",
+    "slug": "upper-mustang-flight-drive-tour-6-days",
+    "destination": "Mustang",
+    "destinationId": 15,
+    "country": "Nepal",
+    "duration": "6 days",
+    "price": 950,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "2-10 people",
+    "bestTime": "Mar-Nov",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+    "featured": true,
+    "type": "adventure",
+    "category": "Adventure",
+    "description": "Journey to the forbidden kingdom of Upper Mustang, a restricted area that preserves ancient Tibetan culture and traditions. Explore medieval cities, ancient monasteries, and dramatic desert landscapes.",
+    "highlights": [
+      "Restricted Upper Mustang region",
+      "Lo Manthang walled city",
+      "Ancient Tibetan monasteries",
+      "Unique high-altitude desert",
+      "Sky caves exploration",
+      "Royal Palace of Mustang King"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Kathmandu to Pokhara to Jomsom",
+        "description": "Morning flight to Pokhara, then scenic mountain flight to Jomsom. Explore Jomsom town and visit local monastery."
+      },
+      {
+        "day": 2,
+        "title": "Jomsom to Charang to Lo Manthang",
+        "description": "Drive through the Kali Gandaki valley to Charang. Visit the impressive Charang monastery with ancient murals."
+      },
+      {
+        "day": 3,
+        "title": "Explore Lo Manthang",
+        "description": "Full day exploring Lo Manthang's medieval architecture. Visit ancient gompas and meet with local Loba people."
+      },
+      {
+        "day": 4,
+        "title": "Lo Manthang to Ghar Gompa to Ghami",
+        "description": "Visit ancient Ghar Gompa and explore mysterious sky caves. Drive to Ghami village via different route."
+      },
+      {
+        "day": 5,
+        "title": "Ghami to Jomsom",
+        "description": "Return journey to Jomsom through scenic Mustang landscapes. Stop at Samar village and Chele."
+      },
+      {
+        "day": 6,
+        "title": "Jomsom to Pokhara to Kathmandu",
+        "description": "Morning flight from Jomsom to Pokhara with spectacular mountain views. Connect to Kathmandu flight."
+      }
+    ],
+    "included": [
+      "Domestic flights (Kathmandu-Pokhara-Jomsom)",
+      "Private vehicle for sightseeing",
+      "Accommodation in best available lodges",
+      "All meals during tour",
+      "Professional guide",
+      "Upper Mustang restricted area permits"
+    ],
+    "excluded": [
+      "International flights",
+      "Nepal visa fees",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and driver"
+    ]
   }
 ]

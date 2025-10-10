@@ -2,7 +2,7 @@
   "id": 21,
   "slug": "full-day-kathmandu-sightseeing-1-day",
   "title": "Full day Kathmandu Sightseeing- 1 Day",
-  "category": "Trekking",
+  "category": "Cultural",
   "description": "Kathmandu Tour is a journey through Nepal’s vibrant capital city, where history, culture, and modern life intersect. From centuries-old temples and pa...",
   "location": "Kathmandu",
   "price": 55,
@@ -40,8 +40,8 @@
   ],
   "activities": [
     {
-      "name": "Trekking",
-      "description": "Experience trekking activities"
+      "name": "Cultural Tours",
+      "description": "Experience cultural activities"
     }
   ],
   "itinerary": [

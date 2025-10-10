@@ -2,7 +2,7 @@
   "id": 12,
   "slug": "8-days-culture-wildlife-and-heritage-of-nepal",
   "title": "8 Days Culture, Wildlife and Heritage of Nepal",
-  "category": "Trekking",
+  "category": "Cultural",
   "description": "A Journey Through Nepal’s Living Heritage, Timeless Temples, and Breathtaking LandscapesOverview of JourneyIf you are dreaming of a once-in-a-lifetime...",
   "location": "Nepal",
   "price": 699,
@@ -39,8 +39,8 @@
   ],
   "activities": [
     {
-      "name": "Trekking",
-      "description": "Experience trekking activities"
+      "name": "Cultural Tours",
+      "description": "Experience cultural activities"
     }
   ],
   "itinerary": [

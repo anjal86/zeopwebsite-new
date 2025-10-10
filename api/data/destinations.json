@@ -26,9 +26,7 @@
       24,
       103
     ],
-    "relatedActivities": [
-      1
-    ],
+    "relatedActivities": [],
     "title": "Annapurna",
     "region": "asdasd"
   },
@@ -57,7 +55,6 @@
       39
     ],
     "relatedActivities": [
-      1,
       2
     ],
     "title": "Everest"
@@ -86,41 +83,16 @@
       8
     ],
     "relatedActivities": [
-      1,
       5
     ],
     "title": "Langtang"
-  },
-  {
-    "id": 4,
-    "name": "Manaslu",
-    "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 0,
-    "href": "/destinations/manaslu",
-    "type": "nepal",
-    "description": "The Manaslu Circuit offers a remote and less crowded alternative to other popular treks, with stunning mountain views and rich cultural experiences.",
-    "highlights": [
-      "Manaslu Base Camp",
-      "Larkya La Pass",
-      "Samagaon",
-      "Buddhist Monasteries"
-    ],
-    "bestTime": "Mar-May, Sep-Nov",
-    "altitude": "5,106m",
-    "difficulty": "Challenging",
-    "relatedTours": [],
-    "relatedActivities": [
-      1,
-      5
-    ]
   },
   {
     "id": 5,
     "name": "Pokhara",
     "country": "Nepal",
     "image": "/uploads/destinations/pokhara/pokhara_1758268514571.jpg",
-    "tourCount": 3,
+    "tourCount": 5,
     "href": "/destinations/pokhara",
     "type": "nepal",
     "description": "Discover the beauty and culture of Pokhara in Nepal.",
@@ -136,7 +108,9 @@
     "relatedTours": [
       7,
       9,
-      32
+      32,
+      104,
+      105
     ],
     "relatedActivities": [
       3
@@ -174,7 +148,7 @@
     "name": "Chitwan",
     "country": "Nepal",
     "image": "/uploads/destinations/chitwan/chitwan_1758268583730.jpg",
-    "tourCount": 1,
+    "tourCount": 3,
     "href": "/destinations/chitwan",
     "type": "nepal",
     "description": "Discover the beauty and culture of Chitwan in Nepal.",
@@ -189,37 +163,15 @@
     "difficulty": "Easy",
     "relatedTours": [
       33,
-      3
+      3,
+      106,
+      107
     ],
     "relatedActivities": [
       4,
       5
     ],
     "title": "Chitwan"
-  },
-  {
-    "id": 8,
-    "name": "Dolpo",
-    "country": "Nepal",
-    "image": "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "tourCount": 0,
-    "href": "/destinations/dolpo",
-    "type": "nepal",
-    "description": "A remote and mystical region offering pristine wilderness, ancient Tibetan culture, and some of Nepal's most challenging trekking routes.",
-    "highlights": [
-      "Phoksundo Lake",
-      "Shey Gompa",
-      "Tibetan Culture",
-      "Remote Wilderness"
-    ],
-    "bestTime": "May-Sep",
-    "altitude": "3,611m",
-    "difficulty": "Very Challenging",
-    "relatedTours": [],
-    "relatedActivities": [
-      1,
-      5
-    ]
   },
   {
     "id": 9,
@@ -267,8 +219,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [
-      5,
-      1
+      5
     ]
   },
   {
@@ -557,6 +508,38 @@
     "difficulty": "Challenging",
     "relatedTours": [],
     "relatedActivities": []
+  },
+  {
+    "id": 27,
+    "name": "Rara",
+    "country": "Nepal",
+    "image": "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "tourCount": 1,
+    "href": "/destinations/rara",
+    "type": "nepal",
+    "description": "Discover Nepal's largest and most pristine alpine lake, nestled in the remote far-western hills of Rara National Park.",
+    "highlights": [
+      "Nepal's Largest Alpine Lake",
+      "Crystal Clear Turquoise Waters",
+      "Pristine Wilderness",
+      "Murma Top Viewpoint",
+      "Remote Mountain Villages",
+      "Untouched Natural Beauty"
+    ],
+    "bestTime": "Sep-May",
+    "altitude": "2,990m",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [
+      108
+    ],
+    "relatedActivities": [
+      1,
+      5
+    ],
+    "title": "Rara",
+    "region": "Far West",
+    "slug": "rara",
+    "featured": true
   },
   {
     "id": 26,

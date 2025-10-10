@@ -1,21 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Trekking",
-    "image": "https://images.unsplash.com/photo-1523459178261-028135da2714?q=80&w=2068",
-    "tourCount": 25,
-    "href": "/activities/trekking",
-    "type": "adventure",
-    "description": "Experience the thrill of walking through some of the world's most spectacular mountain landscapes, from gentle day hikes to challenging multi-day expeditions.",
-    "highlights": ["Mountain Views", "Cultural Immersion", "Physical Challenge", "Natural Beauty"],
-    "difficulty": "Easy to Challenging",
-    "bestTime": "Mar-May, Sep-Nov",
-    "duration": "1-21 Days",
-    "popularDestinations": ["Everest", "Annapurna", "Langtang", "Manaslu"],
-    "relatedTours": [1, 3, 5],
-    "relatedDestinations": [1, 2, 3, 4]
-  },
-  {
     "id": 2,
     "name": "Mountaineering",
     "image": "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070",
@@ -128,7 +112,7 @@
     "relatedDestinations": [6, 5, 7]
   },
   {
-    "id": 8,
+    "id": 9,
     "name": "City Tours",
     "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "tourCount": 8,
@@ -144,7 +128,7 @@
     "relatedDestinations": [26, 12]
   },
   {
-    "id": 9,
+    "id": 11,
     "name": "Desert Safari",
     "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "tourCount": 5,
