@@ -1,0 +1,268 @@
+{
+  "id": 11,
+  "slug": "kailash-mansarovar-yatra-12nights-13days",
+  "title": "Kailash Mansarovar Yatra 12 Nights 13 Days",
+  "category": "Spiritual",
+  "description": "Embark on the sacred journey to Mount Kailash and Lake Mansarovar, one of the most revered pilgrimage sites in Hinduism, Buddhism, Jainism, and Bon religion. This 13-day overland journey from Kathmandu offers a transformative spiritual experience through the mystical landscapes of Tibet.",
+  "location": "Tibet, China",
+  "price": 2500,
+  "duration": "13 days",
+  "group_size": "8-15 people",
+  "difficulty": "Challenging",
+  "rating": 4.8,
+  "reviews": 156,
+  "best_time": "May to September",
+  "featured": true,
+  "listed": true,
+  "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+  "gallery": [
+    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1464822759844-d150baec93c5?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=2070&auto=format&fit=crop"
+  ],
+  "highlights": [
+    "Sacred Mount Kailash Parikrama (circumambulation)",
+    "Holy bath and prayers at Lake Mansarovar",
+    "Visit to ancient Tibetan monasteries",
+    "Crossing Dolma La Pass at 5,630m",
+    "Spiritual journey through pristine Tibetan landscapes",
+    "Cultural immersion in Tibetan Buddhist traditions",
+    "Professional guide with spiritual knowledge",
+    "Gamow bag for altitude sickness prevention"
+  ],
+  "inclusions": [
+    "Airport transfers in Kathmandu",
+    "Hotel accommodation in Kathmandu (twin sharing)",
+    "All transportation by private vehicle",
+    "Tibet travel permits and visas",
+    "Professional guide throughout the journey",
+    "All meals during the tour",
+    "Accommodation in guesthouses/ashrams",
+    "Gamow bag for altitude sickness prevention",
+    "First aid kit and medical support",
+    "Yatra briefing session",
+    "Temple visits in Kathmandu"
+  ],
+  "exclusions": [
+    "International flights to/from Kathmandu",
+    "Nepal visa fees",
+    "Personal expenses and shopping",
+    "Travel insurance (mandatory)",
+    "Tips for guide and driver",
+    "Personal medical kit and Diamox tablets",
+    "Alcoholic beverages",
+    "Emergency evacuation costs",
+    "Personal trekking equipment",
+    "Laundry and communication charges"
+  ],
+  "activities": [
+    "Sacred pilgrimage",
+    "High altitude trekking",
+    "Cultural exploration",
+    "Spiritual ceremonies",
+    "Photography",
+    "Meditation"
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival in Kathmandu (1300m)",
+      "description": "Upon arrival at Kathmandu International Airport, you will be greeted and assisted by our representative after completing custom formalities. Transfer to hotel for check-in. Evening yatra briefing session before dinner covering important aspects of the Kailash Mansarovar Yatra.",
+      "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+      "meals": "Dinner",
+      "activities": [
+        "Airport transfer",
+        "Hotel check-in",
+        "Yatra briefing"
+      ]
+    },
+    {
+      "day": 2,
+      "title": "Kathmandu Temple Visit",
+      "description": "After breakfast, embark on Kathmandu city sightseeing tour. Visit Pashupatinath Temple, Boudhanath Stupa (World Heritage Site), Jal Narayan Temple (Sleeping Vishnu), and Kathmandu Durbar Square (Living God Kumari). Return to hotel for packing and preparation for the yatra.",
+      "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Temple visits",
+        "Cultural sightseeing",
+        "Yatra preparation"
+      ]
+    },
+    {
+      "day": 3,
+      "title": "Kathmandu to Kodari (1600m)",
+      "description": "Drive to Kodari (145 km, 5-6 hours) at the Nepal-Tibet border. Complete immigration formalities and prepare for entry into Tibet. Overnight at Kodari.",
+      "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Border crossing",
+        "Immigration formalities"
+      ]
+    },
+    {
+      "day": 4,
+      "title": "Kodari to Nylam (2800m)",
+      "description": "Cross into Tibet and drive to Nylam (160 km, 4-5 hours) for acclimatization. This is an important day for altitude adjustment as we gain significant elevation.",
+      "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Tibet entry",
+        "Altitude acclimatization",
+        "Rest"
+      ]
+    },
+    {
+      "day": 5,
+      "title": "Nylam to Saga (4500m)",
+      "description": "Drive to Saga (270 km, 6-7 hours) crossing the mighty Brahmaputra River. The journey takes you through stunning Tibetan landscapes and high-altitude terrain.",
+      "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "High altitude driving",
+        "Brahmaputra River crossing",
+        "Landscape viewing"
+      ]
+    },
+    {
+      "day": 6,
+      "title": "Saga to Mansarovar (4550m)",
+      "description": "Drive to the sacred Lake Mansarovar (470 km, 8-9 hours). Upon arrival, check-in at Pramath Ashram. First glimpse of the holy lake and preparation for tomorrow's parikrama.",
+      "accommodation": "Pramath Ashram (Dormitory room, Common Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Sacred lake arrival",
+        "Spiritual preparation"
+      ]
+    },
+    {
+      "day": 7,
+      "title": "Mansarovar Parikrama to Darchen (4600m)",
+      "description": "Complete Mansarovar Parikrama by vehicle (102 km, 3 hours). Take holy bath in the sacred lake, perform puja and homa ceremonies. Continue drive to Darchen (58 km, 1.5 hours), the base camp for Kailash Parikrama.",
+      "accommodation": "Basic Hotel (Shared room, Common Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Lake parikrama",
+        "Holy bath",
+        "Puja ceremonies",
+        "Kailash base camp arrival"
+      ]
+    },
+    {
+      "day": 8,
+      "title": "Darchen to Diraphuk (4860m)",
+      "description": "Begin the sacred Kailash Parikrama. Visit Yamdwar for darshan, then trek to Diraphuk (12 km, 4-5 hours). First day of the challenging but spiritually rewarding circumambulation of Mount Kailash.",
+      "accommodation": "Basic Guesthouse (Dormitory, Common facilities)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Kailash parikrama start",
+        "Yamdwar darshan",
+        "High altitude trekking"
+      ]
+    },
+    {
+      "day": 9,
+      "title": "Diraphuk to Zutulphuk via Dolma La Pass (4650m)",
+      "description": "The most challenging day of the yatra. Cross the Dolma La Pass at 5,630m, the highest point of the parikrama. Trek to Zutulphuk (22 km, 8-10 hours). This is considered the most spiritually significant day of the journey.",
+      "accommodation": "Basic Guesthouse (Dormitory, Common facilities)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Dolma La Pass crossing",
+        "High altitude trekking",
+        "Spiritual significance"
+      ]
+    },
+    {
+      "day": 10,
+      "title": "Zutulphuk to Darchen to Saga (4500m)",
+      "description": "Complete the Kailash Parikrama by trekking back to Darchen (8 km, 2-3 hours). After completing this sacred journey, drive back to Saga for overnight rest.",
+      "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Parikrama completion",
+        "Return journey",
+        "Celebration"
+      ]
+    },
+    {
+      "day": 11,
+      "title": "Saga to Nylam (2800m)",
+      "description": "Drive back to Nylam (270 km, 6-7 hours) retracing the route through the beautiful Tibetan landscapes. Gradual descent to lower altitude for better rest.",
+      "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Return journey",
+        "Altitude descent",
+        "Rest and recovery"
+      ]
+    },
+    {
+      "day": 12,
+      "title": "Nylam to Kathmandu (1300m)",
+      "description": "Cross back into Nepal and drive to Kathmandu (160 km + 145 km, 8-9 hours total). Return to the familiar environment and comfortable accommodation for rest and relaxation.",
+      "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+      "meals": "Breakfast, Lunch, Dinner",
+      "activities": [
+        "Border crossing",
+        "Return to Kathmandu",
+        "Rest and recovery"
+      ]
+    },
+    {
+      "day": 13,
+      "title": "Departure from Kathmandu",
+      "description": "Transfer to Tribhuvan International Airport for departure or extend your stay in Kathmandu for additional sightseeing and shopping.",
+      "accommodation": "N/A",
+      "meals": "Breakfast",
+      "activities": [
+        "Airport transfer",
+        "Departure"
+      ]
+    }
+  ],
+  "what_to_bring": [],
+  "fitness_requirements": "Basic fitness level sufficient.",
+  "altitude_profile": {
+    "max_altitude": "Low altitude",
+    "acclimatization_days": 0,
+    "difficulty_level": "Moderate"
+  },
+  "booking_info": {
+    "advance_booking": "7 days recommended",
+    "group_discounts": "Available for 6+ people",
+    "cancellation_policy": "Free cancellation up to 7 days before departure"
+  },
+  "created_at": "2025-09-19T04:13:16.254Z",
+  "updated_at": "2025-10-10T12:17:34.861Z",
+  "important_notes": {
+    "health_requirements": "Medical examination recommended before travel. Participants should be examined by a doctor to assess health condition and ability to cope with high altitude travel, extreme cold, dust, and trekking to 19,500ft during parikrama.",
+    "altitude_sickness": "Travelers are likely to experience altitude sickness symptoms (headache, loss of appetite, nausea, exhaustion, sleeplessness, breathlessness) until body adjusts. Mandatory 2 nights stay at Mansarovar (4550m) for acclimatization. Diamox tablets recommended. Gamow bag provided for altitude sickness prevention.",
+    "currency": "Chinese Yuan is the local currency. USD 1 = 7.02 Yuan & 1 Yuan = INR 11.90 approx. Money can be exchanged at Bank of China at Kyirung county.",
+    "what_to_bring": [
+      "Winter wear (Gore-Tex material recommended)",
+      "Down jacket, raincoat or windbreakers",
+      "Thermal underwear, warm trousers & woolen shirts",
+      "Warm sweaters, woolen gloves, sun hat",
+      "Comfortable shoes, light leather boots",
+      "Woolen balaclava and scarf/dust mask",
+      "Strong water bottle & water purifying tablets",
+      "Personal medical kit and Diamox tablets",
+      "Sunglasses and sun block lotion",
+      "Wet tissues and personal hygiene items"
+    ],
+    "risks_liability": "All tours in Tibet are conducted under Tibet Tourism Bureau (TTB) rules and regulations. Company shall not be responsible for changes due to unavoidable circumstances such as landslide, road blockage, flood, snow, political unrest, flight cancellation, delays, sickness or accidents. Extra costs shall be borne by clients."
+  },
+  "primary_destination_id": 9,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    5,
+    6
+  ],
+  "related_destinations": [
+    "Tibet"
+  ],
+  "related_activities": [
+    "Cultural Tours",
+    "Pilgrimage"
+  ]
+}

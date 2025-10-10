@@ -538,5 +538,213 @@
       "Travel insurance",
       "Tips for guide and driver"
     ]
+  },
+  {
+    "id": 11,
+    "title": "Kailash Mansarovar Yatra 12 Nights 13 Days",
+    "slug": "kailash-mansarovar-yatra-12nights-13days",
+    "location": "Tibet, China",
+    "duration": "13 days",
+    "price": 2500,
+    "currency": "USD",
+    "difficulty": "Challenging",
+    "group_size": "8-15 people",
+    "best_time": "May-Sep",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+    "featured": true,
+    "type": "pilgrimage",
+    "category": "Spiritual",
+    "description": "Embark on the sacred journey to Mount Kailash and Lake Mansarovar, one of the most revered pilgrimage sites in Hinduism, Buddhism, Jainism, and Bon religion. This 13-day overland journey from Kathmandu offers a transformative spiritual experience through the mystical landscapes of Tibet.",
+    "highlights": [
+      "Sacred Mount Kailash Parikrama (circumambulation)",
+      "Holy bath and prayers at Lake Mansarovar",
+      "Visit to ancient Tibetan monasteries",
+      "Crossing Dolma La Pass at 5,630m",
+      "Spiritual journey through pristine Tibetan landscapes",
+      "Cultural immersion in Tibetan Buddhist traditions"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Kathmandu",
+        "description": "Arrival at Kathmandu International Airport, transfer to hotel, and yatra briefing session."
+      },
+      {
+        "day": 2,
+        "title": "Kathmandu Temple Visit",
+        "description": "Visit Pashupatinath Temple, Boudhanath Stupa, Jal Narayan Temple, and Kathmandu Durbar Square."
+      },
+      {
+        "day": 3,
+        "title": "Kathmandu to Kodari",
+        "description": "Drive to Kodari (1600m) at the Nepal-Tibet border. Complete border formalities."
+      },
+      {
+        "day": 4,
+        "title": "Kodari to Nylam",
+        "description": "Cross into Tibet and drive to Nylam (2800m) for acclimatization."
+      },
+      {
+        "day": 5,
+        "title": "Nylam to Saga",
+        "description": "Drive to Saga (4500m) crossing the Brahmaputra River. Overnight at Saga."
+      },
+      {
+        "day": 6,
+        "title": "Saga to Mansarovar",
+        "description": "Drive to the sacred Lake Mansarovar (4550m). Check-in at Pramath Ashram."
+      },
+      {
+        "day": 7,
+        "title": "Mansarovar Parikrama to Darchen",
+        "description": "Complete Mansarovar Parikrama (102km), take holy bath, perform puja, then drive to Darchen."
+      },
+      {
+        "day": 8,
+        "title": "Darchen to Diraphuk",
+        "description": "Begin Kailash Parikrama. Trek from Darchen to Diraphuk (4860m, 12km) via Yamdwar."
+      },
+      {
+        "day": 9,
+        "title": "Diraphuk to Zutulphuk via Dolma La Pass",
+        "description": "Cross the challenging Dolma La Pass (5630m) and trek to Zutulphuk (4650m, 22km)."
+      },
+      {
+        "day": 10,
+        "title": "Zutulphuk to Darchen to Saga",
+        "description": "Complete Kailash Parikrama by trekking back to Darchen (8km), then drive to Saga."
+      },
+      {
+        "day": 11,
+        "title": "Saga to Nylam",
+        "description": "Drive back to Nylam (2800m) retracing the route through Tibetan landscapes."
+      },
+      {
+        "day": 12,
+        "title": "Nylam to Kathmandu",
+        "description": "Cross back into Nepal and drive to Kathmandu (1300m). Rest and relaxation."
+      },
+      {
+        "day": 13,
+        "title": "Departure from Kathmandu",
+        "description": "Transfer to airport for departure or extend stay in Kathmandu."
+      }
+    ],
+    "included": [
+      "Airport transfers in Kathmandu",
+      "Hotel accommodation in Kathmandu (twin sharing)",
+      "All transportation by private vehicle",
+      "Tibet travel permits and visas",
+      "Professional guide throughout the journey",
+      "All meals during the tour",
+      "Accommodation in guesthouses/ashrams",
+      "Gamow bag for altitude sickness prevention",
+      "First aid kit and medical support"
+    ],
+    "excluded": [
+      "International flights to/from Kathmandu",
+      "Nepal visa fees",
+      "Personal expenses and shopping",
+      "Travel insurance (mandatory)",
+      "Tips for guide and driver",
+      "Personal medical kit and Diamox tablets",
+      "Alcoholic beverages",
+      "Emergency evacuation costs"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Kailash Mansarovar Yatra 8 Nights 9 Days - Helicopter Route",
+    "slug": "kailash-mansarovar-yatra-8nights-9days-helicopter",
+    "location": "Tibet, China",
+    "duration": "9 days",
+    "price": 4500,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "group_size": "8-12 people",
+    "best_time": "May-Sep",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+    "featured": true,
+    "type": "Spiritual",
+    "category": "Pilgrimage",
+    "description": "Experience the sacred Kailash Mansarovar Yatra via helicopter route from Lucknow. This premium 9-day journey combines helicopter flights with the spiritual pilgrimage, offering comfort and convenience while maintaining the sacred essence of the yatra.",
+    "highlights": [
+      "Helicopter flights from Simikot to Hilsa",
+      "Sacred Mount Kailash Parikrama",
+      "Holy bath at Lake Mansarovar",
+      "Reduced travel time with helicopter transfers",
+      "Professional spiritual guide",
+      "Comfortable accommodation options",
+      "Medical support and Gamow bag",
+      "Small group experience"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival Lucknow - Drive to Nepalgunj",
+        "description": "Arrival at Lucknow Airport, meet and greet, drive to Nepalgunj (200km, 5-6 hours). Check-in at hotel. Yatra briefing before dinner."
+      },
+      {
+        "day": 2,
+        "title": "Nepalgunj - Fly to Simikot",
+        "description": "Morning flight to Simikot (45 minutes, 2800m). Transfer to hotel, evening visit to Lord Shiva Temple. Acclimatization day."
+      },
+      {
+        "day": 3,
+        "title": "Simikot - Helicopter to Hilsa - Drive to Purang",
+        "description": "Helicopter flight to Hilsa (20 minutes, 15kg baggage limit). Border formalities, drive to Purang (3700m, 35km, 1.5 hours). Check-in and rest."
+      },
+      {
+        "day": 4,
+        "title": "Acclimatization Day in Purang",
+        "description": "Rest day for acclimatization at 3900m. Light activities, medical check-up, preparation for higher altitudes."
+      },
+      {
+        "day": 5,
+        "title": "Purang - Mansarovar Lake",
+        "description": "Drive to Mansarovar Lake (102km, 4-5 hours, 4550m). Holy bath, prayers, and homa ceremony. Overnight at lake side."
+      },
+      {
+        "day": 6,
+        "title": "Mansarovar - Darchen - Trek to Deraphuk",
+        "description": "Drive to Darchen (58km, 2 hours, 4600m). Begin Kailash Parikrama, trek to Deraphuk (12km, 4860m). Overnight in guest house."
+      },
+      {
+        "day": 7,
+        "title": "Deraphuk - Dolma La Pass - Zutalphuk",
+        "description": "Cross Dolma La Pass (5630m), the highest point of Parikrama. Trek to Zutalphuk (22km, 4600m). Challenging but spiritually rewarding day."
+      },
+      {
+        "day": 8,
+        "title": "Zutalphuk - Darchen - Drive to Hilsa",
+        "description": "Complete Parikrama with trek to Darchen (8km, 3 hours). Drive to Hilsa (3700m). Border formalities and overnight."
+      },
+      {
+        "day": 9,
+        "title": "Hilsa - Helicopter to Simikot - Fly to Nepalgunj - Lucknow",
+        "description": "Helicopter to Simikot (20 minutes), flight to Nepalgunj (50 minutes), drive to Lucknow for departure."
+      }
+    ],
+    "included": [
+      "Airport transfers in Lucknow",
+      "All domestic flights (Nepalgunj-Simikot-Nepalgunj)",
+      "Helicopter flights (Simikot-Hilsa-Simikot)",
+      "All accommodation (twin/shared basis)",
+      "All meals during the tour",
+      "Tibet travel permits and visas",
+      "Professional guide and support staff",
+      "All ground transportation",
+      "Gamow bag for altitude sickness",
+      "First aid kit and medical support"
+    ],
+    "excluded": [
+      "International flights to/from India",
+      "Nepal visa fees",
+      "Personal expenses and shopping",
+      "Travel insurance (mandatory)",
+      "Tips for guide and staff",
+      "Personal medical kit and Diamox",
+      "Alcoholic beverages and personal items"
+    ]
   }
 ]
