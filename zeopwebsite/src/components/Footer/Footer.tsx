@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart, ExternalLink } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
 import { useLogos } from '../../hooks/useLogos';
+import footerLogo from '../../assets/zeo-logo-white.png';
 
 const Footer: React.FC = () => {
   const { data: contactInfo } = useContact();
@@ -57,11 +58,11 @@ const Footer: React.FC = () => {
               >
                 <Link to="/" className="flex items-center mb-4 hover:opacity-80 transition-opacity">
                   <img
-                    src={logos?.footer || "/src/assets/zeo-logo-white.png"}
+                    src={logos?.footer || footerLogo}
                     alt="Zeo Tourism Logo"
                     className="h-10 w-auto"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/src/assets/zeo-logo-white.png";
+                      (e.target as HTMLImageElement).src = footerLogo;
                     }}
                   />
                 </Link>

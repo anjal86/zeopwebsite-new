@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import headerLogo from '../assets/zeo-logo.png';
+import footerLogo from '../assets/zeo-logo-white.png';
 
 interface LogoData {
   header: string;
@@ -23,8 +25,8 @@ export const useLogos = () => {
       setError(err instanceof Error ? err.message : 'Failed to fetch logos');
       // Set default logos on error - this ensures the site always works
       setLogos({
-        header: '/src/assets/zeo-logo.png',
-        footer: '/src/assets/zeo-logo-white.png',
+        header: headerLogo,
+        footer: footerLogo,
         lastUpdated: new Date().toISOString()
       });
     } finally {

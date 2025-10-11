@@ -7,6 +7,7 @@ import {
 import { useContact } from '../../hooks/useApi';
 import { useLogos } from '../../hooks/useLogos';
 import ContactModal from '../UI/ContactModal';
+import headerLogo from '../../assets/zeo-logo.png';
 
 interface NavItem {
   label: string;
@@ -143,11 +144,11 @@ const Navigation: React.FC = () => {
             <div className="flex items-center flex-shrink-0">
               <Link to="/" onClick={handleNavClick}>
                 <img
-                  src={logos?.header || "/src/assets/zeo-logo.png"}
+                  src={logos?.header || headerLogo}
                   alt="Zeo Tourism Logo"
                   className="h-10 w-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/src/assets/zeo-logo.png";
+                    (e.target as HTMLImageElement).src = headerLogo;
                   }}
                 />
               </Link>

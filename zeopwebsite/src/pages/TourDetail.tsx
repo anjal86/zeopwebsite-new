@@ -16,7 +16,6 @@ interface TourDetails extends Tour {
   gallery?: string[];
   exclusions?: string[];
   itinerary?: ItineraryDay[];
-  what_to_bring?: string[];
   fitness_requirements?: string;
   altitude_profile?: {
     max_altitude: string;
@@ -284,7 +283,6 @@ const TourDetail: React.FC = () => {
                   highlights={tourDetails.highlights}
                   inclusions={tourDetails.inclusions}
                   exclusions={tourDetails.exclusions}
-                  whatToBring={tourDetails.what_to_bring}
                   itinerary={tourDetails.itinerary}
                   activities={tourActivities}
                   images={images}

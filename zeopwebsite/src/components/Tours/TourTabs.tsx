@@ -14,7 +14,6 @@ interface TourTabsProps {
   highlights?: string[];
   inclusions?: string[];
   exclusions?: string[];
-  whatToBring?: string[];
   itinerary?: ItineraryDay[];
   activities: Array<{ id: number; name: string; image: string }>;
   images: string[];
@@ -36,7 +35,6 @@ const TourTabs: React.FC<TourTabsProps> = ({
   highlights,
   inclusions,
   exclusions,
-  whatToBring,
   itinerary,
   activities,
 }) => {
@@ -353,44 +351,7 @@ const TourTabs: React.FC<TourTabsProps> = ({
               )}
             </div>
 
-            {/* What to Bring */}
-            <div>
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center">
-                <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2" />
-                What to Bring
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-                <ul className="space-y-2">
-                  {whatToBring && whatToBring.length > 0 ? (
-                    whatToBring.map((item, index) => (
-                      <li key={index} className="flex items-start">
-                        <Info className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">{item}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <>
-                      <li className="flex items-start">
-                        <Info className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">Comfortable walking shoes</span>
-                      </li>
-                      <li className="flex items-start">
-                        <Info className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">Weather-appropriate clothing</span>
-                      </li>
-                      <li className="flex items-start">
-                        <Info className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">Camera for memories</span>
-                      </li>
-                      <li className="flex items-start">
-                        <Info className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm sm:text-base text-gray-700">Personal medications</span>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-            </div>
+
           </div>
         )}
 
