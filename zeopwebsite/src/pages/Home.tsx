@@ -105,7 +105,6 @@ const Home: React.FC = () => {
                       View All Destinations
                       <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <div className="text-sm text-gray-400">14 Destinations</div>
                   </div>
                 </div>
               </div>
@@ -126,7 +125,6 @@ const Home: React.FC = () => {
                       Browse Tours
                       <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <div className="text-sm text-gray-400">9 Tours</div>
                   </div>
                 </div>
               </div>
@@ -147,7 +145,6 @@ const Home: React.FC = () => {
                       Contact Us
                       <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <div className="text-sm text-gray-400">24/7 Support</div>
                   </div>
                 </div>
               </div>
