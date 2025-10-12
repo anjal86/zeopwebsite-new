@@ -2,15 +2,70 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mountain, ArrowRight, MapPin } from 'lucide-react';
-import { useDestinations } from '../../hooks/useApi';
+import { useDestinations, useTours } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 
 const FeaturedDestinations: React.FC = () => {
   const { data: allDestinations, loading, error, refetch } = useDestinations();
-  
-  // Show only first 6 destinations for homepage (no more featured filtering)
-  const destinations = allDestinations?.slice(0, 6) || [];
+  const { data: allTours } = useTours();
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
+  
+  // Calculate tour count for each destination based on relationship system
+  const getDestinationTourCount = (destinationId: number, destinationName: string) => {
+    if (!allTours) return 0;
+    
+    // Count tours using relationship-based matching
+    const relationshipTours = allTours.filter(tour => {
+      if (tour.listed === false) return false; // Only count listed tours
+      
+      // Check if this destination is the primary destination for the tour
+      const isPrimaryDestination = (tour as any).primary_destination_id === destinationId;
+      
+      // Check if this destination is in the secondary destinations for the tour
+      const isSecondaryDestination = (tour as any).secondary_destination_ids?.includes(destinationId);
+      
+      return isPrimaryDestination || isSecondaryDestination;
+    });
+    
+    // Fallback to location-based matching for legacy support
+    const locationTours = allTours.filter(tour => {
+      if (!tour.location || tour.listed === false) return false;
+      
+      const tourLocation = tour.location.toLowerCase();
+      const destName = destinationName.toLowerCase();
+      
+      // Match by various location patterns
+      return tourLocation.includes(destName) ||
+             (destName === 'annapurna' && (tourLocation.includes('annapurna') || tourLocation.includes('abc'))) ||
+             (destName === 'everest' && (tourLocation.includes('everest') || tourLocation.includes('ebc'))) ||
+             (destName === 'langtang' && tourLocation.includes('langtang')) ||
+             (destName === 'manaslu' && tourLocation.includes('manaslu')) ||
+             (destName === 'kailash' && (tourLocation.includes('kailash') || tourLocation.includes('mansarovar'))) ||
+             (destName === 'tibet' && (tourLocation.includes('tibet') || tourLocation.includes('lhasa'))) ||
+             (destName === 'kathmandu' && tourLocation.includes('kathmandu')) ||
+             (destName === 'pokhara' && tourLocation.includes('pokhara')) ||
+             (destName === 'chitwan' && tourLocation.includes('chitwan')) ||
+             (destName === 'lumbini' && tourLocation.includes('lumbini')) ||
+             (destName === 'mustang' && tourLocation.includes('mustang')) ||
+             (destName === 'dolpo' && tourLocation.includes('dolpo'));
+    });
+    
+    // Combine and deduplicate tours
+    const allRelatedTours = [...relationshipTours];
+    locationTours.forEach(locationTour => {
+      if (!allRelatedTours.find(tour => tour.id === locationTour.id)) {
+        allRelatedTours.push(locationTour);
+      }
+    });
+    
+    return allRelatedTours.length;
+  };
+
+  // Filter destinations to only show those with tours and take first 6
+  const featuredDestinations = allDestinations?.map(destination => ({
+    ...destination,
+    tourCount: getDestinationTourCount(destination.id, destination.name)
+  })).filter(destination => destination.tourCount > 0).slice(0, 6) || [];
 
   // Listen for destination updates from admin interface
   useEffect(() => {
@@ -49,9 +104,6 @@ const FeaturedDestinations: React.FC = () => {
       </section>
     );
   }
-
-  // Use the first 6 destinations
-  const featuredDestinations = destinations || [];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -133,6 +185,12 @@ const FeaturedDestinations: React.FC = () => {
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
                       {destination.name}
                     </h3>
+                    <div className="flex items-center mt-2 opacity-80">
+                      <Mountain className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                      <span className="text-xs sm:text-sm">
+                        {destination.tourCount} {destination.tourCount === 1 ? 'Tour' : 'Tours'}
+                      </span>
+                    </div>
                   </div>
                   
                   {/* Hover Effect */}
@@ -153,6 +211,12 @@ const FeaturedDestinations: React.FC = () => {
             <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
           </Link>
         </div>
+
+        {featuredDestinations.length === 0 && (
+          <div className="text-center text-gray-600 mt-8">
+            No destinations with tours available at the moment.
+          </div>
+        )}
       </div>
     </section>
   );

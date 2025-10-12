@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MapPin } from 'lucide-react';
+import { MapPin, Mountain } from 'lucide-react';
 import { useDestinations, useTours } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
@@ -150,7 +150,7 @@ const Destinations: React.FC = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
           >
             {filteredDestinations.map((destination) => (
               <motion.div
@@ -160,7 +160,7 @@ const Destinations: React.FC = () => {
                 className="group cursor-pointer"
               >
                 <Link to={destination.href || `/destinations/${destination.name.toLowerCase()}`} className="block">
-                  <div className="relative rounded-3xl overflow-hidden aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
+                  <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden aspect-[4/3] sm:aspect-[3/2] shadow-lg hover:shadow-2xl transition-all duration-500">
                     <img
                       src={destination.image}
                       alt={destination.name}
@@ -170,24 +170,21 @@ const Destinations: React.FC = () => {
                     {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-                    {/* Tour Count Badge */}
-                    {destination.tourCount && (
-                      <div className="absolute top-6 right-6">
-                        <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
-                          {destination.tourCount}
-                        </span>
-                      </div>
-                    )}
-
                     {/* Content */}
-                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                      <div className="flex items-center mb-3 opacity-80">
-                        <MapPin className="w-4 h-4 mr-2" />
-                        <span className="text-sm">{destination.country}</span>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white">
+                      <div className="flex items-center mb-2 sm:mb-3 opacity-80">
+                        <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                        <span className="text-xs sm:text-sm">{destination.country}</span>
                       </div>
-                      <h3 className="text-2xl font-bold">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
                         {destination.name}
                       </h3>
+                      <div className="flex items-center mt-2 opacity-80">
+                        <Mountain className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                        <span className="text-xs sm:text-sm">
+                          {destination.tourCount} {destination.tourCount === 1 ? 'Tour' : 'Tours'}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Hover Effect */}

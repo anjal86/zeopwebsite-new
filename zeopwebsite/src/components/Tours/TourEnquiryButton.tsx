@@ -4,11 +4,20 @@ import { useContact } from '../../hooks/useApi';
 
 interface TourEnquiryButtonProps {
   price: number;
+  hasDiscount?: boolean;
+  discountPercentage?: number;
+  priceAvailable?: boolean;
   onEnquiryClick?: () => void;
   tourTitle?: string;
 }
 
-const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle }) => {
+const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ 
+  price, 
+  hasDiscount, 
+  discountPercentage, 
+  priceAvailable = true, 
+  tourTitle 
+}) => {
   const { data: contactInfo } = useContact();
   const [formData, setFormData] = useState({
     name: '',
@@ -119,8 +128,31 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ price, tourTitle 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Price Header */}
         <div className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white p-4 text-center">
-          <div className="text-2xl font-bold">${price}</div>
-          <div className="text-sky-100 text-sm">per person</div>
+          {priceAvailable ? (
+            <>
+              {hasDiscount && discountPercentage && (
+                <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold mb-2 inline-block">
+                  {discountPercentage}% OFF
+                </div>
+              )}
+              <div className="flex items-center justify-center space-x-2">
+                {hasDiscount && discountPercentage ? (
+                  <>
+                    <div className="text-2xl font-bold">${Math.round(price * (1 - discountPercentage / 100))}</div>
+                    <div className="text-lg text-sky-200 line-through">${price}</div>
+                  </>
+                ) : (
+                  <div className="text-2xl font-bold">${price}</div>
+                )}
+              </div>
+              <div className="text-sky-100 text-sm">per person</div>
+            </>
+          ) : (
+            <>
+              <div className="text-2xl font-bold">Request Price</div>
+              <div className="text-sky-100 text-sm">Contact for pricing</div>
+            </>
+          )}
         </div>
 
         {/* Form */}

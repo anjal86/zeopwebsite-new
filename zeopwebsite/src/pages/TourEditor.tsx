@@ -56,6 +56,9 @@ interface TourDetails {
   location?: string;
   category?: string;
   price: number;
+  hasDiscount?: boolean; // Whether the tour has a discount
+  discountPercentage?: number; // Discount percentage (e.g., 25 for 25% off)
+  priceAvailable?: boolean; // Controls whether price is displayed to users
   duration: string;
   group_size: string;
   best_time: string;
@@ -967,6 +970,76 @@ const TourEditor: React.FC = () => {
                       
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Price Display
+                        </label>
+                        <div className="flex items-center space-x-3">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              name="priceAvailable"
+                              checked={formData.priceAvailable !== false}
+                              onChange={(e) => setFormData(prev => ({ ...prev, priceAvailable: e.target.checked }))}
+                              className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                            />
+                            <span className="ml-2 text-sm text-gray-700">Show price to customers</span>
+                          </label>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          When unchecked, customers will see "Request Price" instead of the actual price
+                        </p>
+                      </div>
+
+                      {/* Discount Section */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Discount Settings
+                        </label>
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-3">
+                            <label className="flex items-center">
+                              <input
+                                type="checkbox"
+                                name="hasDiscount"
+                                checked={formData.hasDiscount || false}
+                                onChange={(e) => setFormData(prev => ({ 
+                                  ...prev, 
+                                  hasDiscount: e.target.checked,
+                                  // Clear discount fields if unchecked
+                                  ...(e.target.checked ? {} : { discountPercentage: undefined })
+                                }))}
+                                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                              />
+                              <span className="ml-2 text-sm text-gray-700">This tour has a discount</span>
+                            </label>
+                          </div>
+                          
+                          {formData.hasDiscount && (
+                            <div className="ml-6">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                  Discount Percentage *
+                                </label>
+                                <input
+                                  type="number"
+                                  name="discountPercentage"
+                                  value={formData.discountPercentage || ''}
+                                  onChange={handleInputChange}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                  placeholder="e.g., 25"
+                                  min="0"
+                                  max="100"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          When enabled, customers will see the discount badge and the discounted price (main price will be treated as original price)
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Group Size *
                         </label>
                         <input
@@ -1767,7 +1840,7 @@ const TourEditor: React.FC = () => {
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
                                   <Bed className="w-4 h-4 text-gray-500" />
                                   Accommodation
                                 </label>
@@ -1781,7 +1854,7 @@ const TourEditor: React.FC = () => {
                               </div>
                               
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
                                   <Utensils className="w-4 h-4 text-gray-500" />
                                   Meals
                                 </label>

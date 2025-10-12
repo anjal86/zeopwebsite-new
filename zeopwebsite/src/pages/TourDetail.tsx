@@ -501,6 +501,9 @@ const TourDetail: React.FC = () => {
             <div className="lg:col-span-1" ref={enquirySectionRef}>
               <TourEnquiryButton
                 price={tourDetails.price}
+                hasDiscount={tourDetails.hasDiscount}
+                discountPercentage={tourDetails.discountPercentage}
+                priceAvailable={tourDetails.priceAvailable}
                 tourTitle={tourDetails.title}
               />
             </div>

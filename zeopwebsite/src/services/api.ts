@@ -30,7 +30,10 @@ export interface Tour {
   category: string;
   image: string;
   price: number;
-  originalPrice?: number;
+  originalPrice?: number; // Original price before discount (if applicable)
+  priceAvailable?: boolean; // Controls whether price is shown or "Request Price" is displayed
+  hasDiscount?: boolean; // Whether the tour has a discount
+  discountPercentage?: number; // Discount percentage (e.g., 25 for 25% off)
   duration: string;
   group_size: string; // SQLite uses group_size instead of groupSize
   difficulty: 'Easy' | 'Moderate' | 'Challenging';
