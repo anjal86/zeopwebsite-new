@@ -35,6 +35,9 @@ const TourManager: React.FC = () => {
   const [itemsPerPage] = useState(20); // Increased from 10 to 20 to show more tours
   const [totalItems, setTotalItems] = useState(0);
 
+  // Add status filter (client-side)
+  const [statusFilter, setStatusFilter] = useState('');
+
   // Sorting state and helpers
   const [sortBy, setSortBy] = useState<{ field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed'; direction: 'asc' | 'desc' }>({ field: 'title', direction: 'asc' });
 
@@ -78,6 +81,16 @@ const TourManager: React.FC = () => {
     });
     return list;
   }, [tours, sortBy, destinationsMap]);
+
+  const filteredTours = React.useMemo(() => {
+    let list = sortedTours;
+    if (statusFilter === 'listed') {
+      list = list.filter(t => t.listed ?? true);
+    } else if (statusFilter === 'unlisted') {
+      list = list.filter(t => !(t.listed ?? true));
+    }
+    return list;
+  }, [sortedTours, statusFilter]);
 
   const deleteTour = async (tour: Tour) => {
     const token = localStorage.getItem('adminToken');
@@ -235,9 +248,10 @@ const TourManager: React.FC = () => {
   }
 
   // Pagination calculations
+  const displayTotalItems = statusFilter ? filteredTours.length : totalItems;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startItem = (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+  const endItem = Math.min(currentPage * itemsPerPage, displayTotalItems);
 
   // Pagination handlers
   const handlePageChange = (page: number) => {
@@ -267,9 +281,15 @@ const TourManager: React.FC = () => {
     setCurrentPage(1);
   };
 
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
+
   const handleClearFilters = () => {
     setSearchTerm('');
     setDestinationFilter('');
+    setStatusFilter('');
     setCurrentPage(1);
   };
 
@@ -293,7 +313,7 @@ const TourManager: React.FC = () => {
 
       {/* Search Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Search */}
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
@@ -319,6 +339,19 @@ const TourManager: React.FC = () => {
               {destinations.map(destination => (
                 <option key={destination} value={destination}>{destination}</option>
               ))}
+            </select>
+          </div>
+
+          {/* Status Dropdown */}
+          <div>
+            <select
+              value={statusFilter}
+              onChange={(e) => handleStatusFilterChange(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            >
+              <option value="">All Status</option>
+              <option value="listed">Listed</option>
+              <option value="unlisted">Unlisted</option>
             </select>
           </div>
 
@@ -394,7 +427,7 @@ const TourManager: React.FC = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sortedTours.map((tour: Tour) => (
+              {filteredTours.map((tour: Tour) => (
                 <tr
                   key={tour.id}
                   className="hover:bg-gray-50 transition-colors cursor-pointer"
@@ -497,7 +530,7 @@ const TourManager: React.FC = () => {
 
       {/* Tours Cards - Mobile & Tablet */}
       <div className="lg:hidden space-y-4">
-        {sortedTours.map((tour: Tour) => (
+        {filteredTours.map((tour: Tour) => (
           <div
             key={tour.id}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
@@ -609,7 +642,7 @@ const TourManager: React.FC = () => {
               <span>
                 Showing <span className="font-medium">{startItem}</span> to{' '}
                 <span className="font-medium">{endItem}</span> of{' '}
-                <span className="font-medium">{totalItems}</span> results
+                <span className="font-medium">{displayTotalItems}</span> results
               </span>
             </div>
             <div className="flex items-center justify-center sm:justify-end space-x-1 sm:space-x-2">

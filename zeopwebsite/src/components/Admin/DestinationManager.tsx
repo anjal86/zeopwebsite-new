@@ -11,12 +11,15 @@ import {
   Image as ImageIcon,
   Search,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { useAdminApi } from '../../hooks/useApi';
 import SearchableSelect from '../UI/SearchableSelect';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
+import Toggle from '../UI/Toggle';
 // @ts-ignore
 import { getData } from 'country-list';
 
@@ -52,12 +55,40 @@ interface DestinationFormData extends ContentDestination {
 
 const DestinationManager: React.FC = () => {
   const { data: destinations, loading, error } = useAdminApi<ContentDestination[]>('/api/admin/destinations');
+  const [destList, setDestList] = useState<ContentDestination[]>([]);
+  useEffect(() => {
+    setDestList(destinations || []);
+  }, [destinations]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDestination, setEditingDestination] = useState<ContentDestination | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Sorting state and helpers (to align with TourManager)
+  const [sortBy, setSortBy] = useState<{ field: 'name' | 'country' | 'listed' | 'tourCount'; direction: 'asc' | 'desc' }>({ field: 'name', direction: 'asc' });
+
+  // Status filter (client-side)
+  const [statusFilter, setStatusFilter] = useState('');
+  const toggleSort = (field: 'name' | 'country' | 'listed' | 'tourCount') => {
+    setSortBy(prev => prev.field === field ? { field, direction: prev.direction === 'asc' ? 'desc' : 'asc' } : { field, direction: 'asc' });
+  };
+
+  const getComparableValue = (destination: ContentDestination, field: 'name' | 'country' | 'listed' | 'tourCount') => {
+    switch (field) {
+      case 'name':
+        return (((destination as any).name || (destination as any).title || '') as string).toLowerCase();
+      case 'country':
+        return (((destination as any).country || '') as string).toLowerCase();
+      case 'listed':
+        return (destination as any).listed === false ? 0 : 1;
+      case 'tourCount':
+        return Number((destination as any).tourCount || 0);
+      default:
+        return 0;
+    }
+  };
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -130,144 +161,12 @@ const DestinationManager: React.FC = () => {
     resetForm();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else if (name === 'title') {
-      // Auto-generate slug when title changes
-      const slug = generateSlug(value);
-      setFormData(prev => ({ ...prev, title: value, slug }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
 
-  // Handle country selection from SearchableSelect
-  const handleCountryChange = (value: string) => {
-    setFormData(prev => ({ ...prev, country: value }));
-  };
 
-  // Get all countries from the library and add custom entries
-  const allCountries = getData();
-  const countryOptions = [
-    // Add custom entries first
-    { value: 'Tibet', label: 'Tibet' },
-    // Then add all countries from the library
-    ...allCountries.map((country: any) => ({
-      value: country.name,
-      label: country.name
-    })),
-    // Add other custom entries
-    { value: 'Other', label: 'Other' }
-  ].sort((a, b) => a.label.localeCompare(b.label));
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Clean up previous blob URL if it exists
-      if (previewUrl && previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl);
-      }
-      
-      setFormData(prev => ({ ...prev, imageFile: file }));
-      // Create a temporary object URL for preview
-      const newPreviewUrl = URL.createObjectURL(file);
-      setPreviewUrl(newPreviewUrl);
-      setFormData(prev => ({ ...prev, image: newPreviewUrl }));
-    }
-  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(null);
 
-    try {
-      let imageUrl = formData.image;
 
-      // Handle file upload if there's a new image file
-      if (formData.imageFile) {
-        const uploadFormData = new FormData();
-        uploadFormData.append('image', formData.imageFile);
-        // Use the destination slug/title for organizing uploads
-        const destinationSlug = formData.slug || generateSlug(formData.title || 'destination');
-        uploadFormData.append('destinationSlug', destinationSlug);
-        
-        const token = localStorage.getItem('adminToken');
-        const uploadResponse = await fetch(`${getApiBaseUrl()}/admin/upload`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: uploadFormData,
-        });
-
-        if (uploadResponse.ok) {
-          const uploadResult = await uploadResponse.json();
-          imageUrl = uploadResult.url;
-        } else {
-          const errorText = await uploadResponse.text();
-          throw new Error(`Upload failed: ${errorText}`);
-        }
-      }
-
-      const apiData = {
-        slug: formData.slug,
-        title: formData.title,
-        country: formData.country,
-        image: imageUrl, // This should be the new uploaded image URL
-        listed: formData.listed !== false, // Default to true if not explicitly set
-      };
-      
-      const url = editingDestination
-        ? `${getApiBaseUrl()}/admin/destinations/${editingDestination.slug || editingDestination.id}`
-        : `${getApiBaseUrl()}/admin/destinations`;
-      
-      const method = editingDestination ? 'PUT' : 'POST';
-      const token = localStorage.getItem('adminToken');
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(apiData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save destination');
-      }
-
-      const savedDestination = await response.json();
-      
-      // Wait a moment for the server to finish processing
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Force refresh to get updated data
-      window.location.reload();
-      
-      closeModal();
-      
-      // Trigger a global refresh event for other components
-      window.dispatchEvent(new CustomEvent('destinationUpdated', {
-        detail: {
-          destinationId: savedDestination.id,
-          newImageUrl: savedDestination.image,
-          timestamp: Date.now()
-        }
-      }));
-      
-    } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Failed to save destination');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const deleteDestination = async (destination: ContentDestination) => {
     const token = localStorage.getItem('adminToken');
@@ -284,8 +183,67 @@ const DestinationManager: React.FC = () => {
       throw new Error(errorData.error || 'Failed to delete destination');
     }
 
-    window.location.reload();
+    // Update local list without reloading the page
+    setDestList(prev => prev.filter(d => {
+      const idOrSlug = (d as any).slug || (d as any).id?.toString() || d.name || '';
+      return idOrSlug !== slug;
+    }));
+
+    // Notify other components
+    window.dispatchEvent(new CustomEvent('destinationUpdated', {
+      detail: {
+        destinationId: (destination as any).id,
+        timestamp: Date.now()
+      }
+    }));
   };
+
+  // Enhanced filtering with search - moved before early returns to fix hook order
+  const allFilteredDestinations = React.useMemo(() => {
+    return (destList || [])?.filter(destination => {
+      const country = (destination as any).country || '';
+      const type = (destination as any).type || '';
+      const name = (destination as any).name || (destination as any).title || '';
+      const region = (destination as any).region || '';
+      
+      // Tab filter
+      let tabMatch = false;
+      if (activeTab === 'nepal') {
+        tabMatch = country === 'Nepal' || type === 'nepal';
+      } else {
+        tabMatch = country !== 'Nepal' && type === 'international';
+      }
+      
+      // Search filter
+      const searchMatch = searchTerm === '' ||
+        name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        region.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Status filter
+      const isListed = (destination as any).listed !== false;
+      const statusMatch = statusFilter === '' || (statusFilter === 'listed' ? isListed : statusFilter === 'unlisted' ? !isListed : true);
+      
+      return tabMatch && searchMatch && statusMatch;
+    }) || [];
+  }, [destList, activeTab, searchTerm, statusFilter]);
+
+  // Apply sorting before pagination
+  const sortedDestinations = React.useMemo(() => {
+    const list = [...allFilteredDestinations];
+    list.sort((a, b) => {
+      const aVal = getComparableValue(a, sortBy.field);
+      const bVal = getComparableValue(b, sortBy.field);
+      let cmp = 0;
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        cmp = aVal - bVal;
+      } else {
+        cmp = String(aVal).localeCompare(String(bVal));
+      }
+      return sortBy.direction === 'asc' ? cmp : -cmp;
+    });
+    return list;
+  }, [allFilteredDestinations, sortBy]);
 
   const deleteModal = useDeleteModal<ContentDestination>({
     onDelete: deleteDestination,
@@ -324,8 +282,14 @@ const DestinationManager: React.FC = () => {
         throw new Error(errorData.error || 'Failed to update destination listing status');
       }
 
-      // Force refetch to get updated data and refresh UI
-      window.location.reload();
+      // Update local list without reloading
+      setDestList(prev => prev.map(d => {
+        const idOrSlug = (d as any).slug || (d as any).id?.toString() || d.name || '';
+        if (idOrSlug === slug) {
+          return { ...d, listed: newListed } as ContentDestination;
+        }
+        return d;
+      }));
 
       // Trigger a global refresh event for other components
       window.dispatchEvent(new CustomEvent('destinationUpdated', {
@@ -365,36 +329,12 @@ const DestinationManager: React.FC = () => {
     );
   }
 
-  // Enhanced filtering with search
-  const allFilteredDestinations = destinations?.filter(destination => {
-    const country = (destination as any).country || '';
-    const type = (destination as any).type || '';
-    const name = (destination as any).name || (destination as any).title || '';
-    const region = (destination as any).region || '';
-    
-    // Tab filter
-    let tabMatch = false;
-    if (activeTab === 'nepal') {
-      tabMatch = country === 'Nepal' || type === 'nepal';
-    } else {
-      tabMatch = country !== 'Nepal' && type === 'international';
-    }
-    
-    // Search filter
-    const searchMatch = searchTerm === '' ||
-      name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      region.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return tabMatch && searchMatch;
-  }) || [];
-
   // Pagination calculations
-  const totalItems = allFilteredDestinations.length;
+  const totalItems = sortedDestinations.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const filteredDestinations = allFilteredDestinations.slice(startIndex, endIndex);
+  const filteredDestinations = sortedDestinations.slice(startIndex, endIndex);
   
   const startItem = startIndex + 1;
   const endItem = Math.min(endIndex, totalItems);
@@ -427,8 +367,14 @@ const DestinationManager: React.FC = () => {
     setCurrentPage(1);
   };
 
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
+
   const handleClearFilters = () => {
     setSearchTerm('');
+    setStatusFilter('');
     setCurrentPage(1);
   };
 
@@ -451,7 +397,7 @@ const DestinationManager: React.FC = () => {
 
       {/* Search Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Search */}
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="relative">
@@ -478,6 +424,19 @@ const DestinationManager: React.FC = () => {
             </select>
           </div>
 
+          {/* Status Filter */}
+          <div>
+            <select
+              value={statusFilter}
+              onChange={(e) => handleStatusFilterChange(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            >
+              <option value="">All Status</option>
+              <option value="listed">Listed</option>
+              <option value="unlisted">Unlisted</option>
+            </select>
+          </div>
+
           {/* Clear Filters */}
           <div>
             <button
@@ -497,19 +456,39 @@ const DestinationManager: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Destination
+                  <button onClick={() => toggleSort('name')} className="flex items-center gap-1">
+                    <span>Destination</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'name' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Country
+                  <button onClick={() => toggleSort('country')} className="flex items-center gap-1">
+                    <span>Country</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'country' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type
                 </th>
                 <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Listed
+                  <button onClick={() => toggleSort('listed')} className="flex items-center gap-1">
+                    <span>Listed</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'listed' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tours
+                  <button onClick={() => toggleSort('tourCount')} className="flex items-center gap-1">
+                    <span>Tours</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'tourCount' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-16 px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -564,18 +543,26 @@ const DestinationManager: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-3 py-4" onClick={(e) => e.stopPropagation()}>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
+                    <div className="flex items-center">
+                      <Toggle
                         checked={(destination as any).listed !== false}
                         onChange={() => handleListToggle(destination)}
-                        className="sr-only peer"
+                        size="sm"
                       />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600 hover:bg-gray-300 peer-checked:hover:bg-green-700"></div>
-                      <span className="ml-2 text-xs font-medium text-gray-900">
-                        {(destination as any).listed !== false ? 'Listed' : 'Unlisted'}
+                      <span className="ml-2 text-xs text-gray-600 hidden xl:block">
+                        {(destination as any).listed !== false ? (
+                          <span className="flex items-center text-green-600">
+                            <Eye className="w-3 h-3 mr-1" />
+                            Listed
+                          </span>
+                        ) : (
+                          <span className="flex items-center text-gray-500">
+                            <EyeOff className="w-3 h-3 mr-1" />
+                            Unlisted
+                          </span>
+                        )}
                       </span>
-                    </label>
+                    </div>
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-900">
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -673,6 +660,27 @@ const DestinationManager: React.FC = () => {
                     <Globe className="w-3 h-3 mr-1" />
                     <span className="truncate">{destination.country}</span>
                   </div>
+                </div>
+
+                <div className="mt-2 flex items-center" onClick={(e) => e.stopPropagation()}>
+                  <Toggle
+                    checked={(destination as any).listed !== false}
+                    onChange={() => handleListToggle(destination)}
+                    size="sm"
+                  />
+                  <span className="ml-2 text-xs text-gray-600">
+                    {(destination as any).listed !== false ? (
+                      <span className="flex items-center text-green-600">
+                        <Eye className="w-3 h-3 mr-1" />
+                        Listed
+                      </span>
+                    ) : (
+                      <span className="flex items-center text-gray-500">
+                        <EyeOff className="w-3 h-3 mr-1" />
+                        Unlisted
+                      </span>
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
@@ -817,232 +825,210 @@ const DestinationManager: React.FC = () => {
                   onClick={closeModal}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
+              <div className="p-6 overflow-auto">
+                {/* Form */}
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  setIsSubmitting(true);
+                  setSubmitError(null);
 
-              <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-                <div className="overflow-y-auto flex-1 p-6">
-                  <div className="space-y-6">
-                    {submitError && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                        <div className="flex items-center gap-2 text-red-800">
-                          <AlertCircle className="w-5 h-5" />
-                          <span className="font-medium">Error</span>
-                        </div>
-                        <p className="text-red-700 mt-1">{submitError}</p>
-                      </div>
-                    )}
+                  try {
+                    const token = localStorage.getItem('adminToken');
 
-                    {/* Basic Information */}
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-semibold text-gray-900">Basic Information</h4>
-                          <p className="text-sm text-gray-500">Set the main details for this destination</p>
-                        </div>
-                      </div>
+                    let imagePath = formData.image || '';
 
-                      <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-2">
-                              Title *
-                            </label>
-                            <input
-                              type="text"
-                              name="title"
-                              value={formData.title}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                              placeholder="e.g., Everest Region"
-                            />
-                            <p className="text-xs text-gray-500 mt-1">This will be the main name displayed for the destination</p>
+                    // If a new image file was selected, upload it
+                    if ((formData as any).imageFile) {
+                      const formDataObj = new FormData();
+                      formDataObj.append('image', (formData as any).imageFile);
+
+                      const uploadResponse = await fetch(`${getApiBaseUrl()}/admin/uploads/destinations`, {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': `Bearer ${token}`
+                        },
+                        body: formDataObj
+                      });
+
+                      if (!uploadResponse.ok) {
+                        const errorData = await uploadResponse.json();
+                        throw new Error(errorData.error || 'Image upload failed');
+                      }
+
+                      const uploadData = await uploadResponse.json();
+                      imagePath = uploadData.path || uploadData.url || imagePath;
+                    }
+
+                    const payload = {
+                      slug: formData.slug,
+                      title: formData.title,
+                      country: formData.country,
+                      image: imagePath,
+                      listed: (formData as any).listed !== false,
+                      ...(formData.description ? { description: formData.description } : {})
+                    };
+
+                    const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${formData.slug || (editingDestination as any)?.slug || (editingDestination as any)?.id || ''}`, {
+                      method: editingDestination ? 'PUT' : 'POST',
+                      headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                      const errorData = await response.json();
+                      throw new Error(errorData.error || 'Failed to save destination');
+                    }
+
+                    const savedData = await response.json();
+
+                    // Update local list
+                    setDestList(prev => {
+                      const existsIndex = prev.findIndex(d => {
+                        const idOrSlug = (d as any).slug || (d as any).id?.toString() || d.name || '';
+                        return idOrSlug === (editingDestination as any)?.slug || idOrSlug === (editingDestination as any)?.id?.toString();
+                      });
+                      if (existsIndex >= 0) {
+                        const newList = [...prev];
+                        newList[existsIndex] = savedData;
+                        return newList;
+                      }
+                      return [savedData, ...prev];
+                    });
+
+                    // Close modal
+                    closeModal();
+
+                  } catch (error) {
+                    setSubmitError(error instanceof Error ? error.message : 'Failed to save destination');
+                  } finally {
+                    setIsSubmitting(false);
+                  }
+                }}>
+                  {/* Form Fields */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Title</label>
+                      <input
+                        type="text"
+                        value={formData.title}
+                        onChange={(e) => {
+                          const newTitle = e.target.value;
+                          setFormData(prev => ({ ...prev, title: newTitle, slug: generateSlug(newTitle) }));
+                        }}
+                        className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Country</label>
+                      <SearchableSelect
+                        options={getData().map((country: any) => ({ label: country.name, value: country.name }))}
+                        value={formData.country}
+                        onChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Description</label>
+                      <textarea
+                        value={formData.description || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                        className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        rows={3}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Image</label>
+                      <div className="mt-1">
+                        {previewUrl ? (
+                          <div className="relative">
+                            <img src={previewUrl} alt="Preview" className="w-full h-40 object-cover rounded-md border" />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (previewUrl && previewUrl.startsWith('blob:')) {
+                                  URL.revokeObjectURL(previewUrl);
+                                }
+                                setPreviewUrl(null);
+                                setFormData(prev => ({ ...prev, image: '' }));
+                              }}
+                              className="absolute top-2 right-2 bg-white rounded-md p-2 shadow hover:bg-gray-50"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-2">
-                              Slug * (Auto-generated)
-                            </label>
+                        ) : (
+                          <label className="flex items-center justify-center w-full h-40 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50">
+                            <div className="text-center">
+                              <ImageIcon className="w-8 h-8 text-gray-400 mx-auto" />
+                              <span className="text-sm text-gray-600">Click to upload image</span>
+                            </div>
                             <input
-                              type="text"
-                              name="slug"
-                              value={formData.slug}
-                              onChange={handleInputChange}
-                              required
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 transition-colors"
-                              placeholder="e.g., everest-region"
-                              readOnly
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = URL.createObjectURL(file);
+                                  setPreviewUrl(url);
+                                  setFormData(prev => ({ ...prev, imageFile: file } as DestinationFormData));
+                                }
+                              }}
                             />
-                            <p className="text-xs text-gray-500 mt-1">URL-friendly version of the title</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-2">
-                            Country *
                           </label>
-                          <SearchableSelect
-                            options={countryOptions}
-                            value={formData.country}
-                            onChange={handleCountryChange}
-                            placeholder="Select a country"
-                            name="country"
-                          />
-                          <p className="text-xs text-gray-500 mt-1">Select the country where this destination is located</p>
-                        </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Image Upload */}
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-100">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <ImageIcon className="w-4 h-4 text-gray-600" />
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-semibold text-gray-900">Destination Image</h4>
-                          <p className="text-sm text-gray-500">Upload or provide a URL for the destination image</p>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg p-6 border border-gray-200 space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-3">
-                            Image Upload
-                          </label>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                            <div className="flex flex-col items-center gap-4">
-                              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                <ImageIcon className="w-6 h-6 text-gray-600" />
-                              </div>
-                              <div>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={handleFileChange}
-                                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                                />
-                                <p className="text-xs text-gray-500 mt-2">
-                                  PNG, JPG, GIF up to 10MB
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {formData.image && (
-                            <div className="mt-6">
-                              <div className="flex items-center justify-between mb-3">
-                                <p className="text-sm font-medium text-gray-900">Current Image:</p>
-                              </div>
-                              <div className="relative">
-                                <img
-                                  src={formData.image}
-                                  alt="Preview"
-                                  className="w-full max-w-md h-48 object-cover rounded-lg border shadow-sm"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                                  }}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    if (previewUrl && previewUrl.startsWith('blob:')) {
-                                      URL.revokeObjectURL(previewUrl);
-                                    }
-                                    setFormData(prev => ({ ...prev, image: '', imageFile: undefined }));
-                                    setPreviewUrl(null);
-                                  }}
-                                  className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg"
-                                  title="Remove image"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Toggle
+                          checked={(formData as any).listed !== false}
+                          onChange={(checked: boolean) => setFormData(prev => ({ ...prev, listed: checked }))}
+                          size="sm"
+                        />
+                        <span className="ml-2 text-sm text-gray-600">
+                          {(formData as any).listed !== false ? (
+                            <span className="flex items-center text-green-600">
+                              <Eye className="w-4 h-4 mr-1" />
+                              Listed
+                            </span>
+                          ) : (
+                            <span className="flex items-center text-gray-500">
+                              <EyeOff className="w-4 h-4 mr-1" />
+                              Unlisted
+                            </span>
                           )}
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-2">
-                            Image URL (Alternative)
-                          </label>
-                          <input
-                            type="text"
-                            name="image"
-                            value={formData.image}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                            placeholder="https://example.com/image.jpg or /uploads/destinations/..."
-                          />
-                          <p className="text-xs text-gray-500 mt-1">Provide a full URL or relative path to an image</p>
-                        </div>
+                        </span>
                       </div>
-                    </div>
 
-                    {/* Listing Status */}
-                    <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                      <div className="bg-white rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <label className="text-sm font-medium text-gray-900 cursor-pointer">
-                              List This Destination
-                            </label>
-                            <p className="text-xs text-gray-500 mt-1">
-                              When enabled, this destination will be visible on your website. Unlist to temporarily hide it from visitors.
-                            </p>
-                          </div>
-                          <div className="ml-4 flex items-center">
-                            <label className="relative inline-flex items-center cursor-pointer">
-                              <input
-                                type="checkbox"
-                                name="listed"
-                                checked={formData.listed !== false}
-                                onChange={handleInputChange}
-                                className="sr-only peer"
-                              />
-                              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sticky Footer with Action Buttons */}
-                <div className="flex justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 font-medium"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Saving...
-                      </>
-                    ) : (
-                      <>
+                      <button
+                        type="submit"
+                        className="btn-primary flex items-center gap-2"
+                        disabled={isSubmitting}
+                      >
                         <Save className="w-4 h-4" />
-                        {editingDestination ? 'Update' : 'Create'} Destination
-                      </>
+                        {isSubmitting ? 'Saving...' : (editingDestination ? 'Update Destination' : 'Create Destination')}
+                      </button>
+                    </div>
+
+                    {submitError && (
+                      <div className="mt-4 text-red-600 text-sm">
+                        {submitError}
+                      </div>
                     )}
-                  </button>
-                </div>
-              </form>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         )}
