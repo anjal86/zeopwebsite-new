@@ -254,6 +254,8 @@ const loadTourDetails = () => {
           const filePath = path.join(tourDetailsDir, file);
           const data = fs.readFileSync(filePath, 'utf8');
           const tourDetail = JSON.parse(data);
+          // Strip deprecated field
+          delete tourDetail.what_to_bring;
           tourDetails.push(tourDetail);
         } catch (error) {
           console.error(`Error loading tour detail file ${file}:`, error);
@@ -681,12 +683,12 @@ const updateDestinationRelationships = (tourId, newPrimaryDestId, newSecondaryDe
 // Get all tours (merge basic tours with detailed tours)
 app.get('/api/tours', async (req, res) => {
   await delay(300);
-  
+
   const { category, location, destination, search, featured, page, limit } = req.query;
-  
+
   // Use only detailed tours as primary data source
   const allTours = [...tourDetails];
-  
+
   // Filter out unlisted tours for public API (only show explicitly listed tours or tours without listed field)
   let filteredTours = allTours.filter(tour => tour.listed !== false);
 
@@ -711,7 +713,7 @@ app.get('/api/tours', async (req, res) => {
       (dest.name && dest.name.toLowerCase() === destination.toLowerCase()) ||
       (dest.title && dest.title.toLowerCase() === destination.toLowerCase())
     );
-    
+
     if (destinationData) {
       filteredTours = filteredTours.filter(tour =>
         tour.primary_destination_id === destinationData.id ||
@@ -737,11 +739,11 @@ app.get('/api/tours', async (req, res) => {
     // First sort by featured status (featured tours first)
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
-    
+
     // Then sort by rating (highest first)
     const ratingDiff = (b.rating || 0) - (a.rating || 0);
     if (ratingDiff !== 0) return ratingDiff;
-    
+
     // Finally sort by ID for consistent ordering
     return a.id - b.id;
   });
@@ -749,15 +751,15 @@ app.get('/api/tours', async (req, res) => {
   // Pagination support
   const totalCount = filteredTours.length;
   let paginatedTours = filteredTours;
-  
+
   if (page && limit) {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 12;
     const startIndex = (pageNum - 1) * limitNum;
     const endIndex = startIndex + limitNum;
-    
+
     paginatedTours = filteredTours.slice(startIndex, endIndex);
-    
+
     // Add pagination metadata to response headers
     res.set({
       'X-Total-Count': totalCount.toString(),
@@ -880,6 +882,8 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
+    // Strip deprecated field before saving
+    if (newTour.what_to_bring) delete newTour.what_to_bring;
     
     // Add to tours array
     tourDetails.push(newTour);
@@ -936,6 +940,8 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
       ...tourData,
       updated_at: new Date().toISOString()
     };
+    // Strip deprecated field before saving
+    if (updatedTour.what_to_bring) delete updatedTour.what_to_bring;
     
     tourDetails[tourIndex] = updatedTour;
     
@@ -1117,14 +1123,39 @@ app.get('/api/admin/tours/slug/:slug', authenticateToken, async (req, res) => {
 // Get all destinations
 app.get('/api/destinations', async (req, res) => {
   await delay(300);
-  
-  const { country } = req.query;
-  let filteredDestinations = [...destinations];
 
-  // Calculate dynamic tour counts based on actual relationships
+  const { country } = req.query;
+  // Filter out unlisted destinations for public API (only show explicitly listed destinations or destinations without listed field)
+  let filteredDestinations = destinations.filter(dest => dest.listed !== false);
+
+  // Calculate dynamic tour counts based on actual tour relationships
+  const calculateDestinationTourCount = (destinationId, destinationName) => {
+    if (!tourDetails || tourDetails.length === 0) return 0;
+
+    // Count tours using multiple matching methods
+    const matchedTours = tourDetails.filter(tour => {
+      if (tour.listed === false) return false; // Only count listed tours
+
+      // Method 1: Relationship-based matching (primary/secondary destinations)
+      const isPrimaryDestination = tour.primary_destination_id === destinationId;
+      const isSecondaryDestination = tour.secondary_destination_ids?.includes(destinationId);
+
+      // Method 2: Direct destinationId matching
+      const isDirectDestination = tour.destinationId === destinationId;
+
+      // Method 3: Name-based matching
+      const isNameMatch = tour.destination === destinationName;
+
+      return isPrimaryDestination || isSecondaryDestination || isDirectDestination || isNameMatch;
+    });
+
+    return matchedTours.length;
+  };
+
+  // Map with calculated tour counts for all listed destinations
   filteredDestinations = filteredDestinations.map(dest => ({
     ...dest,
-    tourCount: (dest.relatedTours || []).length
+    tourCount: calculateDestinationTourCount(dest.id, dest.name)
   }));
 
   // Filter by country
@@ -1263,7 +1294,7 @@ app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, re
     console.log('Request body:', req.body);
     
     const { identifier } = req.params;
-    const { title, country, region, image, featured } = req.body;
+    const { title, country, region, image, featured, listed } = req.body;
     
     // Try to find by slug first, then by ID
     let destinationIndex = destinations.findIndex(d => d.slug === identifier);
@@ -1286,6 +1317,7 @@ app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, re
       region: region !== undefined ? region : existingDestination.region,
       image: image || existingDestination.image, // This should be the new uploaded image URL
       featured: featured !== undefined ? featured : existingDestination.featured,
+      listed: listed !== undefined ? listed : existingDestination.listed,
       type: country ? (country.toLowerCase() === 'nepal' ? 'nepal' : 'international') : existingDestination.type,
       description: title ? `Discover the beauty and culture of ${title} in ${country || existingDestination.country}.` : existingDestination.description
     };

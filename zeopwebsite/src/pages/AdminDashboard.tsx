@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BarChart3,
   Mountain,
   Backpack,
   Settings,
-  LogOut,
   Menu,
   X,
   Image as ImageIcon,
   MessageSquare,
-  Mail,
-  Camera
+  Mail
 } from 'lucide-react';
 import { useApi, useAdminApi } from '../hooks/useApi';
 import DestinationManager from '../components/Admin/DestinationManager';
@@ -22,6 +21,7 @@ import ContactEnquiryManager from '../components/Admin/ContactEnquiryManager';
 import TestimonialManager from '../components/Admin/TestimonialManager';
 import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
 import LogoManager from '../components/Admin/LogoManager';
+import AdminSidebar from '../components/Admin/AdminSidebar';
 
 interface User {
   id: number;
@@ -37,6 +37,8 @@ const AdminDashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  // Add responsive detection for animation behavior
+  const [isMobile, setIsMobile] = useState(false);
 
   // Get active tab from URL or default to 'overview'
   const activeTab = (searchParams.get('tab') as ActiveTab) || 'overview';
@@ -58,6 +60,14 @@ const AdminDashboard: React.FC = () => {
     }
   }, [navigate]);
 
+  // Track viewport width to decide slide behavior
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   // Function to handle tab changes and update URL
   const handleTabChange = (tab: ActiveTab) => {
     setSearchParams({ tab });
@@ -69,16 +79,6 @@ const AdminDashboard: React.FC = () => {
     navigate('/admin/login');
   };
 
-  const menuItems = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'destinations', label: 'Destinations', icon: Mountain },
-    { id: 'tours', label: 'Tours', icon: Backpack },
-    { id: 'sliders', label: 'Sliders', icon: ImageIcon },
-    { id: 'kailash-gallery', label: 'Gallery', icon: Camera },
-    { id: 'enquiries', label: 'Enquiries', icon: Mail },
-    { id: 'testimonials', label: 'Reviews', icon: MessageSquare },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ];
 
   const renderContent = () => {
     switch (activeTab) {
@@ -122,66 +122,25 @@ const AdminDashboard: React.FC = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`bg-slate-800 text-white fixed left-0 top-0 h-full z-30 transition-transform duration-300 ${
-        sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'
-      } ${sidebarOpen ? 'md:w-64' : 'md:w-16'}`}>
-        {/* Header */}
-        <div className="p-4 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">Z</span>
-            </div>
-            {sidebarOpen && (
-              <div>
-                <h1 className="font-bold text-lg">Zeo Admin</h1>
-                <p className="text-slate-400 text-xs">Content Management</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="mt-4 px-2">
-          {menuItems.map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  handleTabChange(item.id as ActiveTab);
-                  setSidebarOpen(false);
-                }}
-                className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${
-                  activeTab === item.id ? 'bg-slate-700 text-white' : 'text-slate-300'
-                }`}
-              >
-                <IconComponent className="w-4 h-4 flex-shrink-0" />
-                <span className="font-medium truncate">{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* User Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700">
-          <div className="flex items-center space-x-3 mb-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-sm font-bold">{user.name.charAt(0)}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate text-white">{user.name}</p>
-              <p className="text-xs text-slate-400 truncate">{user.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full px-3 py-2 text-sm bg-red-600 hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
+      <motion.aside
+        className={`bg-slate-800 text-white fixed left-0 top-0 h-full z-30 ${sidebarOpen ? 'md:w-64' : 'md:w-16'}`}
+        initial={false}
+        animate={{ x: isMobile && !sidebarOpen ? '-100%' : 0 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        aria-expanded={sidebarOpen}
+      >
+        <AdminSidebar
+          activeKey={activeTab}
+          onSelect={(key) => {
+            handleTabChange(key as ActiveTab);
+            setSidebarOpen(false);
+          }}
+          sidebarOpen={sidebarOpen}
+          user={user}
+          onLogout={handleLogout}
+          mode={'buttons'}
+        />
+      </motion.aside>
 
       {/* Main Content */}
       <div className={`flex-1 flex flex-col ${sidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>

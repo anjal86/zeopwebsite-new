@@ -35,6 +35,50 @@ const TourManager: React.FC = () => {
   const [itemsPerPage] = useState(20); // Increased from 10 to 20 to show more tours
   const [totalItems, setTotalItems] = useState(0);
 
+  // Sorting state and helpers
+  const [sortBy, setSortBy] = useState<{ field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed'; direction: 'asc' | 'desc' }>({ field: 'title', direction: 'asc' });
+
+  const toggleSort = (field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed') => {
+    setSortBy(prev => prev.field === field ? { field, direction: prev.direction === 'asc' ? 'desc' : 'asc' } : { field, direction: 'asc' });
+  };
+
+  const getComparableValue = (tour: Tour, field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed') => {
+    switch (field) {
+      case 'title':
+        return (tour.title || '').toLowerCase();
+      case 'category':
+        return (tour.category || '').toLowerCase();
+      case 'destination':
+        return ((destinationsMap.get(tour.primary_destination_id || 0) || tour.location || '')).toLowerCase();
+      case 'duration': {
+        const match = (tour.duration || '').match(/(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      }
+      case 'price':
+        return Number(tour.price) || 0;
+      case 'listed':
+        return tour.listed === false ? 0 : 1;
+      default:
+        return 0;
+    }
+  };
+
+  const sortedTours = React.useMemo(() => {
+    const list = [...tours];
+    list.sort((a, b) => {
+      const aVal = getComparableValue(a, sortBy.field);
+      const bVal = getComparableValue(b, sortBy.field);
+      let cmp = 0;
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        cmp = aVal - bVal;
+      } else {
+        cmp = String(aVal).localeCompare(String(bVal));
+      }
+      return sortBy.direction === 'asc' ? cmp : -cmp;
+    });
+    return list;
+  }, [tours, sortBy, destinationsMap]);
+
   const deleteTour = async (tour: Tour) => {
     const token = localStorage.getItem('adminToken');
     const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/tours/${tour.id}`, {
@@ -297,22 +341,52 @@ const TourManager: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="w-1/3 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tour
+                  <button onClick={() => toggleSort('title')} className="flex items-center gap-1">
+                    <span>Tour</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'title' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
+                  <button onClick={() => toggleSort('category')} className="flex items-center gap-1">
+                    <span>Category</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'category' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-24 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Destination
+                  <button onClick={() => toggleSort('destination')} className="flex items-center gap-1">
+                    <span>Destination</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'destination' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Duration
+                  <button onClick={() => toggleSort('duration')} className="flex items-center gap-1">
+                    <span>Duration</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'duration' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-16 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
+                  <button onClick={() => toggleSort('price')} className="flex items-center gap-1">
+                    <span>Price</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'price' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-20 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Listed
+                  <button onClick={() => toggleSort('listed')} className="flex items-center gap-1">
+                    <span>Listed</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'listed' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
                 </th>
                 <th className="w-16 px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -320,7 +394,7 @@ const TourManager: React.FC = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {tours.map((tour: Tour) => (
+              {sortedTours.map((tour: Tour) => (
                 <tr
                   key={tour.id}
                   className="hover:bg-gray-50 transition-colors cursor-pointer"
@@ -423,7 +497,7 @@ const TourManager: React.FC = () => {
 
       {/* Tours Cards - Mobile & Tablet */}
       <div className="lg:hidden space-y-4">
-        {tours.map((tour: Tour) => (
+        {sortedTours.map((tour: Tour) => (
           <div
             key={tour.id}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"

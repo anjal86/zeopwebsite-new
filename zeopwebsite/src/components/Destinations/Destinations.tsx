@@ -1,75 +1,30 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MapPin, Mountain } from 'lucide-react';
-import { useDestinations, useTours } from '../../hooks/useApi';
+import { MapPin } from 'lucide-react';
+import { useDestinations } from '../../hooks/useApi';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import ErrorMessage from '../UI/ErrorMessage';
 
 const Destinations: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
 
-  // Use API hooks to fetch destinations and tours
+  // Use API hooks to fetch destinations
   const { data: destinations, loading, error } = useDestinations();
-  const { data: allTours } = useTours();
 
-  // Calculate tour count for each destination based on relationship system
-  const getDestinationTourCount = (destinationId: number, destinationName: string) => {
-    if (!allTours) return 0;
-    
-    // Count tours using relationship-based matching
-    const relationshipTours = allTours.filter(tour => {
-      if (tour.listed === false) return false; // Only count listed tours
-      
-      // Check if this destination is the primary destination for the tour
-      const isPrimaryDestination = (tour as any).primary_destination_id === destinationId;
-      
-      // Check if this destination is in the secondary destinations for the tour
-      const isSecondaryDestination = (tour as any).secondary_destination_ids?.includes(destinationId);
-      
-      return isPrimaryDestination || isSecondaryDestination;
-    });
-    
-    // Fallback to location-based matching for legacy support
-    const locationTours = allTours.filter(tour => {
-      if (!tour.location || tour.listed === false) return false;
-      
-      const tourLocation = tour.location.toLowerCase();
-      const destName = destinationName.toLowerCase();
-      
-      // Match by various location patterns
-      return tourLocation.includes(destName) ||
-             (destName === 'annapurna' && (tourLocation.includes('annapurna') || tourLocation.includes('abc'))) ||
-             (destName === 'everest' && (tourLocation.includes('everest') || tourLocation.includes('ebc'))) ||
-             (destName === 'langtang' && tourLocation.includes('langtang')) ||
-             (destName === 'chitwan' && tourLocation.includes('chitwan')) ||
-             (destName === 'pokhara' && tourLocation.includes('pokhara')) ||
-             (destName === 'kathmandu' && tourLocation.includes('kathmandu')) ||
-             (destName === 'manaslu' && tourLocation.includes('manaslu'));
-    });
-    
-    // Combine both methods and remove duplicates
-    const allRelatedTours = [...relationshipTours];
-    locationTours.forEach(locationTour => {
-      if (!allRelatedTours.find(tour => tour.id === locationTour.id)) {
-        allRelatedTours.push(locationTour);
-      }
-    });
-    
-    return allRelatedTours.length;
-  };
-
-  // Filter destinations based on country and add calculated tour counts
+  // Filter destinations based on country and listed status (show all listed destinations)
   const filteredDestinations = destinations?.filter(destination => {
+    // Check if destination is listed (default to true if not set)
+    const isListed = (destination as any).listed !== false;
+    if (!isListed) return false;
+
+    // Tab filter
     if (activeTab === 'nepal') {
       return destination.country === 'Nepal';
     } else {
       return destination.country !== 'Nepal';
     }
-  }).map(destination => ({
-    ...destination,
-    tourCount: getDestinationTourCount(destination.id, destination.name)
-  })).filter(destination => destination.tourCount > 0) || []; // Only show destinations with available tours
+  }) || [];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -179,12 +134,6 @@ const Destinations: React.FC = () => {
                       <h3 className="text-lg sm:text-xl md:text-2xl font-bold">
                         {destination.name}
                       </h3>
-                      <div className="flex items-center mt-2 opacity-80">
-                        <Mountain className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                        <span className="text-xs sm:text-sm">
-                          {destination.tourCount} {destination.tourCount === 1 ? 'Tour' : 'Tours'}
-                        </span>
-                      </div>
                     </div>
 
                     {/* Hover Effect */}

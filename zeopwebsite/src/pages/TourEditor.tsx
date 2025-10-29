@@ -13,12 +13,7 @@ import {
   Camera,
   Calendar,
   X,
-  BarChart3,
   Mountain,
-  Backpack,
-  Users,
-  Settings,
-  LogOut,
   Menu,
   ChevronUp,
   ChevronDown,
@@ -29,11 +24,10 @@ import {
   Image,
   Eye,
   MapPin,
-  Activity,
-  Mail,
-  MessageCircle
+  Activity
 } from 'lucide-react';
 import ProgressModal from '../components/UI/ProgressModal';
+import AdminSidebar from '../components/Admin/AdminSidebar';
 
 interface ItineraryDay {
   day: number;
@@ -69,7 +63,7 @@ interface TourDetails {
   exclusions?: string[];
   activities?: Activity[];
   itinerary?: ItineraryDay[];
-  what_to_bring?: string[];
+
   fitness_requirements?: string;
   // Relationship fields - Primary + Secondary Destinations
   primary_destination_id?: number;
@@ -94,6 +88,14 @@ const TourEditor: React.FC = () => {
   const [activeTab, setActiveTab] = useState('basic');
   const [user, setUser] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Simple fetch for destinations and activities
   const [destinations, setDestinations] = useState<any[]>([]);
@@ -149,7 +151,7 @@ const TourEditor: React.FC = () => {
     exclusions: [],
     activities: [],
     itinerary: [],
-    what_to_bring: [],
+
     fitness_requirements: '',
     primary_destination_id: undefined,
     secondary_destination_ids: [],
@@ -315,8 +317,7 @@ const TourEditor: React.FC = () => {
           inclusions: details.inclusions || [],
           exclusions: details.exclusions || [],
           activities: details.activities || [],
-          itinerary: details.itinerary || [],
-          what_to_bring: details.what_to_bring || []
+          itinerary: details.itinerary || []
         };
         
         setFormData(formattedDetails);
@@ -510,17 +511,6 @@ const TourEditor: React.FC = () => {
     return formData.title.trim().length > 0;
   };
 
-  const menuItems = [
-    { id: 'overview', label: 'Overview', icon: BarChart3, path: '/admin/dashboard?tab=overview' },
-    { id: 'destinations', label: 'Destinations', icon: Mountain, path: '/admin/dashboard?tab=destinations' },
-    { id: 'tours', label: 'Tours', icon: Backpack, path: '/admin/dashboard?tab=tours' },
-    { id: 'sliders', label: 'Hero Sliders', icon: Image, path: '/admin/dashboard?tab=sliders' },
-    { id: 'kailash-gallery', label: 'Kailash Gallery', icon: Camera, path: '/admin/dashboard?tab=kailash-gallery' },
-    { id: 'enquiries', label: 'Contact Enquiries', icon: Mail, path: '/admin/dashboard?tab=enquiries' },
-    { id: 'testimonials', label: 'Testimonials', icon: MessageCircle, path: '/admin/dashboard?tab=testimonials' },
-    { id: 'users', label: 'Users', icon: Users, path: '/admin/dashboard?tab=users' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/admin/dashboard?tab=settings' },
-  ];
 
   const tabs = [
     { id: 'basic', label: 'Basic Info', icon: FileText },
@@ -700,70 +690,32 @@ const TourEditor: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-100 flex">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       {/* Sidebar */}
-      <div className={`bg-slate-800 text-white ${sidebarOpen ? 'w-64' : 'w-16'} fixed left-0 top-0 h-full z-40`}>
-        {/* Header */}
-        <div className="p-4 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">Z</span>
-            </div>
-            {sidebarOpen && (
-              <div>
-                <h1 className="font-bold text-lg">Zeo Admin</h1>
-                <p className="text-slate-400 text-xs">Content Management</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="mt-6">
-          {menuItems.map((item) => {
-            const IconComponent = item.icon;
-            const isActive = item.id === 'tours'; // Highlight tours since we're editing a tour
-            return (
-              <Link
-                key={item.id}
-                to={item.path}
-                className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-slate-700 transition-colors ${
-                  isActive ? 'bg-slate-700 border-r-2 border-blue-500' : ''
-                }`}
-              >
-                <IconComponent className="w-5 h-5" />
-                {sidebarOpen && <span className="font-medium">{item.label}</span>}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* User Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-bold">{user.name?.charAt(0) || 'A'}</span>
-            </div>
-            {sidebarOpen && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{user.name || 'Admin'}</p>
-                <p className="text-xs text-slate-400 truncate">{user.email || 'admin@zeotreks.com'}</p>
-              </div>
-            )}
-          </div>
-          {sidebarOpen && (
-            <button
-              onClick={handleLogout}
-              className="w-full mt-3 px-3 py-2 text-sm bg-red-600 hover:bg-red-700 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
-          )}
-        </div>
-      </div>
+      <motion.aside
+        initial={false}
+        animate={{ x: isMobile && !sidebarOpen ? '-100%' : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className={`bg-slate-800 text-white ${sidebarOpen ? 'w-64' : 'w-16'} fixed left-0 top-0 h-full z-40 overflow-visible`}
+      >
+        <AdminSidebar
+          activeKey={'tours'}
+          mode={'links'}
+          linkBase={'/admin/dashboard'}
+          sidebarOpen={sidebarOpen}
+          user={user}
+          onLogout={handleLogout}
+        />
+      </motion.aside>
 
       {/* Main Content */}
-      <div className={`flex-1 flex flex-col ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
+      <div className={`flex-1 flex flex-col ${isMobile ? (sidebarOpen ? 'ml-64' : 'ml-0') : (sidebarOpen ? 'ml-64' : 'ml-16')}`}>
         {/* Top Bar with Integrated Tab Navigation */}
         <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
           {/* Main Header */}
@@ -1689,43 +1641,7 @@ const TourEditor: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* What to Bring */}
-                    <div className="bg-white rounded-lg shadow-sm border p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">What to Bring</h3>
-                        <button
-                          type="button"
-                          onClick={() => addArrayItem('what_to_bring')}
-                          className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors flex items-center gap-1"
-                        >
-                          <Plus className="w-3 h-3" />
-                          Add
-                        </button>
-                      </div>
-                      <div className="space-y-3">
-                        {(formData.what_to_bring || []).map((item, index) => (
-                          <div key={index} className="flex items-center gap-3">
-                            <input
-                              type="text"
-                              value={item}
-                              onChange={(e) => handleArrayChange('what_to_bring', index, e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                              placeholder="Item to bring..."
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem('what_to_bring', index)}
-                              className="text-red-500 hover:text-red-700 p-1"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                        {(!formData.what_to_bring || formData.what_to_bring.length === 0) && (
-                          <p className="text-gray-500 text-sm">No items added yet. Click "Add" to add what to bring.</p>
-                        )}
-                      </div>
-                    </div>
+
                   </motion.div>
                 )}
 

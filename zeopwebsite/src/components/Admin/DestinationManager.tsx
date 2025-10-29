@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import { useDestinations } from '../../hooks/useApi';
+import { useAdminApi } from '../../hooks/useApi';
 import SearchableSelect from '../UI/SearchableSelect';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
@@ -47,10 +47,11 @@ interface ContentDestination {
 
 interface DestinationFormData extends ContentDestination {
   imageFile?: File;
+  listed?: boolean;
 }
 
 const DestinationManager: React.FC = () => {
-  const { data: destinations, loading, error, refetch } = useDestinations();
+  const { data: destinations, loading, error } = useAdminApi<ContentDestination[]>('/api/admin/destinations');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDestination, setEditingDestination] = useState<ContentDestination | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,6 +116,7 @@ const DestinationManager: React.FC = () => {
         title: (destination as any).title || (destination as any).name || '',
         country: destination.country || 'Nepal',
         image: destination.image || '',
+        listed: (destination as any).listed !== false, // Default to true if not set
       };
       setFormData(mappedData);
     } else {
@@ -217,6 +219,7 @@ const DestinationManager: React.FC = () => {
         title: formData.title,
         country: formData.country,
         image: imageUrl, // This should be the new uploaded image URL
+        listed: formData.listed !== false, // Default to true if not explicitly set
       };
       
       const url = editingDestination
@@ -245,8 +248,8 @@ const DestinationManager: React.FC = () => {
       // Wait a moment for the server to finish processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Force refetch to get updated data and refresh UI
-      await refetch();
+      // Force refresh to get updated data
+      window.location.reload();
       
       closeModal();
       
@@ -281,7 +284,7 @@ const DestinationManager: React.FC = () => {
       throw new Error(errorData.error || 'Failed to delete destination');
     }
 
-    await refetch();
+    window.location.reload();
   };
 
   const deleteModal = useDeleteModal<ContentDestination>({
@@ -295,6 +298,45 @@ const DestinationManager: React.FC = () => {
       deleteModal.openModal(destination);
     } catch (error) {
       alert('Failed to delete destination: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
+  };
+
+  const handleListToggle = async (destination: ContentDestination) => {
+    try {
+      const slug = (destination as any).slug || (destination as any).id?.toString() || destination.name || '';
+      const currentListed = (destination as any).listed !== false;
+      const newListed = !currentListed;
+
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      body: JSON.stringify({
+        listed: newListed
+      }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update destination listing status');
+      }
+
+      // Force refetch to get updated data and refresh UI
+      window.location.reload();
+
+      // Trigger a global refresh event for other components
+      window.dispatchEvent(new CustomEvent('destinationUpdated', {
+        detail: {
+          destinationId: (destination as any).id,
+          timestamp: Date.now()
+        }
+      }));
+
+    } catch (error) {
+      alert('Failed to update listing status: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
   };
 
@@ -313,8 +355,8 @@ const DestinationManager: React.FC = () => {
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">Error Loading Destinations</h3>
         <p className="text-gray-500 mb-4">{error}</p>
-        <button 
-          onClick={() => refetch()}
+        <button
+          onClick={() => window.location.reload()}
           className="btn-primary"
         >
           Try Again
@@ -454,14 +496,20 @@ const DestinationManager: React.FC = () => {
           <table className="w-full table-fixed divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="w-1/3 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Destination
                 </th>
-                <th className="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Country
                 </th>
-                <th className="w-1/4 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type
+                </th>
+                <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Listed
+                </th>
+                <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tours
                 </th>
                 <th className="w-16 px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -513,6 +561,25 @@ const DestinationManager: React.FC = () => {
                         : 'bg-blue-100 text-blue-800'
                     }`}>
                       {activeTab === 'nepal' ? 'Nepal' : 'International'}
+                    </span>
+                  </td>
+                  <td className="px-3 py-4" onClick={(e) => e.stopPropagation()}>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={(destination as any).listed !== false}
+                        onChange={() => handleListToggle(destination)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600 hover:bg-gray-300 peer-checked:hover:bg-green-700"></div>
+                      <span className="ml-2 text-xs font-medium text-gray-900">
+                        {(destination as any).listed !== false ? 'Listed' : 'Unlisted'}
+                      </span>
+                    </label>
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-900">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {(destination as any).tourCount || 0} Tours
                     </span>
                   </td>
                   <td className="px-3 py-4 text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
@@ -918,19 +985,29 @@ const DestinationManager: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Featured Toggle */}
+                    {/* Listing Status */}
                     <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                       <div className="bg-white rounded-lg p-4 border border-gray-200">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <label className="text-sm font-medium text-gray-900 cursor-pointer">
-                              Featured Destination
+                              List This Destination
                             </label>
                             <p className="text-xs text-gray-500 mt-1">
-                              When enabled, this destination will appear in the "Popular Destinations" section on the homepage
+                              When enabled, this destination will be visible on your website. Unlist to temporarily hide it from visitors.
                             </p>
                           </div>
-                          <div className="ml-4">
+                          <div className="ml-4 flex items-center">
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                name="listed"
+                                checked={formData.listed !== false}
+                                onChange={handleInputChange}
+                                className="sr-only peer"
+                              />
+                              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
                           </div>
                         </div>
                       </div>

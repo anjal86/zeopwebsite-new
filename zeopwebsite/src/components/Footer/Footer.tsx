@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Heart, ExternalLink } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
 import { useLogos } from '../../hooks/useLogos';
 import footerLogo from '../../assets/zeo-logo-white.png';
@@ -182,8 +182,7 @@ const Footer: React.FC = () => {
         <div className="py-4 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © 2024 {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved. | Crafted with{' '}
-              <Heart className="w-4 h-4 inline text-red-500 fill-current" /> in Nepal
+              © {new Date().getFullYear()} {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved. |
             </p>
             <div className="flex items-center text-gray-400 text-sm">
               <span>Developed by</span>

@@ -1,5 +1,37 @@
 [
   {
+    "id": 1,
+    "name": "Annapurna",
+    "country": "Nepal",
+    "image": "/uploads/destinations/annapurna/annapurna_1758268396020.jpg",
+    "tourCount": 5,
+    "href": "/destinations/annapurna",
+    "type": "nepal",
+    "description": "Discover the beauty and culture of Annapurna in Nepal.",
+    "highlights": [
+      "Annapurna Circuit",
+      "Annapurna Base Camp",
+      "Poon Hill",
+      "Thorong La Pass"
+    ],
+    "bestTime": "Mar-May, Sep-Nov",
+    "altitude": "3,210m",
+    "difficulty": "Moderate to Challenging",
+    "relatedTours": [
+      2,
+      3,
+      11,
+      23,
+      34,
+      24,
+      103
+    ],
+    "relatedActivities": [],
+    "title": "Annapurna",
+    "region": "asdasd",
+    "listed": true
+  },
+  {
     "id": 2,
     "name": "Everest",
     "country": "Nepal",
@@ -55,8 +87,7 @@
     "relatedActivities": [
       5
     ],
-    "title": "Langtang",
-    "listed": true
+    "title": "Langtang"
   },
   {
     "id": 5,
@@ -86,8 +117,7 @@
     "relatedActivities": [
       3
     ],
-    "title": "Pokhara",
-    "listed": true
+    "title": "Pokhara"
   },
   {
     "id": 6,
@@ -113,8 +143,7 @@
     "relatedActivities": [
       5
     ],
-    "title": "Kathmandu",
-    "listed": true
+    "title": "Kathmandu"
   },
   {
     "id": 7,
@@ -144,8 +173,7 @@
       4,
       5
     ],
-    "title": "Chitwan",
-    "listed": true
+    "title": "Chitwan"
   },
   {
     "id": 9,
@@ -172,8 +200,7 @@
     "relatedActivities": [
       6,
       5
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 10,
@@ -196,8 +223,7 @@
     "relatedTours": [],
     "relatedActivities": [
       5
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 11,
@@ -223,8 +249,7 @@
     "relatedActivities": [
       5,
       6
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 12,
@@ -248,8 +273,7 @@
     "relatedActivities": [
       3,
       5
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 13,
@@ -273,8 +297,7 @@
     "relatedActivities": [
       7,
       3
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 14,
@@ -298,8 +321,7 @@
     "relatedActivities": [
       5,
       4
-    ],
-    "listed": true
+    ]
   },
   {
     "id": 16,
@@ -317,8 +339,7 @@
     "relatedTours": [
       29
     ],
-    "relatedActivities": [],
-    "listed": false
+    "relatedActivities": []
   },
   {
     "id": 17,
@@ -334,8 +355,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 18,
@@ -351,8 +371,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 19,
@@ -368,8 +387,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 20,
@@ -385,8 +403,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 21,
@@ -402,8 +419,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 22,
@@ -419,8 +435,7 @@
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": true
+    "relatedActivities": []
   },
   {
     "id": 23,
@@ -445,8 +460,7 @@
     "altitude": "3,800m",
     "difficulty": "Moderate",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": false
+    "relatedActivities": []
   },
   {
     "id": 24,
@@ -471,8 +485,7 @@
     "altitude": "1,200m",
     "difficulty": "Easy",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": false
+    "relatedActivities": []
   },
   {
     "id": 25,
@@ -497,8 +510,7 @@
     "altitude": "4,000m+",
     "difficulty": "Challenging",
     "relatedTours": [],
-    "relatedActivities": [],
-    "listed": false
+    "relatedActivities": []
   },
   {
     "id": 27,
@@ -530,8 +542,7 @@
     "title": "Rara",
     "region": "Far West",
     "slug": "rara",
-    "featured": true,
-    "listed": true
+    "featured": true
   },
   {
     "id": 26,
@@ -568,7 +579,6 @@
     "title": "Dubai",
     "region": "Middle East",
     "slug": "dubai",
-    "featured": true,
-    "listed": true
+    "featured": true
   }
 ]
