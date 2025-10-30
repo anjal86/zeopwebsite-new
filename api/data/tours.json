@@ -751,5 +751,647 @@
       "Personal medical kit and Diamox",
       "Alcoholic beverages and personal items"
     ]
+  },
+  {
+    "id": 306,
+    "title": "Indo Nepal Cross Border Tour - 6 Nights 7 Days",
+    "slug": "indo-nepal-cross-border-tour-6n-7d",
+    "destination": "Kathmandu",
+    "destinationId": 6,
+    "country": "Nepal",
+    "duration": "7 days",
+    "price": 899,
+    "hasDiscount": false,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-15 people",
+    "bestTime": "Oct-Apr",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": false,
+    "type": "cultural",
+    "category": "Cultural",
+    "description": "Experience the best of Nepal with this comprehensive cross-border tour covering Pokhara's natural beauty, Kathmandu's cultural heritage, and Chitwan's wildlife adventure.",
+    "highlights": [
+      "Lumbini - Birthplace of Lord Buddha",
+      "Pokhara valley with mountain views",
+      "Kathmandu UNESCO World Heritage sites",
+      "Chitwan National Park safari",
+      "Manakamana Temple cable car ride",
+      "Tharu cultural dance experience"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Gorakhpur - Lumbini - Pokhara",
+        "description": "Arrival in Gorakhpur, drive to Sunauli border, visit Lumbini (birthplace of Lord Buddha), continue to Pokhara"
+      },
+      {
+        "day": 2,
+        "title": "Sarangkot Excursion & Pokhara Sightseeing",
+        "description": "Early morning sunrise at Sarangkot, Pokhara city tour including Bindavasini Temple, David Falls, Gupteshwor Cave, boat ride on Phewa Lake"
+      },
+      {
+        "day": 3,
+        "title": "Pokhara to Kathmandu via Manakamana",
+        "description": "Scenic drive to Kathmandu with cable car visit to Manakamana Temple"
+      },
+      {
+        "day": 4,
+        "title": "Kathmandu City Sightseeing",
+        "description": "Visit Pashupatinath Temple, Jala Narayan Temple, Swayambhunath Stupa, Boudhanath Stupa, and Kathmandu Durbar Square"
+      },
+      {
+        "day": 5,
+        "title": "Kathmandu to Chitwan",
+        "description": "Drive to Chitwan, visit Tharu Village, evening Tharu stick dance performance"
+      },
+      {
+        "day": 6,
+        "title": "Chitwan Safari Activities",
+        "description": "Canoe trip, Elephant Breeding Center, jungle walk, elephant or jeep safari in Chitwan National Park"
+      },
+      {
+        "day": 7,
+        "title": "Chitwan to Gorakhpur Departure",
+        "description": "Drive back to Gorakhpur for departure"
+      }
+    ],
+    "included": [
+      "Hotel accommodation (3-5 star options)",
+      "Daily breakfast",
+      "All transfers and transportation",
+      "Professional guide",
+      "All entrance fees",
+      "Chitwan safari activities",
+      "Cable car to Manakamana Temple"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner (except in Chitwan)",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and staff"
+    ]
+  },
+  {
+    "id": 307,
+    "title": "Nepal Golden Triangle Tour - 7 Nights 8 Days",
+    "slug": "nepal-golden-triangle-tour-7n-8d",
+    "destination": "Kathmandu",
+    "destinationId": 6,
+    "country": "Nepal",
+    "duration": "8 days",
+    "price": 1099,
+    "hasDiscount": true,
+    "discountPercentage": 15,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-20 people",
+    "bestTime": "Sep-May",
+    "image": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "cultural",
+    "category": "Cultural",
+    "description": "Discover Nepal's most popular destinations in this comprehensive golden triangle tour covering Kathmandu's heritage, Pokhara's natural beauty, and Chitwan's wildlife.",
+    "highlights": [
+      "Kathmandu UNESCO World Heritage sites",
+      "Pashupatinath Temple evening aarti",
+      "Pokhara valley and Himalayan views",
+      "Sarangkot sunrise experience",
+      "Chitwan National Park safari",
+      "Manakamana Temple cable car",
+      "Tharu cultural experience"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Kathmandu",
+        "description": "Airport pickup, hotel check-in, evening aarti at Pashupatinath Temple"
+      },
+      {
+        "day": 2,
+        "title": "Kathmandu City Sightseeing",
+        "description": "Visit Jala Narayan Temple, Swayambhunath, Kathmandu Durbar Square, and Boudhanath Stupa"
+      },
+      {
+        "day": 3,
+        "title": "Kathmandu to Pokhara via Manakamana",
+        "description": "Drive to Pokhara with cable car visit to Manakamana Temple, evening at Lakeside"
+      },
+      {
+        "day": 4,
+        "title": "Sarangkot Excursion & Pokhara Sightseeing",
+        "description": "Sunrise at Sarangkot, Bindabasini Temple, David Falls, Gupteshwor Cave, Phewa Lake boating"
+      },
+      {
+        "day": 5,
+        "title": "Pokhara to Chitwan",
+        "description": "Drive to Chitwan, visit Tharu Village, evening Tharu stick dance"
+      },
+      {
+        "day": 6,
+        "title": "Chitwan Safari Activities",
+        "description": "Canoe ride, Elephant Breeding Center, jungle walk, elephant or jeep safari"
+      },
+      {
+        "day": 7,
+        "title": "Chitwan to Kathmandu",
+        "description": "Drive back to Kathmandu, free time for shopping at Thamel"
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Airport transfer for final departure"
+      }
+    ],
+    "included": [
+      "Hotel accommodation (3-5 star options)",
+      "Daily breakfast",
+      "All transfers and transportation",
+      "Professional guide",
+      "All entrance fees",
+      "Chitwan safari activities",
+      "Cable car to Manakamana Temple"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner (except in Chitwan)",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and staff"
+    ]
+  },
+  {
+    "id": 308,
+    "title": "Everest Base Camp Trek - 13 Nights 14 Days",
+    "slug": "everest-base-camp-trek-13n-14d",
+    "destination": "Everest",
+    "destinationId": 2,
+    "country": "Nepal",
+    "duration": "14 days",
+    "price": 2299,
+    "hasDiscount": true,
+    "discountPercentage": 10,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Challenging",
+    "groupSize": "2-12 people",
+    "bestTime": "Mar-May, Sep-Nov",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "trekking",
+    "category": "Adventure",
+    "description": "Experience the ultimate adventure with this classic Everest Base Camp trek. Walk in the footsteps of legendary climbers and witness the world's highest peak up close.",
+    "highlights": [
+      "Flight to Lukla - world's most dangerous airport",
+      "Sagarmatha National Park",
+      "Namche Bazaar - Sherpa capital",
+      "Tengboche Monastery",
+      "Everest Base Camp (5,364m)",
+      "Kala Patthar viewpoint (5,545m)",
+      "Sherpa culture and hospitality",
+      "Stunning Himalayan views"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive in Kathmandu",
+        "description": "Airport pickup, hotel check-in, trek briefing"
+      },
+      {
+        "day": 2,
+        "title": "Fly to Lukla, trek to Phakding",
+        "description": "Spectacular mountain flight to Lukla, trek to Phakding (2,610m)"
+      },
+      {
+        "day": 3,
+        "title": "Trek to Namche Bazaar",
+        "description": "Enter Sagarmatha National Park, trek to Namche Bazaar (3,440m)"
+      },
+      {
+        "day": 4,
+        "title": "Acclimatization day at Namche",
+        "description": "Rest day, visit Khunde and Khumjung villages, mountain views"
+      },
+      {
+        "day": 5,
+        "title": "Trek to Tengboche",
+        "description": "Trek to Tengboche (3,850m), visit famous monastery"
+      },
+      {
+        "day": 6,
+        "title": "Trek to Dingboche",
+        "description": "Trek to Dingboche (4,350m) via Pangboche village"
+      },
+      {
+        "day": 7,
+        "title": "Acclimatization day at Dingboche",
+        "description": "Rest day, optional hike to Chhukung"
+      },
+      {
+        "day": 8,
+        "title": "Trek to Lobuche",
+        "description": "Trek to Lobuche (4,950m), memorial cairns"
+      },
+      {
+        "day": 9,
+        "title": "Trek to Everest Base Camp and Gorakshep",
+        "description": "Trek to Everest Base Camp (5,364m), return to Gorakshep (5,160m)"
+      },
+      {
+        "day": 10,
+        "title": "Hike to Kala Patthar, trek to Pheriche",
+        "description": "Early morning hike to Kala Patthar (5,545m), trek down to Pheriche (4,240m)"
+      },
+      {
+        "day": 11,
+        "title": "Trek to Namche Bazaar",
+        "description": "Descend to Namche Bazaar through rhododendron forests"
+      },
+      {
+        "day": 12,
+        "title": "Trek to Lukla",
+        "description": "Final trekking day, return to Lukla"
+      },
+      {
+        "day": 13,
+        "title": "Fly back to Kathmandu",
+        "description": "Morning flight to Kathmandu, free time for shopping"
+      },
+      {
+        "day": 14,
+        "title": "Departure",
+        "description": "Airport transfer for final departure"
+      }
+    ],
+    "included": [
+      "Kathmandu-Lukla-Kathmandu flights",
+      "Teahouse accommodation during trek",
+      "All meals during trek",
+      "Professional trekking guide",
+      "Porter service (1 porter for 2 trekkers)",
+      "Sagarmatha National Park permits",
+      "TIMS card",
+      "First aid kit",
+      "Hotel in Kathmandu with breakfast"
+    ],
+    "excluded": [
+      "International flights",
+      "Nepal visa fees",
+      "Travel insurance (mandatory)",
+      "Personal trekking equipment",
+      "Tips for guide and porter",
+      "Personal expenses",
+      "Emergency evacuation"
+    ]
+  },
+  {
+    "id": 309,
+    "title": "Muktinath Yatra - 6 Nights 7 Days",
+    "slug": "muktinath-yatra-6n-7d",
+    "destination": "Pokhara",
+    "destinationId": 5,
+    "country": "Nepal",
+    "duration": "7 days",
+    "price": 1299,
+    "hasDiscount": false,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "2-15 people",
+    "bestTime": "Mar-May, Sep-Nov",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "pilgrimage",
+    "category": "Spiritual",
+    "description": "Sacred pilgrimage to Muktinath Temple, the place of salvation. This spiritual journey combines religious significance with stunning Himalayan landscapes.",
+    "highlights": [
+      "Muktinath Temple - place of salvation",
+      "108 sacred water spouts",
+      "Jwala Mai eternal flame temple",
+      "Flight to Jomsom",
+      "Pashupatinath Temple aarti",
+      "Kathmandu UNESCO sites",
+      "Pokhara valley beauty",
+      "Manakamana Temple cable car"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Kathmandu",
+        "description": "Airport pickup, hotel check-in, evening aarti at Pashupatinath Temple"
+      },
+      {
+        "day": 2,
+        "title": "Kathmandu to Pokhara via Manakamana",
+        "description": "Drive to Pokhara with cable car visit to Manakamana Temple"
+      },
+      {
+        "day": 3,
+        "title": "Fly to Jomsom, drive to Muktinath",
+        "description": "Morning flight to Jomsom, drive to Muktinath Temple for darshan, return to Jomsom"
+      },
+      {
+        "day": 4,
+        "title": "Fly to Pokhara, city sightseeing",
+        "description": "Flight back to Pokhara, city tour including Bindavasini Temple, David Falls, Phewa Lake boating"
+      },
+      {
+        "day": 5,
+        "title": "Pokhara to Kathmandu",
+        "description": "Drive back to Kathmandu, evening shopping at Thamel"
+      },
+      {
+        "day": 6,
+        "title": "Kathmandu City Sightseeing",
+        "description": "Visit Boudhanath Stupa, Swayambhunath, Jala Narayan Temple, Kathmandu Durbar Square"
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "description": "Airport transfer for final departure"
+      }
+    ],
+    "included": [
+      "Hotel accommodation (3-5 star options)",
+      "Daily breakfast",
+      "Pokhara-Jomsom-Pokhara flights",
+      "All transfers and transportation",
+      "Professional guide",
+      "All entrance fees",
+      "Cable car to Manakamana Temple"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide and staff"
+    ]
+  },
+  {
+    "id": 310,
+    "title": "Nepal Heritage Tour - 3 Nights 4 Days",
+    "slug": "nepal-heritage-tour-3n-4d",
+    "destination": "Kathmandu",
+    "destinationId": 6,
+    "country": "Nepal",
+    "duration": "4 days",
+    "price": 599,
+    "hasDiscount": true,
+    "discountPercentage": 20,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-20 people",
+    "bestTime": "Year-round",
+    "image": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": false,
+    "type": "cultural",
+    "category": "Cultural",
+    "description": "Explore Nepal's rich cultural heritage in this short but comprehensive tour covering Kathmandu Valley's UNESCO World Heritage sites.",
+    "highlights": [
+      "Kathmandu Durbar Square",
+      "Pashupatinath Temple",
+      "Boudhanath Stupa",
+      "Swayambhunath (Monkey Temple)",
+      "Patan Durbar Square",
+      "Bhaktapur Durbar Square",
+      "Traditional Newari architecture",
+      "Living Goddess Kumari"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Kathmandu",
+        "description": "Airport pickup, hotel check-in, welcome dinner"
+      },
+      {
+        "day": 2,
+        "title": "Kathmandu Valley Sightseeing",
+        "description": "Visit Kathmandu Durbar Square, Swayambhunath, Pashupatinath Temple"
+      },
+      {
+        "day": 3,
+        "title": "Patan and Bhaktapur Tour",
+        "description": "Explore Patan Durbar Square and Bhaktapur Durbar Square, traditional crafts"
+      },
+      {
+        "day": 4,
+        "title": "Departure",
+        "description": "Last-minute shopping, airport transfer"
+      }
+    ],
+    "included": [
+      "Hotel accommodation",
+      "Daily breakfast",
+      "All transfers and transportation",
+      "Professional guide",
+      "All entrance fees",
+      "Welcome dinner"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner (except welcome dinner)",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide"
+    ]
+  },
+  {
+    "id": 311,
+    "title": "Nepal Tour - 4 Nights 5 Days by Flight",
+    "slug": "nepal-tour-4n-5d-by-flight",
+    "destination": "Kathmandu",
+    "destinationId": 6,
+    "country": "Nepal",
+    "duration": "5 days",
+    "price": 799,
+    "hasDiscount": false,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Easy",
+    "groupSize": "2-15 people",
+    "bestTime": "Sep-May",
+    "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": false,
+    "type": "cultural",
+    "category": "Cultural",
+    "description": "Perfect introduction to Nepal combining cultural heritage of Kathmandu with the natural beauty of Pokhara, optimized for travelers with limited time.",
+    "highlights": [
+      "Kathmandu UNESCO World Heritage sites",
+      "Scenic flight to Pokhara",
+      "Pokhara valley and lakes",
+      "Himalayan mountain views",
+      "Traditional temples and stupas",
+      "Local cultural experiences"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Kathmandu",
+        "description": "Airport pickup, hotel check-in, orientation tour"
+      },
+      {
+        "day": 2,
+        "title": "Kathmandu Sightseeing",
+        "description": "Visit major UNESCO sites including Durbar Square, Pashupatinath, Boudhanath"
+      },
+      {
+        "day": 3,
+        "title": "Fly to Pokhara",
+        "description": "Morning flight to Pokhara, city tour, Phewa Lake activities"
+      },
+      {
+        "day": 4,
+        "title": "Pokhara Exploration",
+        "description": "Sarangkot sunrise, waterfalls, caves, and mountain viewpoints"
+      },
+      {
+        "day": 5,
+        "title": "Return to Kathmandu and Departure",
+        "description": "Flight back to Kathmandu, airport transfer"
+      }
+    ],
+    "included": [
+      "Hotel accommodation",
+      "Daily breakfast",
+      "Kathmandu-Pokhara-Kathmandu flights",
+      "All transfers and transportation",
+      "Professional guide",
+      "All entrance fees"
+    ],
+    "excluded": [
+      "International flights",
+      "Lunch and dinner",
+      "Personal expenses",
+      "Travel insurance",
+      "Tips for guide"
+    ]
+  },
+  {
+    "id": 312,
+    "title": "Annapurna Base Camp Trek - 13 Nights 14 Days",
+    "slug": "annapurna-base-camp-trek-13n-14d",
+    "destination": "Annapurna",
+    "destinationId": 1,
+    "country": "Nepal",
+    "duration": "14 days",
+    "price": 1899,
+    "hasDiscount": true,
+    "discountPercentage": 12,
+    "priceAvailable": true,
+    "currency": "USD",
+    "difficulty": "Moderate",
+    "groupSize": "2-12 people",
+    "bestTime": "Mar-May, Sep-Nov",
+    "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "featured": true,
+    "type": "trekking",
+    "category": "Adventure",
+    "description": "Trek to the heart of the Annapurna Sanctuary, surrounded by towering peaks. Experience diverse landscapes from subtropical forests to alpine meadows.",
+    "highlights": [
+      "Annapurna Base Camp (4,130m)",
+      "Annapurna Sanctuary",
+      "Diverse ecosystems and landscapes",
+      "Gurung and Magar villages",
+      "Hot springs at Jhinu Danda",
+      "360-degree mountain views",
+      "Rhododendron forests",
+      "Traditional mountain culture"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive in Kathmandu",
+        "description": "Airport pickup, hotel check-in, trek preparation"
+      },
+      {
+        "day": 2,
+        "title": "Drive to Pokhara",
+        "description": "Scenic drive to Pokhara, trek briefing"
+      },
+      {
+        "day": 3,
+        "title": "Drive to Nayapul, trek to Tikhedhunga",
+        "description": "Drive to Nayapul, start trekking to Tikhedhunga"
+      },
+      {
+        "day": 4,
+        "title": "Trek to Ghorepani",
+        "description": "Climb to Ghorepani through rhododendron forests"
+      },
+      {
+        "day": 5,
+        "title": "Poon Hill sunrise, trek to Tadapani",
+        "description": "Early morning hike to Poon Hill, trek to Tadapani"
+      },
+      {
+        "day": 6,
+        "title": "Trek to Chhomrong",
+        "description": "Descend to Modi Khola, climb to Chhomrong village"
+      },
+      {
+        "day": 7,
+        "title": "Trek to Bamboo",
+        "description": "Descend to Chhomrong Khola, trek through bamboo forests"
+      },
+      {
+        "day": 8,
+        "title": "Trek to Deurali",
+        "description": "Trek through the Modi Khola valley to Deurali"
+      },
+      {
+        "day": 9,
+        "title": "Trek to Annapurna Base Camp",
+        "description": "Enter Annapurna Sanctuary, reach Base Camp"
+      },
+      {
+        "day": 10,
+        "title": "Explore ABC, trek to Bamboo",
+        "description": "Sunrise at ABC, descend to Bamboo"
+      },
+      {
+        "day": 11,
+        "title": "Trek to Jhinu Danda",
+        "description": "Trek to Jhinu Danda, relax in hot springs"
+      },
+      {
+        "day": 12,
+        "title": "Trek to Nayapul, drive to Pokhara",
+        "description": "Final trekking day, drive back to Pokhara"
+      },
+      {
+        "day": 13,
+        "title": "Drive to Kathmandu",
+        "description": "Return to Kathmandu, celebration dinner"
+      },
+      {
+        "day": 14,
+        "title": "Departure",
+        "description": "Airport transfer for final departure"
+      }
+    ],
+    "included": [
+      "Teahouse accommodation during trek",
+      "All meals during trek",
+      "Professional trekking guide",
+      "Porter service",
+      "ACAP and TIMS permits",
+      "Transportation as per itinerary",
+      "First aid kit",
+      "Hotel in Kathmandu and Pokhara"
+    ],
+    "excluded": [
+      "International flights",
+      "Nepal visa fees",
+      "Travel insurance",
+      "Personal trekking equipment",
+      "Tips for guide and porter",
+      "Personal expenses",
+      "Emergency evacuation"
+    ]
   }
 ]
