@@ -173,7 +173,7 @@
       6,
       5
     ],
-    "listed": true
+    "listed": false
   },
   {
     "id": 10,
@@ -249,7 +249,7 @@
       3,
       5
     ],
-    "listed": true
+    "listed": false
   },
   {
     "id": 13,
@@ -335,7 +335,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 18,
