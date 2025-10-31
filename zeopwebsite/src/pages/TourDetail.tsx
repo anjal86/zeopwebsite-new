@@ -11,6 +11,18 @@ import { useTours, useDestinations, useActivities } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 import { formatDuration } from '../utils/formatDuration';
 
+// API base URL helper function
+const getApiBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}/api`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
+};
+
 // Extended tour interface for detailed data
 interface TourDetails extends Tour {
   gallery?: string[];
@@ -74,7 +86,7 @@ const TourDetail: React.FC = () => {
       
       setDetailsLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/tours/slug/${tour.slug}`);
+        const response = await fetch(`${getApiBaseUrl()}/tours/slug/${tour.slug}`);
         if (response.ok) {
           const details = await response.json();
           setTourDetails(details);

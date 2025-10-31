@@ -171,6 +171,20 @@ const DestinationManager: React.FC = () => {
   const deleteDestination = async (destination: ContentDestination) => {
     const token = localStorage.getItem('adminToken');
     const slug = (destination as any).slug || (destination as any).id?.toString() || destination.name || '';
+    
+    // Validate that we have a proper identifier
+    if (!slug || slug === 'undefined' || slug === 'null') {
+      throw new Error('Invalid destination identifier. Cannot delete destination without proper ID or slug.');
+    }
+
+    // Log the deletion attempt for debugging
+    console.log('Attempting to delete destination:', {
+      slug,
+      id: (destination as any).id,
+      name: destination.name,
+      title: (destination as any).title
+    });
+
     const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug}`, {
       method: 'DELETE',
       headers: {
@@ -180,7 +194,21 @@ const DestinationManager: React.FC = () => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to delete destination');
+      console.error('Delete destination failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+        slug
+      });
+      
+      // Provide more specific error messages
+      if (response.status === 404) {
+        throw new Error(`Destination "${slug}" not found. It may have already been deleted or the identifier is invalid.`);
+      } else if (response.status === 401) {
+        throw new Error('Authentication failed. Please log in again.');
+      } else {
+        throw new Error(errorData.error || `Failed to delete destination (${response.status})`);
+      }
     }
 
     // Update local list without reloading the page
@@ -842,24 +870,51 @@ const DestinationManager: React.FC = () => {
 
                     // If a new image file was selected, upload it
                     if ((formData as any).imageFile) {
-                      const formDataObj = new FormData();
-                      formDataObj.append('image', (formData as any).imageFile);
+                      try {
+                        const formDataObj = new FormData();
+                        formDataObj.append('image', (formData as any).imageFile);
+                        formDataObj.append('destinationSlug', formData.slug || '');
 
-                      const uploadResponse = await fetch(`${getApiBaseUrl()}/admin/uploads/destinations`, {
-                        method: 'POST',
-                        headers: {
-                          'Authorization': `Bearer ${token}`
-                        },
-                        body: formDataObj
-                      });
+                        console.log('Uploading image to:', `${getApiBaseUrl()}/admin/upload`);
+                        console.log('File details:', {
+                          name: (formData as any).imageFile.name,
+                          size: (formData as any).imageFile.size,
+                          type: (formData as any).imageFile.type
+                        });
 
-                      if (!uploadResponse.ok) {
-                        const errorData = await uploadResponse.json();
-                        throw new Error(errorData.error || 'Image upload failed');
+                        const uploadResponse = await fetch(`${getApiBaseUrl()}/admin/upload`, {
+                          method: 'POST',
+                          headers: {
+                            'Authorization': `Bearer ${token}`
+                          },
+                          body: formDataObj
+                        });
+
+                        console.log('Upload response status:', uploadResponse.status);
+                        console.log('Upload response headers:', Object.fromEntries(uploadResponse.headers.entries()));
+
+                        if (!uploadResponse.ok) {
+                          let errorMessage = 'Image upload failed';
+                          try {
+                            const errorData = await uploadResponse.json();
+                            errorMessage = errorData.error || errorMessage;
+                            console.error('Upload error data:', errorData);
+                          } catch (parseError) {
+                            const errorText = await uploadResponse.text();
+                            console.error('Upload error text:', errorText);
+                            errorMessage = `HTTP ${uploadResponse.status}: ${errorText || uploadResponse.statusText}`;
+                          }
+                          throw new Error(errorMessage);
+                        }
+
+                        const uploadData = await uploadResponse.json();
+                        console.log('Upload success data:', uploadData);
+                        imagePath = uploadData.path || uploadData.url || imagePath;
+                      } catch (uploadError) {
+                        console.error('Image upload error:', uploadError);
+                        const errorMessage = uploadError instanceof Error ? uploadError.message : 'Unknown upload error';
+                        throw new Error(`Image upload failed: ${errorMessage}`);
                       }
-
-                      const uploadData = await uploadResponse.json();
-                      imagePath = uploadData.path || uploadData.url || imagePath;
                     }
 
                     const payload = {
@@ -871,7 +926,12 @@ const DestinationManager: React.FC = () => {
                       ...(formData.description ? { description: formData.description } : {})
                     };
 
-                    const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${formData.slug || (editingDestination as any)?.slug || (editingDestination as any)?.id || ''}`, {
+                    // Construct the correct URL based on whether we're creating or updating
+                    const url = editingDestination 
+                      ? `${getApiBaseUrl()}/admin/destinations/${(editingDestination as any)?.slug || (editingDestination as any)?.id || ''}`
+                      : `${getApiBaseUrl()}/admin/destinations`;
+                    
+                    const response = await fetch(url, {
                       method: editingDestination ? 'PUT' : 'POST',
                       headers: {
                         'Authorization': `Bearer ${token}`,

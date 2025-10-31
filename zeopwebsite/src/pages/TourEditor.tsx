@@ -29,6 +29,18 @@ import {
 import ProgressModal from '../components/UI/ProgressModal';
 import AdminSidebar from '../components/Admin/AdminSidebar';
 
+// API base URL helper function
+const getApiBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}/api`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
+};
+
 interface ItineraryDay {
   day: number;
   title: string;
@@ -105,8 +117,8 @@ const TourEditor: React.FC = () => {
     const fetchData = async () => {
       try {
         const [destResponse, actResponse] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/destinations`),
-          fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/activities`)
+          fetch(`${getApiBaseUrl()}/destinations`),
+          fetch(`${getApiBaseUrl()}/activities`)
         ]);
         
         if (destResponse.ok) {

@@ -20,7 +20,40 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000'], // Specific origins for better security
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:3000',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:5174',
+      'http://127.0.0.1:3000',
+      'https://zeotourism.com',
+      'http://zeotourism.com',
+      'https://www.zeotourism.com',
+      'http://www.zeotourism.com',
+      'https://zeo.brandspire.com.np',
+      'http://zeo.brandspire.com.np'
+    ];
+    
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    
+    // For development, allow any localhost origin
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      console.log('Allowing development origin:', origin);
+      return callback(null, true);
+    }
+    
+    console.log('CORS blocked origin:', origin);
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    return callback(new Error(msg), false);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range', 'Cache-Control', 'X-Requested-With', 'Accept', 'Accept-Encoding'],
@@ -47,12 +80,26 @@ app.use('/uploads', (req, res, next) => {
   const filePath = path.join(uploadsDir, req.path);
   
   // Set CORS headers for all uploads
-  res.set({
-    'Access-Control-Allow-Origin': 'http://localhost:5173',
-    'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
-    'Access-Control-Allow-Headers': 'Range, Accept, Accept-Encoding, Cache-Control',
-    'Cross-Origin-Resource-Policy': 'cross-origin'
-  });
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://zeotourism.com',
+    'http://zeotourism.com',
+    'https://www.zeotourism.com',
+    'http://www.zeotourism.com',
+    'https://zeo.brandspire.com.np',
+    'http://zeo.brandspire.com.np'
+  ];
+  
+  if (allowedOrigins.includes(origin)) {
+    res.set({
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+      'Access-Control-Allow-Headers': 'Range, Accept, Accept-Encoding, Cache-Control',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
+    });
+  }
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
@@ -254,8 +301,6 @@ const loadTourDetails = () => {
           const filePath = path.join(tourDetailsDir, file);
           const data = fs.readFileSync(filePath, 'utf8');
           const tourDetail = JSON.parse(data);
-          // Strip deprecated field
-          delete tourDetail.what_to_bring;
           tourDetails.push(tourDetail);
         } catch (error) {
           console.error(`Error loading tour detail file ${file}:`, error);
@@ -277,22 +322,9 @@ let slidersData = loadData('sliders.json');
 let usersData = loadData('users.json');
 let contactData = loadData('contact.json');
 let testimonialsData = loadData('testimonials.json');
-let enquiriesData = loadData('enquiries.json');
-let kailashGalleryData = loadData('kailash-gallery.json');
 let logoData = loadData('logos.json');
+let enquiriesData = loadData('enquiries.json');
 let tourDetails = loadTourDetails();
-
-// Hot reload function for tour data
-const reloadTourData = () => {
-  console.log('🔄 Hot reloading tour data...');
-  tourDetails = loadTourDetails();
-  console.log(`✅ Reloaded ${tourDetails.length} tours from individual files`);
-};
-
-// Auto-reload tour data every 10 seconds (for development)
-if (process.env.NODE_ENV !== 'production') {
-  setInterval(reloadTourData, 10000);
-}
 
 // Extract arrays from the loaded data
 let tours = toursData.tours || toursData || [];
@@ -302,9 +334,7 @@ let sliders = slidersData.sliders || slidersData || [];
 let users = usersData.users || usersData || [];
 let contact = contactData || {};
 let testimonials = testimonialsData.testimonials || testimonialsData || [];
-let enquiries = enquiriesData.enquiries || enquiriesData || [];
-let kailashGallery = kailashGalleryData.gallery || [];
-let kailashGalleryMetadata = kailashGalleryData.metadata || { totalPhotos: 0, lastUpdated: new Date().toISOString(), pageTitle: "Kailash Mansarovar", pageSubtitle: "Sacred Journey Gallery" };
+let enquiries = enquiriesData || {};
 let logos = logoData.logos || logoData || {
   header: '/src/assets/zeo-logo.png',
   footer: '/src/assets/zeo-logo-white.png',
@@ -441,7 +471,6 @@ app.post('/api/admin/sliders', authenticateToken, (req, res) => {
         location: sliderData.location || '',
         image: sliderData.image || '',
         video: sliderData.video || '',
-        video_start_time: sliderData.video_start_time || 0,
         order_index: sliderData.order_index || 1,
         is_active: sliderData.is_active !== undefined ? sliderData.is_active : true,
         button_text: sliderData.button_text || '',
@@ -683,109 +712,23 @@ const updateDestinationRelationships = (tourId, newPrimaryDestId, newSecondaryDe
 // Get all tours (merge basic tours with detailed tours)
 app.get('/api/tours', async (req, res) => {
   await delay(300);
-
-  const { category, location, destination, search, featured, page, limit } = req.query;
-
-  // Use only detailed tours as primary data source
+  
+  const { category, location, search, featured } = req.query;
+  
+  // Merge basic tours with detailed tours, prioritizing detailed tours
   const allTours = [...tourDetails];
-
-  // Filter out unlisted tours for public API (only show explicitly listed tours or tours without listed field)
-  let filteredTours = allTours.filter(tour => tour.listed !== false);
-
-  // Filter by category
-  if (category) {
-    filteredTours = filteredTours.filter(tour =>
-      tour.category.toLowerCase() === category.toLowerCase()
-    );
-  }
-
-  // Filter by location (legacy support)
-  if (location) {
-    filteredTours = filteredTours.filter(tour =>
-      tour.location && tour.location.toLowerCase() === location.toLowerCase()
-    );
-  }
-
-  // Filter by destination (new destination-based filtering)
-  if (destination) {
-    // First, find the destination ID by name
-    const destinationData = destinations.find(dest =>
-      (dest.name && dest.name.toLowerCase() === destination.toLowerCase()) ||
-      (dest.title && dest.title.toLowerCase() === destination.toLowerCase())
-    );
-
-    if (destinationData) {
-      filteredTours = filteredTours.filter(tour =>
-        tour.primary_destination_id === destinationData.id ||
-        (tour.secondary_destination_ids && tour.secondary_destination_ids.includes(destinationData.id))
-      );
+  
+  // Add basic tours that don't have detailed versions
+  tours.forEach(basicTour => {
+    const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
+    if (!hasDetailedVersion) {
+      allTours.push(basicTour);
     }
-  }
-
-  // Search filter
-  if (search) {
-    const searchTerm = search.toLowerCase();
-    filteredTours = filteredTours.filter(tour =>
-      (tour.title && tour.title.toLowerCase().includes(searchTerm)) ||
-      (tour.description && tour.description.toLowerCase().includes(searchTerm)) ||
-      (tour.location && tour.location.toLowerCase().includes(searchTerm)) ||
-      (tour.category && tour.category.toLowerCase().includes(searchTerm)) ||
-      (tour.highlights && tour.highlights.some(h => h && h.toLowerCase().includes(searchTerm)))
-    );
-  }
-
-  // Sort tours consistently by ID to maintain order across pages
-  filteredTours.sort((a, b) => {
-    // First sort by featured status (featured tours first)
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
-
-    // Then sort by rating (highest first)
-    const ratingDiff = (b.rating || 0) - (a.rating || 0);
-    if (ratingDiff !== 0) return ratingDiff;
-
-    // Finally sort by ID for consistent ordering
-    return a.id - b.id;
   });
-
-  // Pagination support
-  const totalCount = filteredTours.length;
-  let paginatedTours = filteredTours;
-
-  if (page && limit) {
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 12;
-    const startIndex = (pageNum - 1) * limitNum;
-    const endIndex = startIndex + limitNum;
-
-    paginatedTours = filteredTours.slice(startIndex, endIndex);
-
-    // Add pagination metadata to response headers
-    res.set({
-      'X-Total-Count': totalCount.toString(),
-      'X-Page': pageNum.toString(),
-      'X-Limit': limitNum.toString(),
-      'X-Total-Pages': Math.ceil(totalCount / limitNum).toString(),
-      'X-Has-Next': (endIndex < totalCount).toString(),
-      'X-Has-Previous': (pageNum > 1).toString()
-    });
-  }
-
-  res.json(paginatedTours);
-});
-
-// Admin: Get all tours including unlisted ones
-app.get('/api/admin/tours', authenticateToken, async (req, res) => {
-  await delay(300);
   
-  const { category, location, destination, search, featured, page, limit } = req.query;
-  
-  // Use only detailed tours as primary data source
-  const allTours = [...tourDetails];
-  
-  // For admin, show ALL tours (including unlisted ones)
   let filteredTours = [...allTours];
 
+
   // Filter by category
   if (category) {
     filteredTours = filteredTours.filter(tour =>
@@ -793,80 +736,99 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
     );
   }
 
-  // Filter by location (legacy support)
+  // Filter by location
   if (location) {
     filteredTours = filteredTours.filter(tour =>
-      tour.location && tour.location.toLowerCase() === location.toLowerCase()
+      tour.location.toLowerCase() === location.toLowerCase()
     );
-  }
-
-  // Filter by destination (new destination-based filtering)
-  if (destination) {
-    // First, find the destination ID by name
-    const destinationData = destinations.find(dest =>
-      (dest.name && dest.name.toLowerCase() === destination.toLowerCase()) ||
-      (dest.title && dest.title.toLowerCase() === destination.toLowerCase())
-    );
-    
-    if (destinationData) {
-      filteredTours = filteredTours.filter(tour =>
-        tour.primary_destination_id === destinationData.id ||
-        (tour.secondary_destination_ids && tour.secondary_destination_ids.includes(destinationData.id))
-      );
-    }
   }
 
   // Search filter
   if (search) {
     const searchTerm = search.toLowerCase();
     filteredTours = filteredTours.filter(tour =>
-      (tour.title && tour.title.toLowerCase().includes(searchTerm)) ||
-      (tour.description && tour.description.toLowerCase().includes(searchTerm)) ||
-      (tour.location && tour.location.toLowerCase().includes(searchTerm)) ||
-      (tour.category && tour.category.toLowerCase().includes(searchTerm)) ||
-      (tour.highlights && tour.highlights.some(h => h && h.toLowerCase().includes(searchTerm)))
+      tour.title.toLowerCase().includes(searchTerm) ||
+      tour.description.toLowerCase().includes(searchTerm) ||
+      tour.location.toLowerCase().includes(searchTerm) ||
+      tour.category.toLowerCase().includes(searchTerm) ||
+      (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
     );
   }
 
-  // Sort tours consistently by ID to maintain order across pages
-  filteredTours.sort((a, b) => {
-    // First sort by featured status (featured tours first)
-    if (a.featured && !b.featured) return -1;
-    if (!a.featured && b.featured) return 1;
-    
-    // Then sort by rating (highest first)
-    const ratingDiff = (b.rating || 0) - (a.rating || 0);
-    if (ratingDiff !== 0) return ratingDiff;
-    
-    // Finally sort by ID for consistent ordering
-    return a.id - b.id;
-  });
+  res.json(filteredTours);
+});
 
-  // Pagination support
-  const totalCount = filteredTours.length;
-  let paginatedTours = filteredTours;
-  
-  if (page && limit) {
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 12;
+// Admin: Get all tours with pagination and admin-specific features
+app.get('/api/admin/tours', authenticateToken, async (req, res) => {
+  try {
+    console.log('Admin tours request:', req.query);
+    
+    const { page = 1, limit = 20, search, destination } = req.query;
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    
+    // Merge basic tours with detailed tours, prioritizing detailed tours
+    const allTours = [...tourDetails];
+    
+    // Add basic tours that don't have detailed versions
+    tours.forEach(basicTour => {
+      const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
+      if (!hasDetailedVersion) {
+        allTours.push(basicTour);
+      }
+    });
+    
+    let filteredTours = [...allTours];
+    
+    // Search filter
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      filteredTours = filteredTours.filter(tour =>
+        tour.title.toLowerCase().includes(searchTerm) ||
+        tour.description.toLowerCase().includes(searchTerm) ||
+        tour.location.toLowerCase().includes(searchTerm) ||
+        tour.category.toLowerCase().includes(searchTerm) ||
+        (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
+      );
+    }
+    
+    // Destination filter
+    if (destination) {
+      filteredTours = filteredTours.filter(tour =>
+        tour.location.toLowerCase().includes(destination.toLowerCase()) ||
+        (tour.destination_name && tour.destination_name.toLowerCase().includes(destination.toLowerCase()))
+      );
+    }
+    
+    // Sort by ID descending (newest first)
+    filteredTours.sort((a, b) => b.id - a.id);
+    
+    // Calculate pagination
+    const totalItems = filteredTours.length;
+    const totalPages = Math.ceil(totalItems / limitNum);
     const startIndex = (pageNum - 1) * limitNum;
     const endIndex = startIndex + limitNum;
     
-    paginatedTours = filteredTours.slice(startIndex, endIndex);
+    // Apply pagination
+    const paginatedTours = filteredTours.slice(startIndex, endIndex);
     
-    // Add pagination metadata to response headers
-    res.set({
-      'X-Total-Count': totalCount.toString(),
-      'X-Page': pageNum.toString(),
-      'X-Limit': limitNum.toString(),
-      'X-Total-Pages': Math.ceil(totalCount / limitNum).toString(),
-      'X-Has-Next': (endIndex < totalCount).toString(),
-      'X-Has-Previous': (pageNum > 1).toString(),
-      'Access-Control-Expose-Headers': 'X-Total-Count, X-Page, X-Limit, X-Total-Pages, X-Has-Next, X-Has-Previous'
+    console.log(`Returning ${paginatedTours.length} tours out of ${totalItems} total`);
+    
+    res.json({
+      tours: paginatedTours,
+      pagination: {
+        currentPage: pageNum,
+        totalPages,
+        totalItems,
+        itemsPerPage: limitNum,
+        hasNextPage: pageNum < totalPages,
+        hasPrevPage: pageNum > 1
+      }
     });
+  } catch (error) {
+    console.error('Error fetching admin tours:', error);
+    res.status(500).json({ error: 'Failed to fetch tours' });
   }
-
-  res.json(paginatedTours);
 });
 
 // Admin: Create new tour with relationship management
@@ -882,17 +844,9 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
-    // Strip deprecated field before saving
-    if (newTour.what_to_bring) delete newTour.what_to_bring;
     
     // Add to tours array
     tourDetails.push(newTour);
-    
-    // Save individual tour file
-    if (newTour.slug) {
-      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${newTour.slug}.json`);
-      fs.writeFileSync(tourFilePath, JSON.stringify(newTour, null, 2));
-    }
     
     // Update destination relationships
     if (newTour.primary_destination_id || (newTour.secondary_destination_ids && newTour.secondary_destination_ids.length > 0)) {
@@ -901,6 +855,12 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
         newTour.primary_destination_id,
         newTour.secondary_destination_ids || []
       );
+    }
+    
+    // Save tour data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
     }
     
     console.log('Tour created successfully with relationships');
@@ -919,10 +879,7 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
     
     const { id } = req.params;
     const tourData = req.body;
-    const tourId = parseInt(id);
-    
-    // Find tour in detailed tours
-    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
+    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(id));
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
@@ -935,128 +892,73 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
     const newSecondaryDestIds = tourData.secondary_destination_ids || [];
     
     // Update tour data
-    const updatedTour = {
+    tourDetails[tourIndex] = {
       ...existingTour,
       ...tourData,
       updated_at: new Date().toISOString()
     };
-    // Strip deprecated field before saving
-    if (updatedTour.what_to_bring) delete updatedTour.what_to_bring;
-    
-    tourDetails[tourIndex] = updatedTour;
-    
-    // Save individual tour file
-    if (updatedTour.slug) {
-      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${updatedTour.slug}.json`);
-      fs.writeFileSync(tourFilePath, JSON.stringify(updatedTour, null, 2));
-    }
     
     // Update destination relationships
     updateDestinationRelationships(
-      tourId,
+      parseInt(id),
       newPrimaryDestId,
       newSecondaryDestIds,
       oldPrimaryDestId,
       oldSecondaryDestIds
     );
     
-    console.log(`Tour ${tourId} updated successfully in individual file with relationships`);
-    res.json(updatedTour);
+    // Save tour data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
+    }
+    
+    console.log('Tour updated successfully with relationships');
+    res.json(tourDetails[tourIndex]);
   } catch (error) {
     console.error('Error updating tour:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });
 
-// Admin: Delete tour with relationship management
+// Admin: Delete tour with relationship cleanup
 app.delete('/api/admin/tours/:id', authenticateToken, async (req, res) => {
   try {
-    const { id } = req.params;
-    const tourId = parseInt(id);
+    console.log('Deleting tour with relationships...');
     
-    // Find tour in detailed tours
-    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
+    const { id } = req.params;
+    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(id));
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
     }
     
     const tour = tourDetails[tourIndex];
-    
-    // Remove tour from destination relationships
     const primaryDestId = tour.primary_destination_id || tour.destination_id || null;
     const secondaryDestIds = tour.secondary_destination_ids || [];
     
-    if (primaryDestId || secondaryDestIds.length > 0) {
-      updateDestinationRelationships(
-        tourId,
-        null, // No new primary destination
-        [], // No new secondary destinations
-        primaryDestId,
-        secondaryDestIds
-      );
-    }
-    
-    // Remove individual tour file
-    if (tour.slug) {
-      const tourFilePath = path.join(__dirname, 'data', 'tour-details', `${tour.slug}.json`);
-      if (fs.existsSync(tourFilePath)) {
-        fs.unlinkSync(tourFilePath);
-        console.log(`Deleted individual tour file: ${tour.slug}.json`);
-      }
-    }
-    
-    // Remove tour from memory array
+    // Remove tour from arrays
     tourDetails.splice(tourIndex, 1);
     
-    console.log(`Tour ${tourId} deleted successfully from individual file`);
+    // Clean up destination relationships
+    updateDestinationRelationships(
+      parseInt(id),
+      null, // no new primary destination
+      [], // no new secondary destinations
+      primaryDestId, // old primary destination to remove
+      secondaryDestIds // old secondary destinations to remove
+    );
+    
+    // Save tour data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
+    }
+    
+    console.log('Tour deleted successfully with relationship cleanup');
     res.json({ message: 'Tour deleted successfully' });
   } catch (error) {
     console.error('Error deleting tour:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Admin: Update tour listing status
-app.patch('/api/admin/tours/:id/listing', authenticateToken, async (req, res) => {
-  try {
-    console.log('Updating tour listing status for ID:', req.params.id);
-    console.log('Request body:', req.body);
-    
-    const { id } = req.params;
-    const { listed } = req.body;
-    const tourId = parseInt(id);
-    
-    // Find tour in detailed tours
-    const tourIndex = tourDetails.findIndex(t => t.id === tourId);
-    
-    if (tourIndex === -1) {
-      return res.status(404).json({ error: 'Tour not found' });
-    }
-    
-    // Update the listing status
-    tourDetails[tourIndex] = {
-      ...tourDetails[tourIndex],
-      listed: listed,
-      updated_at: new Date().toISOString()
-    };
-    
-    // Update the individual tour detail file
-    const tourSlug = tourDetails[tourIndex].slug;
-    if (tourSlug) {
-      const tourDetailFilePath = path.join(__dirname, 'data', 'tour-details', `${tourSlug}.json`);
-      try {
-        fs.writeFileSync(tourDetailFilePath, JSON.stringify(tourDetails[tourIndex], null, 2));
-        console.log(`Updated individual tour detail file: ${tourSlug}.json`);
-      } catch (error) {
-        console.error(`Error updating individual tour detail file: ${error.message}`);
-      }
-    }
-    
-    console.log(`Tour ${tourId} listing status updated in individual file`);
-    res.json(tourDetails[tourIndex]);
-  } catch (error) {
-    console.error('Error updating tour listing status:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });
@@ -1067,10 +969,15 @@ app.get('/api/tours/:id', async (req, res) => {
   
   const tourId = parseInt(req.params.id);
   
-  // Find tour in detailed tours only
+  // First check detailed tours
   let tour = tourDetails.find(t => t.id === tourId);
   
-  if (!tour || tour.listed === false) {
+  // If not found, check basic tours
+  if (!tour) {
+    tour = tours.find(t => t.id === tourId);
+  }
+  
+  if (!tour) {
     return res.status(404).json({
       success: false,
       message: 'Tour not found'
@@ -1080,33 +987,12 @@ app.get('/api/tours/:id', async (req, res) => {
   res.json(tour);
 });
 
-// Get tour by slug (check detailed tours first, then basic tours)
+// Get tour by slug (for detailed tours)
 app.get('/api/tours/slug/:slug', async (req, res) => {
   await delay(200);
   
   const { slug } = req.params;
-  
-  // Find tour in detailed tours only
-  let tour = tourDetails.find(t => t.slug === slug);
-  
-  if (!tour || tour.listed === false) {
-    return res.status(404).json({
-      success: false,
-      message: 'Tour not found'
-    });
-  }
-  
-  res.json(tour);
-});
-
-// Admin: Get tour by slug (including unlisted tours)
-app.get('/api/admin/tours/slug/:slug', authenticateToken, async (req, res) => {
-  await delay(200);
-  
-  const { slug } = req.params;
-  
-  // Find tour in detailed tours only (including unlisted ones)
-  let tour = tourDetails.find(t => t.slug === slug);
+  const tour = tourDetails.find(t => t.slug === slug);
   
   if (!tour) {
     return res.status(404).json({
@@ -1123,39 +1009,14 @@ app.get('/api/admin/tours/slug/:slug', authenticateToken, async (req, res) => {
 // Get all destinations
 app.get('/api/destinations', async (req, res) => {
   await delay(300);
-
+  
   const { country } = req.query;
-  // Filter out unlisted destinations for public API (only show explicitly listed destinations or destinations without listed field)
-  let filteredDestinations = destinations.filter(dest => dest.listed !== false);
+  let filteredDestinations = [...destinations];
 
-  // Calculate dynamic tour counts based on actual tour relationships
-  const calculateDestinationTourCount = (destinationId, destinationName) => {
-    if (!tourDetails || tourDetails.length === 0) return 0;
-
-    // Count tours using multiple matching methods
-    const matchedTours = tourDetails.filter(tour => {
-      if (tour.listed === false) return false; // Only count listed tours
-
-      // Method 1: Relationship-based matching (primary/secondary destinations)
-      const isPrimaryDestination = tour.primary_destination_id === destinationId;
-      const isSecondaryDestination = tour.secondary_destination_ids?.includes(destinationId);
-
-      // Method 2: Direct destinationId matching
-      const isDirectDestination = tour.destinationId === destinationId;
-
-      // Method 3: Name-based matching
-      const isNameMatch = tour.destination === destinationName;
-
-      return isPrimaryDestination || isSecondaryDestination || isDirectDestination || isNameMatch;
-    });
-
-    return matchedTours.length;
-  };
-
-  // Map with calculated tour counts for all listed destinations
+  // Calculate dynamic tour counts based on actual relationships
   filteredDestinations = filteredDestinations.map(dest => ({
     ...dest,
-    tourCount: calculateDestinationTourCount(dest.id, dest.name)
+    tourCount: (dest.relatedTours || []).length
   }));
 
   // Filter by country
@@ -1232,13 +1093,35 @@ app.get('/api/admin/destinations', authenticateToken, async (req, res) => {
   }
 });
 
+// Admin: Get single destination by identifier (slug or ID)
+app.get('/api/admin/destinations/:identifier', authenticateToken, async (req, res) => {
+  try {
+    const { identifier } = req.params;
+    
+    // Try to find by slug first, then by ID
+    let destination = destinations.find(d => d.slug === identifier);
+    if (!destination) {
+      destination = destinations.find(d => d.id === parseInt(identifier));
+    }
+    
+    if (!destination) {
+      return res.status(404).json({ error: 'Destination not found' });
+    }
+    
+    res.json(destination);
+  } catch (error) {
+    console.error('Error fetching destination:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Admin: Create new destination
 app.post('/api/admin/destinations', authenticateToken, async (req, res) => {
   try {
     console.log('Creating new destination...');
     console.log('Request body:', req.body);
     
-    const { slug, title, country, region, image, featured } = req.body;
+    const { slug, title, country, region, image, featured, listed, description } = req.body;
     
     // Validate required fields
     if (!slug || !title || !country) {
@@ -1260,10 +1143,11 @@ app.post('/api/admin/destinations', authenticateToken, async (req, res) => {
       region: region || '',
       image: image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop',
       featured: featured || false,
+      listed: listed !== false, // Default to true unless explicitly set to false
       tourCount: 0,
       href: `/destinations/${slug}`,
       type: country.toLowerCase() === 'nepal' ? 'nepal' : 'international',
-      description: `Discover the beauty and culture of ${title} in ${country}.`,
+      description: description || `Discover the beauty and culture of ${title} in ${country}.`,
       highlights: [],
       bestTime: 'Year-round',
       altitude: 'Varies',
@@ -1294,7 +1178,7 @@ app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, re
     console.log('Request body:', req.body);
     
     const { identifier } = req.params;
-    const { title, country, region, image, featured, listed } = req.body;
+    const { title, country, region, image, featured, listed, description } = req.body;
     
     // Try to find by slug first, then by ID
     let destinationIndex = destinations.findIndex(d => d.slug === identifier);
@@ -1319,7 +1203,7 @@ app.put('/api/admin/destinations/:identifier', authenticateToken, async (req, re
       featured: featured !== undefined ? featured : existingDestination.featured,
       listed: listed !== undefined ? listed : existingDestination.listed,
       type: country ? (country.toLowerCase() === 'nepal' ? 'nepal' : 'international') : existingDestination.type,
-      description: title ? `Discover the beauty and culture of ${title} in ${country || existingDestination.country}.` : existingDestination.description
+      description: description || (title ? `Discover the beauty and culture of ${title} in ${country || existingDestination.country}.` : existingDestination.description)
     };
     
     destinations[destinationIndex] = updatedDestination;
@@ -1342,15 +1226,39 @@ app.delete('/api/admin/destinations/:identifier', authenticateToken, async (req,
   try {
     const { identifier } = req.params;
     
+    // Validate identifier
+    if (!identifier || identifier.trim() === '' || identifier === 'undefined' || identifier === 'null') {
+      console.error('Invalid destination identifier received:', identifier);
+      return res.status(400).json({ error: 'Invalid destination identifier provided' });
+    }
+    
+    // Log the deletion attempt for debugging
+    console.log('Attempting to delete destination with identifier:', identifier);
+    console.log('Available destinations:', destinations.map(d => ({ id: d.id, slug: d.slug, name: d.name })));
+    
     // Try to find by slug first, then by ID
     let destinationIndex = destinations.findIndex(d => d.slug === identifier);
     if (destinationIndex === -1) {
-      destinationIndex = destinations.findIndex(d => d.id === parseInt(identifier));
+      // Only try to parse as integer if it looks like a number
+      const numericId = parseInt(identifier);
+      if (!isNaN(numericId)) {
+        destinationIndex = destinations.findIndex(d => d.id === numericId);
+      }
     }
     
     if (destinationIndex === -1) {
-      return res.status(404).json({ error: 'Destination not found' });
+      console.error('Destination not found:', {
+        identifier,
+        availableDestinations: destinations.map(d => ({ id: d.id, slug: d.slug, name: d.name }))
+      });
+      return res.status(404).json({ 
+        error: 'Destination not found',
+        message: `No destination found with identifier "${identifier}". Please check if the destination exists.`
+      });
     }
+    
+    const destinationToDelete = destinations[destinationIndex];
+    console.log('Found destination to delete:', destinationToDelete);
     
     destinations.splice(destinationIndex, 1);
     const saved = saveData('destinations.json', destinations);
@@ -1359,9 +1267,97 @@ app.delete('/api/admin/destinations/:identifier', authenticateToken, async (req,
       throw new Error('Failed to save destination data to file');
     }
     
+    console.log('Successfully deleted destination:', destinationToDelete.name || destinationToDelete.title);
     res.json({ message: 'Destination deleted successfully' });
   } catch (error) {
     console.error('Error deleting destination:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== ADMIN ENQUIRIES API ====================
+
+// Admin: Get all enquiries
+app.get('/api/admin/enquiries', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    res.json(enquiries);
+  } catch (error) {
+    console.error('Error fetching enquiries:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Get single enquiry by ID
+app.get('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const enquiry = enquiries.enquiries.find(e => e.id === parseInt(id));
+    
+    if (!enquiry) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    res.json(enquiry);
+  } catch (error) {
+    console.error('Error fetching enquiry:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Update enquiry (for notes, assignment, etc.)
+app.put('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { assigned_to, notes, responded_at } = req.body;
+    
+    const enquiryIndex = enquiries.enquiries.findIndex(e => e.id === parseInt(id));
+    if (enquiryIndex === -1) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    const updatedEnquiry = {
+      ...enquiries.enquiries[enquiryIndex],
+      assigned_to: assigned_to !== undefined ? assigned_to : enquiries.enquiries[enquiryIndex].assigned_to,
+      notes: notes !== undefined ? notes : enquiries.enquiries[enquiryIndex].notes,
+      responded_at: responded_at !== undefined ? responded_at : enquiries.enquiries[enquiryIndex].responded_at,
+      updated_at: new Date().toISOString()
+    };
+    
+    enquiries.enquiries[enquiryIndex] = updatedEnquiry;
+    
+    const saved = saveData('enquiries.json', enquiries);
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    res.json(updatedEnquiry);
+  } catch (error) {
+    console.error('Error updating enquiry:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Delete enquiry
+app.delete('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const enquiryIndex = enquiries.enquiries.findIndex(e => e.id === parseInt(id));
+    if (enquiryIndex === -1) {
+      return res.status(404).json({ error: 'Enquiry not found' });
+    }
+    
+    enquiries.enquiries.splice(enquiryIndex, 1);
+    const saved = saveData('enquiries.json', enquiries);
+    
+    if (!saved) {
+      throw new Error('Failed to save enquiry data to file');
+    }
+    
+    res.json({ message: 'Enquiry deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting enquiry:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -1370,6 +1366,109 @@ app.delete('/api/admin/destinations/:identifier', authenticateToken, async (req,
 
 // Admin: Upload file endpoint
 app.post('/api/admin/upload', authenticateToken, upload.single('image'), async (req, res) => {
+  try {
+    console.log('Upload request received:', {
+      hasFile: !!req.file,
+      body: req.body,
+      headers: {
+        'content-type': req.headers['content-type'],
+        'authorization': req.headers['authorization'] ? 'Bearer [REDACTED]' : 'None'
+      }
+    });
+
+    if (!req.file) {
+      console.error('No file uploaded in request');
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    const destinationSlug = req.body.destinationSlug || 'destination';
+    const file = req.file;
+    
+    console.log(`Uploading file for destination: ${destinationSlug}`, {
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      tempPath: file.path
+    });
+    
+    // Create destination-specific directory with clean slug
+    const cleanSlug = destinationSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+    const destinationDir = path.join(uploadsDir, 'destinations', cleanSlug);
+    
+    console.log(`Creating directory: ${destinationDir}`);
+    if (!fs.existsSync(destinationDir)) {
+      fs.mkdirSync(destinationDir, { recursive: true });
+      console.log(`Created directory: ${destinationDir}`);
+    }
+    
+    // Delete any existing files for this destination to keep directory clean
+    try {
+      const existingFiles = fs.readdirSync(destinationDir);
+      existingFiles.forEach(existingFile => {
+        if (existingFile.startsWith(cleanSlug)) {
+          const oldFilePath = path.join(destinationDir, existingFile);
+          fs.unlinkSync(oldFilePath);
+          console.log(`Deleted old file: ${oldFilePath}`);
+        }
+      });
+    } catch (error) {
+      console.log('No existing files to delete or error cleaning up:', error.message);
+    }
+    
+    // Generate simple filename with destination name and timestamp to avoid caching issues
+    const timestamp = Date.now();
+    const fileExtension = path.extname(file.originalname);
+    const filename = `${cleanSlug}_${timestamp}${fileExtension}`;
+    const finalPath = path.join(destinationDir, filename);
+    
+    console.log(`Moving file from ${file.path} to ${finalPath}`);
+    
+    // Move file to final location
+    try {
+      fs.renameSync(file.path, finalPath);
+      console.log(`File moved successfully to: ${finalPath}`);
+    } catch (moveError) {
+      console.error('Error moving file:', moveError);
+      throw new Error(`Failed to move uploaded file: ${moveError.message}`);
+    }
+    
+    // Return the URL path
+    const relativePath = path.relative(uploadsDir, finalPath).replace(/\\/g, '/');
+    const fileUrl = `/uploads/${relativePath}`;
+    
+    console.log(`File uploaded successfully: ${fileUrl}`);
+    
+    res.json({
+      success: true,
+      url: fileUrl,
+      filename: filename,
+      destination: cleanSlug
+    });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    
+    // Clean up temp file if it exists
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      try {
+        fs.unlinkSync(req.file.path);
+        console.log('Cleaned up temp file:', req.file.path);
+      } catch (cleanupError) {
+        console.error('Error cleaning up temp file:', cleanupError);
+      }
+    }
+    
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// ==================== DESTINATIONS UPLOAD API ====================
+
+// Destination-specific upload endpoint
+app.post('/api/admin/uploads/destinations', authenticateToken, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -1420,11 +1519,12 @@ app.post('/api/admin/upload', authenticateToken, upload.single('image'), async (
     res.json({
       success: true,
       url: fileUrl,
+      path: fileUrl,
       filename: filename,
       destination: cleanSlug
     });
   } catch (error) {
-    console.error('Error uploading file:', error);
+    console.error('Error uploading destination file:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -1469,211 +1569,6 @@ app.put('/api/admin/contact', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating contact information:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// ==================== CONTACT ENQUIRIES API ====================
-
-// Submit contact enquiry (public endpoint)
-app.post('/api/contact/enquiry', async (req, res) => {
-  try {
-    console.log('Submitting new contact enquiry...');
-    console.log('Request body:', req.body);
-    
-    const { name, email, phone, destination, tour_title, travelers, date, message } = req.body;
-    
-    // Validate required fields
-    if (!name || !email || !destination || !message) {
-      return res.status(400).json({ error: 'Name, email, destination, and message are required' });
-    }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Please provide a valid email address' });
-    }
-    
-    // Generate tour title from destination if not provided
-    const getTourTitle = (destination) => {
-      const titleMap = {
-        'everest': 'Everest Base Camp Trek',
-        'kailash': 'Kailash Mansarovar Yatra',
-        'annapurna': 'Annapurna Circuit Trek',
-        'kathmandu': 'Kathmandu Valley Tour',
-        'langtang': 'Langtang Valley Trek',
-        'pokhara': 'Pokhara City Tour',
-        'other': 'Custom Tour Package'
-      };
-      return titleMap[destination.toLowerCase()] || `${destination.charAt(0).toUpperCase() + destination.slice(1)} Tour`;
-    };
-    
-    const newEnquiry = {
-      id: Math.max(...enquiries.map(e => e.id), 0) + 1,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone?.trim() || '',
-      destination: destination.trim(),
-      tour_title: tour_title?.trim() || getTourTitle(destination),
-      travelers: travelers?.trim() || '1',
-      date: date?.trim() || '',
-      message: message.trim(),
-      assigned_to: null,
-      notes: '',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      responded_at: null,
-      source: 'website_contact_form'
-    };
-    
-    enquiries.push(newEnquiry);
-    const saved = saveData('enquiries.json', { enquiries });
-    
-    if (!saved) {
-      throw new Error('Failed to save enquiry data to file');
-    }
-    
-    console.log('Contact enquiry submitted successfully');
-    res.status(201).json({
-      success: true,
-      message: 'Your enquiry has been submitted successfully. We will get back to you soon!',
-      enquiry: {
-        id: newEnquiry.id,
-        name: newEnquiry.name,
-        destination: newEnquiry.destination,
-        created_at: newEnquiry.created_at
-      }
-    });
-  } catch (error) {
-    console.error('Error submitting contact enquiry:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// ==================== ADMIN CONTACT ENQUIRIES API ====================
-
-// Admin: Get all enquiries
-app.get('/api/admin/enquiries', authenticateToken, async (req, res) => {
-  try {
-    await delay(200);
-    let filteredEnquiries = [...enquiries];
-    
-    // Sort by date (newest first)
-    filteredEnquiries.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    
-    res.json(filteredEnquiries);
-  } catch (error) {
-    console.error('Error fetching admin enquiries:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Get enquiry by ID
-app.get('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
-  try {
-    await delay(200);
-    const enquiryId = parseInt(req.params.id);
-    const enquiry = enquiries.find(e => e.id === enquiryId);
-    
-    if (!enquiry) {
-      return res.status(404).json({
-        success: false,
-        message: 'Enquiry not found'
-      });
-    }
-    
-    res.json(enquiry);
-  } catch (error) {
-    console.error('Error fetching enquiry:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Update enquiry
-app.put('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
-  try {
-    console.log('Updating enquiry with ID:', req.params.id);
-    console.log('Request body:', req.body);
-    
-    const { id } = req.params;
-    const updateData = req.body;
-    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
-    
-    if (enquiryIndex === -1) {
-      return res.status(404).json({ error: 'Enquiry not found' });
-    }
-    
-    const existingEnquiry = enquiries[enquiryIndex];
-    
-    // Update enquiry data
-    enquiries[enquiryIndex] = {
-      ...existingEnquiry,
-      ...updateData,
-      updated_at: new Date().toISOString()
-    };
-    
-    const saved = saveData('enquiries.json', { enquiries });
-    if (!saved) {
-      throw new Error('Failed to save enquiry data to file');
-    }
-    
-    console.log('Enquiry updated successfully');
-    res.json(enquiries[enquiryIndex]);
-  } catch (error) {
-    console.error('Error updating enquiry:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Admin: Delete enquiry
-app.delete('/api/admin/enquiries/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
-    
-    if (enquiryIndex === -1) {
-      return res.status(404).json({ error: 'Enquiry not found' });
-    }
-    
-    enquiries.splice(enquiryIndex, 1);
-    const saved = saveData('enquiries.json', { enquiries });
-    
-    if (!saved) {
-      throw new Error('Failed to save enquiry data to file');
-    }
-    
-    res.json({ message: 'Enquiry deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting enquiry:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Mark enquiry as responded
-app.patch('/api/admin/enquiries/:id/respond', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const enquiryIndex = enquiries.findIndex(e => e.id === parseInt(id));
-    
-    if (enquiryIndex === -1) {
-      return res.status(404).json({ error: 'Enquiry not found' });
-    }
-    
-    enquiries[enquiryIndex].responded_at = new Date().toISOString();
-    enquiries[enquiryIndex].updated_at = new Date().toISOString();
-    
-    const saved = saveData('enquiries.json', { enquiries });
-    if (!saved) {
-      throw new Error('Failed to save enquiry data to file');
-    }
-    
-    res.json({
-      success: true,
-      message: 'Enquiry marked as responded',
-      enquiry: enquiries[enquiryIndex]
-    });
-  } catch (error) {
-    console.error('Error marking enquiry as responded:', error);
-    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -1930,815 +1825,6 @@ app.patch('/api/admin/testimonials/:id/featured', authenticateToken, async (req,
   }
 });
 
-// ==================== SITEMAP GENERATION API ====================
-
-// Auto-generate sitemap endpoint
-app.get('/api/generate-sitemap', async (req, res) => {
-  try {
-    const { generateSitemap } = require('../zeopwebsite/scripts/generateSitemap.cjs');
-    await generateSitemap();
-    
-    res.json({
-      success: true,
-      message: 'Sitemap generated successfully',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error generating sitemap:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to generate sitemap',
-      message: error.message
-    });
-  }
-});
-
-// Serve sitemap.xml
-app.get('/sitemap.xml', (req, res) => {
-  try {
-    const sitemapPath = path.join(__dirname, '../zeopwebsite/public/sitemap.xml');
-    
-    if (fs.existsSync(sitemapPath)) {
-      res.set('Content-Type', 'application/xml');
-      res.sendFile(sitemapPath);
-    } else {
-      res.status(404).json({ error: 'Sitemap not found' });
-    }
-  } catch (error) {
-    console.error('Error serving sitemap:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// ==================== SITEMAP GENERATION API ====================
-
-// Auto-generate sitemap endpoint
-app.get('/api/generate-sitemap', async (req, res) => {
-  try {
-    const { generateSitemap } = require('../zeopwebsite/scripts/generateSitemap.cjs');
-    await generateSitemap();
-    
-    res.json({
-      success: true,
-      message: 'Sitemap generated successfully',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error generating sitemap:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to generate sitemap',
-      message: error.message
-    });
-  }
-});
-
-// Serve sitemap.xml
-app.get('/sitemap.xml', (req, res) => {
-  try {
-    const sitemapPath = path.join(__dirname, '../zeopwebsite/public/sitemap.xml');
-    
-    if (fs.existsSync(sitemapPath)) {
-      res.set('Content-Type', 'application/xml');
-      res.sendFile(sitemapPath);
-    } else {
-      res.status(404).json({ error: 'Sitemap not found' });
-    }
-  } catch (error) {
-    console.error('Error serving sitemap:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// ==================== TRIP PLANNING API ====================
-
-// Load trip planning data
-let tripPlansData = loadData('trip-plans.json');
-let tripPlans = tripPlansData.tripPlans || tripPlansData || [];
-
-// Get trip planning recommendations based on preferences
-app.get('/api/trip-planning/recommendations', async (req, res) => {
-  try {
-    await delay(300);
-    
-    const { 
-      destinations, 
-      activities, 
-      duration, 
-      budget, 
-      difficulty, 
-      groupSize, 
-      travelDates 
-    } = req.query;
-    
-    let recommendations = [];
-    
-    // Filter tours based on criteria
-    let filteredTours = [...tourDetails];
-    
-    // Filter by destinations
-    if (destinations) {
-      const destArray = destinations.split(',').map(d => d.trim().toLowerCase());
-      filteredTours = filteredTours.filter(tour => 
-        destArray.some(dest => 
-          tour.location?.toLowerCase().includes(dest) ||
-          tour.primary_destination?.toLowerCase().includes(dest) ||
-          (tour.secondary_destinations && tour.secondary_destinations.some(sd => 
-            sd.toLowerCase().includes(dest)
-          ))
-        )
-      );
-    }
-    
-    // Filter by activities
-    if (activities) {
-      const activityArray = activities.split(',').map(a => a.trim().toLowerCase());
-      filteredTours = filteredTours.filter(tour => 
-        activityArray.some(activity => 
-          tour.category?.toLowerCase().includes(activity) ||
-          (tour.activities && tour.activities.some(a => 
-            a.name?.toLowerCase().includes(activity)
-          ))
-        )
-      );
-    }
-    
-    // Filter by difficulty
-    if (difficulty) {
-      filteredTours = filteredTours.filter(tour => 
-        tour.difficulty?.toLowerCase().includes(difficulty.toLowerCase())
-      );
-    }
-    
-    // Filter by budget range
-    if (budget) {
-      const budgetNum = parseInt(budget);
-      if (!isNaN(budgetNum)) {
-        filteredTours = filteredTours.filter(tour => 
-          tour.price && tour.price <= budgetNum * 1.2 // Allow 20% over budget
-        );
-      }
-    }
-    
-    // Sort by rating and price
-    filteredTours.sort((a, b) => {
-      const ratingDiff = (b.rating || 0) - (a.rating || 0);
-      if (ratingDiff !== 0) return ratingDiff;
-      return (a.price || 0) - (b.price || 0);
-    });
-    
-    // Limit to top 10 recommendations
-    recommendations = filteredTours.slice(0, 10).map(tour => ({
-      id: tour.id,
-      title: tour.title,
-      description: tour.description,
-      price: tour.price,
-      duration: tour.duration,
-      difficulty: tour.difficulty,
-      rating: tour.rating,
-      image: tour.image,
-      location: tour.location,
-      category: tour.category,
-      highlights: tour.highlights?.slice(0, 3) || [],
-      bestTime: tour.best_time,
-      groupSize: tour.group_size
-    }));
-    
-    res.json({
-      success: true,
-      recommendations,
-      totalFound: filteredTours.length,
-      criteria: {
-        destinations: destinations?.split(',').map(d => d.trim()) || [],
-        activities: activities?.split(',').map(a => a.trim()) || [],
-        duration,
-        budget,
-        difficulty,
-        groupSize,
-        travelDates
-      }
-    });
-  } catch (error) {
-    console.error('Error getting trip recommendations:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get available destinations for trip planning
-app.get('/api/trip-planning/destinations', async (req, res) => {
-  try {
-    await delay(200);
-    
-    const { type } = req.query;
-    let filteredDestinations = [...destinations];
-    
-    if (type) {
-      filteredDestinations = filteredDestinations.filter(dest => 
-        dest.type === type
-      );
-    }
-    
-    // Add tour counts and activity types
-    const enrichedDestinations = filteredDestinations.map(dest => {
-      const relatedTours = tourDetails.filter(tour => 
-        tour.primary_destination_id === dest.id || 
-        (tour.secondary_destination_ids && tour.secondary_destination_ids.includes(dest.id))
-      );
-      
-      const activityTypes = [...new Set(
-        relatedTours.map(tour => tour.category).filter(Boolean)
-      )];
-      
-      return {
-        ...dest,
-        tourCount: relatedTours.length,
-        activityTypes,
-        priceRange: relatedTours.length > 0 ? {
-          min: Math.min(...relatedTours.map(t => t.price || 0)),
-          max: Math.max(...relatedTours.map(t => t.price || 0))
-        } : { min: 0, max: 0 }
-      };
-    });
-    
-    res.json(enrichedDestinations);
-  } catch (error) {
-    console.error('Error getting trip planning destinations:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get available activities for trip planning
-app.get('/api/trip-planning/activities', async (req, res) => {
-  try {
-    await delay(200);
-    
-    const enrichedActivities = activities.map(activity => {
-      const relatedTours = tourDetails.filter(tour => 
-        tour.category?.toLowerCase().includes(activity.name.toLowerCase()) ||
-        (tour.activities && tour.activities.some(a => 
-          a.name?.toLowerCase().includes(activity.name.toLowerCase())
-        ))
-      );
-      
-      return {
-        ...activity,
-        tourCount: relatedTours.length,
-        priceRange: relatedTours.length > 0 ? {
-          min: Math.min(...relatedTours.map(t => t.price || 0)),
-          max: Math.max(...relatedTours.map(t => t.price || 0))
-        } : { min: 0, max: 0 },
-        difficultyLevels: [...new Set(
-          relatedTours.map(tour => tour.difficulty).filter(Boolean)
-        )]
-      };
-    });
-    
-    res.json(enrichedActivities);
-  } catch (error) {
-    console.error('Error getting trip planning activities:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Submit trip planning request
-app.post('/api/trip-planning/submit', async (req, res) => {
-  try {
-    console.log('Submitting trip planning request...');
-    console.log('Request body:', req.body);
-    
-    const {
-      name,
-      email,
-      phone,
-      destinations,
-      activities,
-      duration,
-      budget,
-      difficulty,
-      groupSize,
-      travelDates,
-      specialRequirements,
-      message
-    } = req.body;
-    
-    // Validate required fields
-    if (!name || !email || !destinations || !activities) {
-      return res.status(400).json({ 
-        error: 'Name, email, destinations, and activities are required' 
-      });
-    }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Please provide a valid email address' });
-    }
-    
-    const newTripPlan = {
-      id: Math.max(...tripPlans.map(tp => tp.id), 0) + 1,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone?.trim() || '',
-      destinations: Array.isArray(destinations) ? destinations : [destinations],
-      activities: Array.isArray(activities) ? activities : [activities],
-      duration: duration || '',
-      budget: budget || '',
-      difficulty: difficulty || '',
-      groupSize: groupSize || '',
-      travelDates: travelDates || '',
-      specialRequirements: specialRequirements?.trim() || '',
-      message: message?.trim() || '',
-      status: 'pending',
-      assignedTo: null,
-      notes: '',
-      recommendations: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    
-    tripPlans.push(newTripPlan);
-    const saved = saveData('trip-plans.json', { tripPlans });
-    
-    if (!saved) {
-      throw new Error('Failed to save trip plan data to file');
-    }
-    
-    console.log('Trip planning request submitted successfully');
-    res.status(201).json({
-      success: true,
-      message: 'Your trip planning request has been submitted successfully. We will get back to you with personalized recommendations soon!',
-      tripPlan: {
-        id: newTripPlan.id,
-        name: newTripPlan.name,
-        destinations: newTripPlan.destinations,
-        activities: newTripPlan.activities,
-        createdAt: newTripPlan.createdAt
-      }
-    });
-  } catch (error) {
-    console.error('Error submitting trip planning request:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// ==================== ADMIN TRIP PLANNING API ====================
-
-// Admin: Get all trip planning requests
-app.get('/api/admin/trip-plans', authenticateToken, async (req, res) => {
-  try {
-    await delay(200);
-    const { status } = req.query;
-    
-    let filteredTripPlans = [...tripPlans];
-    
-    // Filter by status if requested
-    if (status) {
-      filteredTripPlans = filteredTripPlans.filter(tp => tp.status === status);
-    }
-    
-    // Sort by date (newest first)
-    filteredTripPlans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    res.json(filteredTripPlans);
-  } catch (error) {
-    console.error('Error fetching admin trip plans:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Get trip plan by ID
-app.get('/api/admin/trip-plans/:id', authenticateToken, async (req, res) => {
-  try {
-    await delay(200);
-    const tripPlanId = parseInt(req.params.id);
-    const tripPlan = tripPlans.find(tp => tp.id === tripPlanId);
-    
-    if (!tripPlan) {
-      return res.status(404).json({
-        success: false,
-        message: 'Trip plan not found'
-      });
-    }
-    
-    res.json(tripPlan);
-  } catch (error) {
-    console.error('Error fetching trip plan:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Update trip plan
-app.put('/api/admin/trip-plans/:id', authenticateToken, async (req, res) => {
-  try {
-    console.log('Updating trip plan with ID:', req.params.id);
-    console.log('Request body:', req.body);
-    
-    const { id } = req.params;
-    const updateData = req.body;
-    const tripPlanIndex = tripPlans.findIndex(tp => tp.id === parseInt(id));
-    
-    if (tripPlanIndex === -1) {
-      return res.status(404).json({ error: 'Trip plan not found' });
-    }
-    
-    const existingTripPlan = tripPlans[tripPlanIndex];
-    
-    // Update trip plan data
-    tripPlans[tripPlanIndex] = {
-      ...existingTripPlan,
-      ...updateData,
-      updatedAt: new Date().toISOString()
-    };
-    
-    const saved = saveData('trip-plans.json', { tripPlans });
-    if (!saved) {
-      throw new Error('Failed to save trip plan data to file');
-    }
-    
-    console.log('Trip plan updated successfully');
-    res.json(tripPlans[tripPlanIndex]);
-  } catch (error) {
-    console.error('Error updating trip plan:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Admin: Delete trip plan
-app.delete('/api/admin/trip-plans/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const tripPlanIndex = tripPlans.findIndex(tp => tp.id === parseInt(id));
-    
-    if (tripPlanIndex === -1) {
-      return res.status(404).json({ error: 'Trip plan not found' });
-    }
-    
-    tripPlans.splice(tripPlanIndex, 1);
-    const saved = saveData('trip-plans.json', { tripPlans });
-    
-    if (!saved) {
-      throw new Error('Failed to save trip plan data to file');
-    }
-    
-    res.json({ message: 'Trip plan deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting trip plan:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Update trip plan status
-app.patch('/api/admin/trip-plans/:id/status', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    const tripPlanIndex = tripPlans.findIndex(tp => tp.id === parseInt(id));
-    
-    if (tripPlanIndex === -1) {
-      return res.status(404).json({ error: 'Trip plan not found' });
-    }
-    
-    tripPlans[tripPlanIndex].status = status;
-    tripPlans[tripPlanIndex].updatedAt = new Date().toISOString();
-    
-    const saved = saveData('trip-plans.json', { tripPlans });
-    if (!saved) {
-      throw new Error('Failed to save trip plan data to file');
-    }
-    
-    res.json({
-      success: true,
-      message: `Trip plan status updated to ${status}`,
-      tripPlan: tripPlans[tripPlanIndex]
-    });
-  } catch (error) {
-    console.error('Error updating trip plan status:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// ==================== KAILASH GALLERY API ====================
-
-// Get Kailash gallery photos (public endpoint)
-app.get('/api/kailash-gallery', async (req, res) => {
-  try {
-    await delay(200);
-    const activePhotos = kailashGallery
-      .filter(photo => photo.isActive)
-      .sort((a, b) => a.order - b.order);
-      
-    res.json({
-      gallery: activePhotos,
-      metadata: kailashGalleryMetadata
-    });
-  } catch (error) {
-    console.error('Error fetching Kailash gallery:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get Kailash gallery metadata (public endpoint)
-app.get('/api/kailash-gallery/metadata', async (req, res) => {
-  try {
-    await delay(100);
-    res.json(kailashGalleryMetadata);
-  } catch (error) {
-    console.error('Error fetching Kailash gallery metadata:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// ==================== ADMIN KAILASH GALLERY API ====================
-
-// Admin: Get all gallery photos including inactive ones
-app.get('/api/admin/kailash-gallery', authenticateToken, async (req, res) => {
-  try {
-    await delay(200);
-    const sortedPhotos = kailashGallery.sort((a, b) => a.order - b.order);
-    res.json({
-      gallery: sortedPhotos,
-      metadata: kailashGalleryMetadata
-    });
-  } catch (error) {
-    console.error('Error fetching admin Kailash gallery:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Create new gallery photo with file upload
-app.post('/api/admin/kailash-gallery', authenticateToken, (req, res) => {
-  upload.single('image')(req, res, async (err) => {
-    if (err) {
-      console.error('Multer error:', err);
-      return res.status(400).json({ error: err.message });
-    }
-    
-    try {
-      console.log('Creating new Kailash gallery photo...');
-      console.log('Request body:', req.body);
-      console.log('Uploaded file:', req.file);
-      
-      const photoData = JSON.parse(req.body.photoData || '{}');
-      const file = req.file;
-      
-      // Build the photo object
-      const newPhoto = {
-        id: Math.max(...kailashGallery.map(p => p.id), 0) + 1,
-        title: photoData.title || '',
-        image: photoData.image || '',
-        alt: photoData.alt || photoData.title || '',
-        gridSpan: photoData.gridSpan || 'col-span-1 row-span-1',
-        order: photoData.order || kailashGallery.length + 1,
-        isActive: photoData.isActive !== undefined ? photoData.isActive : true,
-        uploadedAt: new Date().toISOString()
-      };
-      
-      // If a file was uploaded, compress and update the image field
-      if (file) {
-        console.log('Processing uploaded gallery image:', file.filename);
-        
-        // Create kailash-gallery specific directory
-        const galleryDir = path.join(uploadsDir, 'kailash-gallery');
-        if (!fs.existsSync(galleryDir)) {
-          fs.mkdirSync(galleryDir, { recursive: true });
-        }
-        
-        // Compress image
-        const compressedFileName = `kailash_${Date.now()}_${file.filename}`;
-        const compressedPath = path.join(galleryDir, compressedFileName);
-        
-        console.log('Compressing gallery image...');
-        const processedFilePath = await compressImage(file.path, compressedPath, 85);
-        
-        const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
-        const fileUrl = `/uploads/${relativePath}`;
-        
-        newPhoto.image = fileUrl;
-        console.log('Gallery image compressed and saved:', fileUrl);
-      }
-      
-      kailashGallery.push(newPhoto);
-      
-      // Update metadata
-      kailashGalleryMetadata.totalPhotos = kailashGallery.length;
-      kailashGalleryMetadata.lastUpdated = new Date().toISOString();
-      
-      const saved = saveData('kailash-gallery.json', {
-        gallery: kailashGallery,
-        metadata: kailashGalleryMetadata
-      });
-      
-      if (!saved) {
-        throw new Error('Failed to save gallery data to file');
-      }
-      
-      console.log('Gallery photo created successfully');
-      res.status(201).json(newPhoto);
-    } catch (error) {
-      console.error('Error creating gallery photo:', error);
-      res.status(500).json({ error: error.message || 'Internal server error' });
-    }
-  });
-});
-
-// Admin: Update gallery photo
-app.put('/api/admin/kailash-gallery/:id', authenticateToken, (req, res) => {
-  upload.single('image')(req, res, async (err) => {
-    if (err) {
-      console.error('Multer error:', err);
-      return res.status(400).json({ error: err.message });
-    }
-    
-    try {
-      console.log('Updating gallery photo with ID:', req.params.id);
-      
-      const { id } = req.params;
-      const updateData = req.file ? JSON.parse(req.body.photoData || '{}') : req.body;
-      const file = req.file;
-      const photoIndex = kailashGallery.findIndex(p => p.id === parseInt(id));
-      
-      if (photoIndex === -1) {
-        return res.status(404).json({ error: 'Gallery photo not found' });
-      }
-      
-      const existingPhoto = kailashGallery[photoIndex];
-      
-      // If a new file was uploaded, compress and handle it
-      if (file) {
-        console.log('Processing uploaded file for gallery update:', file.filename);
-        
-        // Delete old file if it exists and is a local upload
-        if (existingPhoto.image && existingPhoto.image.startsWith('/uploads/')) {
-          const oldImagePath = path.join(__dirname, existingPhoto.image);
-          if (fs.existsSync(oldImagePath)) {
-            console.log('Deleting old gallery image:', oldImagePath);
-            fs.unlinkSync(oldImagePath);
-          }
-        }
-        
-        // Create kailash-gallery specific directory
-        const galleryDir = path.join(uploadsDir, 'kailash-gallery');
-        if (!fs.existsSync(galleryDir)) {
-          fs.mkdirSync(galleryDir, { recursive: true });
-        }
-        
-        // Compress image
-        const compressedFileName = `kailash_${Date.now()}_${file.filename}`;
-        const compressedPath = path.join(galleryDir, compressedFileName);
-        
-        console.log('Compressing gallery image for update...');
-        const processedFilePath = await compressImage(file.path, compressedPath, 85);
-        
-        const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
-        const fileUrl = `/uploads/${relativePath}`;
-        
-        updateData.image = fileUrl;
-        console.log('Gallery image compressed and updated:', fileUrl);
-      }
-      
-      kailashGallery[photoIndex] = {
-        ...existingPhoto,
-        ...updateData,
-        uploadedAt: file ? new Date().toISOString() : existingPhoto.uploadedAt
-      };
-      
-      // Update metadata
-      kailashGalleryMetadata.lastUpdated = new Date().toISOString();
-      
-      const saved = saveData('kailash-gallery.json', {
-        gallery: kailashGallery,
-        metadata: kailashGalleryMetadata
-      });
-      
-      if (!saved) {
-        throw new Error('Failed to save gallery data to file');
-      }
-      
-      console.log('Gallery photo updated successfully');
-      res.json(kailashGallery[photoIndex]);
-    } catch (error) {
-      console.error('Error updating gallery photo:', error);
-      res.status(500).json({ error: error.message || 'Internal server error' });
-    }
-  });
-});
-
-// Admin: Delete gallery photo
-app.delete('/api/admin/kailash-gallery/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const photoIndex = kailashGallery.findIndex(p => p.id === parseInt(id));
-    
-    if (photoIndex === -1) {
-      return res.status(404).json({ error: 'Gallery photo not found' });
-    }
-    
-    const photo = kailashGallery[photoIndex];
-    
-    // Delete associated file if it's a local upload
-    if (photo.image && photo.image.startsWith('/uploads/')) {
-      const imagePath = path.join(__dirname, photo.image);
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-        console.log('Deleted gallery image file:', imagePath);
-      }
-    }
-    
-    kailashGallery.splice(photoIndex, 1);
-    
-    // Update metadata
-    kailashGalleryMetadata.totalPhotos = kailashGallery.length;
-    kailashGalleryMetadata.lastUpdated = new Date().toISOString();
-    
-    const saved = saveData('kailash-gallery.json', {
-      gallery: kailashGallery,
-      metadata: kailashGalleryMetadata
-    });
-    
-    if (!saved) {
-      throw new Error('Failed to save gallery data to file');
-    }
-    
-    res.json({ message: 'Gallery photo deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting gallery photo:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Admin: Update gallery metadata
-app.put('/api/admin/kailash-gallery/metadata', authenticateToken, async (req, res) => {
-  try {
-    console.log('Updating Kailash gallery metadata...');
-    console.log('Request body:', req.body);
-    
-    const { pageTitle, pageSubtitle } = req.body;
-    
-    if (pageTitle) kailashGalleryMetadata.pageTitle = pageTitle;
-    if (pageSubtitle) kailashGalleryMetadata.pageSubtitle = pageSubtitle;
-    kailashGalleryMetadata.lastUpdated = new Date().toISOString();
-    
-    const saved = saveData('kailash-gallery.json', {
-      gallery: kailashGallery,
-      metadata: kailashGalleryMetadata
-    });
-    
-    if (!saved) {
-      throw new Error('Failed to save gallery metadata to file');
-    }
-    
-    console.log('Gallery metadata updated successfully');
-    res.json(kailashGalleryMetadata);
-  } catch (error) {
-    console.error('Error updating gallery metadata:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-// Admin: Update photo order
-app.patch('/api/admin/kailash-gallery/reorder', authenticateToken, async (req, res) => {
-  try {
-    console.log('Reordering gallery photos...');
-    console.log('Request body:', req.body);
-    
-    const { photoIds } = req.body; // Array of photo IDs in new order
-    
-    if (!Array.isArray(photoIds)) {
-      return res.status(400).json({ error: 'Photo IDs must be an array' });
-    }
-    
-    // Update order for each photo
-    photoIds.forEach((photoId, index) => {
-      const photoIndex = kailashGallery.findIndex(p => p.id === photoId);
-      if (photoIndex !== -1) {
-        kailashGallery[photoIndex].order = index + 1;
-      }
-    });
-    
-    // Update metadata
-    kailashGalleryMetadata.lastUpdated = new Date().toISOString();
-    
-    const saved = saveData('kailash-gallery.json', {
-      gallery: kailashGallery,
-      metadata: kailashGalleryMetadata
-    });
-    
-    if (!saved) {
-      throw new Error('Failed to save gallery data to file');
-    }
-    
-    console.log('Gallery photos reordered successfully');
-    res.json({
-      success: true,
-      message: 'Gallery photos reordered successfully',
-      gallery: kailashGallery.sort((a, b) => a.order - b.order)
-    });
-  } catch (error) {
-    console.error('Error reordering gallery photos:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
 // ==================== LOGOS API ====================
 
 // Get logos (public endpoint)
@@ -2778,7 +1864,7 @@ app.post('/api/admin/logos/upload', authenticateToken, (req, res) => {
       console.log('Request body:', req.body);
       console.log('Uploaded file:', req.file);
       
-      const { type } = req.body; // type: 'header' or 'footer'
+      const { type } = req.body;
       const file = req.file;
       
       if (!file) {
@@ -2817,7 +1903,7 @@ app.post('/api/admin/logos/upload', authenticateToken, (req, res) => {
       
       // Compress and save image
       console.log('Compressing logo image...');
-      const processedFilePath = await compressImage(file.path, finalPath, 90); // Higher quality for logos
+      const processedFilePath = await compressImage(file.path, finalPath, 90);
       
       const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
       const fileUrl = `/uploads/${relativePath}`;
@@ -2925,28 +2011,6 @@ app.delete('/api/admin/logos/:type', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error resetting logo:', error);
     res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Reload tour data endpoint
-app.post('/api/admin/reload-tours', authenticateToken, (req, res) => {
-  try {
-    console.log('Reloading tour data from individual files...');
-    
-    // Reload tour details from individual files
-    tourDetails = loadTourDetails();
-    
-    console.log(`Reloaded ${tourDetails.length} tours from individual files`);
-    
-    res.json({
-      success: true,
-      message: 'Tour data reloaded successfully',
-      toursCount: tourDetails.length,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error reloading tour data:', error);
-    res.status(500).json({ error: 'Failed to reload tour data' });
   }
 });
 

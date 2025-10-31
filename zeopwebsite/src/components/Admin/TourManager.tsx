@@ -19,6 +19,18 @@ import { useDeleteModal } from '../../hooks/useDeleteModal';
 import { formatDuration } from '../../utils/formatDuration';
 import { toursApi, type Tour } from '../../services/api';
 
+// API base URL helper function
+const getApiBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}/api`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '/api';
+};
+
 const TourManager: React.FC = () => {
   const navigate = useNavigate();
   const [tours, setTours] = useState<Tour[]>([]);
@@ -94,7 +106,7 @@ const TourManager: React.FC = () => {
 
   const deleteTour = async (tour: Tour) => {
     const token = localStorage.getItem('adminToken');
-    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/tours/${tour.id}`, {
+    const response = await fetch(`${getApiBaseUrl()}/admin/tours/${tour.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -131,7 +143,7 @@ const TourManager: React.FC = () => {
 
   const fetchDestinations = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/destinations`);
+      const response = await fetch(`${getApiBaseUrl()}/destinations`);
       if (response.ok) {
         const data = await response.json();
         const uniqueLocations = [...new Set(data.map((dest: any) => dest.name || dest.title).filter(Boolean))] as string[];
@@ -160,7 +172,7 @@ const TourManager: React.FC = () => {
         ...(destinationFilter && { destination: destinationFilter })
       });
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/tours?${params}`, {
+      const response = await fetch(`${getApiBaseUrl()}/admin/tours?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
