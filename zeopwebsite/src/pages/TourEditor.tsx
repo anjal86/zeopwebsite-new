@@ -41,6 +41,18 @@ const getApiBaseUrl = (): string => {
   return '/api';
 };
 
+// Image base URL helper function
+const getImageBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '';
+};
+
 interface ItineraryDay {
   day: number;
   title: string;
@@ -319,6 +331,10 @@ const TourEditor: React.FC = () => {
         // Ensure relationship fields are properly initialized
         const formattedDetails = {
           ...details,
+          // Parse duration to extract numeric value (e.g., "13 days" -> "13")
+          duration: typeof details.duration === 'string' 
+            ? details.duration.replace(/[^\d]/g, '') || details.duration
+            : details.duration,
           primary_destination_id: details.primary_destination_id || details.destination_id || details.destination_ids?.[0] || autoDetectedDestinations.primary,
           secondary_destination_ids: details.secondary_destination_ids || autoDetectedDestinations.secondary,
           activity_ids: details.activity_ids || autoDetectedActivities.ids,
@@ -397,6 +413,81 @@ const TourEditor: React.FC = () => {
     });
   };
 
+  // Function to clear all gallery images
+  const clearAllGalleryImages = async () => {
+    if (!confirm('Remove all gallery images?')) return;
+
+    try {
+      // Delete all images from server if editing existing tour
+      if (isEditing && tourId && tourId !== 'new' && formData.gallery) {
+        const token = localStorage.getItem('adminToken');
+        
+        for (const imageUrl of formData.gallery) {
+          const filename = imageUrl.split('/').pop();
+          if (filename && !imageUrl.startsWith('http')) {
+            try {
+              await fetch(`${getApiBaseUrl()}/admin/tours/${tourId}/gallery/${filename}`, {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+            } catch (error) {
+              console.error('Error deleting image:', filename, error);
+            }
+          }
+        }
+      }
+
+      // Clear from local state
+      setFormData(prev => ({ ...prev, gallery: [] }));
+      
+    } catch (error) {
+      console.error('Error clearing gallery images:', error);
+      // Still clear from UI even if server deletion fails
+      setFormData(prev => ({ ...prev, gallery: [] }));
+    }
+  };
+  const removeGalleryImage = async (index: number) => {
+    const imageUrl = formData.gallery?.[index];
+    if (!imageUrl) return;
+
+    try {
+      // Extract filename from URL
+      const filename = imageUrl.split('/').pop();
+      if (!filename || imageUrl.startsWith('http')) {
+        // For external URLs or if we can't extract filename, just remove from array
+        removeArrayItem('gallery', index);
+        return;
+      }
+
+      // Only call API for uploaded files if we're editing an existing tour
+      if (isEditing && tourId && tourId !== 'new') {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${getApiBaseUrl()}/admin/tours/${tourId}/gallery/${filename}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete image from server');
+        }
+
+        console.log('Image deleted from server:', filename);
+      }
+
+      // Remove from local state
+      removeArrayItem('gallery', index);
+      
+    } catch (error) {
+      console.error('Error deleting gallery image:', error);
+      // Still remove from UI even if server deletion fails
+      removeArrayItem('gallery', index);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -456,8 +547,10 @@ const TourEditor: React.FC = () => {
       // Prepare tour data with relationships
       const tourData = {
         ...formData,
-        // Ensure duration is a string for API compatibility
-        duration: String(formData.duration),
+        // Format duration properly - if it's just a number, add "days"
+        duration: formData.duration && !String(formData.duration).includes('day') 
+          ? `${formData.duration} days`
+          : String(formData.duration),
         // Ensure relationships are properly formatted
         primary_destination_id: formData.primary_destination_id || undefined,
         secondary_destination_ids: formData.secondary_destination_ids || [],
@@ -1236,7 +1329,7 @@ const TourEditor: React.FC = () => {
                           {formData.image ? (
                             <div className="relative">
                               <img
-                                src={formData.image.startsWith('http') ? formData.image : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${formData.image}`}
+                                src={formData.image.startsWith('http') ? formData.image : `${getImageBaseUrl()}${formData.image}`}
                                 alt="Main tour image preview"
                                 className="w-full h-48 object-cover rounded-xl border border-gray-200 shadow-sm"
                                 onError={(e) => {
@@ -1898,11 +1991,7 @@ const TourEditor: React.FC = () => {
                           </h3>
                           <button
                             type="button"
-                            onClick={() => {
-                              if (confirm('Remove all gallery images?')) {
-                                setFormData(prev => ({ ...prev, gallery: [] }));
-                              }
-                            }}
+                            onClick={clearAllGalleryImages}
                             className="text-red-600 hover:text-red-700 text-sm flex items-center gap-2"
                             disabled={(formData.gallery || []).length === 0}
                           >
@@ -1915,7 +2004,7 @@ const TourEditor: React.FC = () => {
                           {(formData.gallery || []).map((imageUrl, index) => (
                             <div key={index} className="relative group">
                               <img
-                                src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${imageUrl}`}
+                                src={imageUrl.startsWith('http') ? imageUrl : `${getImageBaseUrl()}${imageUrl}`}
                                 alt={`Gallery image ${index + 1}`}
                                 className="w-full h-32 object-cover rounded-lg border border-gray-200"
                                 onError={(e) => {
@@ -1925,7 +2014,7 @@ const TourEditor: React.FC = () => {
                               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button
                                   type="button"
-                                  onClick={() => removeArrayItem('gallery', index)}
+                                  onClick={() => removeGalleryImage(index)}
                                   className="bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
                                   title="Remove image"
                                 >

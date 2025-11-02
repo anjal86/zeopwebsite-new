@@ -3,7 +3,6 @@
   "slug": "kailash-mansarovar-yatra-12nights-13days",
   "title": "Kailash Mansarovar Yatra 12 Nights 13 Days",
   "category": "Spiritual",
-  "description": "Embark on the sacred journey to Mount Kailash and Lake Mansarovar, one of the most revered pilgrimage sites in Hinduism, Buddhism, Jainism, and Bon religion. This 13-day overland journey from Kathmandu offers a transformative spiritual experience through the mystical landscapes of Tibet.",
   "location": "Tibet, China",
   "price": 2500,
   "duration": "13 days",
@@ -14,12 +13,25 @@
   "best_time": "May to September",
   "featured": true,
   "listed": true,
-  "image": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
+  "image": "/uploads/destinations/tours/tours_1762066264929.webp",
+  "primary_destination_id": 9,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    5,
+    6
+  ],
+  "related_destinations": [
+    "Tibet"
+  ],
+  "related_activities": [
+    "Cultural Tours",
+    "Pilgrimage"
+  ],
+  "created_at": "2025-09-19T04:13:16.254Z",
+  "updated_at": "2025-11-02T06:51:06.454Z",
+  "description": "Embark on the sacred journey to Mount Kailash and Lake Mansarovar, one of the most revered pilgrimage sites in Hinduism, Buddhism, Jainism, and Bon religion. This 13-day overland journey from Kathmandu offers a transformative spiritual experience through the mystical landscapes of Tibet.",
   "gallery": [
-    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759844-d150baec93c5?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=2070&auto=format&fit=crop"
+    "/uploads/destinations/tours/tours_1762064318903.webp"
   ],
   "highlights": [
     "Sacred Mount Kailash Parikrama (circumambulation)",
@@ -232,8 +244,6 @@
     "group_discounts": "Available for 6+ people",
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
-  "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-10-10T12:17:34.861Z",
   "important_notes": {
     "health_requirements": "Medical examination recommended before travel. Participants should be examined by a doctor to assess health condition and ability to cope with high altitude travel, extreme cold, dust, and trekking to 19,500ft during parikrama.",
     "altitude_sickness": "Travelers are likely to experience altitude sickness symptoms (headache, loss of appetite, nausea, exhaustion, sleeplessness, breathlessness) until body adjusts. Mandatory 2 nights stay at Mansarovar (4550m) for acclimatization. Diamox tablets recommended. Gamow bag provided for altitude sickness prevention.",
@@ -251,18 +261,5 @@
       "Wet tissues and personal hygiene items"
     ],
     "risks_liability": "All tours in Tibet are conducted under Tibet Tourism Bureau (TTB) rules and regulations. Company shall not be responsible for changes due to unavoidable circumstances such as landslide, road blockage, flood, snow, political unrest, flight cancellation, delays, sickness or accidents. Extra costs shall be borne by clients."
-  },
-  "primary_destination_id": 9,
-  "secondary_destination_ids": [],
-  "activity_ids": [
-    5,
-    6
-  ],
-  "related_destinations": [
-    "Tibet"
-  ],
-  "related_activities": [
-    "Cultural Tours",
-    "Pilgrimage"
-  ]
+  }
 }

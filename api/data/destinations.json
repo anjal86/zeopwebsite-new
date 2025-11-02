@@ -138,7 +138,8 @@
       33,
       3,
       106,
-      107
+      107,
+      304
     ],
     "relatedActivities": [
       4,
@@ -173,7 +174,7 @@
       6,
       5
     ],
-    "listed": false
+    "listed": true
   },
   {
     "id": 10,
@@ -274,7 +275,7 @@
       7,
       3
     ],
-    "listed": true
+    "listed": false
   },
   {
     "id": 14,
@@ -299,7 +300,7 @@
       5,
       4
     ],
-    "listed": true
+    "listed": false
   },
   {
     "id": 16,
@@ -352,7 +353,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 19,
@@ -369,7 +370,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 20,
@@ -386,7 +387,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 21,
@@ -403,7 +404,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 22,
@@ -420,7 +421,7 @@
     "difficulty": "Easy to Moderate",
     "relatedTours": [],
     "relatedActivities": [],
-    "listed": true
+    "listed": false
   },
   {
     "id": 23,
@@ -570,5 +571,28 @@
     "slug": "dubai",
     "featured": true,
     "listed": true
+  },
+  {
+    "id": 28,
+    "name": "Annapurna ",
+    "slug": "annapurna-",
+    "title": "Annapurna ",
+    "country": "Nepal",
+    "region": "",
+    "image": "/uploads/destinations/annapurna-/annapurna-_1762006248934.jpeg",
+    "featured": false,
+    "listed": true,
+    "tourCount": 0,
+    "href": "/destinations/annapurna-",
+    "type": "nepal",
+    "description": "Annapurna Region",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [
+      312
+    ],
+    "relatedActivities": []
   }
 ]

@@ -35,6 +35,18 @@ const getApiBaseUrl = (): string => {
   return '/api';
 };
 
+// Image base URL helper function
+const getImageBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '';
+};
+
 interface ContentDestination {
   id?: number;
   slug?: string;
@@ -539,7 +551,7 @@ const DestinationManager: React.FC = () => {
                             destination.image
                               ? (destination.image.startsWith('http')
                                   ? destination.image
-                                  : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${destination.image}`)
+                                  : `${getImageBaseUrl()}${destination.image}`)
                               : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                           }
                           alt={(destination as any).title || (destination as any).name || 'Destination'}
@@ -638,7 +650,7 @@ const DestinationManager: React.FC = () => {
                     destination.image
                       ? (destination.image.startsWith('http')
                           ? destination.image
-                          : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${destination.image}`)
+                          : `${getImageBaseUrl()}${destination.image}`)
                       : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                   }
                   alt={(destination as any).title || (destination as any).name || 'Destination'}

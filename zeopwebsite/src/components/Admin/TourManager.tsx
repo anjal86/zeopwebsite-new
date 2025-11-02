@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Plus,
@@ -11,7 +11,10 @@ import {
   Eye,
   EyeOff,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X,
+  Filter,
+  Loader2
 } from 'lucide-react';
 import DeleteModal from '../UI/DeleteModal';
 import Toggle from '../UI/Toggle';
@@ -31,10 +34,23 @@ const getApiBaseUrl = (): string => {
   return '/api';
 };
 
+// Image base URL helper function
+const getImageBaseUrl = (): string => {
+  // Check if we're in production (deployed)
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  
+  // Development environment - use relative URL to leverage Vite proxy
+  return '';
+};
+
 const TourManager: React.FC = () => {
   const navigate = useNavigate();
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
@@ -50,8 +66,57 @@ const TourManager: React.FC = () => {
   // Add status filter (client-side)
   const [statusFilter, setStatusFilter] = useState('');
 
+  // Search suggestions state
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+
   // Sorting state and helpers
   const [sortBy, setSortBy] = useState<{ field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed'; direction: 'asc' | 'desc' }>({ field: 'title', direction: 'asc' });
+
+  // Enhanced debounced search with loading states - now using client-side filtering
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId: number;
+      return () => {
+        clearTimeout(timeoutId);
+        setSearchLoading(true);
+        
+        timeoutId = window.setTimeout(() => {
+          // Just set loading to false after debounce - filtering happens in useMemo
+          setSearchLoading(false);
+        }, 300); // Reduced to 300ms for more responsive feel
+      };
+    })(),
+    []
+  );
+
+  // Generate search suggestions based on existing tours
+  const generateSearchSuggestions = useMemo(() => {
+    if (!searchTerm || searchTerm.length < 2) return [];
+    
+    const suggestions = new Set<string>();
+    const searchLower = searchTerm.toLowerCase();
+    
+    tours.forEach(tour => {
+      // Add matching tour titles
+      if (tour.title?.toLowerCase().includes(searchLower)) {
+        suggestions.add(tour.title);
+      }
+      
+      // Add matching categories
+      if (tour.category?.toLowerCase().includes(searchLower)) {
+        suggestions.add(tour.category);
+      }
+      
+      // Add matching destinations
+      const destination = destinationsMap.get(tour.primary_destination_id || 0) || tour.location;
+      if (destination?.toLowerCase().includes(searchLower)) {
+        suggestions.add(destination);
+      }
+    });
+    
+    return Array.from(suggestions).slice(0, 5); // Limit to 5 suggestions
+  }, [searchTerm, tours, destinationsMap]);
 
   const toggleSort = (field: 'title' | 'category' | 'destination' | 'duration' | 'price' | 'listed') => {
     setSortBy(prev => prev.field === field ? { field, direction: prev.direction === 'asc' ? 'desc' : 'asc' } : { field, direction: 'asc' });
@@ -96,13 +161,30 @@ const TourManager: React.FC = () => {
 
   const filteredTours = React.useMemo(() => {
     let list = sortedTours;
+    
+    // Apply search filter
+    if (searchTerm && searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase().trim();
+      list = list.filter(tour => {
+        return (
+          tour.title?.toLowerCase().includes(searchLower) ||
+          tour.category?.toLowerCase().includes(searchLower) ||
+          tour.location?.toLowerCase().includes(searchLower) ||
+          tour.description?.toLowerCase().includes(searchLower) ||
+          (destinationsMap.get(tour.primary_destination_id || 0) || '')?.toLowerCase().includes(searchLower)
+        );
+      });
+    }
+    
+    // Apply status filter
     if (statusFilter === 'listed') {
       list = list.filter(t => t.listed ?? true);
     } else if (statusFilter === 'unlisted') {
       list = list.filter(t => !(t.listed ?? true));
     }
+    
     return list;
-  }, [sortedTours, statusFilter]);
+  }, [sortedTours, statusFilter, searchTerm, destinationsMap]);
 
   const deleteTour = async (tour: Tour) => {
     const token = localStorage.getItem('adminToken');
@@ -127,19 +209,15 @@ const TourManager: React.FC = () => {
     getItemId: (tour) => tour.id
   });
 
-  // Debounced search effect
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchTours();
-    }, 500); // 500ms delay
-
-    return () => clearTimeout(timeoutId);
-  }, [currentPage, searchTerm, destinationFilter]);
-
   // Fetch destinations only once
   useEffect(() => {
     fetchDestinations();
   }, []);
+
+  // Initial fetch of tours
+  useEffect(() => {
+    fetchTours();
+  }, [currentPage, destinationFilter]); // Only trigger on page and destination filter changes, not searchTerm
 
   const fetchDestinations = async () => {
     try {
@@ -168,7 +246,7 @@ const TourManager: React.FC = () => {
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: itemsPerPage.toString(),
-        ...(searchTerm && { search: searchTerm }),
+        // Remove search term from API call - we'll filter client-side
         ...(destinationFilter && { destination: destinationFilter })
       });
 
@@ -183,13 +261,18 @@ const TourManager: React.FC = () => {
         throw new Error('Failed to fetch tours');
       }
 
-      const tours = await response.json();
+      const data = await response.json();
       
-      // Extract pagination info from headers
-      const totalCount = parseInt(response.headers.get('X-Total-Count') || tours.length.toString());
-      
-      setTours(tours);
-      setTotalItems(totalCount);
+      // Handle the new API response structure
+      if (data.tours && data.pagination) {
+        setTours(data.tours);
+        setTotalItems(data.pagination.totalItems);
+      } else {
+        // Fallback for old API structure (if any)
+        const toursArray = Array.isArray(data) ? data : (data.tours || []);
+        setTours(toursArray);
+        setTotalItems(toursArray.length);
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to fetch tours');
     } finally {
@@ -282,10 +365,37 @@ const TourManager: React.FC = () => {
     }
   };
 
-  // Reset to first page when filters change
+  // Enhanced search change handler
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
+    setShowSuggestions(value.length >= 2);
+    
+    if (value.length >= 2) {
+      setSearchSuggestions(generateSearchSuggestions);
+    } else {
+      setSearchSuggestions([]);
+    }
+    
+    debouncedSearch();
+  };
+
+  // Handle suggestion selection
+  const handleSuggestionSelect = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setShowSuggestions(false);
+    setSearchSuggestions([]);
+    setCurrentPage(1);
+    debouncedSearch();
+  };
+
+  // Clear search
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setShowSuggestions(false);
+    setSearchSuggestions([]);
+    setCurrentPage(1);
+    debouncedSearch();
   };
 
   const handleDestinationFilterChange = (value: string) => {
@@ -323,61 +433,183 @@ const TourManager: React.FC = () => {
         </button>
       </div>
 
-      {/* Search Section */}
+      {/* Enhanced Search Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
+        {/* Search Results Summary */}
+        {(searchTerm || destinationFilter || statusFilter) && (
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Filter className="w-4 h-4" />
+              <span>
+                Showing {filteredTours.length} of {totalItems} tours
+                {searchTerm && ` for "${searchTerm}"`}
+                {destinationFilter && ` in ${destinationFilter}`}
+                {statusFilter && ` (${statusFilter})`}
+              </span>
+            </div>
+            <button
+              onClick={handleClearFilters}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Search */}
-          <div className="sm:col-span-2 lg:col-span-2">
+          {/* Enhanced Search Input */}
+          <div className="sm:col-span-2 lg:col-span-2 relative">
             <div className="relative">
               <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search tours..."
+                placeholder="Search tours, destinations, categories..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                onFocus={() => setShowSuggestions(searchTerm.length >= 2)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all duration-200"
               />
+              
+              {/* Loading indicator */}
+              {searchLoading && (
+                <Loader2 className="w-4 h-4 absolute right-8 top-1/2 transform -translate-y-1/2 text-blue-500 animate-spin" />
+              )}
+              
+              {/* Clear search button */}
+              {searchTerm && !searchLoading && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Search Suggestions Dropdown */}
+            {showSuggestions && searchSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                <div className="p-2">
+                  <div className="text-xs text-gray-500 mb-2 px-2">Suggestions</div>
+                  {searchSuggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionSelect(suggestion)}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Search className="w-3 h-3 text-gray-400" />
+                        <span>{suggestion}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Enhanced Destinations Dropdown */}
+          <div>
+            <div className="relative">
+              <select
+                value={destinationFilter}
+                onChange={(e) => handleDestinationFilterChange(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm appearance-none bg-white"
+              >
+                <option value="">All Destinations</option>
+                {destinations.map(destination => (
+                  <option key={destination} value={destination}>{destination}</option>
+                ))}
+              </select>
+              <ChevronLeft className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 rotate-90 text-gray-400 pointer-events-none" />
             </div>
           </div>
 
-          {/* Destinations Dropdown */}
+          {/* Enhanced Status Dropdown */}
           <div>
-            <select
-              value={destinationFilter}
-              onChange={(e) => handleDestinationFilterChange(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            >
-              <option value="">All Destinations</option>
-              {destinations.map(destination => (
-                <option key={destination} value={destination}>{destination}</option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => handleStatusFilterChange(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm appearance-none bg-white"
+              >
+                <option value="">All Status</option>
+                <option value="listed">Listed</option>
+                <option value="unlisted">Unlisted</option>
+              </select>
+              <ChevronLeft className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 rotate-90 text-gray-400 pointer-events-none" />
+            </div>
           </div>
 
-          {/* Status Dropdown */}
-          <div>
-            <select
-              value={statusFilter}
-              onChange={(e) => handleStatusFilterChange(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            >
-              <option value="">All Status</option>
-              <option value="listed">Listed</option>
-              <option value="unlisted">Unlisted</option>
-            </select>
-          </div>
-
-          {/* Clear Filters */}
+          {/* Enhanced Clear Filters Button */}
           <div>
             <button
               onClick={handleClearFilters}
-              className="w-full px-4 py-3 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+              disabled={!searchTerm && !destinationFilter && !statusFilter}
+              className={`w-full px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
+                searchTerm || destinationFilter || statusFilter
+                  ? 'text-white bg-red-500 hover:bg-red-600 shadow-sm'
+                  : 'text-gray-400 bg-gray-100 cursor-not-allowed'
+              }`}
             >
-              Clear Filters
+              <div className="flex items-center justify-center gap-2">
+                <X className="w-4 h-4" />
+                Clear Filters
+              </div>
             </button>
           </div>
         </div>
+
+        {/* Quick Filter Tags */}
+        {(searchTerm || destinationFilter || statusFilter) && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {searchTerm && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                Search: "{searchTerm}"
+                <button
+                  onClick={() => handleSearchChange('')}
+                  className="hover:bg-blue-200 rounded-full p-0.5"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {destinationFilter && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                Destination: {destinationFilter}
+                <button
+                  onClick={() => handleDestinationFilterChange('')}
+                  className="hover:bg-green-200 rounded-full p-0.5"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {statusFilter && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                Status: {statusFilter}
+                <button
+                  onClick={() => handleStatusFilterChange('')}
+                  className="hover:bg-purple-200 rounded-full p-0.5"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Loading State for Search */}
+      {searchLoading && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <div className="flex items-center justify-center">
+            <Loader2 className="w-6 h-6 animate-spin text-blue-500 mr-3" />
+            <span className="text-gray-600">Searching tours...</span>
+          </div>
+        </div>
+      )}
 
       {/* Tours Table - Desktop */}
       <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -454,7 +686,7 @@ const TourManager: React.FC = () => {
                             tour.image
                               ? (tour.image.startsWith('http')
                                   ? tour.image
-                                  : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${tour.image}`)
+                                  : `${getImageBaseUrl()}${tour.image}`)
                               : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                           }
                           alt={tour.title}
@@ -556,7 +788,7 @@ const TourManager: React.FC = () => {
                     tour.image
                       ? (tour.image.startsWith('http')
                           ? tour.image
-                          : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${tour.image}`)
+                          : `${getImageBaseUrl()}${tour.image}`)
                       : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                   }
                   alt={tour.title}

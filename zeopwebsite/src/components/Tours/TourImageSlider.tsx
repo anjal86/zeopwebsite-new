@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Helper function to get the correct image base URL
+const getImageBaseUrl = () => {
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    // Use the same domain as the frontend for production
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  
+  // Development environment - use relative path
+  return '';
+};
+
 interface TourImageSliderProps {
   images: string[];
   title: string;
@@ -37,7 +48,7 @@ const TourImageSlider: React.FC<TourImageSliderProps> = ({ images, title }) => {
         <img
           src={images[currentImageIndex]?.startsWith('http')
             ? images[currentImageIndex]
-            : `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}${images[currentImageIndex]}`}
+            : `${getImageBaseUrl()}${images[currentImageIndex]}`}
           alt={`${title} - View ${currentImageIndex + 1}`}
           className="max-w-full max-h-full object-contain"
           onError={(e) => {

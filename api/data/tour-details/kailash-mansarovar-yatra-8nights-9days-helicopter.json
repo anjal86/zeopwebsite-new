@@ -3,7 +3,6 @@
   "slug": "kailash-mansarovar-yatra-8nights-9days-helicopter",
   "title": "Kailash Mansarovar Yatra 8 Nights 9 Days - Helicopter Route",
   "category": "Spiritual",
-  "description": "Experience the sacred Kailash Mansarovar Yatra via helicopter route from Lucknow. This premium 9-day journey combines helicopter flights with the spiritual pilgrimage, offering comfort and convenience while maintaining the sacred essence of the yatra. The helicopter route significantly reduces travel time while providing breathtaking aerial views of the Himalayas.",
   "location": "Tibet, China",
   "price": 4500,
   "duration": "9 days",
@@ -14,13 +13,24 @@
   "best_time": "May to September",
   "featured": true,
   "listed": true,
-  "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+  "image": "/uploads/destinations/tours/tours_1762064336559.jpg",
+  "primary_destination_id": 9,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    5,
+    6
+  ],
+  "related_destinations": [
+    "Tibet"
+  ],
+  "related_activities": [
+    "Cultural Tours",
+    "Pilgrimage"
+  ],
+  "updated_at": "2025-11-02T06:19:03.663Z",
+  "description": "Experience the sacred Kailash Mansarovar Yatra via helicopter route from Lucknow. This premium 9-day journey combines helicopter flights with the spiritual pilgrimage, offering comfort and convenience while maintaining the sacred essence of the yatra. The helicopter route significantly reduces travel time while providing breathtaking aerial views of the Himalayas.",
   "gallery": [
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2071&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759844-d150baec93c5?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2074&auto=format&fit=crop"
+    "/uploads/destinations/tours/tours_1762062229885.jpg"
   ],
   "highlights": [
     "Helicopter flights from Simikot to Hilsa for comfort and time-saving",
@@ -171,19 +181,5 @@
     "helicopter_details": "Helicopter flights are weather dependent. 15kg baggage limit per person. Flights may be delayed or cancelled due to weather conditions. Alternative arrangements will be made if necessary.",
     "risks_and_liability": "Tours conducted under Tibet Tourism Bureau regulations. Company not responsible for changes due to natural disasters, political unrest, flight cancellations, or medical emergencies. Travel insurance mandatory."
   },
-  "primary_destination_id": 9,
-  "secondary_destination_ids": [],
-  "activity_ids": [
-    5,
-    6
-  ],
-  "related_destinations": [
-    "Tibet"
-  ],
-  "related_activities": [
-    "Cultural Tours",
-    "Pilgrimage"
-  ],
-  "what_to_bring": [],
-  "updated_at": "2025-10-10T12:17:11.011Z"
+  "what_to_bring": []
 }

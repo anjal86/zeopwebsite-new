@@ -67,9 +67,10 @@ const uploadsDir = path.join(__dirname, 'uploads');
 const slidersDir = path.join(uploadsDir, 'sliders');
 const imagesDir = path.join(slidersDir, 'images');
 const videosDir = path.join(slidersDir, 'videos');
+const kailashGalleryDir = path.join(uploadsDir, 'kailash-gallery');
 
 // Create all necessary directories
-[uploadsDir, slidersDir, imagesDir, videosDir].forEach(dir => {
+[uploadsDir, slidersDir, imagesDir, videosDir, kailashGalleryDir].forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -324,6 +325,7 @@ let contactData = loadData('contact.json');
 let testimonialsData = loadData('testimonials.json');
 let logoData = loadData('logos.json');
 let enquiriesData = loadData('enquiries.json');
+let kailashGalleryData = loadData('kailash-gallery.json');
 let tourDetails = loadTourDetails();
 
 // Extract arrays from the loaded data
@@ -339,6 +341,15 @@ let logos = logoData.logos || logoData || {
   header: '/src/assets/zeo-logo.png',
   footer: '/src/assets/zeo-logo-white.png',
   lastUpdated: new Date().toISOString()
+};
+let kailashGallery = kailashGalleryData || {
+  gallery: [],
+  metadata: {
+    totalPhotos: 0,
+    lastUpdated: new Date().toISOString(),
+    pageTitle: 'Kailash Mansarovar',
+    pageSubtitle: 'Sacred Journey Gallery'
+  }
 };
 
 // Helper functions
@@ -725,9 +736,9 @@ app.get('/api/tours', async (req, res) => {
       allTours.push(basicTour);
     }
   });
-  
-  let filteredTours = [...allTours];
 
+  // Filter out unlisted tours (only show tours where listed is true or undefined)
+  let filteredTours = allTours.filter(tour => tour.listed !== false);
 
   // Filter by category
   if (category) {
@@ -857,9 +868,21 @@ app.post('/api/admin/tours', authenticateToken, async (req, res) => {
       );
     }
     
-    // Save tour data
-    const saved = saveData('tours.json', { tours: tourDetails });
-    if (!saved) {
+    // Save tour data to both the detailed file and the main tours array
+    const updatedTour = tourDetails[tourIndex];
+    const detailFilename = path.join('tour-details', `${updatedTour.slug}.json`);
+    const savedDetail = saveData(detailFilename, updatedTour);
+
+    // Also update the main tours.json file
+    const mainTourIndex = tours.findIndex(t => t.id === updatedTour.id);
+    if (mainTourIndex !== -1) {
+      tours[mainTourIndex] = { ...tours[mainTourIndex], ...updatedTour }; // Update existing
+    } else {
+      tours.push(updatedTour); // Or add if it's a new tour somehow
+    }
+    const savedMain = saveData('tours.json', { tours });
+
+    if (!savedDetail || !savedMain) {
       throw new Error('Failed to save tour data to file');
     }
     
@@ -879,24 +902,34 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
     
     const { id } = req.params;
     const tourData = req.body;
-    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(id));
+    
+    // Find tour in both arrays
+    const tourIndex = tours.findIndex(t => t.id === parseInt(id));
+    const tourDetailIndex = tourDetails.findIndex(t => t.id === parseInt(id));
     
     if (tourIndex === -1) {
       return res.status(404).json({ error: 'Tour not found' });
     }
     
-    const existingTour = tourDetails[tourIndex];
+    const existingTour = tours[tourIndex];
     const oldPrimaryDestId = existingTour.primary_destination_id || existingTour.destination_id || null;
     const oldSecondaryDestIds = existingTour.secondary_destination_ids || [];
     const newPrimaryDestId = tourData.primary_destination_id || null;
     const newSecondaryDestIds = tourData.secondary_destination_ids || [];
     
-    // Update tour data
-    tourDetails[tourIndex] = {
+    // Update tour data in main tours array
+    const updatedTour = {
       ...existingTour,
       ...tourData,
       updated_at: new Date().toISOString()
     };
+    
+    tours[tourIndex] = updatedTour;
+    
+    // Update tour details array if it exists
+    if (tourDetailIndex !== -1) {
+      tourDetails[tourDetailIndex] = updatedTour;
+    }
     
     // Update destination relationships
     updateDestinationRelationships(
@@ -907,14 +940,17 @@ app.put('/api/admin/tours/:id', authenticateToken, async (req, res) => {
       oldSecondaryDestIds
     );
     
-    // Save tour data
-    const saved = saveData('tours.json', { tours: tourDetails });
-    if (!saved) {
+    // Save to both the individual tour-detail file and main tours.json
+    const detailFilename = path.join('tour-details', `${updatedTour.slug}.json`);
+    const savedDetail = saveData(detailFilename, updatedTour);
+    const savedMain = saveData('tours.json', { tours });
+    
+    if (!savedDetail || !savedMain) {
       throw new Error('Failed to save tour data to file');
     }
     
     console.log('Tour updated successfully with relationships');
-    res.json(tourDetails[tourIndex]);
+    res.json(updatedTour);
   } catch (error) {
     console.error('Error updating tour:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
@@ -963,6 +999,58 @@ app.delete('/api/admin/tours/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// Admin: Update tour listing status
+app.patch('/api/admin/tours/:id/listing', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { listed } = req.body;
+    
+    // Validate input
+    if (typeof listed !== 'boolean') {
+      return res.status(400).json({ error: 'Listed status must be a boolean value' });
+    }
+    
+    // Find tour in tourDetails array
+    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(id));
+    
+    if (tourIndex === -1) {
+      return res.status(404).json({ error: 'Tour not found' });
+    }
+    
+    // Update the listing status
+    tourDetails[tourIndex].listed = listed;
+    
+    // Save the updated data
+    const saved = saveData('tours.json', { tours: tourDetails });
+    if (!saved) {
+      throw new Error('Failed to save tour data to file');
+    }
+    
+    console.log(`Tour ${id} listing status updated to: ${listed}`);
+    res.json(tourDetails[tourIndex]);
+  } catch (error) {
+    console.error('Error updating tour listing status:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+// Get tour by slug (admin endpoint with authentication)
+app.get('/api/admin/tours/slug/:slug', authenticateToken, async (req, res) => {
+  await delay(200);
+  
+  const { slug } = req.params;
+  const tour = tourDetails.find(t => t.slug === slug);
+  
+  if (!tour) {
+    return res.status(404).json({
+      success: false,
+      message: 'Tour not found'
+    });
+  }
+  
+  res.json(tour);
+});
+
 // Get tour by ID (check detailed tours first, then basic tours)
 app.get('/api/tours/:id', async (req, res) => {
   await delay(200);
@@ -984,6 +1072,14 @@ app.get('/api/tours/:id', async (req, res) => {
     });
   }
   
+  // Check if tour is listed (public access should only see listed tours)
+  if (tour.listed === false) {
+    return res.status(404).json({
+      success: false,
+      message: 'Tour not found'
+    });
+  }
+  
   res.json(tour);
 });
 
@@ -995,6 +1091,14 @@ app.get('/api/tours/slug/:slug', async (req, res) => {
   const tour = tourDetails.find(t => t.slug === slug);
   
   if (!tour) {
+    return res.status(404).json({
+      success: false,
+      message: 'Tour not found'
+    });
+  }
+  
+  // Check if tour is listed (public access should only see listed tours)
+  if (tour.listed === false) {
     return res.status(404).json({
       success: false,
       message: 'Tour not found'
@@ -1281,7 +1385,7 @@ app.delete('/api/admin/destinations/:identifier', authenticateToken, async (req,
 app.get('/api/admin/enquiries', authenticateToken, async (req, res) => {
   try {
     await delay(200);
-    res.json(enquiries);
+    res.json(enquiries.enquiries || []);
   } catch (error) {
     console.error('Error fetching enquiries:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -2011,6 +2115,221 @@ app.delete('/api/admin/logos/:type', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error resetting logo:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ==================== KAILASH GALLERY ENDPOINTS ====================
+
+// GET /api/kailash-gallery - Public endpoint for gallery
+app.get('/api/kailash-gallery', async (req, res) => {
+  try {
+    // Filter only active photos and sort by order
+    const activePhotos = kailashGallery.gallery
+      .filter(photo => photo.isActive !== false)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    res.json({
+      success: true,
+      gallery: activePhotos,
+      metadata: kailashGallery.metadata
+    });
+  } catch (error) {
+    console.error('Error fetching Kailash Gallery:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /api/admin/kailash-gallery - Admin endpoint for gallery management
+app.get('/api/admin/kailash-gallery', authenticateToken, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    // Sort by order, then by uploadedAt (newest first)
+    const sortedPhotos = [...kailashGallery.gallery].sort((a, b) => {
+      if (a.order !== b.order) {
+        return (a.order || 999) - (b.order || 999);
+      }
+      return new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0);
+    });
+
+    const paginatedPhotos = sortedPhotos.slice(startIndex, endIndex);
+
+    res.json({
+      success: true,
+      gallery: paginatedPhotos,
+      metadata: {
+        ...kailashGallery.metadata,
+        totalPhotos: kailashGallery.gallery.length,
+        currentPage: page,
+        totalPages: Math.ceil(kailashGallery.gallery.length / limit),
+        hasNextPage: endIndex < kailashGallery.gallery.length,
+        hasPrevPage: page > 1
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching admin Kailash Gallery:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// POST /api/admin/kailash-gallery - Upload new photo
+app.post('/api/admin/kailash-gallery', authenticateToken, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    const { title, alt, gridSpan, order, isActive } = req.body;
+    
+    // Generate unique filename
+    const timestamp = Date.now();
+    const originalName = path.parse(req.file.originalname).name;
+    const extension = path.extname(req.file.originalname);
+    const filename = `kailash-${timestamp}-${originalName}${extension}`;
+    
+    const inputPath = req.file.path;
+    const outputPath = path.join(kailashGalleryDir, filename);
+
+    // Compress and save image
+    await compressImage(inputPath, outputPath, 85);
+    
+    // Remove temporary file
+    if (fs.existsSync(inputPath)) {
+      fs.unlinkSync(inputPath);
+    }
+
+    // Create new photo object
+    const newPhoto = {
+      id: timestamp.toString(),
+      title: title || 'Kailash Gallery Photo',
+      image: `/uploads/kailash-gallery/${filename}`,
+      alt: alt || title || 'Kailash Gallery Photo',
+      gridSpan: parseInt(gridSpan) || 1,
+      order: parseInt(order) || kailashGallery.gallery.length,
+      isActive: isActive !== 'false',
+      uploadedAt: new Date().toISOString()
+    };
+
+    // Add to gallery
+    kailashGallery.gallery.push(newPhoto);
+    kailashGallery.metadata.totalPhotos = kailashGallery.gallery.length;
+    kailashGallery.metadata.lastUpdated = new Date().toISOString();
+
+    // Save to file
+    saveData('kailash-gallery.json', kailashGallery);
+
+    res.json({
+      success: true,
+      message: 'Photo uploaded successfully',
+      photo: newPhoto,
+      metadata: kailashGallery.metadata
+    });
+
+  } catch (error) {
+    console.error('Error uploading Kailash Gallery photo:', error);
+    
+    // Clean up uploaded file on error
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    
+    res.status(500).json({ error: 'Failed to upload photo' });
+  }
+});
+
+// DELETE /api/admin/kailash-gallery/:id - Delete photo
+app.delete('/api/admin/kailash-gallery/:id', authenticateToken, async (req, res) => {
+  try {
+    const photoId = req.params.id;
+    const photoIndex = kailashGallery.gallery.findIndex(photo => photo.id === photoId);
+
+    if (photoIndex === -1) {
+      return res.status(404).json({ error: 'Photo not found' });
+    }
+
+    const photo = kailashGallery.gallery[photoIndex];
+    
+    // Delete physical file
+    if (photo.image) {
+      const imagePath = path.join(__dirname, photo.image.replace('/uploads/', 'uploads/'));
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    // Remove from gallery
+    kailashGallery.gallery.splice(photoIndex, 1);
+    kailashGallery.metadata.totalPhotos = kailashGallery.gallery.length;
+    kailashGallery.metadata.lastUpdated = new Date().toISOString();
+
+    // Save to file
+    saveData('kailash-gallery.json', kailashGallery);
+
+    res.json({
+      success: true,
+      message: 'Photo deleted successfully',
+      metadata: kailashGallery.metadata
+    });
+
+  } catch (error) {
+    console.error('Error deleting Kailash Gallery photo:', error);
+    res.status(500).json({ error: 'Failed to delete photo' });
+  }
+});
+
+// DELETE /api/admin/tours/:tourId/gallery/:filename - Delete individual gallery image
+app.delete('/api/admin/tours/:tourId/gallery/:filename', authenticateToken, async (req, res) => {
+  try {
+    const { tourId, filename } = req.params;
+    console.log(`Deleting gallery image: ${filename} from tour: ${tourId}`);
+    
+    // Find the tour
+    const tourIndex = tourDetails.findIndex(t => t.id === parseInt(tourId));
+    if (tourIndex === -1) {
+      return res.status(404).json({ error: 'Tour not found' });
+    }
+    
+    const tour = tourDetails[tourIndex];
+    
+    // Remove the image from the gallery array
+    if (tour.gallery && Array.isArray(tour.gallery)) {
+      const imageUrl = `/uploads/tours/${filename}`;
+      const updatedGallery = tour.gallery.filter(img => !img.includes(filename));
+      
+      // Update the tour data
+      tourDetails[tourIndex] = {
+        ...tour,
+        gallery: updatedGallery,
+        updated_at: new Date().toISOString()
+      };
+      
+      // Persist the updated tour detail to its specific file
+      const detailFilename = path.join('tour-details', `${tour.slug}.json`);
+      const saved = saveData(detailFilename, tourDetails[tourIndex]);
+      if (!saved) {
+        throw new Error('Failed to save tour detail');
+      }
+    }
+    
+    // Delete the physical file
+    const filePath = path.join(__dirname, 'uploads', 'tours', filename);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      console.log(`Deleted file: ${filePath}`);
+    }
+    
+    res.json({ 
+      message: 'Gallery image deleted successfully',
+      filename: filename,
+      tourId: tourId
+    });
+    
+  } catch (error) {
+    console.error('Error deleting gallery image:', error);
+    res.status(500).json({ error: 'Failed to delete gallery image' });
   }
 });
 

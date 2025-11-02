@@ -43,7 +43,7 @@ const getApiBaseUrl = (): string => {
   }
   
   // Development environment
-  return 'http://localhost:3000/api';
+  return '/api';
 };
 
 interface Slider {

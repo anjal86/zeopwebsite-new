@@ -160,5 +160,18 @@
     "cancellation_policy": "Free cancellation up to 10 days before departure"
   },
   "created_at": "2024-12-30T10:00:00.000Z",
-  "updated_at": "2024-12-30T10:00:00.000Z"
+  "updated_at": "2025-11-02T05:41:59.896Z",
+  "primary_destination_id": 28,
+  "secondary_destination_ids": [],
+  "activity_ids": [
+    3,
+    2
+  ],
+  "related_destinations": [
+    "Annapurna "
+  ],
+  "related_activities": [
+    "Adventure Sports",
+    "Mountaineering"
+  ]
 }
