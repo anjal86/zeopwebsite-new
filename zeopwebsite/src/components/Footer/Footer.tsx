@@ -182,7 +182,9 @@ const Footer: React.FC = () => {
         <div className="py-4 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {new Date().getFullYear()} {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved. |
+              © {new Date().getFullYear()} {contactInfo?.company.name || 'Zeo Tourism'}. All rights reserved.
+              <span className="mx-2">|</span>
+              <Link to="/privacy-policy" className="hover:text-sky-blue transition-colors">Privacy Policy</Link>
             </p>
             <div className="flex items-center text-gray-400 text-sm">
               <span>Developed by</span>

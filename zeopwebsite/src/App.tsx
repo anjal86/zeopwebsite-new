@@ -21,6 +21,7 @@ import TripPlanning from './pages/TripPlanning';
 import AboutPage from './pages/About';
 import ContactPage from './pages/Contact';
 import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 // Import admin pages
 import AdminLogin from './pages/AdminLogin';
@@ -55,8 +56,8 @@ function Layout({ children }: { children: React.ReactNode }) {
       {/* Navigation - Only show on non-admin routes */}
       {!isAdminRoute && <Navigation />}
       
-      {/* Main Content */}
-      <main>
+      {/* Main Content (offset for fixed header) */}
+      <main className="pt-28 md:pt-32">
         {children}
       </main>
       
@@ -112,6 +113,7 @@ function App() {
           <Route path="/plan-your-trip" element={<TripPlanning />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />

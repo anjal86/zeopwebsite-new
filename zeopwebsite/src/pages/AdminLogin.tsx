@@ -135,16 +135,6 @@ const AdminLogin: React.FC = () => {
               )}
             </button>
           </form>
-
-          <div className="mt-6 pt-6 border-t border-white/20">
-            <div className="text-center text-slate-400 text-sm">
-              <p>Demo Credentials:</p>
-              <p className="text-white mt-1">
-                <strong>Email:</strong> admin@zeotourism.com<br />
-                <strong>Password:</strong> admin123
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}
