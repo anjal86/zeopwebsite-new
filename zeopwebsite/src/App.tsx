@@ -57,7 +57,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       {!isAdminRoute && <Navigation />}
       
       {/* Main Content (offset for fixed header) */}
-      <main className="pt-28 md:pt-32">
+      <main >
         {children}
       </main>
       
