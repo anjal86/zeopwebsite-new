@@ -16,6 +16,7 @@ interface EnquiryFormData {
   email: string;
   phone: string;
   destination: string;
+  tour_title: string;
   travelers: string;
   date: string;
   message: string;
@@ -28,11 +29,11 @@ interface TourEnquiryModalProps {
   onSubmit?: (formData: EnquiryFormData) => Promise<void>;
 }
 
-const TourEnquiryModal: React.FC<TourEnquiryModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  tourTitle, 
-  onSubmit 
+const TourEnquiryModal: React.FC<TourEnquiryModalProps> = ({
+  isOpen,
+  onClose,
+  tourTitle,
+  onSubmit
 }) => {
   // Auto-detect destination from tour title
   const getDestinationFromTitle = (title: string) => {
@@ -51,6 +52,7 @@ const TourEnquiryModal: React.FC<TourEnquiryModalProps> = ({
     email: '',
     phone: '',
     destination: getDestinationFromTitle(tourTitle),
+    tour_title: tourTitle || '',
     travelers: '2',
     date: '',
     message: ''
@@ -71,18 +73,18 @@ const TourEnquiryModal: React.FC<TourEnquiryModalProps> = ({
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.destination) {
       setErrorMessage('Name, email, and destination are required');
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
       return;
     }
-    
+
     setIsSubmitting(true);
     setShowError(false);
     setErrorMessage('');
-    
+
     try {
       if (onSubmit) {
         await onSubmit(formData);
@@ -102,14 +104,14 @@ const TourEnquiryModal: React.FC<TourEnquiryModalProps> = ({
           throw new Error(result.error || 'Failed to submit enquiry');
         }
       }
-      
+
       // Success
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
         onClose();
       }, 2000);
-      
+
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit enquiry. Please try again.');
       setShowError(true);

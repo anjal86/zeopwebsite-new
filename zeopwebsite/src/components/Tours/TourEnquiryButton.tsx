@@ -11,12 +11,12 @@ interface TourEnquiryButtonProps {
   tourTitle?: string;
 }
 
-const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({ 
-  price, 
-  hasDiscount, 
-  discountPercentage, 
-  priceAvailable = true, 
-  tourTitle 
+const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
+  price,
+  hasDiscount,
+  discountPercentage,
+  priceAvailable = true,
+  tourTitle
 }) => {
   const { data: contactInfo } = useContact();
   const [formData, setFormData] = useState({
@@ -24,9 +24,10 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
     email: '',
     phone: '',
     destination: tourTitle?.toLowerCase().includes('everest') ? 'everest' :
-                 tourTitle?.toLowerCase().includes('annapurna') ? 'annapurna' :
-                 tourTitle?.toLowerCase().includes('kailash') ? 'kailash' :
-                 tourTitle?.toLowerCase().includes('langtang') ? 'langtang' : 'other',
+      tourTitle?.toLowerCase().includes('annapurna') ? 'annapurna' :
+        tourTitle?.toLowerCase().includes('kailash') ? 'kailash' :
+          tourTitle?.toLowerCase().includes('langtang') ? 'langtang' : 'other',
+    tour_title: tourTitle || '',
     travelers: '',
     date: '',
     message: ''
@@ -45,18 +46,18 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email) {
       setErrorMessage('Name and email are required');
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
       return;
     }
-    
+
     setIsSubmitting(true);
     setShowError(false);
     setErrorMessage('');
-    
+
     try {
       const response = await fetch('/api/contact/enquiry', {
         method: 'POST',
@@ -71,22 +72,23 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
       if (!response.ok) {
         throw new Error(result.error || 'Failed to submit enquiry');
       }
-      
+
       // Success
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 5000);
-      
+
       // Reset form
       setFormData({
         name: '',
         email: '',
         phone: '',
         destination: formData.destination,
+        tour_title: tourTitle || '',
         travelers: '',
         date: '',
         message: ''
       });
-      
+
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit enquiry. Please try again.');
       setShowError(true);
@@ -103,7 +105,7 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
     const travelersInfo = formData.travelers ? `Travelers: ${formData.travelers}\n` : '';
     const dateInfo = formData.date ? `Preferred Date: ${formData.date}\n` : '';
     const messageInfo = formData.message ? `Message: ${formData.message}\n` : '';
-    
+
     const message = `Hi! I'm interested in the ${tourTitle || 'tour'}.\n\n${customerInfo}${emailInfo}${phoneInfo}${travelersInfo}${dateInfo}${messageInfo}\nCould you please provide more details?`;
     const whatsappNumber = contactInfo?.contact.phone.whatsapp?.replace('+', '') || '9779851234567';
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -116,7 +118,7 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
     const travelersInfo = formData.travelers ? `Travelers: ${formData.travelers}\n` : '';
     const dateInfo = formData.date ? `Preferred Date: ${formData.date}\n` : '';
     const messageInfo = formData.message ? `Message: ${formData.message}\n` : '';
-    
+
     const subject = `Enquiry about ${tourTitle || 'Tour'}`;
     const body = `Hi,\n\nI'm interested in the ${tourTitle || 'tour'}.\n\n${customerInfo}${phoneInfo}${travelersInfo}${dateInfo}${messageInfo}\nCould you please provide more details?\n\nThank you!`;
     const emailUrl = `mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -213,7 +215,7 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-sky-blue focus:outline-none focus:ring-2 focus:ring-sky-blue/20 transition-all duration-300"
                 placeholder="No. of Travelers"
               />
-              
+
               <input
                 type="date"
                 name="date"
@@ -260,7 +262,7 @@ const TourEnquiryButton: React.FC<TourEnquiryButtonProps> = ({
               <MessageCircle className="w-4 h-4 mr-2" />
               WhatsApp
             </button>
-            
+
             <button
               onClick={handleEmailClick}
               className="bg-gray-600 text-white py-3 rounded-xl font-medium hover:bg-gray-700 transition-colors flex items-center justify-center"

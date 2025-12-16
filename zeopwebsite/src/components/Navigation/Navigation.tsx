@@ -86,26 +86,26 @@ const Navigation: React.FC = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-6">
               <motion.a
-                href={`mailto:${contactInfo?.contact.email.primary || 'info@zeotourism.com'}`}
+                href={`mailto:${contactInfo?.contact?.email?.primary || 'info@zeotourism.com'}`}
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center hover:text-secondary transition-colors duration-300"
               >
                 <Mail className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">{contactInfo?.contact.email.primary || 'info@zeotourism.com'}</span>
+                <span className="hidden sm:inline font-medium">{contactInfo?.contact?.email?.primary || 'info@zeotourism.com'}</span>
               </motion.a>
               <motion.a
-                href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`}
+                href={`tel:${contactInfo?.contact?.phone?.primary || '+9779851234567'}`}
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center hover:text-secondary transition-colors duration-300"
               >
                 <Phone className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">{contactInfo?.contact.phone.primary || '+9779851234567'}</span>
+                <span className="hidden sm:inline font-medium">{contactInfo?.contact?.phone?.primary || '+9779851234567'}</span>
               </motion.a>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
                 <MapPin className="w-3 h-3 mr-2 text-secondary" />
-                <span className="font-medium">{contactInfo?.contact.address.street || 'Baluwatar-4, Kathmandu'}</span>
+                <span className="font-medium">{contactInfo?.contact?.address?.street || 'Baluwatar-4, Kathmandu'}</span>
               </div>
               {/* Login Text in Top Bar */}
               <Link to="/admin/login">
@@ -127,18 +127,16 @@ const Navigation: React.FC = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 ease-out ${
-          isScrolled
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ease-out ${isScrolled
             ? 'bg-white shadow-2xl border-b border-gray-200'
             : 'bg-white shadow-xl mx-4 md:mx-16 rounded-b-2xl'
-        }`}
+          }`}
         style={{
           top: isScrolled ? '0px' : '40px',
         }}
       >
-        <div className={`transition-all duration-300 ease-out ${
-          isScrolled ? 'px-4 lg:px-8' : 'px-6'
-        }`}>
+        <div className={`transition-all duration-300 ease-out ${isScrolled ? 'px-4 lg:px-8' : 'px-6'
+          }`}>
           <div className="flex items-center justify-between h-15 py-3">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0">
@@ -165,11 +163,10 @@ const Navigation: React.FC = () => {
                   <Link
                     to={item.href}
                     onClick={handleNavClick}
-                    className={`font-medium transition-all duration-300 relative py-2 px-3 whitespace-nowrap text-sm ${
-                      isActiveRoute(item.href)
+                    className={`font-medium transition-all duration-300 relative py-2 px-3 whitespace-nowrap text-sm ${isActiveRoute(item.href)
                         ? 'text-primary'
                         : 'text-gray-700 hover:text-primary'
-                    } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
+                      } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
                   >
                     {item.label}
                     {isActiveRoute(item.href) && (
@@ -230,25 +227,24 @@ const Navigation: React.FC = () => {
                       <Link
                         to={item.href}
                         onClick={handleNavClick}
-                        className={`block py-3 px-4 font-medium transition-all duration-300 ${
-                          isActiveRoute(item.href)
+                        className={`block py-3 px-4 font-medium transition-all duration-300 ${isActiveRoute(item.href)
                             ? 'text-primary'
                             : 'text-gray-900 hover:text-primary'
-                        } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
+                          } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
                       >
                         {item.label}
                       </Link>
                     </motion.div>
                   ))}
                 </nav>
-                
+
                 {/* Mobile Contact & CTA */}
                 <div className="mt-6 pt-6 border-t space-y-3 border-gray-200">
                   <div className="flex items-center justify-center gap-2 py-2 text-gray-600">
                     <Phone className="w-4 h-4" />
-                    <span className="text-sm">{contactInfo?.contact.phone.primary || '+9779851234567'}</span>
+                    <span className="text-sm">{contactInfo?.contact?.phone?.primary || '+9779851234567'}</span>
                   </div>
-                  
+
                   {/* Mobile Enquire Now Button */}
                   <motion.button
                     whileHover={{ scale: 1.02 }}

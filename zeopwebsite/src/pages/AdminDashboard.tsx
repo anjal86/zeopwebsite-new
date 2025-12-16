@@ -22,6 +22,7 @@ import TestimonialManager from '../components/Admin/TestimonialManager';
 import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
 import LogoManager from '../components/Admin/LogoManager';
 import AdminSidebar from '../components/Admin/AdminSidebar';
+import ActivityManager from '../components/Admin/ActivityManager';
 
 interface User {
   id: number;
@@ -30,7 +31,7 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings';
 
 const AdminDashboard: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -88,6 +89,8 @@ const AdminDashboard: React.FC = () => {
         return <DestinationManager />;
       case 'tours':
         return <TourManager />;
+      case 'activities':
+        return <ActivityManager />;
       case 'sliders':
         return <SliderManager />;
       case 'kailash-gallery':
@@ -179,11 +182,10 @@ const AdminDashboard: React.FC = () => {
           {/* Overview */}
           <button
             onClick={() => handleTabChange('overview')}
-            className={`flex flex-col items-center justify-center py-3 transition-colors ${
-              activeTab === 'overview'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-600'
-            }`}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${activeTab === 'overview'
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-gray-600'
+              }`}
           >
             <BarChart3 className="w-5 h-5 mb-1" />
             <span className="text-xs font-medium">Overview</span>
@@ -192,11 +194,10 @@ const AdminDashboard: React.FC = () => {
           {/* Tours */}
           <button
             onClick={() => handleTabChange('tours')}
-            className={`flex flex-col items-center justify-center py-3 transition-colors ${
-              activeTab === 'tours'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-600'
-            }`}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${activeTab === 'tours'
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-gray-600'
+              }`}
           >
             <Backpack className="w-5 h-5 mb-1" />
             <span className="text-xs font-medium">Tours</span>
@@ -205,11 +206,10 @@ const AdminDashboard: React.FC = () => {
           {/* Destinations */}
           <button
             onClick={() => handleTabChange('destinations')}
-            className={`flex flex-col items-center justify-center py-3 transition-colors ${
-              activeTab === 'destinations'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-600'
-            }`}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${activeTab === 'destinations'
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-gray-600'
+              }`}
           >
             <Mountain className="w-5 h-5 mb-1" />
             <span className="text-xs font-medium">Destinations</span>
@@ -218,11 +218,10 @@ const AdminDashboard: React.FC = () => {
           {/* Settings */}
           <button
             onClick={() => handleTabChange('settings')}
-            className={`flex flex-col items-center justify-center py-3 transition-colors ${
-              activeTab === 'settings'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-600'
-            }`}
+            className={`flex flex-col items-center justify-center py-3 transition-colors ${activeTab === 'settings'
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-gray-600'
+              }`}
           >
             <Settings className="w-5 h-5 mb-1" />
             <span className="text-xs font-medium">Settings</span>
@@ -313,7 +312,7 @@ const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ 
             <h4 className="font-medium text-slate-900">Manage Destinations</h4>
             <p className="text-sm text-slate-600">Add or edit travel destinations</p>
           </button>
-          
+
           <button
             onClick={() => onTabChange('tours')}
             className="p-4 border border-slate-200 rounded-lg hover:bg-green-50 hover:border-green-300 transition-colors text-left group"
@@ -324,7 +323,7 @@ const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ 
             <h4 className="font-medium text-slate-900">Manage Tours</h4>
             <p className="text-sm text-slate-600">Add or edit tour packages</p>
           </button>
-          
+
           <button
             onClick={() => onTabChange('sliders')}
             className="p-4 border border-slate-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 transition-colors text-left group"
@@ -335,7 +334,7 @@ const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ 
             <h4 className="font-medium text-slate-900">Manage Sliders</h4>
             <p className="text-sm text-slate-600">Update hero section sliders</p>
           </button>
-          
+
           <button
             onClick={() => onTabChange('enquiries')}
             className="p-4 border border-slate-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors text-left group"
@@ -361,7 +360,7 @@ const SettingsContent: React.FC = () => {
       <div>
         <LogoManager />
       </div>
-      
+
       {/* Contact Information Section */}
       <div>
         <ContactManager />

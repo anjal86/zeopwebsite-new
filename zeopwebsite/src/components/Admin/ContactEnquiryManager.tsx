@@ -15,7 +15,8 @@ import {
   User,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  MessageCircle
 } from 'lucide-react';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
@@ -34,9 +35,9 @@ interface Enquiry {
   email: string;
   phone: string;
   destination: string;
-  tour_title: string;
-  travelers: string;
-  date: string;
+  tour_name: string;
+  number_of_people: string;
+  travel_date: string;
   message: string;
   assigned_to: string | null;
   notes: string;
@@ -53,7 +54,7 @@ const ContactEnquiryManager: React.FC = () => {
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -123,9 +124,9 @@ const ContactEnquiryManager: React.FC = () => {
       enquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       enquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       enquiry.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      enquiry.tour_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      enquiry.tour_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       enquiry.message.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesSearch;
   });
 
@@ -135,7 +136,7 @@ const ContactEnquiryManager: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const filteredEnquiries = allFilteredEnquiries.slice(startIndex, endIndex);
-  
+
   const startItem = startIndex + 1;
   const endItem = Math.min(endIndex, totalItems);
 
@@ -182,7 +183,7 @@ const ContactEnquiryManager: React.FC = () => {
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">Error Loading Enquiries</h3>
         <p className="text-gray-500 mb-4">{error}</p>
-        <button 
+        <button
           onClick={() => fetchEnquiries()}
           className="btn-primary"
         >
@@ -295,8 +296,8 @@ const ContactEnquiryManager: React.FC = () => {
                     )}
                   </td>
                   <td className="px-3 py-4">
-                    <div className="text-sm font-medium text-gray-900 truncate" title={enquiry.tour_title}>
-                      {enquiry.tour_title}
+                    <div className="text-sm font-medium text-gray-900 truncate" title={enquiry.tour_name}>
+                      {enquiry.tour_name}
                     </div>
                     <div className="text-xs text-gray-500 truncate capitalize" title={enquiry.destination}>
                       {enquiry.destination}
@@ -305,13 +306,13 @@ const ContactEnquiryManager: React.FC = () => {
                   <td className="px-3 py-4 text-sm text-gray-900">
                     <div className="flex items-center min-w-0">
                       <Users className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                      <span className="truncate">{enquiry.travelers || '-'}</span>
+                      <span className="truncate">{enquiry.number_of_people || '-'}</span>
                     </div>
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-900">
                     <div className="flex items-center min-w-0">
                       <Calendar className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                      <span className="truncate">{enquiry.date || '-'}</span>
+                      <span className="truncate">{enquiry.travel_date || '-'}</span>
                     </div>
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-500">
@@ -362,7 +363,7 @@ const ContactEnquiryManager: React.FC = () => {
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -375,7 +376,7 @@ const ContactEnquiryManager: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 ml-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => {
@@ -396,7 +397,7 @@ const ContactEnquiryManager: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-500">
                   <div className="flex items-center">
                     <Mail className="w-3 h-3 mr-1" />
@@ -407,19 +408,19 @@ const ContactEnquiryManager: React.FC = () => {
                     <span className="truncate">{enquiry.phone || 'No phone'}</span>
                   </div>
                 </div>
-                
+
                 <div className="mt-2">
                   <div className="text-sm font-medium text-gray-900 truncate">
-                    {enquiry.tour_title}
+                    {enquiry.tour_name}
                   </div>
                   <div className="text-xs text-gray-500 capitalize">
-                    {enquiry.destination} • {enquiry.travelers || 'Unknown'} travelers
+                    {enquiry.destination} • {enquiry.number_of_people || 'Unknown'} travelers
                   </div>
                 </div>
-                
+
                 <div className="mt-2 flex items-center justify-between">
                   <div className="text-xs text-gray-500">
-                    {enquiry.date ? `Preferred: ${enquiry.date}` : 'No date specified'}
+                    {enquiry.travel_date ? `Preferred: ${enquiry.travel_date}` : 'No date specified'}
                   </div>
                   <div className="text-xs text-gray-500">
                     {new Date(enquiry.created_at).toLocaleDateString()}
@@ -457,7 +458,7 @@ const ContactEnquiryManager: React.FC = () => {
                 <ChevronLeft className="w-4 h-4 sm:mr-1" />
                 <span className="hidden sm:inline">Previous</span>
               </button>
-              
+
               <div className="flex items-center space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNumber;
@@ -470,7 +471,7 @@ const ContactEnquiryManager: React.FC = () => {
                   } else {
                     pageNumber = currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNumber}
@@ -583,14 +584,39 @@ const ContactEnquiryManager: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">{selectedEnquiry.email}</span>
+                          <a href={`mailto:${selectedEnquiry.email}`} className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                            {selectedEnquiry.email}
+                          </a>
                         </div>
                         {selectedEnquiry.phone && (
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{selectedEnquiry.phone}</span>
+                            <a href={`tel:${selectedEnquiry.phone}`} className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                              {selectedEnquiry.phone}
+                            </a>
                           </div>
                         )}
+
+                        <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100">
+                          <a
+                            href={`mailto:${selectedEnquiry.email}`}
+                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                          >
+                            <Mail className="w-4 h-4" />
+                            Email
+                          </a>
+                          {selectedEnquiry.phone && (
+                            <a
+                              href={`https://wa.me/${selectedEnquiry.phone.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
+                            >
+                              <MessageCircle className="w-4 h-4" />
+                              WhatsApp
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -599,22 +625,22 @@ const ContactEnquiryManager: React.FC = () => {
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <MessageSquare className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm font-medium text-gray-900">{selectedEnquiry.tour_title}</span>
+                          <span className="text-sm font-medium text-gray-900">{selectedEnquiry.tour_name}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-gray-400" />
                           <span className="text-sm text-gray-600 capitalize">{selectedEnquiry.destination}</span>
                         </div>
-                        {selectedEnquiry.travelers && (
+                        {selectedEnquiry.number_of_people && (
                           <div className="flex items-center gap-2">
                             <Users className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{selectedEnquiry.travelers} travelers</span>
+                            <span className="text-sm text-gray-600">{selectedEnquiry.number_of_people} travelers</span>
                           </div>
                         )}
-                        {selectedEnquiry.date && (
+                        {selectedEnquiry.travel_date && (
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{selectedEnquiry.date}</span>
+                            <span className="text-sm text-gray-600">{selectedEnquiry.travel_date}</span>
                           </div>
                         )}
                       </div>

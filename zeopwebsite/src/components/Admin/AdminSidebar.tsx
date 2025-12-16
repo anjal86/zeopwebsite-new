@@ -10,10 +10,11 @@ import {
   MessageSquare,
   Mail,
   Camera,
-  Users
+  Users,
+  Compass
 } from 'lucide-react';
 
-type MenuKey = 'overview' | 'destinations' | 'tours' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users';
+type MenuKey = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users';
 
 interface AdminSidebarProps {
   activeKey?: MenuKey;
@@ -29,6 +30,7 @@ const MENU_ITEMS: { id: MenuKey; label: string; icon: React.ComponentType<any>; 
   { id: 'overview', label: 'Overview', icon: BarChart3, pathQuery: '?tab=overview' },
   { id: 'destinations', label: 'Destinations', icon: Mountain, pathQuery: '?tab=destinations' },
   { id: 'tours', label: 'Tours', icon: Backpack, pathQuery: '?tab=tours' },
+  { id: 'activities', label: 'Activities', icon: Compass, pathQuery: '?tab=activities' },
   { id: 'sliders', label: 'Sliders', icon: ImageIcon, pathQuery: '?tab=sliders' },
   { id: 'kailash-gallery', label: 'Gallery', icon: Camera, pathQuery: '?tab=kailash-gallery' },
   { id: 'enquiries', label: 'Enquiries', icon: Mail, pathQuery: '?tab=enquiries' },
@@ -74,9 +76,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               <Link
                 key={item.id}
                 to={`${linkBase}${item.pathQuery ?? ''}`}
-                className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${
-                  isActive ? 'bg-slate-700 text-white' : 'text-slate-300'
-                }`}
+                className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${isActive ? 'bg-slate-700 text-white' : 'text-slate-300'
+                  }`}
               >
                 <IconComponent className="w-4 h-4 flex-shrink-0" />
                 {sidebarOpen && <span className="font-medium truncate">{item.label}</span>}
@@ -88,9 +89,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <button
               key={item.id}
               onClick={() => onSelect && onSelect(item.id)}
-              className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${
-                isActive ? 'bg-slate-700 text-white' : 'text-slate-300'
-              }`}
+              className={`w-full flex items-center space-x-3 px-3 py-2.5 mb-1 text-left hover:bg-slate-700 rounded-lg transition-colors text-sm ${isActive ? 'bg-slate-700 text-white' : 'text-slate-300'
+                }`}
             >
               <IconComponent className="w-4 h-4 flex-shrink-0" />
               {sidebarOpen && <span className="font-medium truncate">{item.label}</span>}
