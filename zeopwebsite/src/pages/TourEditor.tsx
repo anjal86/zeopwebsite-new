@@ -24,10 +24,13 @@ import {
   Image,
   Eye,
   MapPin,
-  Activity
+  Search,
+  Activity,
+  FileJson
 } from 'lucide-react';
 import ProgressModal from '../components/UI/ProgressModal';
 import AdminSidebar from '../components/Admin/AdminSidebar';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -95,6 +98,7 @@ interface TourDetails {
   activity_ids?: number[];
   related_destinations?: string[];
   related_activities?: string[];
+  featured?: boolean;
 }
 
 const TourEditor: React.FC = () => {
@@ -124,12 +128,15 @@ const TourEditor: React.FC = () => {
   // Simple fetch for destinations and activities
   const [destinations, setDestinations] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
+  const [destSearch, setDestSearch] = useState('');
+  const [destRegionFilter, setDestRegionFilter] = useState<'nepal' | 'international'>('nepal');
+  const [actSearch, setActSearch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [destResponse, actResponse] = await Promise.all([
-          fetch(`${getApiBaseUrl()}/destinations`),
+          fetch(`${getApiBaseUrl()}/destinations?includeUnlisted=true`),
           fetch(`${getApiBaseUrl()}/activities`)
         ]);
 
@@ -159,6 +166,14 @@ const TourEditor: React.FC = () => {
   // Upload state
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Import JSON state
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importJson, setImportJson] = useState('');
+
+  // Paste Itinerary state
+  const [showItineraryPasteModal, setShowItineraryPasteModal] = useState(false);
+  const [itineraryPasteText, setItineraryPasteText] = useState('');
 
   const [formData, setFormData] = useState<TourDetails>({
     slug: '',
@@ -413,6 +428,36 @@ const TourEditor: React.FC = () => {
     });
   };
 
+  const handlePasteAsArray = (
+    e: React.ClipboardEvent,
+    field: keyof TourDetails,
+    index: number
+  ) => {
+    // Get the pasted data
+    const pastedText = e.clipboardData.getData('text');
+    // Split by newline and filter out empty lines
+    const lines = pastedText.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
+
+    // Only intervene if we have multiple lines
+    if (lines.length > 1) {
+      e.preventDefault();
+      setFormData(prev => {
+        const array = (prev[field] as string[]) || [];
+        const newArray = [...array];
+
+        // Replace the current item with the first line
+        newArray[index] = lines[0];
+
+        // Insert the rest of the lines after the current index
+        if (lines.length > 1) {
+          newArray.splice(index + 1, 0, ...lines.slice(1));
+        }
+
+        return { ...prev, [field]: newArray };
+      });
+    }
+  };
+
   // Function to clear all gallery images
   const clearAllGalleryImages = async () => {
     if (!confirm('Remove all gallery images?')) return;
@@ -485,6 +530,177 @@ const TourEditor: React.FC = () => {
       console.error('Error deleting gallery image:', error);
       // Still remove from UI even if server deletion fails
       removeArrayItem('gallery', index);
+    }
+  };
+
+
+  const handleJsonImport = (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (!importJson.trim()) return;
+
+      const parsedData = JSON.parse(importJson);
+
+      // Map the imported data to our form structure
+      // We process it field by field to ensure type safety
+      const newFormData: TourDetails = { ...formData };
+
+      // Basic string/number fields
+      if (parsedData.title) newFormData.title = parsedData.title;
+      if (parsedData.slug) newFormData.slug = parsedData.slug;
+      else if (parsedData.title) newFormData.slug = generateSlug(parsedData.title);
+
+      if (parsedData.description) newFormData.description = parsedData.description;
+      if (parsedData.price) newFormData.price = Number(parsedData.price) || 0;
+      if (parsedData.duration) newFormData.duration = String(parsedData.duration);
+      if (parsedData.group_size) newFormData.group_size = parsedData.group_size;
+      if (parsedData.best_time) newFormData.best_time = parsedData.best_time;
+      if (parsedData.fitness_requirements) newFormData.fitness_requirements = parsedData.fitness_requirements;
+
+      // Boolean fields
+      if (parsedData.priceAvailable !== undefined) newFormData.priceAvailable = parsedData.priceAvailable;
+      if (parsedData.hasDiscount !== undefined) newFormData.hasDiscount = parsedData.hasDiscount;
+      if (parsedData.discountPercentage) newFormData.discountPercentage = Number(parsedData.discountPercentage);
+
+      // Arrays
+      if (Array.isArray(parsedData.gallery)) newFormData.gallery = parsedData.gallery;
+      if (Array.isArray(parsedData.highlights)) newFormData.highlights = parsedData.highlights;
+      if (Array.isArray(parsedData.inclusions)) newFormData.inclusions = parsedData.inclusions;
+      if (Array.isArray(parsedData.exclusions)) newFormData.exclusions = parsedData.exclusions;
+      if (Array.isArray(parsedData.related_destinations)) newFormData.related_destinations = parsedData.related_destinations;
+      if (Array.isArray(parsedData.related_activities)) newFormData.related_activities = parsedData.related_activities;
+
+      // Complex objects
+      if (Array.isArray(parsedData.itinerary)) {
+        newFormData.itinerary = parsedData.itinerary.map((day: any, index: number) => ({
+          day: day.day || index + 1,
+          title: day.title || '',
+          description: day.description || '',
+          accommodation: day.accommodation || '',
+          meals: day.meals || ''
+        }));
+      }
+
+      // Handle relationships if ID's are present
+      if (parsedData.primary_destination_id) newFormData.primary_destination_id = parsedData.primary_destination_id;
+      if (parsedData.secondary_destination_ids) newFormData.secondary_destination_ids = parsedData.secondary_destination_ids;
+      if (parsedData.activity_ids) newFormData.activity_ids = parsedData.activity_ids;
+
+      // If we imported relationships by name but not ID, we could try to auto-detect ID's here,
+      // but the auto-detect logic runs on save or load usually.
+
+      setFormData(newFormData);
+      setShowImportModal(false);
+      setImportJson('');
+
+      // Show success feedback?
+      alert('Tour data imported successfully! Please review the details.');
+
+    } catch (error) {
+      alert('Invalid JSON format. Please check your data.');
+    }
+  };
+
+  const handleItineraryPaste = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!itineraryPasteText.trim()) return;
+
+    try {
+      const days: ItineraryDay[] = [];
+      const lines = itineraryPasteText.split(/\r?\n/);
+      let currentDay: ItineraryDay | null = null;
+      let currentDescription: string[] = [];
+
+      // Regex to match "Day 1", "Day 01", "Day 1:", "Day 1 -", etc.
+      // Matches "Day" followed by a number, then optionally separator and title
+      const dayRegex = /^Day\s+(\d+)(?:[:\.-]?\s*(.*))?/i;
+
+      for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) {
+          // Keep empty lines in description for formatting if we are inside a day
+          if (currentDay && currentDescription.length > 0) {
+            currentDescription.push('');
+          }
+          continue;
+        }
+
+        const match = trimmedLine.match(dayRegex);
+
+        // Check if this line looks like a new day header
+        if (match) {
+          // If we were processing a day, save it
+          if (currentDay) {
+            currentDay.description = currentDescription.join('\n').trim();
+            days.push(currentDay);
+          }
+
+          // Start new day
+          const dayNum = parseInt(match[1]);
+          // Title might be captured in the second group, or it might be empty
+          let title = match[2] ? match[2].trim() : '';
+
+          // If the title starts with "-" or ":", remove it (in case regex didn't catch it cleanly)
+          if (title.startsWith('-') || title.startsWith(':')) {
+            title = title.substring(1).trim();
+          }
+
+          currentDay = {
+            day: dayNum,
+            title: title,
+            description: '',
+            accommodation: '',
+            meals: ''
+          };
+          currentDescription = [];
+        } else if (currentDay) {
+          // Check for specific fields (Accommodation, Meals)
+          const accommodationMatch = trimmedLine.match(/^(?:Accommodation|Overnight|Hotel|Lodge|Guesthouse|Teahouse|Camp|Stay)(?:\s*(?:at|in))?\s*[:|-]?\s*(.*)/i);
+          const mealsMatch = trimmedLine.match(/^(?:Meals|Meal Plan|Food)\s*[:|-]?\s*(.*)/i);
+
+          if (accommodationMatch && accommodationMatch[1]) {
+            currentDay.accommodation = accommodationMatch[1].trim();
+          } else if (mealsMatch && mealsMatch[1]) {
+            currentDay.meals = mealsMatch[1].trim();
+          } else {
+            // Append to current description if we are in a day block
+
+            // Heuristic: If the title is currently empty, and this is the first line of content,
+            // treat this line as the title instead of description.
+            if (!currentDay.title && currentDescription.length === 0) {
+              currentDay.title = trimmedLine;
+            } else {
+              currentDescription.push(trimmedLine);
+            }
+          }
+        }
+      }
+
+      // Push the last day
+      if (currentDay) {
+        currentDay.description = currentDescription.join('\n').trim();
+        days.push(currentDay);
+      }
+
+      if (days.length > 0) {
+        // Sort by day number just in case
+        days.sort((a, b) => a.day - b.day);
+
+        setFormData(prev => ({
+          ...prev,
+          itinerary: days
+        }));
+        setShowItineraryPasteModal(false);
+        setItineraryPasteText('');
+        // Optional: Update duration if it's currently unset or different? 
+        // Better leave duration manual or prompt user.
+        alert(`Successfully parsed and imported ${days.length} days into the itinerary!`);
+      } else {
+        alert('Could not identify any days. Please ensure your text has lines like "Day 1: Title".');
+      }
+    } catch (error) {
+      console.error('Error parsing itinerary:', error);
+      alert('An error occurred while parsing the itinerary.');
     }
   };
 
@@ -786,7 +1002,7 @@ const TourEditor: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
@@ -794,7 +1010,7 @@ const TourEditor: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading tour details...</span>
       </div>
     );
@@ -866,11 +1082,19 @@ const TourEditor: React.FC = () => {
                   Cancel
                 </button>
                 <button
+                  type="button"
+                  onClick={() => setShowImportModal(true)}
+                  className="px-4 py-2 text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-2"
+                >
+                  <FileJson className="w-4 h-4" />
+                  Import JSON
+                </button>
+                <button
                   onClick={handleSubmit}
                   disabled={saving}
                   className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${isFormValid()
-                      ? 'bg-green-600 text-white hover:bg-green-700'
-                      : 'bg-gray-400 text-white cursor-not-allowed'
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-gray-400 text-white cursor-not-allowed'
                     }`}
                   title={!isFormValid() ? 'Please complete all required fields and select destinations & activities' : ''}
                 >
@@ -903,10 +1127,10 @@ const TourEditor: React.FC = () => {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`relative flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                        ? 'border-green-600 text-gray-500'
-                        : hasError
-                          ? 'border-transparent text-red-500 hover:text-red-700 hover:border-red-300'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-green-600 text-gray-500'
+                      : hasError
+                        ? 'border-transparent text-red-500 hover:text-red-700 hover:border-red-300'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                       }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -1161,8 +1385,8 @@ const TourEditor: React.FC = () => {
                                 }));
                               }}
                               className={`px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-2 ${isSelected
-                                  ? 'bg-green-500 text-white border-green-500 shadow-md transform scale-105'
-                                  : 'bg-white text-gray-700 border-gray-300 hover:border-green-400 hover:bg-green-50 hover:text-green-700'
+                                ? 'bg-green-500 text-white border-green-500 shadow-md transform scale-105'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-green-400 hover:bg-green-50 hover:text-green-700'
                                 }`}
                             >
                               {month.substring(0, 3)}
@@ -1377,6 +1601,37 @@ const TourEditor: React.FC = () => {
                 </motion.div>
               )}
 
+              {/* Status & Visibility Tab */}
+              {activeTab === 'details' && (
+                <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                      <Star className="w-4 h-4 text-yellow-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">Visibility Status</h3>
+                      <p className="text-sm text-gray-500">Manage how this tour appears on the website</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    {/* Featured Checkbox */}
+                    <label className="flex items-center space-x-2 cursor-pointer p-4 bg-gray-50 rounded-xl hover:bg-yellow-50 transition-colors border border-gray-100 hover:border-yellow-200">
+                      <input
+                        type="checkbox"
+                        checked={formData.featured || false}
+                        onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                        className="w-5 h-5 text-yellow-600 rounded border-gray-300 focus:ring-yellow-500 cursor-pointer"
+                      />
+                      <div>
+                        <span className="block font-medium text-gray-900">Featured Tour</span>
+                        <span className="block text-xs text-gray-500">Show in featured sections and first in lists</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              )}
+
               {/* Relationships Tab */}
               {activeTab === 'relationships' && (
                 <motion.div
@@ -1402,8 +1657,45 @@ const TourEditor: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {destinations?.map((destination: any) => {
+                    <div className="flex flex-col md:flex-row gap-4 mb-6">
+                      {/* Search Destinations */}
+                      <div className="flex-1 relative">
+                        <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="Search destinations..."
+                          value={destSearch}
+                          onChange={(e) => setDestSearch(e.target.value)}
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                        />
+                      </div>
+
+                      {/* Region Filter */}
+                      <div className="flex gap-2">
+                        {(['nepal', 'international'] as const).map((region) => (
+                          <button
+                            key={region}
+                            type="button"
+                            onClick={() => setDestRegionFilter(region)}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${destRegionFilter === region
+                              ? 'bg-primary text-white shadow-sm'
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                              }`}
+                          >
+                            {region.charAt(0).toUpperCase() + region.slice(1)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-1">
+                      {destinations?.filter(d => {
+                        const matchesSearch = d.name.toLowerCase().includes(destSearch.toLowerCase()) ||
+                          (d.country && d.country.toLowerCase().includes(destSearch.toLowerCase()));
+                        const matchesRegion = (destRegionFilter === 'nepal' && (d.type === 'nepal' || d.country === 'Nepal')) ||
+                          (destRegionFilter === 'international' && (d.type === 'international' || d.country !== 'Nepal'));
+                        return matchesSearch && matchesRegion;
+                      }).map((destination: any) => {
                         const isPrimary = formData.primary_destination_id === destination.id;
                         const isSecondary = formData.secondary_destination_ids?.includes(destination.id);
 
@@ -1415,21 +1707,18 @@ const TourEditor: React.FC = () => {
                               const relatedDestinations = formData.related_destinations || [];
 
                               if (isPrimary) {
-                                // If clicking on primary, make it unselected
                                 setFormData(prev => ({
                                   ...prev,
                                   primary_destination_id: undefined,
                                   related_destinations: relatedDestinations.filter(name => name !== destination.name)
                                 }));
                               } else if (isSecondary) {
-                                // If clicking on secondary, remove from secondary
                                 setFormData(prev => ({
                                   ...prev,
                                   secondary_destination_ids: secondaryIds.filter(id => id !== destination.id),
                                   related_destinations: relatedDestinations.filter(name => name !== destination.name)
                                 }));
                               } else {
-                                // If not selected, add as primary if no primary exists, otherwise add as secondary
                                 if (!formData.primary_destination_id) {
                                   setFormData(prev => ({
                                     ...prev,
@@ -1446,36 +1735,29 @@ const TourEditor: React.FC = () => {
                               }
                             }}
                             className={`relative cursor-pointer rounded-lg border-2 transition-all duration-200 ${isPrimary
-                                ? 'border-primary bg-primary/10 shadow-md'
-                                : isSecondary
-                                  ? 'border-secondary bg-secondary/10 shadow-md'
-                                  : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                              ? 'border-primary bg-primary/10 shadow-md'
+                              : isSecondary
+                                ? 'border-secondary bg-secondary/10 shadow-md'
+                                : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                               }`}
                           >
-                            <div className="p-4">
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={destination.image}
-                                  alt={destination.name}
-                                  className="w-12 h-12 object-cover rounded-lg"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                                  }}
-                                />
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-gray-900">{destination.name}</h4>
-                                  <p className="text-sm text-gray-500">{(destination as any).country}</p>
+                            <div className="p-3">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-medium text-gray-900 truncate text-sm">{destination.name}</h4>
                                 </div>
-                                {isPrimary && (
-                                  <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                                    <span className="text-white text-xs font-bold">P</span>
-                                  </div>
-                                )}
-                                {isSecondary && (
-                                  <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
-                                    <span className="text-white text-xs font-bold">S</span>
-                                  </div>
-                                )}
+                                <div className="flex gap-1 flex-shrink-0">
+                                  {isPrimary && (
+                                    <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center" title="Primary Destination">
+                                      <span className="text-white text-[10px] font-bold">P</span>
+                                    </div>
+                                  )}
+                                  {isSecondary && (
+                                    <div className="w-5 h-5 bg-secondary rounded-full flex items-center justify-center" title="Secondary Destination">
+                                      <span className="text-white text-[10px] font-bold">S</span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1509,8 +1791,25 @@ const TourEditor: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {activities?.map((activity: any) => {
+                    <div className="mb-6">
+                      {/* Search Activities */}
+                      <div className="relative">
+                        <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="Search activities..."
+                          value={actSearch}
+                          onChange={(e) => setActSearch(e.target.value)}
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary text-sm"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-1">
+                      {activities?.filter(act => {
+                        const matchesSearch = act.name.toLowerCase().includes(actSearch.toLowerCase());
+                        return matchesSearch;
+                      }).map((activity: any) => {
                         const isSelected = formData.activity_ids?.includes(activity.id) ||
                           formData.related_activities?.includes(activity.name);
                         return (
@@ -1521,14 +1820,12 @@ const TourEditor: React.FC = () => {
                               const relatedActivities = formData.related_activities || [];
 
                               if (isSelected) {
-                                // Remove from selection
                                 setFormData(prev => ({
                                   ...prev,
                                   activity_ids: activityIds.filter(id => id !== activity.id),
                                   related_activities: relatedActivities.filter(name => name !== activity.name)
                                 }));
                               } else {
-                                // Add to selection
                                 setFormData(prev => ({
                                   ...prev,
                                   activity_ids: [...activityIds, activity.id],
@@ -1537,27 +1834,18 @@ const TourEditor: React.FC = () => {
                               }
                             }}
                             className={`relative cursor-pointer rounded-lg border-2 transition-all duration-200 ${isSelected
-                                ? 'border-secondary bg-secondary/5 shadow-md'
-                                : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                              ? 'border-secondary bg-secondary/10 shadow-md'
+                              : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                               }`}
                           >
-                            <div className="p-4">
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={activity.image}
-                                  alt={activity.name}
-                                  className="w-12 h-12 object-cover rounded-lg"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';
-                                  }}
-                                />
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-gray-900">{activity.name}</h4>
-                                  <p className="text-sm text-gray-500">{(activity as any).type || 'Activity'}</p>
+                            <div className="p-3">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-medium text-gray-900 truncate text-sm">{activity.name}</h4>
                                 </div>
                                 {isSelected && (
-                                  <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
-                                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <div className="w-5 h-5 bg-secondary rounded-full flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>
                                   </div>
@@ -1654,6 +1942,7 @@ const TourEditor: React.FC = () => {
                             type="text"
                             value={highlight}
                             onChange={(e) => handleArrayChange('highlights', index, e.target.value)}
+                            onPaste={(e) => handlePasteAsArray(e, 'highlights', index)}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             placeholder="Tour highlight..."
                           />
@@ -1692,6 +1981,7 @@ const TourEditor: React.FC = () => {
                             type="text"
                             value={inclusion}
                             onChange={(e) => handleArrayChange('inclusions', index, e.target.value)}
+                            onPaste={(e) => handlePasteAsArray(e, 'inclusions', index)}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             placeholder="What's included..."
                           />
@@ -1730,6 +2020,7 @@ const TourEditor: React.FC = () => {
                             type="text"
                             value={exclusion}
                             onChange={(e) => handleArrayChange('exclusions', index, e.target.value)}
+                            onPaste={(e) => handlePasteAsArray(e, 'exclusions', index)}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                             placeholder="What's not included..."
                           />
@@ -1759,9 +2050,19 @@ const TourEditor: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-white rounded-lg shadow-sm border p-6"
                 >
-                  <div className="mb-6">
-                    <h2 className="text-xl font-semibold text-gray-900">Tour Itinerary</h2>
-                    <p className="text-sm text-gray-600 mt-1">Create a detailed day-by-day itinerary for your tour</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900">Tour Itinerary</h2>
+                      <p className="text-sm text-gray-600 mt-1">Create a detailed day-by-day itinerary for your tour</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowItineraryPasteModal(true)}
+                      className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors flex items-center gap-2 border border-blue-200"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Paste Itinerary
+                    </button>
                   </div>
 
                   <div className="space-y-4">
@@ -2044,11 +2345,11 @@ const TourEditor: React.FC = () => {
               )}
             </form>
           </div>
-        </main>
-      </div>
+        </main >
+      </div >
 
       {/* Progress Modal */}
-      <ProgressModal
+      < ProgressModal
         isOpen={showProgressModal}
         title={isEditing ? 'Updating Tour' : 'Creating Tour'}
         message={progressMessage}
@@ -2082,7 +2383,146 @@ const TourEditor: React.FC = () => {
           }
         ] : []}
       />
-    </div>
+      {/* Import JSON Modal */}
+      {
+        showImportModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileJson className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Import Tour JSON</h3>
+                    <p className="text-sm text-gray-500">Paste your tour data JSON below</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowImportModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleJsonImport} className="flex-1 flex flex-col overflow-hidden">
+                <div className="p-6 flex-1 overflow-y-auto">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>Tip:</strong> You can paste a full JSON object here. Fields found in the JSON will overwrite the current form data.
+                    </p>
+                  </div>
+                  <textarea
+                    value={importJson}
+                    onChange={(e) => setImportJson(e.target.value)}
+                    className="w-full h-96 p-4 font-mono text-sm bg-slate-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder={`{
+  "title": "Tour Title",
+  "description": "Tour description...",
+  "price": 1000,
+  "duration": "10 days",
+  "itinerary": [
+    { "day": 1, "title": "Arrival", "description": "..." }
+  ]
+}`}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 rounded-b-lg">
+                  <button
+                    type="button"
+                    onClick={() => setShowImportModal(false)}
+                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!importJson.trim()}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    <FileJson className="w-4 h-4" />
+                    Parse & Import
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+
+      {/* Paste Itinerary Modal */}
+      {
+        showItineraryPasteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Paste Itinerary</h3>
+                    <p className="text-sm text-gray-500">Paste your raw itinerary text below</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowItineraryPasteModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleItineraryPaste} className="flex-1 flex flex-col overflow-hidden">
+                <div className="p-6 flex-1 overflow-y-auto">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>Instructions:</strong> Paste your itinerary text. We'll look for lines starting with "Day 1", "Day 2", etc. to separate the days.
+                    </p>
+                    <p className="text-xs text-blue-600 mt-2 font-mono">
+                      Example:<br />
+                      Day 1: Arrival in Kathmandu<br />
+                      We pick you up from the airport...<br />
+                      <br />
+                      Day 2: Sightseeing<br />
+                      ...
+                    </p>
+                  </div>
+                  <textarea
+                    value={itineraryPasteText}
+                    onChange={(e) => setItineraryPasteText(e.target.value)}
+                    className="w-full h-96 p-4 font-mono text-sm bg-slate-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Paste your itinerary here..."
+                    autoFocus
+                  />
+                </div>
+
+                <div className="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 rounded-b-lg">
+                  <button
+                    type="button"
+                    onClick={() => setShowItineraryPasteModal(false)}
+                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!itineraryPasteText.trim()}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Parse & Create Itinerary
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 

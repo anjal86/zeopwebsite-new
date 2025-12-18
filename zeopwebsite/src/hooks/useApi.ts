@@ -182,18 +182,18 @@ export function usePaginatedTours(filters: {
 
       const apiFilters = {
         ...(filters.search && { search: filters.search }),
-        ...(filters.destination && { location: filters.destination }),
-        ...(filters.activity && { search: filters.activity }) // Use search for activity filtering
+        ...(filters.destination && { location: filters.destination }), // Map destination to location
+        ...(filters.activity && { search: filters.activity }) // Use search for activity if needed, or update API to support activity filter
       };
 
       const result = await api.tours.getPaginated(page, 12, apiFilters);
-      
+
       if (append && page > 1) {
         setTours(prevTours => [...prevTours, ...result.tours]);
       } else {
         setTours(result.tours);
       }
-      
+
       setPagination(result.pagination);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -247,6 +247,8 @@ export function useSearchTours(query: string) {
 export function useDestinations() {
   return useApiCall(() => api.destinations.getAll());
 }
+
+
 
 export function useDestination(id: number) {
   return useApiCall(() => api.destinations.getById(id), [id]);

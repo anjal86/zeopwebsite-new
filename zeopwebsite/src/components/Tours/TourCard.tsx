@@ -44,7 +44,7 @@ const TourCard: React.FC<TourCardProps> = ({
         return primaryDestination.country ? `${primaryDestination.name}, ${primaryDestination.country}` : primaryDestination.name;
       }
     }
-    
+
     // Fallback to the location field if no destination relationship exists
     return tour.location || 'Location not specified';
   };
@@ -57,116 +57,121 @@ const TourCard: React.FC<TourCardProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -2 }}
+        whileHover={{ y: -4 }}
         className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group w-full border border-gray-100"
         onClick={handleViewDetails}
       >
         <div className="flex flex-col md:flex-row md:items-stretch">
           {/* Image Container - Left Side */}
-          <div className="relative md:w-80 h-48 md:h-full overflow-hidden flex-shrink-0">
+          <div className="relative md:w-80 h-56 md:h-auto overflow-hidden flex-shrink-0">
             <div className={`absolute inset-0 bg-gray-200 animate-pulse ${imageLoaded ? 'hidden' : 'block'}`} />
             <img
               src={tour.image}
               alt={tour.title}
-              className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
               onLoad={() => setImageLoaded(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-            
-            {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
-              {tour.featured && (
-                <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+            {/* Soft Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+            {/* Featured Badge - Minimal Floating */}
+            {tour.featured && (
+              <div className="absolute top-3 left-3 z-10">
+                <div className="bg-white/95 backdrop-blur-sm text-yellow-600 px-3 py-1 rounded-full shadow-sm font-bold text-[10px] uppercase tracking-wider border border-white/50">
                   Featured
-                </span>
-              )}
-              {tour.hasDiscount && tour.discountPercentage && (
-                <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                  {tour.discountPercentage}% OFF
-                </span>
-              )}
-              {tour.discount && (
-                <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                  {tour.discount}% OFF
-                </span>
-              )}
+                </div>
+              </div>
+            )}
+
+            {/* Other Badges */}
+            <div className="absolute top-0 left-0 w-full p-4 flex justify-end items-start pointer-events-none">
+              {/* Right: Discount Badge */}
+              <div>
+                {(tour.hasDiscount && tour.discountPercentage) || tour.discount ? (
+                  <div className="bg-red-500 text-white min-w-[45px] h-[45px] flex items-center justify-center rounded-full shadow-xl border-2 border-white/20 transform rotate-12 hover:rotate-0 transition-transform duration-300">
+                    <div className="text-center leading-none">
+                      <span className="block text-xs font-bold">{tour.discountPercentage || tour.discount}%</span>
+                      <span className="block text-[8px] uppercase font-medium">OFF</span>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
 
           {/* Content Area - Right Side */}
-          <div className="flex-1 p-6 flex flex-col justify-between">
+          <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
             <div>
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center text-sky-600 font-medium text-sm tracking-wide uppercase">
+                  <MapPin className="w-4 h-4 mr-1.5" />
+                  {destinationName}
+                </div>
+                <div className="flex items-center space-x-4 text-gray-500 text-sm">
+                  <div className="flex items-center">
+                    <Clock className="w-4 h-4 mr-1.5" />
+                    {formatDuration(tour.duration)}
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 mr-1.5" />
+                    {tour.group_size}
+                  </div>
+                </div>
+              </div>
+
               {/* Title */}
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight group-hover:text-sky-blue transition-colors">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-1 group-hover:text-sky-600 transition-colors">
                 {tour.title}
               </h3>
 
-              {/* Location */}
-              <div className="flex items-center text-gray-600 mb-4">
-                <MapPin className="w-5 h-5 mr-2 text-sky-blue" />
-                <span className="text-base font-medium">{destinationName}</span>
-              </div>
-
-              {/* Tour Details */}
-              <div className="grid grid-cols-2 gap-4 mb-4 text-sm text-gray-600">
-                <div className="flex items-center bg-gray-50 px-3 py-2 rounded-lg">
-                  <Clock className="w-4 h-4 mr-2 text-sky-blue" />
-                  <span className="font-medium">{formatDuration(tour.duration)}</span>
-                </div>
-                <div className="flex items-center bg-gray-50 px-3 py-2 rounded-lg">
-                  <Users className="w-4 h-4 mr-2 text-sky-blue" />
-                  <span className="font-medium">{tour.group_size}</span>
-                </div>
-              </div>
-
               {/* Description */}
-              <p className="text-gray-600 text-sm line-clamp-2 mb-4 leading-relaxed">
+              <p className="text-gray-500 text-base line-clamp-2 mb-6 leading-relaxed">
                 {tour.description}
               </p>
             </div>
 
             {/* Price and Action */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              <div className="flex items-baseline">
+            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+              <div>
                 {tour.priceAvailable !== false ? (
-                  <>
-                    {tour.hasDiscount && tour.discountPercentage ? (
-                      <>
-                        <span className="text-3xl font-bold text-sky-blue">
-                          ${Math.round(tour.price * (1 - tour.discountPercentage / 100))}
-                        </span>
-                        <span className="ml-2 text-base text-gray-400 line-through">
+                  <div className="flex flex-col">
+                    <span className="text-sm text-gray-400 font-medium mb-0.5">Starting from</span>
+                    <div className="flex items-baseline">
+                      {tour.hasDiscount && tour.discountPercentage ? (
+                        <>
+                          <span className="text-2xl font-bold text-gray-900">
+                            ${Math.round(tour.price * (1 - tour.discountPercentage / 100))}
+                          </span>
+                          <span className="ml-2 text-sm text-gray-400 line-through">
+                            ${tour.price}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-2xl font-bold text-gray-900">
                           ${tour.price}
                         </span>
-                      </>
-                    ) : (
-                      <span className="text-3xl font-bold text-sky-blue">
-                        ${tour.price}
-                      </span>
-                    )}
-                    <span className="ml-2 text-sm text-gray-500">per person</span>
-                  </>
+                      )}
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex flex-col">
-                    <span className="text-2xl font-bold text-green-600">
+                    <span className="text-xl font-bold text-green-600">
                       Request Price
                     </span>
                     <span className="text-xs text-gray-500">Contact for pricing</span>
                   </div>
                 )}
               </div>
-              
+
               <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleViewDetails}
-            className="flex items-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl group/btn"
-          >
-            <span>View Details</span>
-            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-          </motion.button>
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleViewDetails}
+                className="w-12 h-12 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center hover:bg-sky-600 hover:text-white transition-colors shadow-sm"
+              >
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
             </div>
           </div>
         </div>
@@ -179,114 +184,117 @@ const TourCard: React.FC<TourCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group w-full h-full flex flex-col border border-gray-100"
+      whileHover={{ y: -8 }}
+      className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer group w-full h-full flex flex-col border border-gray-100"
       onClick={handleViewDetails}
     >
       {/* Large Image Container */}
-      <div className="relative h-56 overflow-hidden flex-shrink-0">
+      <div className="relative h-64 overflow-hidden flex-shrink-0">
         <div className={`absolute inset-0 bg-gray-200 animate-pulse ${imageLoaded ? 'hidden' : 'block'}`} />
         <img
           src={tour.image}
           alt={tour.title}
-          className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
           onLoad={() => setImageLoaded(true)}
         />
-        
+
         {/* Enhanced gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          {tour.featured && (
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+
+        {/* Featured Badge - Minimal Floating */}
+        {tour.featured && (
+          <div className="absolute top-4 left-4 z-10">
+            <div className="bg-white/95 backdrop-blur-sm text-yellow-600 px-3 py-1 rounded-full shadow-lg font-bold text-[10px] uppercase tracking-wider border border-white/50">
               Featured
-            </span>
-          )}
-          {tour.hasDiscount && tour.discountPercentage && (
-            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-              {tour.discountPercentage}% OFF
-            </span>
-          )}
-          {tour.discount && (
-            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-              {tour.discount}% OFF
-            </span>
-          )}
+            </div>
+          </div>
+        )}
+
+        {/* Other Badges */}
+        <div className="absolute top-0 left-0 w-full p-4 flex justify-end items-start pointer-events-none">
+          {/* Right: Discount Badge */}
+          <div>
+            {(tour.hasDiscount && tour.discountPercentage) || tour.discount ? (
+              <div className="bg-red-500 text-white min-w-[50px] h-[50px] flex items-center justify-center rounded-full shadow-xl border-2 border-white/20 transform rotate-12 hover:rotate-0 transition-transform duration-300">
+                <div className="text-center leading-none">
+                  <span className="block text-sm font-bold">{tour.discountPercentage || tour.discount}%</span>
+                  <span className="block text-[10px] uppercase font-medium">OFF</span>
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-6 flex flex-col flex-1 relative">
+        {/* Floating Category/Location Badge */}
+        <div className="absolute -top-5 right-6 bg-white shadow-lg rounded-xl px-4 py-2 flex items-center gap-1.5 text-xs font-bold text-gray-800 uppercase tracking-wide border border-gray-50">
+          <MapPin className="w-3.5 h-3.5 text-sky-500" />
+          {destinationName}
+        </div>
+
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight group-hover:text-sky-blue transition-colors">
+        <h3 className="text-xl font-bold text-gray-900 mt-2 mb-3 line-clamp-2 leading-tight group-hover:text-sky-600 transition-colors">
           {tour.title}
         </h3>
 
-        {/* Location */}
-        <div className="flex items-center text-gray-600 mb-4">
-          <MapPin className="w-4 h-4 mr-2 text-sky-blue" />
-          <span className="text-sm font-medium">{destinationName}</span>
-        </div>
-
-        {/* Tour Details Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-4 text-sm text-gray-600">
-          <div className="flex items-center bg-gray-50 px-3 py-2 rounded-lg">
-            <Clock className="w-4 h-4 mr-2 text-sky-blue" />
-            <span className="font-medium">{formatDuration(tour.duration)}</span>
+        {/* Minimal Meta */}
+        <div className="flex items-center gap-4 mb-6 text-sm text-gray-500 font-medium">
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-4 h-4 text-sky-500" />
+            {formatDuration(tour.duration)}
           </div>
-          <div className="flex items-center bg-gray-50 px-3 py-2 rounded-lg">
-            <Users className="w-4 h-4 mr-2 text-sky-blue" />
-            <span className="font-medium">{tour.group_size}</span>
+          <div className="w-1 h-1 rounded-full bg-gray-300"></div>
+          <div className="flex items-center gap-1.5">
+            <Users className="w-4 h-4 text-sky-500" />
+            {tour.group_size}
           </div>
         </div>
 
-        {/* Spacer to push price/button to bottom */}
+        {/* Spacer */}
         <div className="flex-1"></div>
 
         {/* Price and Details Button */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div className="flex items-center justify-between pt-5 border-t border-gray-100 mt-auto">
           <div className="flex flex-col">
             {tour.priceAvailable !== false ? (
               <>
-                <div className="flex items-baseline">
+                <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">From</span>
+                <div className="flex items-baseline gap-2">
                   {tour.hasDiscount && tour.discountPercentage ? (
                     <>
-                      <span className="text-2xl font-bold text-sky-blue">
+                      <span className="text-2xl font-bold text-gray-900">
                         ${Math.round(tour.price * (1 - tour.discountPercentage / 100))}
                       </span>
-                      <span className="ml-2 text-sm text-gray-400 line-through">
+                      <span className="text-sm text-gray-400 line-through">
                         ${tour.price}
                       </span>
                     </>
                   ) : (
-                    <span className="text-2xl font-bold text-sky-blue">
+                    <span className="text-2xl font-bold text-gray-900">
                       ${tour.price}
                     </span>
                   )}
                 </div>
-                <span className="text-xs text-gray-500">per person</span>
               </>
             ) : (
               <>
-                <span className="text-xl font-bold text-green-600">
+                <span className="text-lg font-bold text-green-600">
                   Request Price
                 </span>
                 <span className="text-xs text-gray-500">Contact for pricing</span>
               </>
             )}
           </div>
-          
+
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleViewDetails}
-            className="flex items-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl group/btn"
+            whileHover={{ x: 5 }}
+            className="group/btn flex items-center gap-2 text-sm font-bold text-sky-600 bg-sky-50 px-4 py-2.5 rounded-xl hover:bg-sky-600 hover:text-white transition-all"
           >
-            <span>Details</span>
-            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+            <span>View Details</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
           </motion.button>
         </div>
       </div>

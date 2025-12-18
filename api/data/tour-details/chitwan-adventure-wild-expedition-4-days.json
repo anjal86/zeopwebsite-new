@@ -5,8 +5,8 @@
   "category": "Adventure",
   "description": "Break free from the mundane and immerse yourself in an exceptional 4-day adventure that merges exhilarating white-water rafting on the mighty Trishuli River with an immersive jungle safari expedition in Chitwan National Park. This meticulously designed adventure package transports you from thundering river rapids to pristine wilderness, delivering the ideal fusion of high-octane thrills and natural discovery that adventure enthusiasts crave.",
   "location": "Chitwan",
-  "price": 520,
-  "duration": "4 days 3 nights",
+  "price": 0,
+  "duration": "43 days",
   "group_size": "2-7 people",
   "difficulty": "Moderate",
   "rating": 4.7,
@@ -150,10 +150,26 @@
     "cancellation_policy": "Free cancellation up to 3 days before departure. Weather-dependent activities may be modified for safety."
   },
   "primary_destination_id": 7,
-  "secondary_destination_ids": [6],
-  "activity_ids": [4, 5, 8],
-  "related_destinations": ["Kathmandu", "Malekhu", "Kurintar", "Sauraha"],
-  "related_activities": ["White-water Rafting", "Wildlife Safari", "Adventure Camping", "Nature Walks"],
+  "secondary_destination_ids": [
+    6
+  ],
+  "activity_ids": [
+    4,
+    5,
+    8
+  ],
+  "related_destinations": [
+    "Kathmandu",
+    "Malekhu",
+    "Kurintar",
+    "Sauraha"
+  ],
+  "related_activities": [
+    "White-water Rafting",
+    "Wildlife Safari",
+    "Adventure Camping",
+    "Nature Walks"
+  ],
   "good_to_know": {
     "main_attractions": "Exhilarating Class III white-water rafting on Trishuli River, unique jungle tower camping experience inside Chitwan National Park, comprehensive wildlife encounters including rhinos and potential tiger sightings, peaceful canoe expeditions on Rapti River, expert-guided wilderness exploration, and cultural stop at renowned Barahsinghe Beer Factory.",
     "travel_distances": "Kathmandu to Malekhu/Kurintar takes 3-4 hours for rafting start point, Malekhu to Chitwan requires 2-3 hours scenic drive, all jungle activities occur within national park boundaries, and return journey to Kathmandu via Barahsinghe takes 5-6 hours with cultural stops.",
@@ -183,5 +199,6 @@
     }
   ],
   "created_at": "2025-10-02T07:20:00.000Z",
-  "updated_at": "2025-10-02T07:20:00.000Z"
+  "updated_at": "2025-12-18T04:21:06.709Z",
+  "priceAvailable": false
 }

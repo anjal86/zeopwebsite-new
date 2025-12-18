@@ -5,7 +5,7 @@
   "category": "Cultural",
   "description": "Experience the best of Nepal with this comprehensive cross-border tour covering Pokhara's natural beauty, Kathmandu's cultural heritage, and Chitwan's wildlife adventure. This unique journey starts from Gorakhpur, India, and takes you through the sacred birthplace of Lord Buddha in Lumbini, the serene lakes of Pokhara, the ancient temples of Kathmandu, and the wildlife paradise of Chitwan National Park.",
   "location": "Nepal",
-  "price": 899,
+  "price": 0,
   "duration": "7 days",
   "group_size": "2-15 people",
   "difficulty": "Easy",
@@ -116,5 +116,10 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2024-12-30T10:00:00.000Z",
-  "updated_at": "2024-12-30T10:00:00.000Z"
+  "updated_at": "2025-12-18T04:22:40.981Z",
+  "secondary_destination_ids": [],
+  "activity_ids": [],
+  "related_destinations": [],
+  "related_activities": [],
+  "priceAvailable": false
 }

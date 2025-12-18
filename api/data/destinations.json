@@ -27,7 +27,7 @@
       2
     ],
     "title": "Everest",
-    "listed": true
+    "listed": false
   },
   {
     "id": 3,
@@ -56,7 +56,7 @@
       5
     ],
     "title": "Langtang",
-    "listed": true
+    "listed": false
   },
   {
     "id": 5,
@@ -80,14 +80,14 @@
       7,
       9,
       32,
-      104,
-      105
+      105,
+      104
     ],
     "relatedActivities": [
       3
     ],
     "title": "Pokhara",
-    "listed": true
+    "listed": false
   },
   {
     "id": 6,
@@ -108,13 +108,17 @@
     "altitude": "1,400m",
     "difficulty": "Easy",
     "relatedTours": [
-      31
+      31,
+      107,
+      106,
+      105,
+      104
     ],
     "relatedActivities": [
       5
     ],
     "title": "Kathmandu",
-    "listed": true
+    "listed": false
   },
   {
     "id": 7,
@@ -136,27 +140,27 @@
     "difficulty": "Easy",
     "relatedTours": [
       33,
-      3,
-      106,
       107,
-      304
+      304,
+      106,
+      3
     ],
     "relatedActivities": [
       4,
       5
     ],
     "title": "Chitwan",
-    "listed": true
+    "listed": false
   },
   {
     "id": 9,
     "name": "Tibet",
-    "country": "Tibet",
+    "country": "China",
     "image": "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "tourCount": 0,
     "href": "/destinations/tibet",
     "type": "international",
-    "description": "The 'Roof of the World' offers spiritual journeys, ancient monasteries, and breathtaking high-altitude landscapes including Mount Kailash.",
+    "description": "Discover the beauty and culture of Tibet in China.",
     "highlights": [
       "Mount Kailash",
       "Lake Mansarovar",
@@ -167,14 +171,17 @@
     "altitude": "3,656m",
     "difficulty": "Moderate to Challenging",
     "relatedTours": [
-      13,
-      11
+      11,
+      316,
+      317,
+      314
     ],
     "relatedActivities": [
       6,
       5
     ],
-    "listed": true
+    "listed": true,
+    "title": "Tibet"
   },
   {
     "id": 10,
@@ -295,7 +302,9 @@
     "bestTime": "Dec-Mar, Jul-Sep",
     "altitude": "Varies",
     "difficulty": "Easy to Moderate",
-    "relatedTours": [],
+    "relatedTours": [
+      303
+    ],
     "relatedActivities": [
       5,
       4
@@ -522,7 +531,8 @@
     "altitude": "2,990m",
     "difficulty": "Easy to Moderate",
     "relatedTours": [
-      108
+      108,
+      302
     ],
     "relatedActivities": [
       1,
@@ -532,7 +542,7 @@
     "region": "Far West",
     "slug": "rara",
     "featured": true,
-    "listed": true
+    "listed": false
   },
   {
     "id": 26,
@@ -557,9 +567,8 @@
     "altitude": "Sea Level",
     "difficulty": "Easy",
     "relatedTours": [
-      202,
-      201,
-      203
+      203,
+      201
     ],
     "relatedActivities": [
       8,
@@ -581,7 +590,7 @@
     "region": "",
     "image": "/uploads/destinations/annapurna-/annapurna-_1762006248934.jpeg",
     "featured": false,
-    "listed": true,
+    "listed": false,
     "tourCount": 0,
     "href": "/destinations/annapurna-",
     "type": "nepal",

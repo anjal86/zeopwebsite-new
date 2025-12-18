@@ -4,6 +4,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -12,7 +13,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -203,7 +204,7 @@ const ContactManager: React.FC = () => {
       // Don't refetch - just show success
       setLastSaved(new Date());
       setSubmitError(null);
-      
+
       // Show save notification
       setShowSaveNotification(true);
       setTimeout(() => setShowSaveNotification(false), 3000);
@@ -223,20 +224,20 @@ const ContactManager: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const keys = name.split('.');
-    
+
     setFormData(prev => {
       const newData = { ...prev };
       let current: any = newData;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
       }
-      
+
       current[keys[keys.length - 1]] = value;
-      
+
       // Auto-save after change
       debouncedAutoSave(newData);
-      
+
       return newData;
     });
   };
@@ -244,7 +245,7 @@ const ContactManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="loader"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading contact information...</span>
       </div>
     );
@@ -256,7 +257,7 @@ const ContactManager: React.FC = () => {
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">Error Loading Contact Information</h3>
         <p className="text-gray-500 mb-4">{error}</p>
-        <button 
+        <button
           onClick={() => refetch()}
           className="btn-primary"
         >
@@ -277,7 +278,7 @@ const ContactManager: React.FC = () => {
         <div className="flex items-center gap-3">
           {isSubmitting && (
             <div className="flex items-center text-blue-600">
-              <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+              <LoadingSpinner size="sm" className="mr-2" />
               <span className="text-sm">Saving...</span>
             </div>
           )}
@@ -597,8 +598,8 @@ const ContactManager: React.FC = () => {
                 />
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-800">
-                    <strong>How to get Google Maps URLs:</strong><br/>
-                    1. <strong>Maps URL:</strong> Go to Google Maps, find your location, click "Share" → "Copy link"<br/>
+                    <strong>How to get Google Maps URLs:</strong><br />
+                    1. <strong>Maps URL:</strong> Go to Google Maps, find your location, click "Share" → "Copy link"<br />
                     2. <strong>Embed URL:</strong> Click "Share" → "Embed a map" → Copy the src URL from the iframe code
                   </p>
                 </div>

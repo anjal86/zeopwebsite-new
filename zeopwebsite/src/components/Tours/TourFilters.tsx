@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter } from 'lucide-react';
+import { useDestinations, useActivities } from '../../hooks/useApi';
 
 interface FilterOptions {
   search: string;
@@ -14,11 +15,14 @@ interface TourFiltersProps {
   filteredCount: number;
 }
 
-const TourFilters: React.FC<TourFiltersProps> = ({ 
-  onFiltersChange, 
-  totalTours, 
-  filteredCount 
+const TourFilters: React.FC<TourFiltersProps> = ({
+  onFiltersChange,
+  totalTours,
+  filteredCount
 }) => {
+  const { data: destinationsData } = useDestinations();
+  const { data: activitiesData } = useActivities();
+
   const [filters, setFilters] = useState<FilterOptions>({
     search: '',
     destination: '',
@@ -33,25 +37,18 @@ const TourFilters: React.FC<TourFiltersProps> = ({
 
   const destinations = [
     { value: '', label: 'All Destinations' },
-    { value: 'nepal', label: 'Nepal' },
-    { value: 'tibet', label: 'Tibet' },
-    { value: 'bhutan', label: 'Bhutan' },
-    { value: 'maldives', label: 'Maldives' },
-    { value: 'thailand', label: 'Thailand' }
+    ...(destinationsData || []).map(dest => ({
+      value: dest.name.toLowerCase(),
+      label: dest.name
+    }))
   ];
 
   const activities = [
     { value: '', label: 'All Activities' },
-    { value: 'trekking', label: 'Trekking' },
-    { value: 'paragliding', label: 'Paragliding' },
-    { value: 'cultural tours', label: 'Cultural Tours' },
-    { value: 'pilgrimage', label: 'Pilgrimage' },
-    { value: 'spa treatments', label: 'Spa & Wellness' },
-    { value: 'water sports', label: 'Water Sports' },
-    { value: 'mountain views', label: 'Mountain Views' },
-    { value: 'monastery visits', label: 'Monastery Visits' },
-    { value: 'wildlife', label: 'Wildlife' },
-    { value: 'adventure sports', label: 'Adventure Sports' }
+    ...(activitiesData || []).map(activity => ({
+      value: activity.name.toLowerCase(),
+      label: activity.name
+    }))
   ];
 
   return (
@@ -59,7 +56,7 @@ const TourFilters: React.FC<TourFiltersProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8"
+      className="bg-white rounded-none shadow-lg border border-gray-100 p-6 mb-8"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -82,7 +79,7 @@ const TourFilters: React.FC<TourFiltersProps> = ({
             value={filters.search}
             onChange={(e) => handleFilterChange('search', e.target.value)}
             placeholder="Search tours..."
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-none focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
           />
         </div>
 
@@ -90,7 +87,7 @@ const TourFilters: React.FC<TourFiltersProps> = ({
         <select
           value={filters.destination}
           onChange={(e) => handleFilterChange('destination', e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
+          className="w-full p-3 border border-gray-300 rounded-none focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
         >
           {destinations.map((dest) => (
             <option key={dest.value} value={dest.value}>
@@ -103,7 +100,7 @@ const TourFilters: React.FC<TourFiltersProps> = ({
         <select
           value={filters.activity}
           onChange={(e) => handleFilterChange('activity', e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
+          className="w-full p-3 border border-gray-300 rounded-none focus:ring-2 focus:ring-sky-blue focus:border-transparent transition-all duration-300"
         >
           {activities.map((activity) => (
             <option key={activity.value} value={activity.value}>

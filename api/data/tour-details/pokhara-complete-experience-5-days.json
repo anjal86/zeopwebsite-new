@@ -5,8 +5,8 @@
   "category": "Cultural",
   "description": "A 5-day curated journey in and around Pokhara. From sunrise at Sarangkot and lake adventures to caves, cultural gems, and nearby hidden escapes like Begnas and Kusma, this package offers couples and explorers a perfect mix of leisure, thrill, and discovery. Experience the best of Pokhara with scenic flights, spiritual sites, adventure activities, and local cultural immersion.",
   "location": "Pokhara",
-  "price": 650,
-  "duration": "5 days 4 nights",
+  "price": 0,
+  "duration": "54 days",
   "group_size": "2-7 people",
   "difficulty": "Easy",
   "rating": 4.7,
@@ -138,10 +138,25 @@
     "cancellation_policy": "Free cancellation up to 3 days before departure. Flight-dependent packages subject to airline policies."
   },
   "primary_destination_id": 5,
-  "secondary_destination_ids": [6],
-  "activity_ids": [3, 5],
-  "related_destinations": ["Kathmandu", "Sarangkot", "Begnas", "Kusma"],
-  "related_activities": ["Sightseeing", "Cultural Tours", "Lake Activities", "Adventure Sports"],
+  "secondary_destination_ids": [
+    6
+  ],
+  "activity_ids": [
+    3,
+    5
+  ],
+  "related_destinations": [
+    "Kathmandu",
+    "Sarangkot",
+    "Begnas",
+    "Kusma"
+  ],
+  "related_activities": [
+    "Sightseeing",
+    "Cultural Tours",
+    "Lake Activities",
+    "Adventure Sports"
+  ],
   "good_to_know": {
     "main_attractions": "Breathtaking sunrise experience at Sarangkot with panoramic Annapurna views, scenic domestic flights with stunning Himalayan aerial perspectives, cultural exploration of Bindabasini Temple and World Peace Stupa, adventure activities at Kusma sky bridge, serene boating on both Phewa and Begnas lakes, and authentic cultural immersion at Majhikuna village.",
     "travel_distances": "Kathmandu to Pokhara domestic flight takes 25 minutes with mountain views, or 6-7 hours scenic drive option, Pokhara to Kusma requires 2 hours for sky bridge activities, Pokhara to Begnas Lake involves 30 minutes comfortable drive, and all local sightseeing within Pokhara area covers short distances.",
@@ -171,6 +186,6 @@
     }
   ],
   "created_at": "2025-10-02T07:10:00.000Z",
-  "updated_at": "2025-10-02T07:10:00.000Z"
+  "updated_at": "2025-12-18T04:23:52.061Z",
+  "priceAvailable": false
 }
-

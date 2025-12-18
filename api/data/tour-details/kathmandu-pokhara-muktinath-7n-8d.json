@@ -5,7 +5,7 @@
   "category": "Cultural",
   "description": "Outline Itinerary Day 1: Arrival at Kathmandu Day 2: Kathmandu sightseeing Day 3: Drive to Pokhara and sightseeing Day 4: Drive to Muktinath Day 5: Mu...",
   "location": "Pokhara",
-  "price": 890,
+  "price": 0,
   "duration": "10 days",
   "group_size": "2-12 people",
   "difficulty": "Easy",
@@ -104,5 +104,10 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-09-19T04:47:52.514Z"
+  "updated_at": "2025-12-18T04:26:30.929Z",
+  "secondary_destination_ids": [],
+  "activity_ids": [],
+  "related_destinations": [],
+  "related_activities": [],
+  "priceAvailable": false
 }

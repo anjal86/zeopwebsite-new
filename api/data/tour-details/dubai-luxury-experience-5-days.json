@@ -5,8 +5,8 @@
   "category": "Luxury",
   "description": "Indulge in the ultimate Dubai luxury experience with 5-star accommodations, private tours, fine dining, and exclusive access to premium attractions. Perfect for those seeking the finest Dubai has to offer.",
   "location": "Dubai, UAE",
-  "price": 1899,
-  "duration": "5",
+  "price": 0,
+  "duration": "5 days",
   "group_size": "2-8 people",
   "difficulty": "Easy",
   "rating": 4.9,
@@ -126,7 +126,7 @@
     "cancellation_policy": "Free cancellation up to 14 days before departure"
   },
   "created_at": "2025-01-20T15:39:00.000Z",
-  "updated_at": "2025-10-11T18:59:18.645Z",
+  "updated_at": "2025-12-18T04:22:18.859Z",
   "listed": true,
   "primary_destination_id": 26,
   "secondary_destination_ids": [],
@@ -139,7 +139,7 @@
   "related_activities": [
     "Desert Safari"
   ],
-  "priceAvailable": true,
+  "priceAvailable": false,
   "hasDiscount": true,
   "discountPercentage": 10
 }

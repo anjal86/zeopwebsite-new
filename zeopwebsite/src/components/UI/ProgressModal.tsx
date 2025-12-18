@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { CheckCircle, AlertCircle } from 'lucide-react';
+import LoadingSpinner from './LoadingSpinner';
 
 interface ProgressModalProps {
   isOpen: boolean;
@@ -32,13 +33,13 @@ const ProgressModal: React.FC<ProgressModalProps> = ({
   const getStatusIcon = () => {
     switch (status) {
       case 'loading':
-        return <Loader className="w-8 h-8 text-blue-600 animate-spin" />;
+        return <LoadingSpinner size="lg" className="text-primary" />;
       case 'success':
         return <CheckCircle className="w-8 h-8 text-green-600" />;
       case 'error':
         return <AlertCircle className="w-8 h-8 text-red-600" />;
       default:
-        return <Loader className="w-8 h-8 text-blue-600 animate-spin" />;
+        return <LoadingSpinner size="lg" className="text-primary" />;
     }
   };
 
@@ -133,11 +134,10 @@ const ProgressModal: React.FC<ProgressModalProps> = ({
               <button
                 key={index}
                 onClick={button.onClick}
-                className={`px-6 py-2 rounded-lg transition-colors ${
-                  button.variant === 'primary'
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-gray-600 text-white hover:bg-gray-700'
-                }`}
+                className={`px-6 py-2 rounded-lg transition-colors ${button.variant === 'primary'
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-gray-600 text-white hover:bg-gray-700'
+                  }`}
               >
                 {button.label}
               </button>

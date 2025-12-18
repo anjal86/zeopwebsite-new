@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Menu, X, Phone, Mail, MapPin, MessageCircle, LogIn
+  Menu, X, Phone, MessageCircle
 } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { useContact } from '../../hooks/useApi';
 import { useLogos } from '../../hooks/useLogos';
 import ContactModal from '../UI/ContactModal';
@@ -75,76 +76,26 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      {/* Enhanced Top Info Bar */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: isScrolled ? 0 : 1, y: isScrolled ? -20 : 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="fixed top-0 left-0 right-0 bg-gradient-to-r from-primary/95 to-primary-dark/95 backdrop-blur-md text-white text-xs py-3 z-40 border-b border-white/10"
-      >
-        <div className="section-container">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-6">
-              <motion.a
-                href={`mailto:${contactInfo?.contact?.email?.primary || 'info@zeotourism.com'}`}
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center hover:text-secondary transition-colors duration-300"
-              >
-                <Mail className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">{contactInfo?.contact?.email?.primary || 'info@zeotourism.com'}</span>
-              </motion.a>
-              <motion.a
-                href={`tel:${contactInfo?.contact?.phone?.primary || '+9779851234567'}`}
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center hover:text-secondary transition-colors duration-300"
-              >
-                <Phone className="w-3 h-3 mr-2" />
-                <span className="hidden sm:inline font-medium">{contactInfo?.contact?.phone?.primary || '+9779851234567'}</span>
-              </motion.a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <MapPin className="w-3 h-3 mr-2 text-secondary" />
-                <span className="font-medium">{contactInfo?.contact?.address?.street || 'Baluwatar-4, Kathmandu'}</span>
-              </div>
-              {/* Login Text in Top Bar */}
-              <Link to="/admin/login">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center hover:text-secondary transition-colors duration-300 cursor-pointer"
-                >
-                  <LogIn className="w-3 h-3 mr-2" />
-                  <span className="font-medium text-xs">Login</span>
-                </motion.div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Enhanced Main Navigation */}
+      {/* Simplified Main Navigation */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 ease-out ${isScrolled
-            ? 'bg-white shadow-2xl border-b border-gray-200'
-            : 'bg-white shadow-xl mx-4 md:mx-16 rounded-b-2xl'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out border-b ${isScrolled
+          ? 'bg-white border-gray-200'
+          : 'bg-white border-gray-100'
           }`}
-        style={{
-          top: isScrolled ? '0px' : '40px',
-        }}
       >
         <div className={`transition-all duration-300 ease-out ${isScrolled ? 'px-4 lg:px-8' : 'px-6'
           }`}>
-          <div className="flex items-center justify-between h-15 py-3">
+          <div className="flex items-center justify-between h-20 py-2">
             {/* Logo */}
             <div className="flex items-center flex-shrink-0">
               <Link to="/" onClick={handleNavClick}>
                 <img
                   src={logos?.header || headerLogo}
                   alt="Zeo Tourism Logo"
-                  className="h-10 w-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  className="h-14 w-auto hover:scale-105 transition-transform duration-300 cursor-pointer"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = headerLogo;
                   }}
@@ -163,16 +114,16 @@ const Navigation: React.FC = () => {
                   <Link
                     to={item.href}
                     onClick={handleNavClick}
-                    className={`font-medium transition-all duration-300 relative py-2 px-3 whitespace-nowrap text-sm ${isActiveRoute(item.href)
-                        ? 'text-primary'
-                        : 'text-gray-700 hover:text-primary'
-                      } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
+                    className={`font-semibold transition-all duration-300 relative py-2.5 px-4 rounded-none text-sm group ${isActiveRoute(item.href)
+                      ? 'text-primary bg-primary/5'
+                      : 'text-gray-600 hover:text-primary hover:bg-gray-50/80'
+                      } ${item.label === 'Kailash Mansarovar' ? 'text-secondary-dark !bg-secondary/10 hover:!bg-secondary/20' : ''}`}
                   >
                     {item.label}
-                    {isActiveRoute(item.href) && (
+                    {isActiveRoute(item.href) && !(item.label === 'Kailash Mansarovar') && (
                       <motion.div
                         layoutId="activeSection"
-                        className="absolute -bottom-1 left-3 right-3 h-0.5 bg-primary rounded-full"
+                        className="absolute -bottom-0.5 left-4 right-4 h-0.5 bg-primary rounded-none"
                       />
                     )}
                   </Link>
@@ -180,18 +131,33 @@ const Navigation: React.FC = () => {
               ))}
             </div>
 
-            {/* CTA Button */}
-            <div className="hidden min-[1280px]:flex items-center flex-shrink-0">
+            {/* CTA Buttons & WhatsApp */}
+            <div className="hidden min-[1280px]:flex items-center space-x-4">
+              {/* WhatsApp Link - Redesigned as Pill */}
+              <motion.a
+                href="https://wa.me/9779705246799"
+                target="_blank"
+                rel="noopener noreferrer"
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2.5 px-4 py-2 rounded-none border border-green-100/50 hover:border-green-200/50 transition-all duration-300 group h-10"
+              >
+                <div className="bg-green-500 p-1.5 rounded-none text-white group-hover:scale-110 transition-all duration-300">
+                  <FaWhatsapp className="w-3.5 h-3.5" />
+                </div>
+                <span className="font-bold text-sm text-gray-700 group-hover:text-green-600 transition-colors duration-300">
+                  {contactInfo?.contact?.phone?.whatsapp || '+9779705246799'}
+                </span>
+              </motion.a>
+
               <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
+                whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowContactModal(true)}
-                className="bg-gradient-to-r from-secondary via-secondary-light to-secondary px-4 py-2 rounded-full text-white font-semibold hover:shadow-2xl transition-all duration-300 flex items-center gap-2 relative overflow-hidden group whitespace-nowrap text-sm"
+                className="bg-secondary px-6 py-2 rounded-none text-white font-bold transition-all duration-300 flex items-center gap-2 relative overflow-hidden group h-10 ring-2 ring-secondary/10 ring-offset-1"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary-light to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <MessageCircle className="w-4 h-4 relative z-10" />
+                <MessageCircle className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
                 <span className="relative z-10">Enquire Now</span>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-white/30 rounded-full animate-ping"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               </motion.button>
             </div>
 
@@ -227,10 +193,10 @@ const Navigation: React.FC = () => {
                       <Link
                         to={item.href}
                         onClick={handleNavClick}
-                        className={`block py-3 px-4 font-medium transition-all duration-300 ${isActiveRoute(item.href)
-                            ? 'text-primary'
-                            : 'text-gray-900 hover:text-primary'
-                          } ${item.label === 'Kailash Mansarovar' ? 'text-secondary font-semibold' : ''}`}
+                        className={`block py-3.5 px-5 font-bold transition-all duration-300 rounded-none ${isActiveRoute(item.href)
+                          ? 'text-primary bg-primary/5 shadow-sm'
+                          : 'text-gray-800 hover:text-primary hover:bg-gray-50'
+                          } ${item.label === 'Kailash Mansarovar' ? 'text-secondary-dark !bg-secondary/10' : ''}`}
                       >
                         {item.label}
                       </Link>
@@ -239,10 +205,27 @@ const Navigation: React.FC = () => {
                 </nav>
 
                 {/* Mobile Contact & CTA */}
-                <div className="mt-6 pt-6 border-t space-y-3 border-gray-200">
-                  <div className="flex items-center justify-center gap-2 py-2 text-gray-600">
-                    <Phone className="w-4 h-4" />
-                    <span className="text-sm">{contactInfo?.contact?.phone?.primary || '+9779851234567'}</span>
+                <div className="mt-8 pt-8 border-t space-y-4 border-gray-100">
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.a
+                      href={`tel:${contactInfo?.contact?.phone?.primary || '+9779851234567'}`}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center gap-2 py-3.5 rounded-none bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all duration-300 border border-gray-100"
+                    >
+                      <Phone className="w-4 h-4 text-primary" />
+                      <span className="text-xs font-bold whitespace-nowrap">Call Us</span>
+                    </motion.a>
+
+                    <motion.a
+                      href="https://wa.me/9779705246799"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center gap-2 py-3.5 rounded-none bg-green-50 text-green-700 hover:bg-green-100 transition-all duration-300 border border-green-100"
+                    >
+                      <FaWhatsapp className="w-4 h-4 text-green-600" />
+                      <span className="text-xs font-bold whitespace-nowrap">WhatsApp</span>
+                    </motion.a>
                   </div>
 
                   {/* Mobile Enquire Now Button */}
@@ -253,9 +236,9 @@ const Navigation: React.FC = () => {
                       setShowContactModal(true);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="bg-gradient-to-r from-secondary to-secondary-light px-6 py-3 rounded-full text-white font-semibold hover:shadow-lg transition-all duration-300 w-full flex items-center justify-center gap-2"
+                    className="bg-gradient-to-r from-secondary via-secondary/95 to-secondary-dark px-6 py-4 rounded-none text-white font-bold shadow-xl shadow-secondary/10 hover:shadow-secondary/20 transition-all duration-300 w-full flex items-center justify-center gap-2 border border-secondary/20"
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="w-5 h-5" />
                     Enquire Now
                   </motion.button>
                 </div>

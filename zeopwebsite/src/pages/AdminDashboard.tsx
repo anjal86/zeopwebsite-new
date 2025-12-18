@@ -23,6 +23,7 @@ import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
 import LogoManager from '../components/Admin/LogoManager';
 import AdminSidebar from '../components/Admin/AdminSidebar';
 import ActivityManager from '../components/Admin/ActivityManager';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 interface User {
   id: number;
@@ -109,7 +110,7 @@ const AdminDashboard: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
@@ -234,7 +235,7 @@ const AdminDashboard: React.FC = () => {
 
 // Overview Content Component
 const OverviewContent: React.FC<{ onTabChange: (tab: ActiveTab) => void }> = ({ onTabChange }) => {
-  const { data: destinations } = useApi('/api/destinations');
+  const { data: destinations } = useApi('/api/destinations?includeUnlisted=true');
   const { data: tours } = useApi('/api/tours');
   const { data: enquiries } = useAdminApi('/api/admin/enquiries');
   const { data: testimonials } = useApi('/api/testimonials');

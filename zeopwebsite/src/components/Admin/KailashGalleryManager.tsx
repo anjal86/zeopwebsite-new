@@ -5,6 +5,7 @@ import {
   Image as ImageIcon,
   X
 } from 'lucide-react';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 interface GalleryPhoto {
   id: number;
@@ -94,18 +95,18 @@ const KailashGalleryManager: React.FC = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0];
-      
+
       // Create a fake event object to reuse existing logic
       const fakeEvent = {
         target: {
           files: [file]
         }
       } as any;
-      
+
       handleFileChange(fakeEvent);
     }
   };
@@ -120,10 +121,10 @@ const KailashGalleryManager: React.FC = () => {
       setUploading(true);
       const token = localStorage.getItem('adminToken');
       const formData = new FormData();
-      
+
       // Use generic title based on timestamp
       const title = `Kailash Gallery Photo ${new Date().toISOString().split('T')[0]}`;
-      
+
       formData.append('photoData', JSON.stringify({
         title: title,
         alt: title
@@ -188,7 +189,7 @@ const KailashGalleryManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-orange-500 border-t-transparent"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading gallery...</span>
       </div>
     );
@@ -230,22 +231,20 @@ const KailashGalleryManager: React.FC = () => {
         <div className="p-6">
           {/* Enhanced Upload Zone */}
           <div
-            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-              isDragOver
+            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${isDragOver
                 ? 'border-orange-500 bg-gradient-to-br from-orange-50 to-orange-100 scale-[1.02] shadow-lg'
                 : 'border-gray-300 hover:border-orange-400 hover:bg-gray-50'
-            }`}
+              }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center gap-4">
               {/* Animated Icon */}
-              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                isDragOver
+              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${isDragOver
                   ? 'bg-orange-200 scale-110 rotate-3'
                   : 'bg-gradient-to-br from-gray-100 to-gray-200 hover:from-orange-50 hover:to-orange-100'
-              }`}>
+                }`}>
                 {isDragOver ? (
                   <svg className="w-8 h-8 text-orange-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -254,20 +253,19 @@ const KailashGalleryManager: React.FC = () => {
                   <ImageIcon className="w-8 h-8 text-gray-600" />
                 )}
               </div>
-              
+
               {/* Upload Text */}
               <div className="space-y-2">
-                <h4 className={`text-lg font-semibold transition-colors ${
-                  isDragOver ? 'text-orange-700' : 'text-gray-800'
-                }`}>
+                <h4 className={`text-lg font-semibold transition-colors ${isDragOver ? 'text-orange-700' : 'text-gray-800'
+                  }`}>
                   {isDragOver ? 'Drop your image here!' : 'Upload Photo'}
                 </h4>
-                
+
                 <p className="text-sm text-gray-500">
                   Drag & drop or click to browse
                 </p>
               </div>
-              
+
               {/* File Input Button */}
               <label className="relative cursor-pointer">
                 <div className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg">
@@ -302,7 +300,7 @@ const KailashGalleryManager: React.FC = () => {
                     <X className="w-3 h-3" />
                   </button>
                 </div>
-                
+
                 <div className="mt-4 flex justify-center">
                   <button
                     onClick={handlePhotoUpload}
@@ -310,10 +308,10 @@ const KailashGalleryManager: React.FC = () => {
                     className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
                   >
                     {uploading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                        Uploading...
-                      </>
+                      <div className="flex items-center gap-2 text-white">
+                        <LoadingSpinner size="sm" />
+                        <span>Uploading...</span>
+                      </div>
                     ) : (
                       <>
                         <Upload className="w-4 h-4 mr-2" />

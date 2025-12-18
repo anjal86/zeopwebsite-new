@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 interface LoginForm {
   email: string;
@@ -13,7 +14,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -127,7 +128,7 @@ const AdminLogin: React.FC = () => {
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <LoadingSpinner size="sm" />
                   <span>Signing in...</span>
                 </div>
               ) : (

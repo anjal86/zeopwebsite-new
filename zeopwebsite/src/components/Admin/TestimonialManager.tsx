@@ -17,6 +17,7 @@ import {
 import Toggle from '../UI/Toggle';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -25,7 +26,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -182,7 +183,7 @@ const TestimonialManager: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -203,7 +204,7 @@ const TestimonialManager: React.FC = () => {
       const url = editingTestimonial
         ? `${getApiBaseUrl()}/admin/testimonials/${editingTestimonial.id}`
         : `${getApiBaseUrl()}/admin/testimonials`;
-      
+
       const method = editingTestimonial ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -270,7 +271,7 @@ const TestimonialManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="loader"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading testimonials...</span>
       </div>
     );
@@ -282,7 +283,7 @@ const TestimonialManager: React.FC = () => {
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">Error Loading Testimonials</h3>
         <p className="text-gray-500 mb-4">{error}</p>
-        <button 
+        <button
           onClick={fetchTestimonials}
           className="btn-primary"
         >
@@ -320,21 +321,19 @@ const TestimonialManager: React.FC = () => {
         <div className="bg-gray-100 rounded-full p-1">
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'all'
+            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${activeTab === 'all'
                 ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
                 : 'text-gray-600 hover:text-blue-500'
-            }`}
+              }`}
           >
             All ({testimonials.length})
           </button>
           <button
             onClick={() => setActiveTab('featured')}
-            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'featured'
+            className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${activeTab === 'featured'
                 ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg'
                 : 'text-gray-600 hover:text-yellow-500'
-            }`}
+              }`}
           >
             Featured ({testimonials.filter(t => t.is_featured).length})
           </button>
@@ -426,19 +425,18 @@ const TestimonialManager: React.FC = () => {
                     <Edit className="w-4 h-4" />
                     Edit
                   </button>
-                  
+
                   <button
                     onClick={() => handleToggleFeatured(testimonial.id)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
-                      testimonial.is_featured
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${testimonial.is_featured
                         ? 'bg-yellow-500 text-white hover:bg-yellow-600'
                         : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                    }`}
+                      }`}
                     title={testimonial.is_featured ? 'Remove from featured' : 'Add to featured'}
                   >
                     <Star className="w-4 h-4" />
                   </button>
-                  
+
                   <button
                     onClick={() => handleDeleteClick(testimonial)}
                     className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
@@ -704,7 +702,7 @@ const TestimonialManager: React.FC = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <LoadingSpinner size="sm" />
                         Saving...
                       </>
                     ) : (

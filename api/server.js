@@ -747,6 +747,15 @@ app.get('/api/tours', async (req, res) => {
   // Filter out unlisted tours (only show tours where listed is true or undefined)
   let filteredTours = allTours.filter(tour => tour.listed !== false);
 
+  // Filter out tours whose primary destination is unlisted
+  const unlistedDestinationIds = (destinations || [])
+    .filter(dest => dest.listed === false)
+    .map(dest => dest.id);
+
+  filteredTours = filteredTours.filter(tour =>
+    !unlistedDestinationIds.includes(tour.primary_destination_id)
+  );
+
   // Filter by category
   if (category) {
     filteredTours = filteredTours.filter(tour =>
@@ -754,26 +763,100 @@ app.get('/api/tours', async (req, res) => {
     );
   }
 
-  // Filter by location
+  // Filter by location (check location string AND destination relationships)
   if (location) {
-    filteredTours = filteredTours.filter(tour =>
-      tour.location.toLowerCase() === location.toLowerCase()
-    );
+    const searchLocation = location.toLowerCase();
+
+    // Find destination IDs that match the search location
+    const matchedDestIds = destinations
+      .filter(d => d.name.toLowerCase().includes(searchLocation) || d.name.toLowerCase() === searchLocation)
+      .map(d => d.id);
+
+    filteredTours = filteredTours.filter(tour => {
+      // Check 1: Location string match
+      const locationMatch = tour.location?.toLowerCase().includes(searchLocation);
+
+      // Check 2: Primary destination match
+      const primaryDestMatch = matchedDestIds.includes(tour.primary_destination_id);
+
+      // Check 3: Secondary destinations match
+      const secondaryDestMatch = tour.secondary_destination_ids?.some(id => matchedDestIds.includes(id));
+
+      return locationMatch || primaryDestMatch || secondaryDestMatch;
+    });
   }
 
   // Search filter
   if (search) {
     const searchTerm = search.toLowerCase();
     filteredTours = filteredTours.filter(tour =>
-      tour.title.toLowerCase().includes(searchTerm) ||
-      tour.description.toLowerCase().includes(searchTerm) ||
-      tour.location.toLowerCase().includes(searchTerm) ||
-      tour.category.toLowerCase().includes(searchTerm) ||
-      (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
+      (tour.title?.toLowerCase().includes(searchTerm) || false) ||
+      (tour.description?.toLowerCase().includes(searchTerm) || false) ||
+      (tour.location?.toLowerCase().includes(searchTerm) || false) ||
+      (tour.category?.toLowerCase().includes(searchTerm) || false) ||
+      (tour.highlights && tour.highlights.some(h => h?.toLowerCase().includes(searchTerm)))
     );
   }
 
   res.json(filteredTours);
+});
+
+// Admin: Export all tour data
+app.get('/api/admin/tours/export', authenticateToken, async (req, res) => {
+  try {
+    console.log('Exporting all tours...');
+
+    // Merge basic tours with detailed tours to ensure we have everything
+    const allTours = [...tourDetails];
+
+    // Add basic tours that don't have detailed versions
+    tours.forEach(basicTour => {
+      const hasDetailedVersion = tourDetails.some(detailedTour => detailedTour.id === basicTour.id);
+      if (!hasDetailedVersion) {
+        allTours.push(basicTour);
+      }
+    });
+
+    // Sort by ID
+    allTours.sort((a, b) => a.id - b.id);
+
+    // Set headers for file download
+    const timestamp = new Date().toISOString().split('T')[0];
+    res.setHeader('Content-Disposition', `attachment; filename=zeo_tours_export_${timestamp}.json`);
+    res.setHeader('Content-Type', 'application/json');
+
+    res.json(allTours);
+  } catch (error) {
+    console.error('Error exporting tours:', error);
+    res.status(500).json({ error: 'Failed to export tours' });
+  }
+});
+
+// Admin: Export single tour data
+app.get('/api/admin/tours/:id/export', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(`Exporting tour ${id}...`);
+
+    let tour = tourDetails.find(t => t.id === parseInt(id));
+    if (!tour) {
+      tour = tours.find(t => t.id === parseInt(id));
+    }
+
+    if (!tour) {
+      return res.status(404).json({ error: 'Tour not found' });
+    }
+
+    // Set headers for file download
+    const filename = tour.slug ? `${tour.slug}.json` : `tour_${tour.id}.json`;
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    res.setHeader('Content-Type', 'application/json');
+
+    res.json(tour);
+  } catch (error) {
+    console.error('Error exporting tour:', error);
+    res.status(500).json({ error: 'Failed to export tour' });
+  }
 });
 
 // Admin: Get all tours with pagination and admin-specific features
@@ -801,21 +884,120 @@ app.get('/api/admin/tours', authenticateToken, async (req, res) => {
     // Search filter
     if (search) {
       const searchTerm = search.toLowerCase();
-      filteredTours = filteredTours.filter(tour =>
-        tour.title.toLowerCase().includes(searchTerm) ||
-        tour.description.toLowerCase().includes(searchTerm) ||
-        tour.location.toLowerCase().includes(searchTerm) ||
-        tour.category.toLowerCase().includes(searchTerm) ||
-        (tour.highlights && tour.highlights.some(h => h.toLowerCase().includes(searchTerm)))
-      );
+      filteredTours = filteredTours.filter(tour => {
+        // Basic fields
+        const basicMatch =
+          (tour.title?.toLowerCase().includes(searchTerm) || false) ||
+          (tour.description?.toLowerCase().includes(searchTerm) || false) ||
+          (tour.location?.toLowerCase().includes(searchTerm) || false) ||
+          (tour.category?.toLowerCase().includes(searchTerm) || false) ||
+          (tour.highlights && tour.highlights.some(h => h?.toLowerCase().includes(searchTerm)));
+
+        if (basicMatch) return true;
+
+        // Check related_destinations array
+        if (tour.related_destinations && Array.isArray(tour.related_destinations)) {
+          const matchesRelated = tour.related_destinations.some(d => {
+            const tourDest = d.toLowerCase();
+            return tourDest.includes(searchTerm) || searchTerm.includes(tourDest);
+          });
+          if (matchesRelated) return true;
+        }
+
+        // Check assigned destination name
+        if (tour.primary_destination_id) {
+          const dest = destinations.find(d => d.id === tour.primary_destination_id);
+          if (dest) {
+            const matchesDest =
+              (dest.name || dest.title || '').toLowerCase().includes(searchTerm) ||
+              (dest.country || '').toLowerCase().includes(searchTerm);
+
+            if (matchesDest) return true;
+          }
+        }
+
+        return false;
+      });
     }
 
     // Destination filter
     if (destination) {
-      filteredTours = filteredTours.filter(tour =>
-        (tour.location && tour.location.toLowerCase().includes(destination.toLowerCase())) ||
-        (tour.destination_name && tour.destination_name.toLowerCase().includes(destination.toLowerCase()))
-      );
+      const destSearch = destination.toLowerCase();
+      filteredTours = filteredTours.filter(tour => {
+        // Check direct fields
+        const matchesDirect =
+          (tour.location && tour.location.toLowerCase().includes(destSearch)) ||
+          (tour.destination_name && tour.destination_name.toLowerCase().includes(destSearch));
+
+        if (matchesDirect) return true;
+
+        // Check related_destinations array
+        if (tour.related_destinations && Array.isArray(tour.related_destinations)) {
+          const matchesRelated = tour.related_destinations.some(d => {
+            const tourDest = d.toLowerCase();
+            return tourDest.includes(destSearch) || destSearch.includes(tourDest);
+          });
+          if (matchesRelated) return true;
+        }
+
+        // Check primary_destination_id relationship
+        if (tour.primary_destination_id) {
+          const destObj = destinations.find(d => d.id === tour.primary_destination_id);
+          if (destObj) {
+            const matchesDest =
+              (destObj.name || destObj.title || '').toLowerCase().includes(destSearch) ||
+              (destObj.country || '').toLowerCase().includes(destSearch);
+
+            if (matchesDest) return true;
+          }
+        }
+
+        return false;
+      });
+    }
+
+    // Status filter (listed/unlisted)
+    if (req.query.status) {
+      if (req.query.status === 'listed') {
+        filteredTours = filteredTours.filter(tour => tour.listed !== false);
+      } else if (req.query.status === 'unlisted') {
+        filteredTours = filteredTours.filter(tour => tour.listed === false);
+      }
+    }
+
+    // Region filter (nepal/international)
+    if (req.query.region) {
+      const region = req.query.region.toLowerCase();
+      filteredTours = filteredTours.filter(tour => {
+        // Try to identify the tour's region type
+        let type = null;
+
+        // 1. Check primary destination object
+        if (tour.primary_destination_id) {
+          const dest = destinations.find(d => d.id === tour.primary_destination_id);
+          if (dest && dest.type) type = dest.type;
+        }
+
+        // 2. Check location string field
+        if (!type && tour.location) {
+          const loc = tour.location.toLowerCase();
+          if (loc.includes('nepal')) type = 'nepal';
+          else if (/bhutan|tibet|india|dubai|thailand|maldives|vietnam|indonesia|philippines|azerbaijan|kenya|canada|uae/.test(loc)) {
+            type = 'international';
+          }
+        }
+
+        // 3. Check related_destinations array
+        if (!type && tour.related_destinations && Array.isArray(tour.related_destinations)) {
+          const hasNepal = tour.related_destinations.some(d => d.toLowerCase().includes('nepal'));
+          const hasIntl = tour.related_destinations.some(d => /bhutan|tibet|india|dubai|thailand|maldives|sri lanka/.test(d.toLowerCase()));
+
+          if (hasNepal) type = 'nepal';
+          else if (hasIntl) type = 'international';
+        }
+
+        return type === region;
+      });
     }
 
     // Sort by ID descending (newest first)
@@ -1182,6 +1364,11 @@ app.get('/api/destinations', async (req, res) => {
     tourCount: (dest.relatedTours || []).length
   }));
 
+  // Filter out unlisted destinations unless explicitly requested
+  if (req.query.includeUnlisted !== 'true') {
+    filteredDestinations = filteredDestinations.filter(dest => dest.listed !== false);
+  }
+
   // Filter by country
   if (country) {
     filteredDestinations = filteredDestinations.filter(dest =>
@@ -1222,6 +1409,9 @@ app.get('/api/activities', async (req, res) => {
   if (type) {
     filteredActivities = filteredActivities.filter(activity => activity.type === type);
   }
+
+  // Filter out unlisted activities (assuming listed: true or listed !== false)
+  filteredActivities = filteredActivities.filter(activity => activity.listed !== false);
 
   res.json(filteredActivities);
 });

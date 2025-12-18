@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -171,7 +172,7 @@ const ContactEnquiryManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="loader"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading enquiries...</span>
       </div>
     );

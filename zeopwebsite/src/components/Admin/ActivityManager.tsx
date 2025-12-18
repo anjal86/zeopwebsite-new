@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -21,13 +22,7 @@ const getApiBaseUrl = (): string => {
     return '/api';
 };
 
-// Image base URL helper function
-const getImageBaseUrl = (): string => {
-    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-        return `${window.location.protocol}//${window.location.host}`;
-    }
-    return '';
-};
+
 
 interface Activity {
     id: number;
@@ -213,7 +208,7 @@ const ActivityManager: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <div className="loader"></div>
+                <LoadingSpinner size="lg" />
                 <span className="ml-3 text-gray-600">Loading activities...</span>
             </div>
         );
@@ -349,7 +344,7 @@ const ActivityManager: React.FC = () => {
                 onConfirm={deleteModal.confirmDelete}
                 title="Delete Activity"
                 message={`Are you sure you want to delete "${deleteModal.selectedItem?.name}"? This action cannot be undone.`}
-                isDeleting={deleteModal.isDeleting}
+                isLoading={deleteModal.isDeleting}
             />
 
             {/* Edit/Create Modal */}

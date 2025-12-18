@@ -9,10 +9,9 @@ const Hero: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [userInteracted, setUserInteracted] = useState(false);
   const [videoErrors, setVideoErrors] = useState<Set<string>>(new Set());
   const [preloadedVideos, setPreloadedVideos] = useState<Set<string>>(new Set());
-  
+
   // Fetch sliders from API
   const { data: slides, loading, error } = useSliders();
 
@@ -27,27 +26,27 @@ const Hero: React.FC = () => {
           video.preload = 'metadata';
           video.muted = true;
           video.playsInline = true;
-          
+
           const videoUrl = slide.video.startsWith('http')
             ? slide.video
             : `${window.location.protocol}//${window.location.host}${slide.video}`;
-          
+
           video.src = videoUrl;
-          
+
           video.addEventListener('loadedmetadata', () => {
             const videoUrl = slide.video;
             if (videoUrl) {
               setPreloadedVideos(prev => new Set([...prev, videoUrl]));
             }
           });
-          
+
           video.addEventListener('error', () => {
             const videoUrl = slide.video;
             if (videoUrl) {
               setVideoErrors(prev => new Set([...prev, videoUrl]));
             }
           });
-          
+
           // Start preloading
           video.load();
         }
@@ -76,7 +75,7 @@ const Hero: React.FC = () => {
   const scrollIndicatorY = useTransform(scrollY, [0, 200], [0, -20]);
   const patternOpacity = useTransform(scrollY, [0, 300], [0.2, 0.05]);
   const backgroundScale = useTransform(scrollY, [0, 500], [1, 1.1]);
-  
+
   // Pre-create particle transforms to avoid conditional hooks
   const particle1Y = useTransform(scrollY, [0, 800], [0, -50]);
   const particle2Y = useTransform(scrollY, [0, 800], [0, -60]);
@@ -86,7 +85,7 @@ const Hero: React.FC = () => {
   const particle6Y = useTransform(scrollY, [0, 800], [0, -100]);
   const particle7Y = useTransform(scrollY, [0, 800], [0, -110]);
   const particle8Y = useTransform(scrollY, [0, 800], [0, -120]);
-  
+
   // Shape transform variables removed
 
   // Pre-create array of particle transforms
@@ -96,29 +95,22 @@ const Hero: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
-    // Enable user interaction on any click/touch
-    const enableInteraction = () => setUserInteracted(true);
-    document.addEventListener('click', enableInteraction);
-    document.addEventListener('touchstart', enableInteraction);
-    
+
     return () => {
       window.removeEventListener('resize', checkMobile);
-      document.removeEventListener('click', enableInteraction);
-      document.removeEventListener('touchstart', enableInteraction);
     };
   }, []);
 
 
   useEffect(() => {
     if (!slides || slides.length === 0) return;
-    
+
     const currentSlideData = slides[currentSlide];
     const duration = currentSlideData.video ? 40000 : 10000; // 40s for video, 10s for photos
-    
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, duration);
@@ -142,7 +134,6 @@ const Hero: React.FC = () => {
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
-    setUserInteracted(true);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
@@ -151,7 +142,7 @@ const Hero: React.FC = () => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -182,16 +173,16 @@ const Hero: React.FC = () => {
 
   const textVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
         ease: "easeOut" as const
       }
     },
-    exit: { 
-      opacity: 0, 
+    exit: {
+      opacity: 0,
       y: -50,
       transition: {
         duration: 0.5
@@ -247,7 +238,7 @@ const Hero: React.FC = () => {
           className="absolute inset-0"
           style={{ y: backgroundY }}
         >
-          <motion.div 
+          <motion.div
             className="relative w-full h-full"
             style={{ scale: backgroundScale }}
           >
@@ -255,20 +246,20 @@ const Hero: React.FC = () => {
               <video
                 key={`video-${currentSlide}-${slides[currentSlide].id}`}
                 className="absolute inset-0 w-full h-full object-cover"
-                autoPlay={!isMobile || userInteracted}
+                autoPlay
                 muted
                 loop
                 playsInline
                 controls={false}
-                preload="none"
-                onLoadedData={(e) => {
+                preload="auto"
+                onLoadedMetadata={(e) => {
                   const video = e.target as HTMLVideoElement;
                   if (slides[currentSlide].video_start_time) {
                     video.currentTime = slides[currentSlide].video_start_time;
                   }
-                  if (isMobile && userInteracted) {
-                    video.play().catch(() => {});
-                  }
+                  video.play().catch(() => {
+                    console.log("Autoplay blocked, waiting for interaction");
+                  });
                 }}
                 onError={() => {
                   const videoUrl = slides[currentSlide].video;
@@ -303,19 +294,19 @@ const Hero: React.FC = () => {
               />
             )}
             {/* Gradient Overlay with Parallax */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" 
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60"
               style={{ opacity: overlayOpacity }}
             />
-            
+
             {/* Pattern Overlay with Parallax */}
-            <motion.div 
-              className="absolute inset-0 pattern-overlay" 
+            <motion.div
+              className="absolute inset-0 pattern-overlay"
               style={{ opacity: patternOpacity }}
             />
           </motion.div>
         </motion.div>
-        
+
       </AnimatePresence>
 
       {/* Enhanced Floating Elements with Parallax - Disabled on mobile for performance */}
@@ -406,13 +397,12 @@ const Hero: React.FC = () => {
                     href={slides[currentSlide].button_url || '#tours'}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-semibold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 min-w-[180px] sm:min-w-[200px] inline-block text-center ${
-                      slides[currentSlide].button_style === 'secondary'
-                        ? 'bg-gradient-to-r from-blue-500 to-blue-600'
-                        : slides[currentSlide].button_style === 'outline'
+                    className={`px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-semibold text-base sm:text-lg hover:shadow-2xl transition-all duration-300 min-w-[180px] sm:min-w-[200px] inline-block text-center ${slides[currentSlide].button_style === 'secondary'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600'
+                      : slides[currentSlide].button_style === 'outline'
                         ? 'border-2 border-white bg-transparent hover:bg-white hover:text-gray-900'
                         : 'bg-gradient-to-r from-orange-500 to-orange-600'
-                    }`}
+                      }`}
                   >
                     {slides[currentSlide].button_text || 'Explore Adventures'}
                   </motion.a>
@@ -461,11 +451,10 @@ const Hero: React.FC = () => {
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`transition-all duration-300 ${
-                  index === currentSlide
-                    ? 'w-6 sm:w-8 md:w-12 h-1.5 sm:h-2 bg-sky-blue'
-                    : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/50 hover:bg-white/70'
-                } rounded-full`}
+                className={`transition-all duration-300 ${index === currentSlide
+                  ? 'w-6 sm:w-8 md:w-12 h-1.5 sm:h-2 bg-sky-blue'
+                  : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/50 hover:bg-white/70'
+                  } rounded-full`}
               />
             ))}
           </div>

@@ -5,8 +5,8 @@
   "category": "Cultural",
   "description": "Setting out from Kathmandu in the early morning, embark on a picturesque 12-14 hour journey to reach the sacred destination of Haleshi Mahadev. Upon a...",
   "location": "Nepal",
-  "price": 890,
-  "duration": "2",
+  "price": 0,
+  "duration": "2 days",
   "group_size": "2-12 people",
   "difficulty": "Easy",
   "rating": 4.751259623511732,
@@ -74,7 +74,7 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-09-19T07:49:44.818Z",
+  "updated_at": "2025-12-18T04:25:08.811Z",
   "primary_destination_id": 3,
   "secondary_destination_ids": [],
   "activity_ids": [
@@ -85,5 +85,6 @@
   ],
   "related_activities": [
     "Cultural Tours"
-  ]
+  ],
+  "priceAvailable": false
 }

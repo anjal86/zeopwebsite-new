@@ -20,7 +20,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
 
   const handleContactAction = (type: 'phone' | 'email' | 'whatsapp' | 'visit' | 'maps') => {
     const contact = contactInfo?.contact;
-    
+
     switch (type) {
       case 'phone':
         window.location.href = `tel:${contact?.phone.primary || '+9779851234567'}`;
@@ -67,14 +67,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+            className="bg-white shadow-2xl max-w-md w-full p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-gray-900">Contact Us</h3>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -90,9 +90,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleContactAction('phone')}
-                className="w-full flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors group"
+                className="w-full flex items-center p-4 bg-blue-50 hover:bg-blue-100 transition-colors group"
               >
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-blue-500 flex items-center justify-center mr-4">
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-left">
@@ -109,9 +109,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleContactAction('whatsapp')}
-                className="w-full flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group"
+                className="w-full flex items-center p-4 bg-green-50 hover:bg-green-100 transition-colors group"
               >
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-green-500 flex items-center justify-center mr-4">
                   <MessageCircle className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-left">
@@ -128,9 +128,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleContactAction('email')}
-                className="w-full flex items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors group"
+                className="w-full flex items-center p-4 bg-orange-50 hover:bg-orange-100 transition-colors group"
               >
-                <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-orange-500 flex items-center justify-center mr-4">
                   <Mail className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-left">
@@ -147,9 +147,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleContactAction('maps')}
-                className="w-full flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group"
+                className="w-full flex items-center p-4 bg-purple-50 hover:bg-purple-100 transition-colors group"
               >
-                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-purple-500 flex items-center justify-center mr-4">
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-left">

@@ -1243,6 +1243,169 @@ app.get('/api/activities/:id', async (req, res) => {
   res.json(activity);
 });
 
+// ==================== ADMIN ACTIVITIES API ====================
+
+// Admin: Get all activities
+app.get('/api/admin/activities', authenticateToken, async (req, res) => {
+  try {
+    await delay(200);
+    res.json(activities);
+  } catch (error) {
+    console.error('Error fetching admin activities:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Admin: Create new activity
+app.post('/api/admin/activities', authenticateToken, (req, res) => {
+  upload.single('mediaFile')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      console.log('Creating new activity...');
+
+      const activityData = JSON.parse(req.body.activityData || '{}');
+      const file = req.file;
+
+      const newActivity = {
+        id: Math.max(...activities.map(a => a.id), 0) + 1,
+        name: activityData.name || '',
+        image: '', // Will be set below
+        tourCount: 0,
+        href: `/activities/${(activityData.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+        type: activityData.type || 'adventure',
+        description: activityData.description || '',
+        highlights: activityData.highlights || [],
+        difficulty: activityData.difficulty || 'Moderate',
+        bestTime: activityData.bestTime || 'Year-round',
+        duration: activityData.duration || '1 Day',
+        popularDestinations: activityData.popularDestinations || [],
+        relatedTours: [],
+        relatedDestinations: []
+      };
+
+      // Handle file upload
+      if (file) {
+        let processedFilePath = file.path;
+
+        if (file.mimetype.startsWith('image/')) {
+          const compressedFileName = `compressed_${file.filename}`;
+          const compressedPath = path.join(path.dirname(file.path), compressedFileName);
+
+          processedFilePath = await compressImage(file.path, compressedPath, 85);
+
+          const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
+          newActivity.image = `/uploads/${relativePath}`;
+        }
+      } else if (activityData.image) {
+        newActivity.image = activityData.image;
+      }
+
+      activities.push(newActivity);
+      saveData('activities.json', activities);
+
+      res.status(201).json(newActivity);
+    } catch (error) {
+      console.error('Error creating activity:', error);
+      res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+  });
+});
+
+// Admin: Update activity
+app.put('/api/admin/activities/:id', authenticateToken, (req, res) => {
+  upload.single('mediaFile')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const { id } = req.params;
+      const activityIndex = activities.findIndex(a => a.id === parseInt(id));
+
+      if (activityIndex === -1) {
+        return res.status(404).json({ error: 'Activity not found' });
+      }
+
+      const activityData = JSON.parse(req.body.activityData || '{}');
+      const file = req.file;
+      const existingActivity = activities[activityIndex];
+
+      const updatedActivity = {
+        ...existingActivity,
+        ...activityData,
+        image: existingActivity.image // Preserve unless updated
+      };
+
+      // Handle file upload
+      if (file) {
+        let processedFilePath = file.path;
+
+        // Delete old image if it exists and is local
+        if (existingActivity.image && existingActivity.image.startsWith('/uploads/')) {
+          const oldPath = path.join(__dirname, existingActivity.image);
+          if (fs.existsSync(oldPath)) {
+            fs.unlinkSync(oldPath);
+          }
+        }
+
+        if (file.mimetype.startsWith('image/')) {
+          const compressedFileName = `compressed_${file.filename}`;
+          const compressedPath = path.join(path.dirname(file.path), compressedFileName);
+
+          processedFilePath = await compressImage(file.path, compressedPath, 85);
+
+          const relativePath = path.relative(uploadsDir, processedFilePath).replace(/\\/g, '/');
+          updatedActivity.image = `/uploads/${relativePath}`;
+        }
+      }
+
+      activities[activityIndex] = updatedActivity;
+      saveData('activities.json', activities);
+
+      res.json(updatedActivity);
+    } catch (error) {
+      console.error('Error updating activity:', error);
+      res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+  });
+});
+
+// Admin: Delete activity
+app.delete('/api/admin/activities/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const activityIndex = activities.findIndex(a => a.id === parseInt(id));
+
+    if (activityIndex === -1) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    const activity = activities[activityIndex];
+
+    // Delete image if local
+    if (activity.image && activity.image.startsWith('/uploads/')) {
+      const imagePath = path.join(__dirname, activity.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    activities.splice(activityIndex, 1);
+    saveData('activities.json', activities);
+
+    res.json({ message: 'Activity deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 // ==================== ADMIN DESTINATIONS API ====================
 
 // Admin: Get all destinations (including inactive ones)

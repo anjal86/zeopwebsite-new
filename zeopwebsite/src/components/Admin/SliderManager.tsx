@@ -33,6 +33,7 @@ import {
   GripVertical
 } from 'lucide-react';
 import Toggle from '../UI/Toggle';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -41,7 +42,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment
   return '/api';
 };
@@ -95,9 +96,8 @@ const SortableSliderItem: React.FC<{
     <div
       ref={setNodeRef}
       style={style}
-      className={`bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 cursor-pointer ${
-        !slider.is_active ? 'opacity-60' : ''
-      } ${isDragging ? 'shadow-lg z-50' : ''}`}
+      className={`bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200 cursor-pointer ${!slider.is_active ? 'opacity-60' : ''
+        } ${isDragging ? 'shadow-lg z-50' : ''}`}
       onClick={() => onEdit(slider)}
     >
       <div className="flex items-center gap-4 p-4">
@@ -195,11 +195,10 @@ const SortableSliderItem: React.FC<{
                 e.stopPropagation();
                 onToggleActive(slider);
               }}
-              className={`inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
-                slider.is_active
-                  ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100'
-                  : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
-              }`}
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${slider.is_active
+                ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100'
+                : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
+                }`}
             >
               {slider.is_active ? (
                 <>
@@ -278,13 +277,13 @@ const SliderManager: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // For now, fetch from public endpoint since auth might not be set up
       const response = await fetch(`${getApiBaseUrl()}/sliders`);
       if (!response.ok) {
         throw new Error('Failed to fetch sliders');
       }
-      
+
       const data = await response.json();
       setSliders(data);
     } catch (err) {
@@ -315,7 +314,7 @@ const SliderManager: React.FC = () => {
     }
     setPreviewUrl(null);
     setMediaType('image');
-    
+
     setFormData({
       id: 0,
       title: '',
@@ -353,7 +352,7 @@ const SliderManager: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -374,30 +373,30 @@ const SliderManager: React.FC = () => {
         e.target.value = ''; // Clear the input
         return;
       }
-      
+
       // Clean up previous blob URL if it exists
       if (previewUrl && previewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(previewUrl);
       }
-      
+
       // Determine if it's an image or video
       const isVideo = file.type.startsWith('video/');
       const isImage = file.type.startsWith('image/');
-      
+
       if (!isVideo && !isImage) {
         alert('Please select an image or video file');
         e.target.value = ''; // Clear the input
         return;
       }
-      
-      
+
+
       setMediaType(isVideo ? 'video' : 'image');
       setFormData(prev => ({ ...prev, mediaFile: file }));
-      
+
       // Create a temporary object URL for preview
       const newPreviewUrl = URL.createObjectURL(file);
       setPreviewUrl(newPreviewUrl);
-      
+
       if (isVideo) {
         // Clear the image and video URLs since we'll be uploading a new file
         setFormData(prev => ({
@@ -430,18 +429,18 @@ const SliderManager: React.FC = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0];
-      
+
       // Create a fake event object to reuse existing logic
       const fakeEvent = {
         target: {
           files: [file]
         }
       } as any;
-      
+
       handleMediaChange(fakeEvent);
     }
   };
@@ -466,7 +465,7 @@ const SliderManager: React.FC = () => {
   const handleTimelineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value);
     setFormData(prev => ({ ...prev, video_start_time: newTime }));
-    
+
     // Update video preview time
     const video = document.querySelector('.video-timeline-preview') as HTMLVideoElement;
     if (video) {
@@ -486,10 +485,10 @@ const SliderManager: React.FC = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      
+
       // Create FormData for file upload
       const formDataToSend = new FormData();
-      
+
       // Add the slider data as JSON string
       const sliderData = {
         title: formData.title,
@@ -505,9 +504,9 @@ const SliderManager: React.FC = () => {
         button_style: formData.button_style,
         show_button: formData.show_button
       };
-      
+
       formDataToSend.append('sliderData', JSON.stringify(sliderData));
-      
+
       // Add the media file if one was selected
       if (formData.mediaFile) {
         formDataToSend.append('mediaFile', formData.mediaFile);
@@ -516,7 +515,7 @@ const SliderManager: React.FC = () => {
       const url = editingSlider
         ? `${getApiBaseUrl()}/admin/sliders/${editingSlider.id}`
         : `${getApiBaseUrl()}/admin/sliders`;
-      
+
       const method = editingSlider ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -614,7 +613,7 @@ const SliderManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="loader"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading sliders...</span>
       </div>
     );
@@ -626,7 +625,7 @@ const SliderManager: React.FC = () => {
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h3 className="text-xl font-semibold text-gray-600 mb-2">Error Loading Sliders</h3>
         <p className="text-gray-500 mb-4">{error}</p>
-        <button 
+        <button
           onClick={() => fetchSliders()}
           className="btn-primary"
         >
@@ -696,11 +695,11 @@ const SliderManager: React.FC = () => {
               </div>
             </SortableContext>
           </DndContext>
-          
+
           {isReordering && (
             <div className="mt-4 text-center">
               <div className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg">
-                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <LoadingSpinner size="sm" />
                 Updating order...
               </div>
             </div>
@@ -788,7 +787,7 @@ const SliderManager: React.FC = () => {
                           />
                           <p className="text-xs text-gray-500 mt-1">This will be the main heading displayed on the slider</p>
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-medium text-gray-900 mb-2">
                             Subtitle
@@ -856,22 +855,20 @@ const SliderManager: React.FC = () => {
                       <div className="p-6">
                         {/* Enhanced Minimal Upload Zone */}
                         <div
-                          className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-                            isDragOver
-                              ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 scale-[1.02] shadow-lg'
-                              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-                          }`}
+                          className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${isDragOver
+                            ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 scale-[1.02] shadow-lg'
+                            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+                            }`}
                           onDragOver={handleDragOver}
                           onDragLeave={handleDragLeave}
                           onDrop={handleDrop}
                         >
                           <div className="flex flex-col items-center gap-4">
                             {/* Animated Icon */}
-                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                              isDragOver
-                                ? 'bg-blue-200 scale-110 rotate-3'
-                                : 'bg-gradient-to-br from-gray-100 to-gray-200 hover:from-blue-50 hover:to-blue-100'
-                            }`}>
+                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${isDragOver
+                              ? 'bg-blue-200 scale-110 rotate-3'
+                              : 'bg-gradient-to-br from-gray-100 to-gray-200 hover:from-blue-50 hover:to-blue-100'
+                              }`}>
                               {isDragOver ? (
                                 <svg className="w-8 h-8 text-blue-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -880,20 +877,19 @@ const SliderManager: React.FC = () => {
                                 <ImageIcon className="w-8 h-8 text-gray-600" />
                               )}
                             </div>
-                            
+
                             {/* Upload Text */}
                             <div className="space-y-2">
-                              <h4 className={`text-lg font-semibold transition-colors ${
-                                isDragOver ? 'text-blue-700' : 'text-gray-800'
-                              }`}>
+                              <h4 className={`text-lg font-semibold transition-colors ${isDragOver ? 'text-blue-700' : 'text-gray-800'
+                                }`}>
                                 {isDragOver ? 'Drop your file here!' : 'Upload Media'}
                               </h4>
-                              
+
                               <p className="text-sm text-gray-500">
                                 Drag & drop or click to browse
                               </p>
                             </div>
-                            
+
                             {/* File Input Button */}
                             <label className="relative cursor-pointer">
                               <div className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg">
@@ -906,7 +902,7 @@ const SliderManager: React.FC = () => {
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                               />
                             </label>
-                            
+
                             {/* File Type Indicators */}
                             <div className="flex items-center gap-6 text-xs text-gray-500">
                               <div className="flex items-center gap-1">
@@ -939,7 +935,7 @@ const SliderManager: React.FC = () => {
                                         // Video preview error
                                       }}
                                     />
-                                    
+
                                     {/* Simple Timeline Control */}
                                     {isVideoLoaded && videoDuration > 0 && (
                                       <div className="space-y-3 bg-white p-4 rounded-lg border">
@@ -949,7 +945,7 @@ const SliderManager: React.FC = () => {
                                             {formatTime(formData.video_start_time || 0)} / {formatTime(videoDuration)}
                                           </span>
                                         </div>
-                                        
+
                                         <input
                                           type="range"
                                           min="0"
@@ -976,7 +972,7 @@ const SliderManager: React.FC = () => {
                                     }}
                                   />
                                 )}
-                                
+
                                 {/* Simple Remove Button */}
                                 <button
                                   type="button"
@@ -1015,7 +1011,7 @@ const SliderManager: React.FC = () => {
                           <p className="text-sm text-gray-500">Configure the action button that appears on this slider</p>
                         </div>
                       </div>
-                      
+
                       {/* Show Button Toggle */}
                       <div className="bg-white rounded-lg p-4 border border-gray-200">
                         <div className="flex items-start justify-between">
@@ -1054,7 +1050,7 @@ const SliderManager: React.FC = () => {
                               />
                               <p className="text-xs text-gray-500 mt-1">This text will appear on the button</p>
                             </div>
-                            
+
                             <div>
                               <label className="block text-sm font-medium text-gray-900 mb-2">
                                 Button Link
@@ -1095,7 +1091,7 @@ const SliderManager: React.FC = () => {
                                       <p className="text-xs text-gray-500">Orange gradient - most prominent</p>
                                     </div>
                                   </label>
-                                  
+
                                   <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                     <input
                                       type="radio"
@@ -1115,7 +1111,7 @@ const SliderManager: React.FC = () => {
                                       <p className="text-xs text-gray-500">Blue gradient - secondary action</p>
                                     </div>
                                   </label>
-                                  
+
                                   <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                     <input
                                       type="radio"
@@ -1184,7 +1180,7 @@ const SliderManager: React.FC = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <LoadingSpinner size="sm" />
                         {formData.mediaFile ? 'Compressing & Saving...' : 'Saving...'}
                       </>
                     ) : (

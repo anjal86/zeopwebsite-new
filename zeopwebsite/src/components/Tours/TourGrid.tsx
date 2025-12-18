@@ -73,7 +73,14 @@ const TourGrid: React.FC<TourGridProps> = ({
   const filteredTours = tours;
 
   // Use tours as-is since API handles sorting and pagination
-  const sortedTours = filteredTours;
+  // Sort tours: Featured first, then by existing order
+  const sortedTours = [...filteredTours].sort((a, b) => {
+    // If one is featured and the other isn't, featured comes first
+    if ((a.featured || false) !== (b.featured || false)) {
+      return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+    }
+    return 0; // Keep original order for same featured status
+  });
 
   const sortOptions = [
     { value: 'popularity', label: 'Most Popular' },
@@ -98,26 +105,24 @@ const TourGrid: React.FC<TourGridProps> = ({
           <span className="text-sm font-medium text-gray-700">
             {totalCount} tour{totalCount !== 1 ? 's' : ''} found
           </span>
-          
+
           {/* View Mode Toggle */}
           <div className="flex items-center bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-all ${
-                viewMode === 'grid'
-                  ? 'bg-white text-sky-blue shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`p-2 rounded-md transition-all ${viewMode === 'grid'
+                ? 'bg-white text-sky-blue shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               <Grid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-all ${
-                viewMode === 'list'
-                  ? 'bg-white text-sky-blue shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`p-2 rounded-md transition-all ${viewMode === 'list'
+                ? 'bg-white text-sky-blue shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -171,7 +176,7 @@ const TourGrid: React.FC<TourGridProps> = ({
             transition={{ duration: 0.3 }}
             className={
               viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6'
                 : 'space-y-6'
             }
           >

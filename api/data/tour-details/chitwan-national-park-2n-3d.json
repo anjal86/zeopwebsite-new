@@ -5,7 +5,7 @@
   "category": "Cultural",
   "description": "Chitwan National Park Tour from Kathmandu: A Wildlife Adventure in NepalEscape the hustle and bustle of Kathmandu and step into the wild with the Chit...",
   "location": "Chitwan",
-  "price": 250,
+  "price": 0,
   "duration": "10 days",
   "group_size": "2-12 people",
   "difficulty": "Easy",
@@ -81,5 +81,10 @@
     "cancellation_policy": "Free cancellation up to 7 days before departure"
   },
   "created_at": "2025-09-19T04:13:16.254Z",
-  "updated_at": "2025-09-19T04:47:52.552Z"
+  "updated_at": "2025-12-18T04:24:38.773Z",
+  "secondary_destination_ids": [],
+  "activity_ids": [],
+  "related_destinations": [],
+  "related_activities": [],
+  "priceAvailable": false
 }

@@ -110,29 +110,29 @@
     {
       "id": 312,
       "slug": "annapurna-base-camp-trek-12-nights-13-days",
-      "title": "Annapurna Base Camp Trek - 12 Nights 13 days",
+      "title": "Annapurna Base Camp Trek - 12 Nights 13 Days",
       "category": "Trekking",
       "description": "Embark on one of Nepal's most spectacular trekking adventures to Annapurna Base Camp, situated in the heart of the Annapurna Sanctuary. This incredible journey takes you through diverse landscapes from subtropical forests to alpine meadows, culminating at the base camp surrounded by towering peaks including Annapurna I (8,091m), Machapuchare (6,993m), and Hiunchuli (6,441m). Experience the rich culture of Gurung and Magar communities, soak in natural hot springs, and witness breathtaking sunrise views over the Annapurna massif.",
       "location": "Nepal",
-      "price": 1899,
+      "price": 0,
       "duration": "13 days",
       "group_size": "2-12 people",
       "difficulty": "Moderate to Challenging",
       "rating": 4.8,
       "reviews": 234,
       "best_time": "March-May, September-November",
-      "featured": false,
+      "featured": true,
       "listed": true,
-      "image": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "image": "",
       "gallery": [
         "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
       ],
       "highlights": [
-        "Reach Annapurna Base Camp at 4,130ms",
+        "Reach Annapurna Base Camp at 4,130m",
         "360-degree mountain views in the sanctuary",
-        "Natural hot springs at Jhinu Dandassss",
+        "Natural hot springs at Jhinu Danda",
         "Diverse flora and fauna",
         "Gurung and Magar cultural experience",
         "Spectacular sunrise over Annapurna massif",
@@ -179,7 +179,7 @@
       "itinerary": [
         {
           "day": 1,
-          "title": "Arrival in Kathmandu (1,400m)",
+          "title": "Arrival in Kathmandu (1,400m)sssss",
           "description": "Welcome to Nepal! Upon arrival at Tribhuvan International Airport, our representative will meet you and transfer you to your hotel in Kathmandu. After check-in, attend a comprehensive pre-trek briefing where you'll meet your trekking guide and receive detailed information about the Annapurna Base Camp trek. Equipment check and final preparations. Evening welcome dinner featuring traditional Nepali cuisine and cultural performances. Overnight in Kathmandu."
         },
         {
@@ -269,7 +269,7 @@
         "cancellation_policy": "Free cancellation up to 10 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2025-12-16T10:27:59.951Z",
+      "updated_at": "2025-12-18T21:06:46.967Z",
       "primary_destination_id": 28,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -282,7 +282,8 @@
       "related_activities": [
         "Adventure Sports",
         "Mountaineering"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 303,
@@ -291,7 +292,7 @@
       "category": "Wildlife",
       "description": "Experience Nepal's best kept wildlife secret in Bardiya National Park. Enjoy thrilling jungle safaris, spot Royal Bengal tigers, one-horned rhinos, and diverse wildlife in their natural habitat.",
       "location": "Bardiya",
-      "price": 450,
+      "price": 0,
       "duration": "4 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
@@ -299,7 +300,7 @@
       "reviews": 67,
       "best_time": "October-April",
       "featured": true,
-      "listed": false,
+      "listed": true,
       "image": "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop",
       "gallery": [
         "https://images.unsplash.com/photo-1558799401-1dcba79e728e?q=80&w=2072&auto=format&fit=crop",
@@ -382,7 +383,7 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-01-02T10:00:00.000Z",
-      "updated_at": "2025-10-12T06:23:56.429Z",
+      "updated_at": "2025-12-18T04:20:55.575Z",
       "primary_destination_id": 14,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -395,7 +396,8 @@
       "related_activities": [
         "Jungle Safari",
         "Cultural Tours"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 17,
@@ -404,7 +406,7 @@
       "category": "Cultural",
       "description": "Trip OverviewOne of the most sacred on a spiritually enriching 7-day Buddhist pilgrimage across Nepal andIndia, tracing the footsteps of Lord Buddha t...",
       "location": "Nepal",
-      "price": 599,
+      "price": 0,
       "duration": "10 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
@@ -499,7 +501,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-09-19T04:47:52.540Z"
+      "updated_at": "2025-12-18T04:20:18.197Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 107,
@@ -508,8 +515,8 @@
       "category": "Adventure",
       "description": "Break free from the mundane and immerse yourself in an exceptional 4-day adventure that merges exhilarating white-water rafting on the mighty Trishuli River with an immersive jungle safari expedition in Chitwan National Park. This meticulously designed adventure package transports you from thundering river rapids to pristine wilderness, delivering the ideal fusion of high-octane thrills and natural discovery that adventure enthusiasts crave.",
       "location": "Chitwan",
-      "price": 520,
-      "duration": "4 days 3 nights",
+      "price": 0,
+      "duration": "43 days",
       "group_size": "2-7 people",
       "difficulty": "Moderate",
       "rating": 4.7,
@@ -702,7 +709,8 @@
         }
       ],
       "created_at": "2025-10-02T07:20:00.000Z",
-      "updated_at": "2025-10-02T07:20:00.000Z"
+      "updated_at": "2025-12-18T04:21:06.709Z",
+      "priceAvailable": false
     },
     {
       "id": 304,
@@ -711,7 +719,7 @@
       "category": "Wildlife",
       "description": "Immerse yourself in the heart of Chitwan National Park with an authentic jungle stay experience. Encounter diverse wildlife including rhinos, tigers, elephants and enjoy traditional Tharu culture.",
       "location": "Chitwan",
-      "price": 320,
+      "price": 0,
       "duration": "4 days",
       "group_size": "2-16 people",
       "difficulty": "Easy",
@@ -802,7 +810,7 @@
         "cancellation_policy": "Free cancellation up to 5 days before departure"
       },
       "created_at": "2025-01-02T10:00:00.000Z",
-      "updated_at": "2025-01-02T10:00:00.000Z",
+      "updated_at": "2025-12-18T04:21:19.544Z",
       "primary_destination_id": 7,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -815,7 +823,8 @@
       "related_activities": [
         "Jungle Safari",
         "Cultural Tours"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 23,
@@ -824,7 +833,7 @@
       "category": "Cultural",
       "description": "Chitwan National Park Tour from Kathmandu: A Wildlife Adventure in NepalEscape the hustle and bustle of Kathmandu and step into the wild with the Chit...",
       "location": "Chitwan",
-      "price": 250,
+      "price": 0,
       "duration": "10 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
@@ -900,7 +909,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-09-19T04:47:52.552Z"
+      "updated_at": "2025-12-18T04:24:38.773Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 3,
@@ -909,8 +923,8 @@
       "category": "Wildlife",
       "description": "Explore Nepal's premier wildlife destination with jungle safaris, elephant encounters, and bird watching in Chitwan National Park.",
       "location": "Chitwan Region",
-      "price": 450,
-      "duration": "2 nights 3 days",
+      "price": 0,
+      "duration": "23 days",
       "group_size": "2-20 people",
       "difficulty": "Easy",
       "rating": 4.5,
@@ -1007,7 +1021,7 @@
         "cancellation_policy": "Free cancellation up to 3 days before departure"
       },
       "created_at": "2025-08-24T13:52:18.550Z",
-      "updated_at": "2025-09-20T19:40:56.697Z",
+      "updated_at": "2025-12-18T04:24:53.207Z",
       "listed": true,
       "primary_destination_id": 7,
       "secondary_destination_ids": [],
@@ -1019,7 +1033,8 @@
       ],
       "related_activities": [
         "Jungle Safari"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 106,
@@ -1028,8 +1043,8 @@
       "category": "Wildlife",
       "description": "Experience the best of Nepal's wildlife with our Chitwan Wildlife & Adventure Tour from Kathmandu. This comprehensive 4-day safari package has been specifically designed for travelers seeking a complete jungle adventure, delivering exceptional wildlife experiences with carefully selected activities and premium resort accommodations. Chitwan National Park, Nepal's wildlife crown jewel and UNESCO World Heritage Site, spans over 932 square kilometers of pristine subtropical wilderness, home to over 68 mammal species and 500+ bird species including one-horned rhinoceros, Royal Bengal tigers, and Asian elephants.",
       "location": "Chitwan",
-      "price": 450,
-      "duration": "4 days 3 nights",
+      "price": 0,
+      "duration": "43 days",
       "group_size": "2-7 people",
       "difficulty": "Easy",
       "rating": 4.6,
@@ -1219,7 +1234,8 @@
         }
       ],
       "created_at": "2025-10-02T07:15:00.000Z",
-      "updated_at": "2025-10-02T07:15:00.000Z"
+      "updated_at": "2025-12-18T04:21:32.507Z",
+      "priceAvailable": false
     },
     {
       "id": 313,
@@ -1228,7 +1244,7 @@
       "category": "Cultural",
       "description": "Highlights:“A cultural tour around Kathmandu valley visiting ancient religious sitesFascinating world heritage monuments of immense interest and livel...",
       "location": "Nepal",
-      "price": 890,
+      "price": 0,
       "duration": "10 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
@@ -1329,7 +1345,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-09-19T04:47:52.537Z"
+      "updated_at": "2025-12-18T04:21:43.886Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 201,
@@ -1338,8 +1359,8 @@
       "category": "Cultural",
       "description": "Discover the modern marvels and traditional charm of Dubai in this comprehensive 4-day city tour. Experience iconic landmarks, luxury shopping, and authentic Emirati culture.",
       "location": "Dubai, UAE",
-      "price": 899,
-      "duration": "4",
+      "price": 0,
+      "duration": "4 days",
       "group_size": "2-15 people",
       "difficulty": "Easy",
       "rating": 4.8,
@@ -1451,147 +1472,24 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-01-20T15:38:00.000Z",
-      "updated_at": "2025-09-20T19:40:04.391Z",
+      "updated_at": "2025-12-18T05:03:45.438Z",
       "listed": true,
       "primary_destination_id": 26,
       "secondary_destination_ids": [],
       "activity_ids": [
-        10
+        10,
+        9,
+        11
       ],
       "related_destinations": [
         "Dubai"
       ],
       "related_activities": [
-        "Luxury Experiences"
-      ]
-    },
-    {
-      "id": 202,
-      "slug": "dubai-desert-adventure-3-days",
-      "title": "Dubai Desert Adventure - 3 Days",
-      "category": "Adventure",
-      "description": "Experience the thrill of the Arabian Desert with dune bashing, camel riding, and traditional Bedouin camp experiences. Perfect for adventure seekers looking for authentic desert culture.",
-      "location": "Dubai Desert, UAE",
-      "price": 649,
-      "duration": "3 days",
-      "group_size": "4-12 people",
-      "difficulty": "Moderate",
-      "rating": 4.7,
-      "reviews": 203,
-      "best_time": "October-April",
-      "featured": true,
-      "image": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "gallery": [
-        "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      ],
-      "highlights": [
-        "4WD dune bashing adventure",
-        "Camel trekking experience",
-        "Traditional Bedouin camp overnight",
-        "Sandboarding activities",
-        "Falconry demonstration",
-        "Arabian BBQ dinner under stars",
-        "Traditional henna painting",
-        "Desert sunrise photography"
-      ],
-      "inclusions": [
-        "Desert camp accommodation (2 nights)",
-        "All meals during desert stay",
-        "4WD transportation",
-        "All desert activities",
-        "Professional desert guide",
-        "Traditional entertainment",
-        "Camel riding",
-        "Sandboarding equipment"
-      ],
-      "exclusions": [
-        "Dubai hotel accommodation",
-        "International flights",
-        "Personal expenses",
-        "Travel insurance",
-        "Alcoholic beverages",
-        "Tips for guide and driver",
-        "City transfers (if not staying in Dubai)"
-      ],
-      "activities": [
-        {
-          "name": "Dune Bashing",
-          "description": "Thrilling 4WD ride over sand dunes with experienced drivers"
-        },
-        {
-          "name": "Camel Trekking",
-          "description": "Traditional camel rides through the desert landscape"
-        },
-        {
-          "name": "Bedouin Camp Experience",
-          "description": "Overnight stay in traditional desert camp with cultural activities"
-        },
-        {
-          "name": "Sandboarding",
-          "description": "Surf the sand dunes on specially designed boards"
-        }
-      ],
-      "itinerary": [
-        {
-          "day": 1,
-          "title": "Desert Safari & Camp Setup",
-          "description": "Pickup from Dubai in the afternoon. Drive to desert location. Thrilling dune bashing session. Camel ride at sunset. Arrive at Bedouin camp. Traditional welcome with Arabic coffee and dates. BBQ dinner with live entertainment including belly dancing and fire shows.",
-          "accommodation": "Traditional Bedouin camp",
-          "meals": "Dinner"
-        },
-        {
-          "day": 2,
-          "title": "Desert Activities & Culture",
-          "description": "Early morning sunrise photography session. Traditional breakfast. Sandboarding activities. Falconry demonstration. Learn about desert survival techniques. Henna painting session. Traditional lunch. Afternoon rest. Evening cultural programs and stargazing.",
-          "accommodation": "Traditional Bedouin camp",
-          "meals": "Breakfast, Lunch, Dinner"
-        },
-        {
-          "day": 3,
-          "title": "Morning Desert Walk & Return",
-          "description": "Early morning desert walk and bird watching. Final breakfast in the desert. Pack up camp. Scenic drive back to Dubai with photo stops. Drop-off at Dubai location.",
-          "accommodation": "End of tour",
-          "meals": "Breakfast"
-        }
-      ],
-      "what_to_bring": [
-        "Comfortable loose clothing",
-        "Closed-toe shoes for activities",
-        "Sandals for camp",
-        "Sun hat and sunglasses",
-        "High SPF sunscreen",
-        "Camera with extra batteries",
-        "Light jacket for cool evenings",
-        "Personal toiletries",
-        "Flashlight/headlamp"
-      ],
-      "fitness_requirements": "Moderate fitness required for sandboarding and camel riding. Some activities may not be suitable for pregnant women or people with back problems.",
-      "altitude_profile": {
-        "max_altitude": "300m (Desert dunes)",
-        "acclimatization_days": 0,
-        "difficulty_level": "Moderate adventure activities in desert environment"
-      },
-      "booking_info": {
-        "advance_booking": "10 days recommended",
-        "group_discounts": "Available for 8+ people",
-        "cancellation_policy": "Free cancellation up to 5 days before departure"
-      },
-      "created_at": "2025-01-20T15:38:00.000Z",
-      "updated_at": "2025-09-20T19:40:45.164Z",
-      "listed": true,
-      "primary_destination_id": 26,
-      "secondary_destination_ids": [],
-      "activity_ids": [
-        9
-      ],
-      "related_destinations": [
-        "Dubai"
-      ],
-      "related_activities": [
+        "Luxury Experiences",
+        "City Tours",
         "Desert Safari"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 203,
@@ -1600,8 +1498,8 @@
       "category": "Luxury",
       "description": "Indulge in the ultimate Dubai luxury experience with 5-star accommodations, private tours, fine dining, and exclusive access to premium attractions. Perfect for those seeking the finest Dubai has to offer.",
       "location": "Dubai, UAE",
-      "price": 1899,
-      "duration": "5",
+      "price": 0,
+      "duration": "5 days",
       "group_size": "2-8 people",
       "difficulty": "Easy",
       "rating": 4.9,
@@ -1721,7 +1619,7 @@
         "cancellation_policy": "Free cancellation up to 14 days before departure"
       },
       "created_at": "2025-01-20T15:39:00.000Z",
-      "updated_at": "2025-10-11T18:59:18.645Z",
+      "updated_at": "2025-12-18T04:22:18.859Z",
       "listed": true,
       "primary_destination_id": 26,
       "secondary_destination_ids": [],
@@ -1734,7 +1632,7 @@
       "related_activities": [
         "Desert Safari"
       ],
-      "priceAvailable": true,
+      "priceAvailable": false,
       "hasDiscount": true,
       "discountPercentage": 10
     },
@@ -1745,7 +1643,7 @@
       "category": "Trekking",
       "description": "Embark on the ultimate Himalayan adventure to Everest Base Camp, following in the footsteps of legendary mountaineers. This iconic trek takes you through the heart of the Khumbu region, offering breathtaking views of the world's highest peaks including Mount Everest, Lhotse, and Ama Dablam. Experience Sherpa culture, visit ancient monasteries, and challenge yourself on this once-in-a-lifetime journey to the base of the world's tallest mountain.",
       "location": "Nepal",
-      "price": 2299,
+      "price": 0,
       "duration": "14 days",
       "group_size": "2-12 people",
       "difficulty": "Challenging",
@@ -1905,7 +1803,12 @@
         "cancellation_policy": "Free cancellation up to 15 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:22:29.921Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 21,
@@ -1988,8 +1891,8 @@
       "category": "Cultural",
       "description": "Setting out from Kathmandu in the early morning, embark on a picturesque 12-14 hour journey to reach the sacred destination of Haleshi Mahadev. Upon a...",
       "location": "Nepal",
-      "price": 890,
-      "duration": "2",
+      "price": 0,
+      "duration": "2 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
       "rating": 4.751259623511732,
@@ -2057,7 +1960,7 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-09-19T07:49:44.818Z",
+      "updated_at": "2025-12-18T04:25:08.811Z",
       "primary_destination_id": 3,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -2068,7 +1971,8 @@
       ],
       "related_activities": [
         "Cultural Tours"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 306,
@@ -2077,7 +1981,7 @@
       "category": "Cultural",
       "description": "Experience the best of Nepal with this comprehensive cross-border tour covering Pokhara's natural beauty, Kathmandu's cultural heritage, and Chitwan's wildlife adventure. This unique journey starts from Gorakhpur, India, and takes you through the sacred birthplace of Lord Buddha in Lumbini, the serene lakes of Pokhara, the ancient temples of Kathmandu, and the wildlife paradise of Chitwan National Park.",
       "location": "Nepal",
-      "price": 899,
+      "price": 0,
       "duration": "7 days",
       "group_size": "2-15 people",
       "difficulty": "Easy",
@@ -2188,21 +2092,26 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:22:40.981Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 11,
-      "slug": "kailash-mansarovar-yatra-12nights-13days",
-      "title": "Kailash Mansarovar Yatra 12 Nights 13 Days",
+      "slug": "kailash-mansarovar-yatra-13-nights-14-days-overland",
+      "title": "Kailash Mansarovar Yatra 13 Nights 14 Days Overland",
       "category": "Spiritual",
       "location": "Tibet, China",
-      "price": 2500,
-      "duration": "13 days",
-      "group_size": "8-15 people",
+      "price": 2650,
+      "duration": "14 days",
+      "group_size": "25+ People",
       "difficulty": "Challenging",
       "rating": 4.8,
       "reviews": 156,
-      "best_time": "May to September",
+      "best_time": "May, June, July, August, September, October",
       "featured": true,
       "listed": true,
       "image": "/uploads/destinations/tours/tours_1762066264929.webp",
@@ -2220,10 +2129,14 @@
         "Pilgrimage"
       ],
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-11-02T06:51:06.454Z",
+      "updated_at": "2025-12-18T12:45:27.395Z",
       "description": "Embark on the sacred journey to Mount Kailash and Lake Mansarovar, one of the most revered pilgrimage sites in Hinduism, Buddhism, Jainism, and Bon religion. This 13-day overland journey from Kathmandu offers a transformative spiritual experience through the mystical landscapes of Tibet.",
       "gallery": [
-        "/uploads/destinations/tours/tours_1762064318903.webp"
+        "/uploads/destinations/tours/tours_1766060386383.jpg",
+        "/uploads/destinations/tours/tours_1766060397550.jpg",
+        "/uploads/destinations/tours/tours_1766060402623.jpg",
+        "/uploads/destinations/tours/tours_1766060407885.jpg",
+        "/uploads/destinations/tours/tours_1766060421857.jpg"
       ],
       "highlights": [
         "Sacred Mount Kailash Parikrama (circumambulation)",
@@ -2236,29 +2149,37 @@
         "Gamow bag for altitude sickness prevention"
       ],
       "inclusions": [
-        "Airport transfers in Kathmandu",
-        "Hotel accommodation in Kathmandu (twin sharing)",
-        "All transportation by private vehicle",
-        "Tibet travel permits and visas",
+        "Traditional welcome on arrival ",
+        "03 Night accommodation at Kathmandu on sharing Twin/Double basis(03 Star Premium)",
+        "01 Night accommodation at Kyirung on sharing basis(Basic Hotel)",
+        "09 Night accommodation in Tibet on sharing basis(Hotels  and Guest houses) ",
         "Professional guide throughout the journey",
-        "All meals during the tour",
-        "Accommodation in guesthouses/ashrams",
-        "Gamow bag for altitude sickness prevention",
-        "First aid kit and medical support",
-        "Yatra briefing session",
-        "Temple visits in Kathmandu"
+        "Tibet travel Permit & Visa fees",
+        "English speaking Tibetan guide for customers formalities",
+        "Nepali Supporting Staff(cook,Sherpa & helper) 5:1 basis ",
+        "Buffet vegetarian meals during Yatra on AP basis(Breakfast,Lunch & Dinner)",
+        "Nepali experienced Team Leader/Guide during Yatra",
+        "Supporting truck to carry equipment ",
+        "Mansarovar and Kailash Yatra Permit fees",
+        "Duffel bag for carrying goods during Yatra",
+        "Duffel bag for carrying goods during Yatra",
+        "Back pack bag for personal items to carry and Cap",
+        "Warm down Jacket refundable ",
+        "First aid medical kit bag & Oxygen cylinder ",
+        "Emergency evacuation management during Yatra",
+        "Round trip transportation in Tibet AC Luxury coach",
+        "Kathmandu - Rasuwagadi - Kathmandu A/C Vehicle",
+        "Arrival and departure transfer with assistance by A/C Vehicle  "
       ],
       "exclusions": [
-        "International flights to/from Kathmandu",
-        "Nepal visa fees",
-        "Personal expenses and shopping",
-        "Travel insurance (mandatory)",
-        "Tips for guide and driver",
-        "Personal medical kit and Diamox tablets",
-        "Alcoholic beverages",
-        "Emergency evacuation costs",
-        "Personal trekking equipment",
-        "Laundry and communication charges"
+        "Personal expenses and travel Insurance",
+        "Medical expenses and Emergency rescue evacuation expenses",
+        "Tips for Guide, Porter, driver and personal expenses",
+        "Extra Hotel charges in Kathmandu if early return from Tibet",
+        "Any additional cost due to natural calamities and unforeseen circumstances",
+        "Visa splitting charge and extra transportation cost, if returning early from Yatra",
+        "5 % Vat GST India Government",
+        "Emergency evacuation costs"
       ],
       "activities": [
         "Sacred pilgrimage",
@@ -2273,7 +2194,7 @@
           "day": 1,
           "title": "Arrival in Kathmandu (1300m)",
           "description": "Upon arrival at Kathmandu International Airport, you will be greeted and assisted by our representative after completing custom formalities. Transfer to hotel for check-in. Evening yatra briefing session before dinner covering important aspects of the Kailash Mansarovar Yatra.",
-          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "accommodation": "Best Western Plus - 4 Star Hotel",
           "meals": "Dinner",
           "activities": [
             "Airport transfer",
@@ -2285,7 +2206,7 @@
           "day": 2,
           "title": "Kathmandu Temple Visit",
           "description": "After breakfast, embark on Kathmandu city sightseeing tour. Visit Pashupatinath Temple, Boudhanath Stupa (World Heritage Site), Jal Narayan Temple (Sleeping Vishnu), and Kathmandu Durbar Square (Living God Kumari). Return to hotel for packing and preparation for the yatra.",
-          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "accommodation": "Best Western Plus - 4 Star Hotel",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Temple visits",
@@ -2295,9 +2216,9 @@
         },
         {
           "day": 3,
-          "title": "Kathmandu to Kodari (1600m)",
-          "description": "Drive to Kodari (145 km, 5-6 hours) at the Nepal-Tibet border. Complete immigration formalities and prepare for entry into Tibet. Overnight at Kodari.",
-          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "title": ": Kathmandu - Drive to Kyirung(1600 m)",
+          "description": "Our representative will pick up you, drive to Kyirung(145 Km ,05/06 Hrs),arrive at Kyirung transfer to hotel for check in. Overnight at  Kyirung Guest house.",
+          "accommodation": "Standard Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Border crossing",
@@ -2306,9 +2227,9 @@
         },
         {
           "day": 4,
-          "title": "Kodari to Nylam (2800m)",
-          "description": "Cross into Tibet and drive to Nylam (160 km, 4-5 hours) for acclimatization. This is an important day for altitude adjustment as we gain significant elevation.",
-          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "title": "Kyirung- Drive to  Gyirung County(2800m)",
+          "description": "After breakfast complete immigration and custom formalities in Nepal and China both side continue drive to Gyirung(35 Km ,1 Hrs 2800m). Arrive at Gyirung transfer to hotel for check in. overnight at Gyirung.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Tibet entry",
@@ -2318,9 +2239,9 @@
         },
         {
           "day": 5,
-          "title": "Nylam to Saga (4500m)",
-          "description": "Drive to Saga (270 km, 6-7 hours) crossing the mighty Brahmaputra River. The journey takes you through stunning Tibetan landscapes and high-altitude terrain.",
-          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "title": "Gyirung County Acclimatation(2800m)",
+          "description": "After breakfast you are free for visit around Gyirung county or shopping . Overnight at Gyirung County.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "High altitude driving",
@@ -2330,9 +2251,9 @@
         },
         {
           "day": 6,
-          "title": "Saga to Mansarovar (4550m)",
-          "description": "Drive to the sacred Lake Mansarovar (470 km, 8-9 hours). Upon arrival, check-in at Pramath Ashram. First glimpse of the holy lake and preparation for tomorrow's parikrama.",
-          "accommodation": "Pramath Ashram (Dormitory room, Common Bathroom)",
+          "title": "Gyirung - Drive to Saga (4500M ,270 km 06/07 Hrs)",
+          "description": "After breakfast drive to Saga crossing Bramhaputra river(270 km, 6/7 Hrs),Arrive at Sanga transfer to hotel for check in. Overnight at Saga hotel.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Sacred lake arrival",
@@ -2341,9 +2262,9 @@
         },
         {
           "day": 7,
-          "title": "Mansarovar Parikrama to Darchen (4600m)",
-          "description": "Complete Mansarovar Parikrama by vehicle (102 km, 3 hours). Take holy bath in the sacred lake, perform puja and homa ceremonies. Continue drive to Darchen (58 km, 1.5 hours), the base camp for Kailash Parikrama.",
-          "accommodation": "Basic Hotel (Shared room, Common Bathroom)",
+          "title": "Saga - Drive to  Mansarovar (4550M ,470 km 08/09 Hrs)",
+          "description": "After breakfast drive towards Mansarovar lake (470 Km, 08/09 Hrs),Arrive at Mansarovar lake transfer to guest house for check in .Overnight at Mansarovar lake.",
+          "accommodation": "Pramath Asram (Dormitory room, Common Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Lake parikrama",
@@ -2354,9 +2275,9 @@
         },
         {
           "day": 8,
-          "title": "Darchen to Diraphuk (4860m)",
-          "description": "Begin the sacred Kailash Parikrama. Visit Yamdwar for darshan, then trek to Diraphuk (12 km, 4-5 hours). First day of the challenging but spiritually rewarding circumambulation of Mount Kailash.",
-          "accommodation": "Basic Guesthouse (Dormitory, Common facilities)",
+          "title": "Mansarovar Parikrama - Drive to Darchen (4600 m)",
+          "description": "After breakfast Parikrma of Mansarovar lake by vehicle (102 Km,3 Hrs) take Holy bath, Perform Puja(prayer ritual, Homa at Mansarovar lake, continue drive to Darchen (58 Km ,1.5 Hrs).Arrive at Darchen transfer to hotel for check in. overnight at Darchen.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Kailash parikrama start",
@@ -2366,9 +2287,9 @@
         },
         {
           "day": 9,
-          "title": "Diraphuk to Zutulphuk via Dolma La Pass (4650m)",
-          "description": "The most challenging day of the yatra. Cross the Dolma La Pass at 5,630m, the highest point of the parikrama. Trek to Zutulphuk (22 km, 8-10 hours). This is considered the most spiritually significant day of the journey.",
-          "accommodation": "Basic Guesthouse (Dormitory, Common facilities)",
+          "title": "Darchen Darshan Yamdwar - Trek to Diraphuk (4860m, 12 Km - First Day of Kora )",
+          "description": "After breakfast short drive to Yamddwar, visit Yama Dwar.This is starting point of Kora.We will trek to Diraphuk which is 12 km trek (7/8 Hrs) crossing west face of Mt.Kailash,You will visit North face of Mt.Kailash. Arrive at Diraphuk transfer to hotel for check in. Overnight at Diraphuk. Overnight at a Hotel in Diraphuk.",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Dolma La Pass crossing",
@@ -2378,9 +2299,9 @@
         },
         {
           "day": 10,
-          "title": "Zutulphuk to Darchen to Saga (4500m)",
-          "description": "Complete the Kailash Parikrama by trekking back to Darchen (8 km, 2-3 hours). After completing this sacred journey, drive back to Saga for overnight rest.",
-          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "title": "Diraphuk - Trek to Zutalphuk (4600M,22 Km - 2nd day of Kora)",
+          "description": "After breakfast trek to Dolma - La Pass and proceed to Zutalphuk(22 Km,12 hrs Trek). This is the most difficult journey throughout the the Yatra since you have to trek up to (5630m) height. From decent to Gaurikund and trek to Zutulphuk following river. Arrive at Zutalphuk transfer, check in to hotel. overnight at Zutalphuk at Huest house.",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Parikrama completion",
@@ -2390,9 +2311,9 @@
         },
         {
           "day": 11,
-          "title": "Saga to Nylam (2800m)",
-          "description": "Drive back to Nylam (270 km, 6-7 hours) retracing the route through the beautiful Tibetan landscapes. Gradual descent to lower altitude for better rest.",
-          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "title": "Zutalphuk - Trek to Darchen(08 Km, 03 Hrs) - Drive to Saga (4500M - 3rd day of Kora)",
+          "description": "After breakfast short trek( 8 Km,2 Hrs) and reach to the point where our coach will be waiting and we will drive to Darchen and merge with other member who were waiting and drive to Saga. Arrive at saga transfer to hotel for check in.overnight at saga.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Return journey",
@@ -2402,9 +2323,9 @@
         },
         {
           "day": 12,
-          "title": "Nylam to Kathmandu (1300m)",
-          "description": "Cross back into Nepal and drive to Kathmandu (160 km + 145 km, 8-9 hours total). Return to the familiar environment and comfortable accommodation for rest and relaxation.",
-          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "title": "Saga - Drive to Gyirung County(2800M ,270 Km,07 Hrs)",
+          "description": "After breakfast drive to Gyirung(270 km, 7 hrs). Arrive at Gyirung transfer to hotel for check in. Overnight at Gyirung",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
           "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Border crossing",
@@ -2414,14 +2335,21 @@
         },
         {
           "day": 13,
-          "title": "Departure from Kathmandu",
-          "description": "Transfer to Tribhuvan International Airport for departure or extend your stay in Kathmandu for additional sightseeing and shopping.",
-          "accommodation": "N/A",
-          "meals": "Breakfast",
+          "title": "Gyirung County  - Drive to Kathmandu  (1300 M, 200 Km 08 Hrs))",
+          "description": "After breakfast drive to Kathmandu crossing Nepal - China both side Border formalities continue drive to Kathmandu arrive at Kathmandu  transfer to hotel for check in.Overnight at Kathmandu.",
+          "accommodation": "Best Western Plus - 4 Star Hotel",
+          "meals": "Breakfast, Lunch, Dinner",
           "activities": [
             "Airport transfer",
             "Departure"
           ]
+        },
+        {
+          "day": 14,
+          "title": "Kathmandu departure transfer ",
+          "description": "After breakfast we will be provide appreciation certificate of Kailash Mansarovar Yatra later drop to airport for final departure",
+          "accommodation": "N/A",
+          "meals": "Breakfast, Lunch, Dinner"
         }
       ],
       "what_to_bring": [],
@@ -2453,192 +2381,10 @@
           "Wet tissues and personal hygiene items"
         ],
         "risks_liability": "All tours in Tibet are conducted under Tibet Tourism Bureau (TTB) rules and regulations. Company shall not be responsible for changes due to unavoidable circumstances such as landslide, road blockage, flood, snow, political unrest, flight cancellation, delays, sickness or accidents. Extra costs shall be borne by clients."
-      }
-    },
-    {
-      "id": 13,
-      "slug": "kailash-mansarovar-yatra-8nights-9days-helicopter",
-      "title": "Kailash Mansarovar Yatra 8 Nights 9 Days - Helicopter Route",
-      "category": "Spiritual",
-      "location": "Tibet, China",
-      "price": 4500,
-      "duration": "9 days",
-      "group_size": "8-12 people",
-      "difficulty": "Moderate",
-      "rating": 4.7,
-      "reviews": 89,
-      "best_time": "May to September",
-      "featured": true,
-      "listed": true,
-      "image": "/uploads/destinations/tours/tours_1762064336559.jpg",
-      "primary_destination_id": 9,
-      "secondary_destination_ids": [],
-      "activity_ids": [
-        5,
-        6
-      ],
-      "related_destinations": [
-        "Tibet"
-      ],
-      "related_activities": [
-        "Cultural Tours",
-        "Pilgrimage"
-      ],
-      "updated_at": "2025-11-02T06:19:03.663Z",
-      "description": "Experience the sacred Kailash Mansarovar Yatra via helicopter route from Lucknow. This premium 9-day journey combines helicopter flights with the spiritual pilgrimage, offering comfort and convenience while maintaining the sacred essence of the yatra. The helicopter route significantly reduces travel time while providing breathtaking aerial views of the Himalayas.",
-      "gallery": [
-        "/uploads/destinations/tours/tours_1762062229885.jpg"
-      ],
-      "highlights": [
-        "Helicopter flights from Simikot to Hilsa for comfort and time-saving",
-        "Sacred Mount Kailash Parikrama (circumambulation)",
-        "Holy bath and prayers at Lake Mansarovar",
-        "Reduced travel time with premium helicopter transfers",
-        "Professional spiritual guide with deep knowledge",
-        "Comfortable accommodation throughout the journey",
-        "Medical support and Gamow bag for altitude safety",
-        "Small group experience for personalized attention",
-        "Aerial views of the majestic Himalayas",
-        "Visit to ancient Tibetan monasteries and temples"
-      ],
-      "inclusions": [
-        "Airport transfers in Lucknow",
-        "All domestic flights (Nepalgunj-Simikot-Nepalgunj)",
-        "Helicopter flights (Simikot-Hilsa-Simikot)",
-        "All accommodation (twin sharing/dormitory basis)",
-        "All meals during the tour (breakfast, lunch, dinner)",
-        "Tibet travel permits and Chinese visa assistance",
-        "Professional spiritual guide and support staff",
-        "All ground transportation in private vehicles",
-        "Gamow bag for altitude sickness prevention",
-        "First aid kit and basic medical support",
-        "Oxygen cylinder for emergency use",
-        "Sleeping bags and basic trekking equipment",
-        "Group visa processing for Tibet",
-        "Border crossing assistance and formalities"
-      ],
-      "exclusions": [
-        "International flights to/from India",
-        "Nepal visa fees (USD 30 for 15 days)",
-        "Personal expenses and shopping",
-        "Travel insurance (mandatory and recommended)",
-        "Tips for guide, driver, and support staff",
-        "Personal medical kit and Diamox tablets",
-        "Alcoholic beverages and personal items",
-        "Emergency evacuation costs",
-        "Extra accommodation due to flight delays",
-        "Personal trekking gear and clothing",
-        "Laundry and communication expenses",
-        "Any meals not mentioned in inclusions"
-      ],
-      "activities": [
-        "Helicopter sightseeing flights",
-        "Sacred Mount Kailash Parikrama",
-        "Holy bath at Lake Mansarovar",
-        "Prayer and meditation sessions",
-        "Homa ceremony at Mansarovar",
-        "Visit to Tibetan monasteries",
-        "High altitude trekking",
-        "Cultural interaction with locals",
-        "Photography of sacred sites",
-        "Spiritual discourse sessions"
-      ],
-      "itinerary": [
-        {
-          "day": 1,
-          "title": "Arrival Lucknow - Drive to Nepalgunj (150m)",
-          "description": "Upon arrival at Lucknow Airport, you will be greeted by our representative. After completing customs formalities, drive to Nepalgunj (200km, 5-6 hours). Check-in at Hotel Diamond Palace or Lord Plaza. Evening yatra briefing session before dinner to prepare for the spiritual journey ahead.",
-          "accommodation": "Hotel Diamond Palace/Lord Plaza (Twin Sharing)",
-          "meals": "Dinner",
-          "altitude": "150m"
-        },
-        {
-          "day": 2,
-          "title": "Nepalgunj - Fly to Simikot (2800m)",
-          "description": "After breakfast, transfer to domestic airport for flight to Simikot (45 minutes). Upon arrival at Simikot airport, transfer to hotel for check-in. Evening short walk to Lord Shiva Temple for prayers. Rest and acclimatization at this altitude.",
-          "accommodation": "Hotel Sunlight (Shared room, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "2800m"
-        },
-        {
-          "day": 3,
-          "title": "Simikot - Helicopter to Hilsa - Drive to Purang (3700m)",
-          "description": "After breakfast, helicopter flight to Hilsa (20 minutes, 15kg baggage weight limit). Wait for other group members to arrive. Complete border formalities and immigration procedures. Drive to Purang (35km, 1.5 hours). Check-in at guest house and rest.",
-          "accommodation": "Guest House (Shared room, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "3700m"
-        },
-        {
-          "day": 4,
-          "title": "Acclimatization Day in Purang (3900m)",
-          "description": "Important acclimatization day to adjust to high altitude. Light activities around Purang town. Medical check-up and preparation for higher altitudes. Visit local market and interact with Tibetan culture. Rest and hydration are essential.",
-          "accommodation": "Guest House (Shared room, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "3900m"
-        },
-        {
-          "day": 5,
-          "title": "Purang - Mansarovar Lake Parikrama (4550m)",
-          "description": "Drive to sacred Lake Mansarovar (102km, 4-5 hours). Upon arrival, perform holy bath in the sacred waters. Conduct prayers, puja, and homa ceremony. Experience the spiritual energy of this most sacred lake. Overnight at lakeside accommodation.",
-          "accommodation": "Guest House (Dormitory, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "4550m"
-        },
-        {
-          "day": 6,
-          "title": "Mansarovar - Darchen - Trek to Deraphuk (4860m)",
-          "description": "Drive to Darchen (58km, 2 hours), the starting point of Kailash Parikrama. Begin the sacred circumambulation of Mount Kailash. Trek to Deraphuk (12km). First glimpse of the north face of Mount Kailash. Overnight in guest house.",
-          "accommodation": "Guest House (Dormitory, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "4860m"
-        },
-        {
-          "day": 7,
-          "title": "Deraphuk - Dolma La Pass - Zutalphuk (4600m)",
-          "description": "Most challenging day of the yatra. Cross Dolma La Pass (5630m), the highest point of Parikrama. Spiritual significance of leaving behind past sins. Trek to Zutalphuk (22km). Physically demanding but spiritually most rewarding day.",
-          "accommodation": "Guest House (Dormitory, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "4600m"
-        },
-        {
-          "day": 8,
-          "title": "Zutalphuk - Darchen - Drive to Hilsa (3700m)",
-          "description": "Complete the sacred Parikrama with final trek to Darchen (8km, 3 hours). Meet with vehicle and merge with other group members. Drive to Hilsa for border crossing. Complete China-Nepal border formalities. Overnight at Hilsa.",
-          "accommodation": "Hotel Snowland (Dormitory, Common Bathroom)",
-          "meals": "Breakfast, Lunch, Dinner",
-          "altitude": "3700m"
-        },
-        {
-          "day": 9,
-          "title": "Hilsa - Helicopter to Simikot - Fly to Nepalgunj - Drive to Lucknow",
-          "description": "After breakfast, helicopter flight to Simikot (20 minutes). Connect with flight from Simikot to Nepalgunj (50 minutes). Upon arrival in Nepalgunj, transfer to hotel for freshening up, then drive to Lucknow for final departure.",
-          "accommodation": "Day use only",
-          "meals": "Breakfast",
-          "altitude": "150m"
-        }
-      ],
-      "important_notes": {
-        "health_requirements": "Medical fitness certificate required. Consult your doctor about high altitude travel ability. Age limit: 18-70 years. Heart patients, pregnant women, and those with serious medical conditions should avoid this tour.",
-        "altitude_sickness": "Symptoms include headache, nausea, breathlessness, and exhaustion. Carry Diamox tablets. We provide Gamow bag for emergency treatment. Drink plenty of water and avoid alcohol/smoking.",
-        "currency": "Chinese Yuan (CNY). USD 1 = 7.02 Yuan approximately. Exchange money at Bank of China in Kyirung county. Exchange remaining Yuan before departure.",
-        "what_to_bring": [
-          "Warm clothing for high altitude",
-          "Comfortable trekking shoes",
-          "Personal medical kit with Diamox",
-          "Sunglasses and sunscreen",
-          "Personal toiletries and medications",
-          "Sleeping bag (can be provided)",
-          "Water bottles and purification tablets",
-          "Camera with extra batteries",
-          "Passport and visa documents",
-          "Travel insurance documents"
-        ],
-        "fitness_requirements": "Good physical fitness required for high altitude trekking. Regular walking/jogging recommended before the tour. Mental preparation for spiritual journey is equally important.",
-        "weather_conditions": "Weather can be unpredictable. Temperature ranges from -10°C to 15°C. Carry layered clothing. Monsoon season (July-August) may cause flight delays.",
-        "helicopter_details": "Helicopter flights are weather dependent. 15kg baggage limit per person. Flights may be delayed or cancelled due to weather conditions. Alternative arrangements will be made if necessary.",
-        "risks_and_liability": "Tours conducted under Tibet Tourism Bureau regulations. Company not responsible for changes due to natural disasters, political unrest, flight cancellations, or medical emergencies. Travel insurance mandatory."
       },
-      "what_to_bring": []
+      "priceAvailable": true,
+      "hasDiscount": true,
+      "discountPercentage": 6
     },
     {
       "id": 7,
@@ -2647,7 +2393,7 @@
       "category": "Cultural",
       "description": "Outline Itinerary Day 1: Arrival at Kathmandu Day 2: Kathmandu sightseeing Day 3: Drive to Pokhara and sightseeing Day 4: Drive to Muktinath Day 5: Mu...",
       "location": "Pokhara",
-      "price": 890,
+      "price": 0,
       "duration": "10 days",
       "group_size": "2-12 people",
       "difficulty": "Easy",
@@ -2746,7 +2492,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.254Z",
-      "updated_at": "2025-09-19T04:47:52.514Z"
+      "updated_at": "2025-12-18T04:26:30.929Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 19,
@@ -2840,7 +2591,7 @@
       "category": "Adventure",
       "description": "Ride to Mustang: 12-Day Himalayan Motorbike Adventure from KathmanduThe Journey of a LifetimeImagine this: you’re cruising through Nepal’s ever-changi...",
       "location": "Nepal",
-      "price": 1000,
+      "price": 0,
       "duration": "10 days",
       "group_size": "2-12 people",
       "difficulty": "Moderate",
@@ -2960,7 +2711,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2025-09-19T04:13:16.253Z",
-      "updated_at": "2025-09-19T04:47:52.513Z"
+      "updated_at": "2025-12-18T04:26:44.054Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 309,
@@ -2969,7 +2725,7 @@
       "category": "Pilgrimage",
       "description": "Embark on a sacred pilgrimage to Muktinath Temple, one of the most revered Hindu and Buddhist temples in the Himalayas. Located at 3,710 meters in the Mustang district, this holy shrine is believed to grant salvation (moksha) to devotees. The temple houses 108 water spouts and an eternal flame, making it a unique spiritual destination. This comfortable journey by flight eliminates the need for long drives, allowing more time for spiritual contemplation and exploration of the mystical Mustang region.",
       "location": "Nepal",
-      "price": 899,
+      "price": 0,
       "duration": "7 days",
       "group_size": "2-15 people",
       "difficulty": "Moderate",
@@ -3088,7 +2844,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:22:52.832Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 301,
@@ -3097,7 +2858,7 @@
       "category": "Adventure",
       "description": "Experience the mystical kingdom of Mustang with a perfect combination of flight and drive. Explore ancient monasteries, dramatic landscapes, and unique Tibetan culture in the rain shadow of the Himalayas.",
       "location": "Mustang",
-      "price": 750,
+      "price": 0,
       "duration": "5 days",
       "group_size": "2-12 people",
       "difficulty": "Moderate",
@@ -3193,7 +2954,7 @@
         "cancellation_policy": "Free cancellation up to 14 days before departure"
       },
       "created_at": "2025-01-02T10:00:00.000Z",
-      "updated_at": "2025-01-02T10:00:00.000Z",
+      "updated_at": "2025-12-18T04:23:03.711Z",
       "primary_destination_id": 15,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -3216,7 +2977,7 @@
       "category": "Cultural",
       "description": "Discover Nepal's most popular destinations in this comprehensive golden triangle tour covering Kathmandu's heritage, Pokhara's natural beauty, and Chitwan's wildlife. This classic Nepal tour combines cultural exploration, mountain views, and jungle adventures, offering the perfect introduction to Nepal's diverse attractions. Experience ancient temples, pristine lakes, and exotic wildlife in one unforgettable journey.",
       "location": "Nepal",
-      "price": 1099,
+      "price": 0,
       "duration": "8 days",
       "group_size": "2-20 people",
       "difficulty": "Easy",
@@ -3338,7 +3099,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:23:15.039Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 310,
@@ -3347,7 +3113,7 @@
       "category": "Cultural",
       "description": "Immerse yourself in Nepal's rich cultural heritage with this comprehensive tour covering UNESCO World Heritage sites in Kathmandu Valley. Explore ancient temples, medieval palaces, and traditional architecture that showcase Nepal's glorious past. This cultural journey takes you through the living museums of Kathmandu, Patan, and Bhaktapur, where centuries-old traditions continue to thrive. Experience the spiritual essence of Nepal through its sacred sites, vibrant festivals, and warm hospitality of the Newar people.",
       "location": "Nepal",
-      "price": 699,
+      "price": 0,
       "duration": "6 days",
       "group_size": "2-20 people",
       "difficulty": "Easy",
@@ -3461,7 +3227,12 @@
         "cancellation_policy": "Free cancellation up to 5 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:23:27.586Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 311,
@@ -3470,7 +3241,7 @@
       "category": "Adventure",
       "description": "Experience Nepal from a unique perspective with this exciting tour featuring scenic mountain flights and ground exploration. This compact yet comprehensive tour combines the thrill of mountain flights with cultural immersion, offering spectacular aerial views of the Himalayas including Mount Everest, followed by ground tours of Nepal's most significant cultural and natural attractions. Perfect for travelers with limited time who want to maximize their Nepal experience with both aerial and terrestrial adventures.",
       "location": "Nepal",
-      "price": 1299,
+      "price": 0,
       "duration": "5 days",
       "group_size": "2-16 people",
       "difficulty": "Easy",
@@ -3580,7 +3351,12 @@
         "cancellation_policy": "Free cancellation up to 7 days before departure"
       },
       "created_at": "2024-12-30T10:00:00.000Z",
-      "updated_at": "2024-12-30T10:00:00.000Z"
+      "updated_at": "2025-12-18T04:23:40.539Z",
+      "secondary_destination_ids": [],
+      "activity_ids": [],
+      "related_destinations": [],
+      "related_activities": [],
+      "priceAvailable": false
     },
     {
       "id": 22,
@@ -3674,8 +3450,8 @@
       "category": "Cultural",
       "description": "A 5-day curated journey in and around Pokhara. From sunrise at Sarangkot and lake adventures to caves, cultural gems, and nearby hidden escapes like Begnas and Kusma, this package offers couples and explorers a perfect mix of leisure, thrill, and discovery. Experience the best of Pokhara with scenic flights, spiritual sites, adventure activities, and local cultural immersion.",
       "location": "Pokhara",
-      "price": 650,
-      "duration": "5 days 4 nights",
+      "price": 0,
+      "duration": "54 days",
       "group_size": "2-7 people",
       "difficulty": "Easy",
       "rating": 4.7,
@@ -3855,7 +3631,8 @@
         }
       ],
       "created_at": "2025-10-02T07:10:00.000Z",
-      "updated_at": "2025-10-02T07:10:00.000Z"
+      "updated_at": "2025-12-18T04:23:52.061Z",
+      "priceAvailable": false
     },
     {
       "id": 104,
@@ -3864,7 +3641,7 @@
       "category": "Adventure",
       "description": "The Pokhara Super Adventure Package 5 Days is your high-energy escape that links Kusma's sky adventures, Pokhara's lakeside charm, and the white-water rush of the Trishuli. Travel the scenic route from Kathmandu to Kusma to Pokhara to Malekhu and back to Kathmandu. Kick off with a sky breakfast and your choice of bungee or swing at The Cliff. In Pokhara, greet the morning with a 30-minute ultralight flight, ride an ATV for 70 minutes, and unwind with boating or kayaking on Fewa Lake.",
       "location": "Pokhara",
-      "price": 850,
+      "price": 0,
       "duration": "5 days",
       "group_size": "2-12 people",
       "difficulty": "Moderate",
@@ -4038,7 +3815,8 @@
         }
       ],
       "created_at": "2025-10-02T07:05:00.000Z",
-      "updated_at": "2025-10-02T07:05:00.000Z"
+      "updated_at": "2025-12-18T04:24:03.495Z",
+      "priceAvailable": false
     },
     {
       "id": 302,
@@ -4047,7 +3825,7 @@
       "category": "Adventure",
       "description": "Discover Nepal's largest and most beautiful alpine lake in the remote far-western region. This unique tour combines scenic flights and overland journey to explore the pristine Rara National Park.",
       "location": "Rara",
-      "price": 890,
+      "price": 0,
       "duration": "7 days",
       "group_size": "2-12 people",
       "difficulty": "Moderate",
@@ -4154,7 +3932,7 @@
         "cancellation_policy": "Free cancellation up to 21 days before departure"
       },
       "created_at": "2025-01-02T10:00:00.000Z",
-      "updated_at": "2025-01-02T10:00:00.000Z",
+      "updated_at": "2025-12-18T04:24:13.917Z",
       "primary_destination_id": 27,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -4167,7 +3945,8 @@
       "related_activities": [
         "Adventure Sports",
         "Cultural Tours"
-      ]
+      ],
+      "priceAvailable": false
     },
     {
       "id": 18,
@@ -4303,7 +4082,7 @@
       "category": "Adventure",
       "description": "Journey to the forbidden kingdom of Upper Mustang, a restricted area that preserves ancient Tibetan culture and traditions. Explore medieval cities, ancient monasteries, and dramatic desert landscapes.",
       "location": "Mustang",
-      "price": 950,
+      "price": 0,
       "duration": "6 days",
       "group_size": "2-10 people",
       "difficulty": "Moderate",
@@ -4405,7 +4184,7 @@
         "cancellation_policy": "Free cancellation up to 21 days before departure"
       },
       "created_at": "2025-01-02T10:00:00.000Z",
-      "updated_at": "2025-01-02T10:00:00.000Z",
+      "updated_at": "2025-12-18T04:24:24.308Z",
       "primary_destination_id": 15,
       "secondary_destination_ids": [],
       "activity_ids": [
@@ -4419,7 +4198,452 @@
       "related_activities": [
         "Cultural Tours",
         "Adventure Sports"
-      ]
+      ],
+      "priceAvailable": false
+    },
+    {
+      "slug": "kailash-mansarovar-yatra-11-nights-12-days-ex-kathmandu-helicopter-route",
+      "title": "Kailash Mansarovar Yatra 11 Nights 12 Days ex Kathmandu - Helicopter Route",
+      "description": "Experience the sacred Kailash Mansarovar Yatra via helicopter route from Kathmandu. This premium 12-day journey combines helicopter flights with the spiritual pilgrimage, offering comfort and convenience while maintaining the sacred essence of the yatra. The helicopter route significantly reduces travel time while providing breathtaking aerial views of the Himalayas.",
+      "price": 3250,
+      "duration": "12 days",
+      "group_size": "25+ People",
+      "best_time": "",
+      "image": "/uploads/destinations/tours/tours_1766064650576.webp",
+      "gallery": [],
+      "highlights": [],
+      "inclusions": [
+        "Traditional welcome on arrival ",
+        "03 Night accommodation at Kathmandu on sharing Twin/Double basis(Premium",
+        "01 Night accommodation at Nepalgunj on Double/Twin sharing basis(Premium)",
+        "01 Night accommodation at Simikot on sharing basis(Guest house) ",
+        "01 Night accommodation at Hilsa on sharing basis(Guest house) ",
+        "05 Night accommodation in Tibet on sharing basis(Hotel Basis) ",
+        "Kathmandu - Nepalgunj – Kathmandu flight cost ",
+        "Nepalgunj - Simikot - Nepalgunj flight cost(17 Pax at a time)",
+        "Simikot - Hilsa - Simikot helicopter cost(04 Pax carry at a time)",
+        "Tibet travel Permit & Visa fees",
+        "Humla Trekking Permit and fees",
+        "English speaking Tibetan guide for customers formalities",
+        "Nepali Supporting Staff(cook,Sherpa & helper) 5:1 basis ",
+        "Buffet vegetarian meals during Yatra on AP basis(Breakfast, Lunch & Dinner)",
+        "Nepali experienced Team Leader/Guide during Yatra",
+        "Supporting truck to carry equipment ",
+        "Mansarovar and Kailash Yatra Permit fees",
+        "Duffel bag for carrying goods during Yatra",
+        "Back pack bag for personal items to carry and Cap",
+        "Warm down Jacket refundable ",
+        "First aid medical kit bag & Oxygen cylinder ",
+        "Emergency evacuation management during Yatra",
+        "Round trip transportation in Tibet AC Luxury coach",
+        "Arrival and departure transfer with assistance by A/C Vehicle  ",
+        "All sightseeing and excursions as mentioned in the itinerary.",
+        "Vehicles are not to be at disposal and are available as per itinerary only (point to point basis).",
+        "Kailash Mansarovar Yatra appreciation certificate  "
+      ],
+      "exclusions": [
+        "Personal expenses and travel Insurance",
+        "Medical expenses and Emergency rescue evacuation expenses",
+        "Horses,Pony and porter during Kailash Parikrama ",
+        "Tips for Guide, Porter, driver and personal expenses",
+        "Extra Hotel charges in Kathmandu if early return from Tibet",
+        "Any additional cost due to natural calamities and unforeseen circumstances",
+        "Visa splitting charge and extra transportation cost, if returning early from Yatra",
+        "5 % GST If you pay India account"
+      ],
+      "activities": [],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival Kathmandu (1300m",
+          "description": "Upon arrival in Kathmandu Airport, you will be greeted and assisted by our representative after completing your custom formalities,transfer to the hotel for check-in. Overnight at Kathmandu Hotel.",
+          "accommodation": "Best Western Plus - 4 Start Hotel ",
+          "meals": "Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Kathmandu Sightseeing - Fly to Nepalgunj (150M ,1 Hrs)",
+          "description": "After breakfast Kathmandu city sightseeing tour, visit  Pasupatinath Temple,Bouddhanath Stupa(World heritage site),Jala Narayan Temple(sleeping Vishnu) back to hotel take lunch evening fly to Nepalgunj,arrive at Nepalgunj transfer to hotel for check in.Overnight at Nepalhunj.",
+          "accommodation": "Hotel Soaltee - 4 Star",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Nepalgunj - Fly to Simikot (2800M ,50 Min)",
+          "description": "After breakfast transfer to domestic airport ,fly to Simikot, arrive at Simikot airport, transfer to hotel for check in. Evening short walk to lord Shiva Temple back to hotel. Overnight at Simikot. ",
+          "accommodation": "Standard Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Simikot - Fly to Hilsa by Helicopter - Drive to Purang (3700M,35 km,2 Hrs)",
+          "description": "After breakfast fly to Hilsa by Helicopter (20 Min, 15 Kg weight limit for baggage) wait for the others member to arrive at Hilsa (since it is a group visa and everyone have to enter Tibet side in one group) complete immigration and custom formalities in Nepal - China both side continue drive to Purang ,on the way we have to pass up to 2 Checkpoints where checking might take upto 1 hour each check post) transfer to the Hotel for check-in.overnight at Purang hotel.\n\n",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Purang Acclimatization Day (3900M)",
+          "description": "After breakfast all day is free for acclimatization today you can buy Kailash kora clothes,bottle,sticks and others trekking gears for parikrama.Overnight at Purang hotel.",
+          "accommodation": "Deluxe Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 6,
+          "title": "Purang - Drive to Mansarovar Parikrama (4550M,102 km,4 Hrs - Holy bath,Pooja,Homa)",
+          "description": "After breakfast drive to Rakshas Tal (40 km, 1.5 hrs) on the way you will have to pass 1 check point. After reaching Rakshas Tal you will see Gurla Mandhata Parvat and first view of Mt.Kailash south face and Manasarovar Lake, 40 Km drive we reach Mansarovar continue Parikrma of Mansarovar lake by Vehicle (102 Km,4 Hrs) and Overnight at the Shore of the Lake.\n\n",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 7,
+          "title": "Mansarovar - Drive to Yamdwar (60 Km,2 Hrs)- Trek to Diraphuk (4860M, 12 Km - First Day of Kora)",
+          "description": "After breakfast short drive to Darchen, visit Yamdwar.This is starting point of Kora.We will trek to Diraphuk which is 12 km trek (7/8 Hrs) crossing west face of Mt.Kailash,You will visit North face of Mt.Kailash. Arrive at Diraphuk ,transfer to the Guest house for check-in.overnight at Diraphuk.",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 8,
+          "title": "Diraphuk - Trek to Zutalphuk (4600M,22 Km - 2nd Day of kora Cross Dolmala Pass)",
+          "description": "After breakfast trek to Dolma -La Pass and trek to Zutalphuk(22 Km,9/10 hrs Trek).This is the most difficult journey throughout  the the yatra since you have to trek up to (5630m) height. From decent to Gaurikund & trek to Zutulphuk following river. Arrive at Zutalphuk transfer to the Guest house for check-in.overnight at Zutalphuk.",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 9,
+          "title": "Zutalphuk - Trek to Darchen(08 Km/3 Hrs - Drive to Hilsa  (3700M,100 km 03 Hrs)",
+          "description": "After breakfast short trek ( 8 Km ,2 Hrs) and reach to the point where our coach will be waiting and we will drive to Darchen and merge with other member  who were waiting and drive to Hilsa border formalities both side China - Nepal, transfer to hotel for check in.Overnight at Hilsa.",
+          "accommodation": "Basic Hotel(Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 10,
+          "title": "Hilsa -Fly to  Simikot by Heli -Fly to Nepalgunj – Fly to Kathmandu",
+          "description": "After breakfast fly to Simikot by Helicopter (20 Mins), Take connecting flight to  Nepalgunj again fly back to Kathmandu.arrival at Kathmandu transfer to hotel for check in. Overnight at Kathmandu.\n\n",
+          "accommodation": "Best Western Plus - 4 Star",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 11,
+          "title": "Bhaktapur Durbar Squire and Doleshwar Mahadev Temple",
+          "description": "After breakfast fly to Simikot by Helicopter (20 Mins), Take connecting flight to  Nepalgunj again fly back to Kathmandu.arrival at Kathmandu transfer to hotel for check in. Overnight at Kathmandu.",
+          "accommodation": "Best Western Plus - 4 Star",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 12,
+          "title": "Kathmandu departure transfer ",
+          "description": "After breakfast we will be provide appreciation certificate of Kailash Mansarovar Yatra later drop to airport for final departure.\n\n",
+          "accommodation": "N/A",
+          "meals": "Breakfast, Lunch, Dinner"
+        }
+      ],
+      "fitness_requirements": "",
+      "secondary_destination_ids": [],
+      "activity_ids": [
+        6,
+        5
+      ],
+      "related_destinations": [
+        "Tibet"
+      ],
+      "related_activities": [
+        "Pilgrimage",
+        "Cultural Tours"
+      ],
+      "id": 314,
+      "created_at": "2025-12-18T13:01:50.158Z",
+      "updated_at": "2025-12-18T21:07:57.116Z",
+      "primary_destination_id": 9,
+      "hasDiscount": true,
+      "discountPercentage": 6,
+      "featured": true
+    },
+    {
+      "slug": "kailash-aerial-darshan-02-nights-03-days",
+      "title": "Kailash Aerial Darshan - 02 Nights 03 Days",
+      "description": "This 3-day spiritual journey offers a unique and comfortable way to seek the blessings of Mount Kailash and Lake Mansarovar via a specialized chartered flight from Nepalgunj. Designed for maximum convenience, this tour eliminates the need for high-altitude trekking, passports, or complex visa processes, making the divine \"Darshan\" accessible to everyone regardless of age. Guests will enjoy 5-star hospitality at Hotel Soaltee, dedicated ground assistance from Lucknow, and expert guided services, ensuring a seamless and soulful pilgrimage experience.",
+      "price": 600,
+      "duration": "3 days",
+      "group_size": "",
+      "best_time": "",
+      "image": "/uploads/destinations/tours/tours_1766067805331.jpg",
+      "gallery": [],
+      "highlights": [
+        "Chartered Flight: Scenic aerial view of Mt. Kailash and Lake Mansarovar.",
+        "Effortless Darshan: No trekking or physical strain, making it ideal for senior citizens.",
+        "Documentation: No passport or China visa required for Indian citizens.",
+        "Premium Stay: 02 nights at the 5-Star Hotel Soaltee with full board meals.",
+        "Complete Package: Includes private AC transfers, guides, and spiritual gifts.",
+        "Quick Trip: A comprehensive 3-day spiritual journey starting from Lucknow."
+      ],
+      "inclusions": [
+        "Traditional welcome drinks on arrival (Non alcoholic)",
+        "02 Nights accommodation at Kathmandu Hotel on AP basis(Breakfast, Lunch & Dinner)",
+        "01 litter mineral water per day",
+        "Hindi/English speaking tour guide for entire trip",
+        "Gift from the company Kailash Tirtham(jal),Rudraksha Mala",
+        "All sightseeing and excursions as mentioned in the itinerary.",
+        "All transfers & sightseeing by private air condition vehicle.",
+        "Round trip Transportation for Lucknow - Nepalgunj - Lucknow  by Private vehicle",
+        "Vehicles are not to be at disposal and are available as per itinerary only (point to point basis).",
+        "All current Nepal Government taxes "
+      ],
+      "exclusions": [
+        "Domestic/International Airfare ",
+        "Insurance Fee",
+        "Personal expenses, tipping and any other services which are not mentioned in the above inclusion"
+      ],
+      "activities": [],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrive in Lucknow - Drive to Nepalgunj(190 km, 04/05 Hrs) ",
+          "description": "Upon arrival in Lucknow Airport, you will be greeted and assisted by our representative after completing your airport process, drive to Nepalgunj,arrival at Nepalgunj, transfer to Hotel for check-in. Overnight at Nepalgunj Hotel.",
+          "accommodation": "Hotel Soaltee - 4 Star",
+          "meals": "Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Kailash MansarovarDarshan Chartered Flight(Aerial view - 1.5 Hrs)",
+          "description": "After breakfast in the morning our guide will organise group transfer from hotel to Nepalgunj airport where the chartered flight for Kailash Darshan,You will get mesmerizing darshan of holy Mount Kailash and Lake Mansarovar from the window of your flight while flying over the mountains near nepal-Tibet border. The view of mountain and lake from the flight is completely subject to clear weather,back to Nepalgunj transfer to hotel.Overnight at Nepalgunj.",
+          "accommodation": "Hotel Soaltee - 4 Star",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Nepalgunj - Drive to Lucknow departure transfer(190 km,04/05 Hrs)",
+          "description": "After breakfast, the morning will be comparatively free and closer to the time of your flight,drive to Lucknow airport on time to board your flight for onward journey. ",
+          "accommodation": "Hotel Soaltee - 4 Star",
+          "meals": "Breakfast, Lunch"
+        }
+      ],
+      "fitness_requirements": "",
+      "primary_destination_id": 9,
+      "secondary_destination_ids": [],
+      "activity_ids": [
+        6,
+        5
+      ],
+      "related_destinations": [
+        "Tibet"
+      ],
+      "related_activities": [
+        "Pilgrimage",
+        "Cultural Tours"
+      ],
+      "id": 316,
+      "created_at": "2025-12-18T14:19:26.720Z",
+      "updated_at": "2025-12-18T19:51:36.120Z"
+    },
+    {
+      "slug": "kailash-yatra-inner-kora-detailed",
+      "title": "Kailash Yatra with Inner Kora 17 Nights 18 Days",
+      "description": "A high-intensity spiritual pilgrimage focusing on the 'City of the Gods.' Beyond the standard outer circuit, this yatra leads devotees closer to the south face of Mt. Kailash to perform the Inner Kora. The journey traverses high-altitude terrain (up to 5,860m) to reach ancient meditation caves and sacred rock formations believed to be the home of Lord Shiva. This exclusive experience is designed for seasoned pilgrims seeking profound spiritual immersion through demanding high-altitude trekking and proximity to the divine summit.",
+      "price": 0,
+      "duration": "18 days",
+      "group_size": "25+ People",
+      "best_time": "May to mid-October",
+      "image": "",
+      "gallery": [],
+      "highlights": [
+        "Charan Sparsh: Trekking to the very base of the North Face to physically touch the mountain.",
+        "Nandi Kora: A strenuous 34km circuit around Nandi Parvat, including the high Nandi Pass (5,805m).",
+        "Saptarishi Caves: Visiting the cliffside caves where the seven legendary sages meditated.",
+        "13 Golden Chortens: Reaching the spiritual high point at 5,860m to witness the stupas of eminent monks.",
+        "Atmalingam: Darshan of the sacred natural rock formation representing the 'soul lingam'.",
+        "Gauri Kund: Rituals at the 'Lake of Compassion' associated with Goddess Parvati."
+      ],
+      "inclusions": [
+        "Traditional welcome on arrival",
+        "03 Night accommodation at Kathmandu on sharing Twin/Double basis (03 Star Premium)",
+        "01 Night accommodation at Kyirung on sharing basis (Guest House)",
+        "13 Night accommodation in Tibet on sharing basis (Hotels and Guest houses)",
+        "Tibet travel Permit and Visa fees",
+        "English speaking Tibetan guide for customers formalities",
+        "Nepali Supporting Staff (cook, Sherpa, and helper) on a 5:1 basis",
+        "Buffet vegetarian meals during Yatra on AP basis (Breakfast, Lunch, and Dinner)",
+        "Nepali experienced Team Leader/Guide during Yatra",
+        "Supporting truck to carry equipment",
+        "Mansarovar and Kailash Yatra Permit fees",
+        "Duffel bag for carrying goods during Yatra",
+        "Back pack bag for personal items to carry and Cap",
+        "Warm down Jacket (refundable)",
+        "First aid medical kit bag and Oxygen cylinder",
+        "Emergency evacuation management during Yatra",
+        "Round trip transportation in Tibet by AC Luxury coach",
+        "Kathmandu - Rasuwagadi - Kathmandu Non-AC Vehicle",
+        "Arrival and departure transfer with assistance by A/C Vehicle",
+        "All sightseeing and excursions as mentioned in the itinerary",
+        "Vehicles provided on a point-to-point basis according to the itinerary",
+        "Kailash Yatra appreciation certificate"
+      ],
+      "exclusions": [
+        "International Airfare – Flights to/from Kathmandu.",
+        "Travel Insurance – High-altitude and medical evacuation coverage.",
+        "Nepal Visa – Fees for entering Nepal (if applicable).",
+        "Personal Expenses – Laundry, drinks, Wi-Fi, and phone calls.",
+        "Pony/Porter – Rental of horses or personal porters for the trek.",
+        "Staff Tips – Gratuities for guides, drivers, and helpers.",
+        "Kathmandu Meals – Lunch and dinner during the Kathmandu stay.",
+        "Emergency Costs – Extra expenses due to delays, landslides, or weather.",
+        "Medical Bills – Hospitalization or advanced medical treatment.",
+        "Single Supplement – Extra cost for private room requests."
+      ],
+      "activities": [],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Kathmandu (1,300m)",
+          "description": "Arrival & Meet: Your spiritual journey begins at Tribhuvan International Airport. Our representative will meet you outside the arrival terminal and transfer you to your hotel. Kathmandu, the capital of Nepal, is a vibrant hub of ancient culture and spirituality.\n\nThe Evening Ritual: After settling in, you will attend a comprehensive Yatra Briefing. This session covers vital information on high-altitude health, trekking safety, and the religious protocols of the Kailash circuit. This is also the time to meet your fellow pilgrims and guides.",
+          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 2,
+          "title": "Kathmandu Temple Visit & Preparation",
+          "description": "The Pilgrimage Begins: Spend the day visiting the most sacred sites in the Kathmandu Valley.\n\nPashupatinath Temple: Witness the sacred rituals along the Bagmati River at this legendary Shiva temple.\n\nBoudhanath Stupa: Walk the kora around one of the world’s largest Buddhist stupas, surrounded by the sound of prayer wheels.\n\nJala Narayan: Visit the reclining \"Sleeping Vishnu,\" a 5th-century masterpiece carved from a single stone.\n\nKathmandu Durbar Square: Explore the medieval palace complex and the home of the Living Goddess, Kumari.\n\nFinal Preparation: Use the afternoon to double-check your gear. Ensure you have your thermal layers, broken-in trekking boots, and a sturdy daypack.",
+          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 3,
+          "title": "Kathmandu to Kyirung (1,600m)",
+          "description": "The Himalayan Drive: Leave the city early for a 145 km drive toward the border. The route follows winding mountain roads, passing through terraced fields, deep river gorges, and small Nepali villages.\n\nEntry to the Mountains: As you reach Kyirung, you'll feel the air cooling and the landscape becoming more rugged. This lower altitude is the perfect first step for your body to begin its long acclimatization process.",
+          "accommodation": "Basic Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 4,
+          "title": "Kyirung to Gyirung County (2,800m)",
+          "description": "The Frontier: Today marks your official entry into Tibet (China). You will spend time completing immigration and custom formalities on both the Nepal and China sides of the border.\n\nDeep Tibet: After crossing, a short 35 km drive brings you to Gyirung County. You will notice a dramatic shift in architecture and culture. Stay hydrated and rest well this evening to help your body adjust to the 2,800m elevation.",
+          "accommodation": "Basic Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 5,
+          "title": "Gyirung to Saga (4,400m)",
+          "description": "The Plateau Crossing: A scenic 270 km drive that showcases the vastness of the Tibetan Plateau. You will cross high mountain passes and catch glimpses of the snow-capped Himalayan range to the south.\n\nThe Brahmaputra: One of the highlights is crossing the legendary Brahmaputra River (Yarlung Tsangpo). By the time you reach Saga, you are in high-altitude territory. Walk slowly and avoid overexertion.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 6,
+          "title": "Saga Acclimatization Day (4,400m)",
+          "description": "The Rest Strategy: This day is non-negotiable for safety. At 4,400m, your body needs time to produce more red blood cells.\n\nExplore: Take a gentle walk through the Saga market. It is a great place to observe the local Tibetan lifestyle or buy any last-minute snacks, dried fruits, or oxygen canisters for the trek ahead.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 7,
+          "title": "Saga to Lake Mansarovar (4,550m)",
+          "description": "The Holy Sight: A long 470 km drive through the high-altitude desert landscape. As you approach the holy land, you will see the peak of Mt. Kailash in the distance.\n\nThe Mind Lake: Reach Lake Mansarovar, the world’s highest body of freshwater. Its turquoise waters are believed to wash away the sins of a lifetime. The serenity of this place, with the Himalayas reflecting in the water, is an unforgettable spiritual experience.",
+          "accommodation": "Pramath Asram (Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 8,
+          "title": "Mansarovar Parikrama & Drive to Darchen (4,600m)",
+          "description": "The Sacred Circle: Complete the 102 km circuit (Parikrama) of Lake Mansarovar by vehicle. Many pilgrims choose a spot to perform a holy dip and conduct a Puja or Homa (fire ritual) by the lakeshore.\n\nBase Camp: Drive 58 km to Darchen, a small settlement located directly at the foot of Mt. Kailash. This is the staging point for the trek. Finalize your daypack for the kora today.",
+          "accommodation": "Basic hotel (Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 9,
+          "title": "Darchen to Diraphuk (4,860m) - Kora Day 1",
+          "description": "Yamdwar: Start with a short drive to Yamdwar, the \"Gate of Salvation.\" This is the official starting point of the 52km kora.\n\nThe West Face: Begin a 12 km trek through the valley. The trail is relatively gradual and follows the Lha Chu river. You will witness the massive West Face of Mt. Kailash before arriving at Diraphuk, which offers a stunning, unobstructed view of the North Face.",
+          "accommodation": "Basic Hotel (Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 10,
+          "title": "Trek to Charansparsh (5,332m) & Back",
+          "description": "Touching the Divine: This is an extra-special day for devout pilgrims. You will trek upward toward the very base of the North Face.\n\nThe Source: Charansparsh literally means \"touching the feet.\" According to the Bhagawat Purana, the nearby river is the first source of water on Earth. Here, you can meditate in the literal shadow of the mountain and touch the holy rock of Kailash before returning to Diraphuk.",
+          "accommodation": "Basic Hotel (Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 11,
+          "title": "Diraphuk to Zuthulpuk (4,760m) via Khandesanglam",
+          "description": "The Inner Path: Today’s trek takes you through Khande Sanglam, a route believed to be where Lord Shiva himself meditates.\n\nSacred Landmarks: The trail offers views of Shivasthali (a symbolic site of death and rebirth), Kuber Kund, and Kuber Parbat. If taking the standard Outer Kora, you would cross the Dolma-La Pass (5,630m). Both paths converge at Zuthulpuk, the site of Milarepa’s \"Cave of Miracles.\"",
+          "accommodation": "Basic Hotel (Dormitory room, Common Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 12,
+          "title": "Zuthulpuk to Darchen & Drive to Saga",
+          "description": "The Final Miles: A gentle 8 km morning trek marks the final stretch of the kora. The trail levels out as you reach the pickup point.\n\nTransition: Rejoin your coach for the drive back to Darchen. After a brief rest and celebration of your trek completion, begin the drive back toward Saga.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 13,
+          "title": "Darchen Acclimatization (Rest Day)",
+          "description": "Recovery: After the physical exertion of the first kora, this day is for rest.\n\nMental Prep: The Inner Kora (Nandi Kora) scheduled for tomorrow is significantly more difficult and requires maximum energy. Use this day for quiet reflection, hydration, and light stretching.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 14,
+          "title": "The Nandi Kora (Inner Circuit) (Max 5,800m)",
+          "description": "The Ultimate Test: This is the most challenging day of the journey. A 22 km trek (up to 12 hours) leads you into the Inner Circle of Mt. Kailash.\n\nThe Inner Sanctum: Visit Sherlung Gompa, Rishi Cave, and Nandi Parvat. You will trek toward Astapad and the Atmalingam, where you find the sacred Red and White lakes. The high pass between Mt. Kailash and Nandi Parvat is extremely steep and requires determination and physical stamina. Descend following the Kailashi Gange river back to Darchen.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 15,
+          "title": "Darchen to Saga (4,400m)",
+          "description": "The Homeward Journey: A long 450 km drive back across the plateau. With the spiritual weight of two koras behind you, enjoy the vast, open views of the Tibetan landscape one last time.",
+          "accommodation": "Hotel Basis (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 16,
+          "title": "Saga to Gyirung (2,800m)",
+          "description": "Descent: Drive 270 km back toward the border. As the altitude drops from 4,400m to 2,800m, you will notice an immediate improvement in your breathing and energy levels. Arrive in Gyirung for your final night in Tibet.",
+          "accommodation": "Basic Hotel (Shared room, Attached Bathroom)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 17,
+          "title": "Gyirung to Kathmandu (1,300m)",
+          "description": "Back to Nepal: Complete your final border formalities and cross back into Nepal.\n\nThe Final Drive: A 200 km drive brings you back through the lush greenery and bustling villages of Nepal, arriving in Kathmandu by late evening. Enjoy a long-awaited hot shower and the comforts of the city.",
+          "accommodation": "Hotel Mandala Norling Lord Prime (Twin Sharing)",
+          "meals": "Breakfast, Lunch, Dinner"
+        },
+        {
+          "day": 18,
+          "title": "Kathmandu Departure",
+          "description": "Final Blessing: After breakfast, you will be honored with an Appreciation Certificate to commemorate your successful completion of the Kailash Mansarovar and Inner Kora Yatra.\n\nFarewell: Transfer to the international airport for your departure flight, carrying home memories of the world's most sacred mountain.",
+          "accommodation": "",
+          "meals": "Breakfast"
+        }
+      ],
+      "fitness_requirements": "Requires excellent physical condition and mental resilience. Trekkers must handle 6–12 hours of daily walking at altitudes where oxygen is 50% lower than sea level. Previous high-altitude experience (like EBC or Kilimanjaro) is highly recommended for the Inner Kora, which involves steep, rocky slopes and basic mountain scrambling.",
+      "primary_destination_id": 9,
+      "secondary_destination_ids": [],
+      "activity_ids": [
+        5,
+        6
+      ],
+      "related_destinations": [
+        "Kathmandu Valley",
+        "Everest Region (En route views)",
+        "Mount Kailash North & South Faces",
+        "Lake Mansarovar",
+        "Tibet"
+      ],
+      "related_activities": [
+        "Kailash Outer Kora",
+        "Adi Kailash Yatra",
+        "Muktinath Pilgrimage",
+        "Cultural Tours",
+        "Pilgrimage"
+      ],
+      "priceAvailable": false,
+      "id": 317,
+      "created_at": "2025-12-18T20:23:38.706Z",
+      "updated_at": "2025-12-18T20:38:38.484Z"
     }
   ]
 }

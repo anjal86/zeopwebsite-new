@@ -7,9 +7,10 @@ import TourImageSlider from '../components/Tours/TourImageSlider';
 import TourEnquiryButton from '../components/Tours/TourEnquiryButton';
 import TourHeader from '../components/Tours/TourHeader';
 import TourTabs, { type ItineraryDay } from '../components/Tours/TourTabs';
-import { useTours, useDestinations, useActivities } from '../hooks/useApi';
+import { useTours, useDestinations } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 import { formatDuration } from '../utils/formatDuration';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -18,7 +19,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -67,23 +68,22 @@ const TourDetail: React.FC = () => {
   const navigate = useNavigate();
   const { data: allTours, loading, error } = useTours();
   const { data: destinations } = useDestinations();
-  const { data: activities } = useActivities();
-  
+
   const [tourDetails, setTourDetails] = useState<TourDetails | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [showFloatingButton, setShowFloatingButton] = useState(true);
   const [expandedGoodToKnow, setExpandedGoodToKnow] = useState<Set<string>>(new Set(['main_attractions'])); // First item expanded by default
   const [expandedFAQs, setExpandedFAQs] = useState<Set<number>>(new Set([0])); // First FAQ expanded by default
   const enquirySectionRef = useRef<HTMLDivElement>(null);
-  
+
   // Find the tour by slug
   const tour = allTours?.find(t => t.slug === tourSlug);
-  
+
   // Fetch detailed tour data when tour is found
   useEffect(() => {
     const fetchTourDetails = async () => {
       if (!tour) return;
-      
+
       setDetailsLoading(true);
       try {
         const response = await fetch(`${getApiBaseUrl()}/tours/slug/${tour.slug}`);
@@ -127,21 +127,21 @@ const TourDetail: React.FC = () => {
   // Get related tours based on shared destinations or activities
   const relatedTours = allTours?.filter(t => {
     if (t.id === tour?.id) return false;
-    
+
     // Check if tours share primary destination
     const sharedPrimaryDestination = tourDetails?.primary_destination_id &&
       (t as any).primary_destination_id === tourDetails.primary_destination_id;
-    
+
     // Check if tours share any destinations (primary or secondary)
     const allTourDestIds = [tourDetails?.primary_destination_id, ...(tourDetails?.secondary_destination_ids || [])].filter(Boolean);
     const allOtherTourDestIds = [(t as any).primary_destination_id, ...((t as any).secondary_destination_ids || [])].filter(Boolean);
     const sharedAnyDestination = allTourDestIds.some(id => allOtherTourDestIds.includes(id));
-    
+
     // Check if tours share activities
     const sharedActivities = (tourDetails?.activity_ids || []).some((actId: number) =>
       (t as any).activity_ids?.includes(actId)
     );
-    
+
     return sharedPrimaryDestination || sharedAnyDestination || sharedActivities;
   }).slice(0, 3) || [];
 
@@ -158,10 +158,7 @@ const TourDetail: React.FC = () => {
   // Get all destinations for this tour
   const allTourDestinations = [primaryDestination, ...secondaryDestinations].filter(Boolean);
 
-  // Get activity names for this tour
-  const tourActivities = activities?.filter(activity =>
-    tourDetails?.activity_ids?.includes(activity.id)
-  ) || [];
+
 
   // Create image gallery using detailed tour data
   const images = tourDetails ? (
@@ -177,17 +174,17 @@ const TourDetail: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (!enquirySectionRef.current) return;
-      
+
       const enquirySection = enquirySectionRef.current;
       const enquiryRect = enquirySection.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      
+
       // Check if we're near the bottom of the page (footer area)
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const windowHeightFull = window.innerHeight;
       const distanceFromBottom = documentHeight - (scrollTop + windowHeightFull);
-      
+
       // Hide floating button when enquiry section is visible, passed, or near footer (bottom 200px)
       if ((enquiryRect.top <= windowHeight && enquiryRect.bottom >= 0) || distanceFromBottom < 200) {
         setShowFloatingButton(false);
@@ -198,7 +195,7 @@ const TourDetail: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial position
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -224,8 +221,8 @@ const TourDetail: React.FC = () => {
   if (loading || detailsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-        <span className="ml-3 text-gray-600">Loading tour details...</span>
+        <LoadingSpinner size="lg" />
+        <span className="ml-3 text-gray-600 font-medium">Loading tour details...</span>
       </div>
     );
   }
@@ -273,7 +270,7 @@ const TourDetail: React.FC = () => {
             {/* Left Column - Image Slider */}
             <div className="lg:col-span-2">
               <TourImageSlider images={images} title={tourDetails.title} />
-              
+
               {/* Tour Header - Title and Stats - Right below slider */}
               <div className="mt-8">
                 <TourHeader
@@ -281,23 +278,20 @@ const TourDetail: React.FC = () => {
                   duration={formatDuration(tourDetails.duration)}
                   groupSize={tourDetails.group_size}
                   bestTime={tourDetails.best_time}
-                  activities={tourActivities}
                   destinations={allTourDestinations.filter(Boolean) as Array<{ id: number; name: string }>}
                   primaryDestination={primaryDestination}
                   secondaryDestinations={secondaryDestinations}
                 />
               </div>
-              
+
               {/* Tour Details - Below title and stats */}
-              <div className="mt-8">
+              <div>
                 <TourTabs
                   description={tourDetails.description}
                   highlights={tourDetails.highlights}
                   inclusions={tourDetails.inclusions}
                   exclusions={tourDetails.exclusions}
                   itinerary={tourDetails.itinerary}
-                  activities={tourActivities}
-                  images={images}
                   title={tourDetails.title}
                   goodToKnow={tourDetails.good_to_know}
                   faqs={tourDetails.faqs}
@@ -532,7 +526,7 @@ const TourDetail: React.FC = () => {
               <h2 className="text-3xl font-bold text-gray-900 mb-4">You Might Also Like</h2>
               <p className="text-gray-600">Discover more amazing tours and experiences</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedTours.map((relatedTour, index) => (
                 <motion.div
@@ -572,7 +566,7 @@ const TourDetail: React.FC = () => {
                 <Send className="w-5 h-5 mb-1" />
                 <span className="text-xs font-medium">Enquiry</span>
               </button>
-              
+
               {/* WhatsApp Button */}
               <button
                 onClick={handleFloatingWhatsApp}
@@ -581,7 +575,7 @@ const TourDetail: React.FC = () => {
                 <MessageCircle className="w-5 h-5 mb-1" />
                 <span className="text-xs font-medium">WhatsApp</span>
               </button>
-              
+
               {/* Email Button */}
               <button
                 onClick={handleFloatingEmail}

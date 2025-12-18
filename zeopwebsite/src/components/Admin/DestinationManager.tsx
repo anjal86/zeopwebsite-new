@@ -20,6 +20,7 @@ import SearchableSelect from '../UI/SearchableSelect';
 import DeleteModal from '../UI/DeleteModal';
 import { useDeleteModal } from '../../hooks/useDeleteModal';
 import Toggle from '../UI/Toggle';
+import LoadingSpinner from '../UI/LoadingSpinner';
 // @ts-ignore
 import { getData } from 'country-list';
 
@@ -30,7 +31,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -42,7 +43,7 @@ const getImageBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '';
 };
@@ -77,7 +78,7 @@ const DestinationManager: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'nepal' | 'international'>('nepal');
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Sorting state and helpers (to align with TourManager)
   const [sortBy, setSortBy] = useState<{ field: 'name' | 'country' | 'listed' | 'tourCount'; direction: 'asc' | 'desc' }>({ field: 'name', direction: 'asc' });
 
@@ -101,7 +102,7 @@ const DestinationManager: React.FC = () => {
         return 0;
     }
   };
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -129,7 +130,7 @@ const DestinationManager: React.FC = () => {
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl(null);
-    
+
     setFormData({
       slug: '',
       title: '',
@@ -183,7 +184,7 @@ const DestinationManager: React.FC = () => {
   const deleteDestination = async (destination: ContentDestination) => {
     const token = localStorage.getItem('adminToken');
     const slug = (destination as any).slug || (destination as any).id?.toString() || destination.name || '';
-    
+
     // Validate that we have a proper identifier
     if (!slug || slug === 'undefined' || slug === 'null') {
       throw new Error('Invalid destination identifier. Cannot delete destination without proper ID or slug.');
@@ -212,7 +213,7 @@ const DestinationManager: React.FC = () => {
         error: errorData,
         slug
       });
-      
+
       // Provide more specific error messages
       if (response.status === 404) {
         throw new Error(`Destination "${slug}" not found. It may have already been deleted or the identifier is invalid.`);
@@ -245,7 +246,7 @@ const DestinationManager: React.FC = () => {
       const type = (destination as any).type || '';
       const name = (destination as any).name || (destination as any).title || '';
       const region = (destination as any).region || '';
-      
+
       // Tab filter
       let tabMatch = false;
       if (activeTab === 'nepal') {
@@ -253,7 +254,7 @@ const DestinationManager: React.FC = () => {
       } else {
         tabMatch = country !== 'Nepal' && type === 'international';
       }
-      
+
       // Search filter
       const searchMatch = searchTerm === '' ||
         name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -263,7 +264,7 @@ const DestinationManager: React.FC = () => {
       // Status filter
       const isListed = (destination as any).listed !== false;
       const statusMatch = statusFilter === '' || (statusFilter === 'listed' ? isListed : statusFilter === 'unlisted' ? !isListed : true);
-      
+
       return tabMatch && searchMatch && statusMatch;
     }) || [];
   }, [destList, activeTab, searchTerm, statusFilter]);
@@ -312,9 +313,9 @@ const DestinationManager: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-      body: JSON.stringify({
-        listed: newListed
-      }),
+        body: JSON.stringify({
+          listed: newListed
+        }),
       });
 
       if (!response.ok) {
@@ -347,7 +348,7 @@ const DestinationManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="loader"></div>
+        <LoadingSpinner size="lg" />
         <span className="ml-3 text-gray-600">Loading destinations...</span>
       </div>
     );
@@ -375,7 +376,7 @@ const DestinationManager: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const filteredDestinations = sortedDestinations.slice(startIndex, endIndex);
-  
+
   const startItem = startIndex + 1;
   const endItem = Math.min(endIndex, totalItems);
 
@@ -550,8 +551,8 @@ const DestinationManager: React.FC = () => {
                           src={
                             destination.image
                               ? (destination.image.startsWith('http')
-                                  ? destination.image
-                                  : `${getImageBaseUrl()}${destination.image}`)
+                                ? destination.image
+                                : `${getImageBaseUrl()}${destination.image}`)
                               : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                           }
                           alt={(destination as any).title || (destination as any).name || 'Destination'}
@@ -574,11 +575,10 @@ const DestinationManager: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-3 py-4">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                      activeTab === 'nepal'
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${activeTab === 'nepal'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-blue-100 text-blue-800'
-                    }`}>
+                      }`}>
                       {activeTab === 'nepal' ? 'Nepal' : 'International'}
                     </span>
                   </td>
@@ -649,8 +649,8 @@ const DestinationManager: React.FC = () => {
                   src={
                     destination.image
                       ? (destination.image.startsWith('http')
-                          ? destination.image
-                          : `${getImageBaseUrl()}${destination.image}`)
+                        ? destination.image
+                        : `${getImageBaseUrl()}${destination.image}`)
                       : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400'
                   }
                   alt={(destination as any).title || (destination as any).name || 'Destination'}
@@ -659,7 +659,7 @@ const DestinationManager: React.FC = () => {
                   }}
                 />
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -667,16 +667,15 @@ const DestinationManager: React.FC = () => {
                       {(destination as any).title || (destination as any).name || 'Unnamed Destination'}
                     </h3>
                     <div className="mt-1 flex items-center space-x-2">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                        activeTab === 'nepal'
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${activeTab === 'nepal'
                           ? 'bg-green-100 text-green-800'
                           : 'bg-blue-100 text-blue-800'
-                      }`}>
+                        }`}>
                         {activeTab === 'nepal' ? 'Nepal' : 'International'}
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 ml-2" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => openModal(destination)}
@@ -694,7 +693,7 @@ const DestinationManager: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="mt-2 text-xs text-gray-500">
                   <div className="flex items-center">
                     <Globe className="w-3 h-3 mr-1" />
@@ -754,7 +753,7 @@ const DestinationManager: React.FC = () => {
                 <ChevronLeft className="w-4 h-4 sm:mr-1" />
                 <span className="hidden sm:inline">Previous</span>
               </button>
-              
+
               <div className="flex items-center space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNumber;
@@ -767,7 +766,7 @@ const DestinationManager: React.FC = () => {
                   } else {
                     pageNumber = currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNumber}
@@ -939,10 +938,10 @@ const DestinationManager: React.FC = () => {
                     };
 
                     // Construct the correct URL based on whether we're creating or updating
-                    const url = editingDestination 
+                    const url = editingDestination
                       ? `${getApiBaseUrl()}/admin/destinations/${(editingDestination as any)?.slug || (editingDestination as any)?.id || ''}`
                       : `${getApiBaseUrl()}/admin/destinations`;
-                    
+
                     const response = await fetch(url, {
                       method: editingDestination ? 'PUT' : 'POST',
                       headers: {

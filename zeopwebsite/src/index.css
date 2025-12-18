@@ -15,12 +15,12 @@
 
 ::-webkit-scrollbar-track {
   background: #f8f9fa;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #055fac, #044a8a);
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -64,6 +64,7 @@ html {
   from {
     transform: translateY(0);
   }
+
   to {
     transform: translateY(-50px);
   }
@@ -74,19 +75,32 @@ html {
   animation-timeline: scroll();
 }
 
-/* Loading animation */
-.loader {
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #055fac;
-  border-radius: 50%;
+/* Minimal Loading Animation */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
-  animation: spin 1s linear infinite;
+}
+
+.loader {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(5, 95, 172, 0.1);
+  border-top-color: #055fac;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Nepali pattern overlay */
@@ -101,14 +115,12 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    repeating-linear-gradient(
-      45deg,
+  background-image:
+    repeating-linear-gradient(45deg,
       transparent,
       transparent 35px,
       rgba(255, 255, 255, 0.05) 35px,
-      rgba(255, 255, 255, 0.05) 70px
-    );
+      rgba(255, 255, 255, 0.05) 70px);
   pointer-events: none;
 }
 
@@ -178,9 +190,12 @@ html {
 
 /* Floating animation for sacred symbols */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
@@ -192,10 +207,13 @@ html {
 
 /* Sacred pulse animation */
 @keyframes sacred-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.7;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.05);
@@ -211,18 +229,17 @@ html {
   0% {
     background-position: -200% center;
   }
+
   100% {
     background-position: 200% center;
   }
 }
 
 .divine-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
   background-size: 200% 100%;
   animation: divine-shimmer 3s infinite;
 }
@@ -234,7 +251,7 @@ html {
   background-size: 400% 400%;
   animation: gradient-shift 4s ease infinite;
   padding: 2px;
-  border-radius: 1rem;
+  border-radius: 0;
 }
 
 .sacred-border::before {
@@ -242,14 +259,17 @@ html {
   position: absolute;
   inset: 2px;
   background: white;
-  border-radius: calc(1rem - 2px);
+  border-radius: 0;
   z-index: -1;
 }
 
 @keyframes gradient-shift {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -268,12 +288,10 @@ html {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(244, 119, 33, 0.1),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(244, 119, 33, 0.1),
+      transparent);
   transition: left 0.5s ease;
 }
 
@@ -287,6 +305,7 @@ html {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -312,12 +331,10 @@ html {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
   transition: left 0.5s ease;
 }
 
@@ -366,17 +383,24 @@ html {
   width: 2px;
   height: 12px;
   background: white;
-  border-radius: 1px;
+  border-radius: 0;
   animation: scroll-bounce 2s infinite;
 }
 
 @keyframes scroll-bounce {
-  0%, 20%, 50%, 80%, 100% {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translate(-50%, -50%) translateY(0);
   }
+
   40% {
     transform: translate(-50%, -50%) translateY(5px);
   }
+
   60% {
     transform: translate(-50%, -50%) translateY(3px);
   }
@@ -388,15 +412,15 @@ html {
     font-size: 2.5rem;
     line-height: 1.2;
   }
-  
+
   .kailash-mansarovar-page .hero-content {
     padding: 1rem;
   }
-  
+
   .package-card.popular {
     transform: none;
   }
-  
+
   .package-card:hover {
     transform: translateY(-5px);
   }
@@ -407,7 +431,7 @@ html {
   -webkit-appearance: none;
   appearance: none;
   height: 12px;
-  border-radius: 6px;
+  border-radius: 0;
   outline: none;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -418,7 +442,7 @@ html {
   appearance: none;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: 0;
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   border: 3px solid white;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
@@ -456,7 +480,7 @@ html {
 
 .slider-timeline::-moz-range-track {
   height: 12px;
-  border-radius: 6px;
+  border-radius: 0;
   background: #e5e7eb;
 }
 
@@ -504,7 +528,7 @@ html {
   width: 60%;
   height: 2px;
   background: linear-gradient(90deg, transparent, #055fac, transparent);
-  border-radius: 1px;
+  border-radius: 0;
 }
 
 /* Smooth tab content transitions */
@@ -517,6 +541,7 @@ html {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -525,10 +550,13 @@ html {
 
 /* Scroll indicator animation */
 @keyframes scroll-hint {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
     opacity: 0.6;
   }
+
   50% {
     transform: translateX(3px);
     opacity: 1;
@@ -544,13 +572,13 @@ html {
   .tour-tabs::-webkit-scrollbar {
     height: 3px;
   }
-  
+
   .tour-tabs::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .tour-tabs::-webkit-scrollbar-thumb {
     background: #d1d5db;
-    border-radius: 2px;
+    border-radius: 0;
   }
 }
