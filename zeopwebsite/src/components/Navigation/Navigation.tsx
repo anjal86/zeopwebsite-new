@@ -104,7 +104,7 @@ const Navigation: React.FC = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden min-[1280px]:flex items-center space-x-0">
+            <div className="hidden 2xl:flex items-center space-x-0">
               {navItems.map((item) => (
                 <motion.div
                   key={item.label}
@@ -114,7 +114,7 @@ const Navigation: React.FC = () => {
                   <Link
                     to={item.href}
                     onClick={handleNavClick}
-                    className={`font-semibold transition-all duration-300 relative py-2.5 px-4 rounded-none text-sm group ${isActiveRoute(item.href)
+                    className={`font-semibold transition-all duration-300 relative py-2.5 px-4 rounded-none text-sm group whitespace-nowrap ${isActiveRoute(item.href)
                       ? 'text-primary bg-primary/5'
                       : 'text-gray-600 hover:text-primary hover:bg-gray-50/80'
                       } ${item.label === 'Kailash Mansarovar' ? 'text-secondary-dark !bg-secondary/10 hover:!bg-secondary/20' : ''}`}
@@ -132,7 +132,7 @@ const Navigation: React.FC = () => {
             </div>
 
             {/* CTA Buttons & WhatsApp */}
-            <div className="hidden min-[1280px]:flex items-center space-x-4">
+            <div className="hidden 2xl:flex items-center space-x-4">
               {/* WhatsApp Link - Redesigned as Pill */}
               <motion.a
                 href={`https://wa.me/${contactInfo?.contact?.phone?.whatsapp?.replace(/[^0-9]/g, '') || '9779705246799'}`}
@@ -144,7 +144,7 @@ const Navigation: React.FC = () => {
                 <div className="bg-green-500 p-1.5 rounded-none text-white group-hover:scale-110 transition-all duration-300">
                   <FaWhatsapp className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-bold text-sm text-gray-700 group-hover:text-green-600 transition-colors duration-300">
+                <span className="font-bold text-sm text-gray-700 group-hover:text-green-600 transition-colors duration-300 whitespace-nowrap">
                   {contactInfo?.contact?.phone?.whatsapp || '+9779705246799'}
                 </span>
               </motion.a>
@@ -153,7 +153,7 @@ const Navigation: React.FC = () => {
                 whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowContactModal(true)}
-                className="bg-secondary px-6 py-2 rounded-none text-white font-bold transition-all duration-300 flex items-center gap-2 relative overflow-hidden group h-10 ring-2 ring-secondary/10 ring-offset-1"
+                className="bg-secondary px-6 py-2 rounded-none text-white font-bold transition-all duration-300 flex items-center gap-2 relative overflow-hidden group h-10 ring-2 ring-secondary/10 ring-offset-1 whitespace-nowrap"
               >
                 <MessageCircle className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
                 <span className="relative z-10">Enquire Now</span>
@@ -166,7 +166,7 @@ const Navigation: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="xl:hidden flex p-2 rounded-lg transition-all duration-300 text-gray-900 hover:bg-gray-100 flex-shrink-0"
+              className="2xl:hidden flex p-2 rounded-lg transition-all duration-300 text-gray-900 hover:bg-gray-100 flex-shrink-0"
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
@@ -181,7 +181,7 @@ const Navigation: React.FC = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="xl:block border-t bg-white border-gray-200"
+              className="block border-t bg-white border-gray-200"
             >
               <div className="px-4 py-6">
                 <nav className="space-y-1">
