@@ -50,7 +50,6 @@ RewriteRule ^(.+)/$ /$1 [R=301,L]
 # Direct file serving for uploaded media files
 # ============================================================================
 RewriteCond %{REQUEST_URI} ^/uploads/(.*)$
-RewriteCond %{DOCUMENT_ROOT}/api/uploads/$1 -f
 RewriteRule ^uploads/(.*)$ /api/uploads/$1 [L]
 
 # ============================================================================
@@ -58,7 +57,6 @@ RewriteRule ^uploads/(.*)$ /api/uploads/$1 [L]
 # Forward all /api requests to the Node.js backend
 # ============================================================================
 RewriteCond %{REQUEST_URI} ^/api/(.*)$
-RewriteCond %{REQUEST_URI} !^/api/uploads/
 RewriteRule ^api/(.*)$ /api/$1 [L,QSA]
 
 # ============================================================================

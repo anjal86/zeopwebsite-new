@@ -78,7 +78,7 @@ const kailashGalleryDir = path.join(uploadsDir, 'kailash-gallery');
 
 // Serve uploaded files statically with proper headers for video streaming
 // Serve uploaded files statically with proper headers
-app.use('/uploads', (req, res, next) => {
+app.use(['/uploads', '/api/uploads'], (req, res, next) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
