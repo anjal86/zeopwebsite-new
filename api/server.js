@@ -77,87 +77,16 @@ const kailashGalleryDir = path.join(uploadsDir, 'kailash-gallery');
 });
 
 // Serve uploaded files statically with proper headers for video streaming
+// Serve uploaded files statically with proper headers
 app.use('/uploads', (req, res, next) => {
-  const filePath = path.join(uploadsDir, req.path);
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+    'Cross-Origin-Resource-Policy': 'cross-origin'
+  });
+  next();
+}, express.static(uploadsDir));
 
-  // Set CORS headers for all uploads
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://zeotourism.com',
-    'http://zeotourism.com',
-    'https://www.zeotourism.com',
-    'http://www.zeotourism.com',
-    'https://zeo.brandspire.com.np',
-    'http://zeo.brandspire.com.np'
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.set({
-      'Access-Control-Allow-Origin': origin,
-      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
-      'Access-Control-Allow-Headers': 'Range, Accept, Accept-Encoding, Cache-Control',
-      'Cross-Origin-Resource-Policy': 'cross-origin'
-    });
-  }
-
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // Check if file exists
-  if (fs.existsSync(filePath)) {
-    const stat = fs.statSync(filePath);
-
-    // Set proper headers for video streaming
-    if (req.path.includes('.mp4') || req.path.includes('.webm') || req.path.includes('.mov')) {
-      res.set({
-        'Accept-Ranges': 'bytes',
-        'Content-Type': 'video/mp4',
-        'Cache-Control': 'public, max-age=31536000',
-        'Content-Length': stat.size.toString()
-      });
-
-      // Handle range requests for video streaming
-      const range = req.headers.range;
-      if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
-        const chunksize = (end - start) + 1;
-
-        res.set({
-          'Content-Range': `bytes ${start}-${end}/${stat.size}`,
-          'Content-Length': chunksize.toString()
-        });
-        res.status(206);
-
-        const stream = fs.createReadStream(filePath, { start, end });
-        stream.pipe(res);
-        return;
-      }
-    } else if (req.path.includes('.jpg') || req.path.includes('.jpeg') || req.path.includes('.png') || req.path.includes('.webp')) {
-      res.set({
-        'Content-Type': req.path.includes('.webp') ? 'image/webp' : req.path.includes('.png') ? 'image/png' : 'image/jpeg',
-        'Cache-Control': 'public, max-age=31536000'
-      });
-    }
-
-    // File exists, serve it normally
-    express.static(uploadsDir)(req, res, next);
-  } else {
-    // File doesn't exist, serve a placeholder image
-    const placeholder = Buffer.from(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg==',
-      'base64'
-    );
-    res.set('Content-Type', 'image/png');
-    res.set('Cache-Control', 'public, max-age=3600');
-    res.send(placeholder);
-  }
-});
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({

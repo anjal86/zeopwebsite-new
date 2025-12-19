@@ -603,5 +603,26 @@
       312
     ],
     "relatedActivities": []
+  },
+  {
+    "id": 29,
+    "name": "Nepal",
+    "slug": "nepal",
+    "title": "Nepal",
+    "country": "Nepal",
+    "region": "",
+    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+    "featured": false,
+    "listed": true,
+    "tourCount": 0,
+    "href": "/destinations/nepal",
+    "type": "nepal",
+    "description": "Discover the beauty and culture of Nepal in Nepal.",
+    "highlights": [],
+    "bestTime": "Year-round",
+    "altitude": "Varies",
+    "difficulty": "Easy to Moderate",
+    "relatedTours": [],
+    "relatedActivities": []
   }
 ]

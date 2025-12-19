@@ -59,6 +59,7 @@ interface ContentDestination {
   href?: string;
   type?: string;
   description?: string;
+  featured?: boolean;
 }
 
 interface DestinationFormData extends ContentDestination {
@@ -80,15 +81,15 @@ const DestinationManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Sorting state and helpers (to align with TourManager)
-  const [sortBy, setSortBy] = useState<{ field: 'name' | 'country' | 'listed' | 'tourCount'; direction: 'asc' | 'desc' }>({ field: 'name', direction: 'asc' });
+  const [sortBy, setSortBy] = useState<{ field: 'name' | 'country' | 'listed' | 'featured' | 'tourCount'; direction: 'asc' | 'desc' }>({ field: 'name', direction: 'asc' });
 
   // Status filter (client-side)
   const [statusFilter, setStatusFilter] = useState('');
-  const toggleSort = (field: 'name' | 'country' | 'listed' | 'tourCount') => {
+  const toggleSort = (field: 'name' | 'country' | 'listed' | 'featured' | 'tourCount') => {
     setSortBy(prev => prev.field === field ? { field, direction: prev.direction === 'asc' ? 'desc' : 'asc' } : { field, direction: 'asc' });
   };
 
-  const getComparableValue = (destination: ContentDestination, field: 'name' | 'country' | 'listed' | 'tourCount') => {
+  const getComparableValue = (destination: ContentDestination, field: 'name' | 'country' | 'listed' | 'featured' | 'tourCount') => {
     switch (field) {
       case 'name':
         return (((destination as any).name || (destination as any).title || '') as string).toLowerCase();
@@ -96,6 +97,8 @@ const DestinationManager: React.FC = () => {
         return (((destination as any).country || '') as string).toLowerCase();
       case 'listed':
         return (destination as any).listed === false ? 0 : 1;
+      case 'featured':
+        return (destination as any).featured ? 1 : 0;
       case 'tourCount':
         return Number((destination as any).tourCount || 0);
       default:
@@ -112,6 +115,7 @@ const DestinationManager: React.FC = () => {
     title: '',
     country: 'Nepal',
     image: '',
+    featured: false,
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -135,7 +139,8 @@ const DestinationManager: React.FC = () => {
       slug: '',
       title: '',
       country: 'Nepal',
-      image: ''
+      image: '',
+      featured: false,
     });
     setEditingDestination(null);
     setSubmitError(null);
@@ -161,6 +166,7 @@ const DestinationManager: React.FC = () => {
         country: destination.country || 'Nepal',
         image: destination.image || '',
         listed: (destination as any).listed !== false, // Default to true if not set
+        featured: destination.featured || false,
       };
       setFormData(mappedData);
     } else {
@@ -345,6 +351,51 @@ const DestinationManager: React.FC = () => {
     }
   };
 
+  const handleFeaturedToggle = async (destination: ContentDestination) => {
+    try {
+      const slug = (destination as any).slug || (destination as any).id?.toString() || destination.name || '';
+      const currentFeatured = (destination as any).featured || false;
+      const newFeatured = !currentFeatured;
+
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${getApiBaseUrl()}/admin/destinations/${slug}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          featured: newFeatured
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update destination featured status');
+      }
+
+      // Update local list without reloading
+      setDestList(prev => prev.map(d => {
+        const idOrSlug = (d as any).slug || (d as any).id?.toString() || d.name || '';
+        if (idOrSlug === slug) {
+          return { ...d, featured: newFeatured } as ContentDestination;
+        }
+        return d;
+      }));
+
+      // Trigger a global refresh event
+      window.dispatchEvent(new CustomEvent('destinationUpdated', {
+        detail: {
+          destinationId: (destination as any).id,
+          timestamp: Date.now()
+        }
+      }));
+
+    } catch (error) {
+      alert('Failed to update featured status: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -524,6 +575,14 @@ const DestinationManager: React.FC = () => {
                   </button>
                 </th>
                 <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <button onClick={() => toggleSort('featured')} className="flex items-center gap-1">
+                    <span>Featured</span>
+                    <span className="text-gray-400">
+                      {sortBy.field === 'featured' ? (sortBy.direction === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </button>
+                </th>
+                <th className="w-1/6 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   <button onClick={() => toggleSort('tourCount')} className="flex items-center gap-1">
                     <span>Tours</span>
                     <span className="text-gray-400">
@@ -576,8 +635,8 @@ const DestinationManager: React.FC = () => {
                   </td>
                   <td className="px-3 py-4">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${activeTab === 'nepal'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-blue-100 text-blue-800'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-blue-100 text-blue-800'
                       }`}>
                       {activeTab === 'nepal' ? 'Nepal' : 'International'}
                     </span>
@@ -599,6 +658,26 @@ const DestinationManager: React.FC = () => {
                           <span className="flex items-center text-gray-500">
                             <EyeOff className="w-3 h-3 mr-1" />
                             Unlisted
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-3 py-4" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center">
+                      <Toggle
+                        checked={(destination as any).featured || false}
+                        onChange={() => handleFeaturedToggle(destination)}
+                        size="sm"
+                      />
+                      <span className="ml-2 text-xs text-gray-600 hidden xl:block">
+                        {(destination as any).featured ? (
+                          <span className="flex items-center text-yellow-600">
+                            Featured
+                          </span>
+                        ) : (
+                          <span className="flex items-center text-gray-500">
+                            Standard
                           </span>
                         )}
                       </span>
@@ -668,8 +747,8 @@ const DestinationManager: React.FC = () => {
                     </h3>
                     <div className="mt-1 flex items-center space-x-2">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${activeTab === 'nepal'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-blue-100 text-blue-800'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-blue-100 text-blue-800'
                         }`}>
                         {activeTab === 'nepal' ? 'Nepal' : 'International'}
                       </span>
@@ -701,25 +780,41 @@ const DestinationManager: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-2 flex items-center" onClick={(e) => e.stopPropagation()}>
-                  <Toggle
-                    checked={(destination as any).listed !== false}
-                    onChange={() => handleListToggle(destination)}
-                    size="sm"
-                  />
-                  <span className="ml-2 text-xs text-gray-600">
-                    {(destination as any).listed !== false ? (
-                      <span className="flex items-center text-green-600">
-                        <Eye className="w-3 h-3 mr-1" />
-                        Listed
-                      </span>
-                    ) : (
-                      <span className="flex items-center text-gray-500">
-                        <EyeOff className="w-3 h-3 mr-1" />
-                        Unlisted
-                      </span>
-                    )}
-                  </span>
+                <div className="mt-2 flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center">
+                    <Toggle
+                      checked={(destination as any).listed !== false}
+                      onChange={() => handleListToggle(destination)}
+                      size="sm"
+                    />
+                    <span className="ml-2 text-xs text-gray-600">
+                      {(destination as any).listed !== false ? (
+                        <span className="flex items-center text-green-600">
+                          <Eye className="w-3 h-3 mr-1" />
+                          Listed
+                        </span>
+                      ) : (
+                        <span className="flex items-center text-gray-500">
+                          <EyeOff className="w-3 h-3 mr-1" />
+                          Unlisted
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Toggle
+                      checked={(destination as any).featured || false}
+                      onChange={() => handleFeaturedToggle(destination)}
+                      size="sm"
+                    />
+                    <span className="ml-2 text-xs text-gray-600">
+                      {(destination as any).featured ? (
+                        <span className="text-yellow-600">Featured</span>
+                      ) : (
+                        <span className="text-gray-500">Standard</span>
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -934,6 +1029,7 @@ const DestinationManager: React.FC = () => {
                       country: formData.country,
                       image: imagePath,
                       listed: (formData as any).listed !== false,
+                      featured: (formData as any).featured || false,
                       ...(formData.description ? { description: formData.description } : {})
                     };
 
@@ -1082,6 +1178,21 @@ const DestinationManager: React.FC = () => {
                         </span>
                       </div>
 
+                      <div className="flex items-center">
+                        <Toggle
+                          checked={(formData as any).featured || false}
+                          onChange={(checked: boolean) => setFormData(prev => ({ ...prev, featured: checked }))}
+                          size="sm"
+                        />
+                        <span className="ml-2 text-sm text-gray-600">
+                          {(formData as any).featured ? (
+                            <span className="text-yellow-600 font-medium">Featured</span>
+                          ) : (
+                            <span className="text-gray-500">Standard</span>
+                          )}
+                        </span>
+                      </div>
+
                       <button
                         type="submit"
                         className="btn-primary flex items-center gap-2"
@@ -1101,10 +1212,10 @@ const DestinationManager: React.FC = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </div >
         )}
-      </AnimatePresence>
-    </div>
+      </AnimatePresence >
+    </div >
   );
 };
 
