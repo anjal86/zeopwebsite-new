@@ -135,7 +135,7 @@ const Navigation: React.FC = () => {
             <div className="hidden min-[1280px]:flex items-center space-x-4">
               {/* WhatsApp Link - Redesigned as Pill */}
               <motion.a
-                href="https://wa.me/9779705246799"
+                href={`https://wa.me/${contactInfo?.contact?.phone?.whatsapp?.replace(/[^0-9]/g, '') || '9779705246799'}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 transition={{ duration: 0.3 }}
@@ -208,7 +208,7 @@ const Navigation: React.FC = () => {
                 <div className="mt-8 pt-8 border-t space-y-4 border-gray-100">
                   <div className="grid grid-cols-2 gap-3">
                     <motion.a
-                      href={`tel:${contactInfo?.contact?.phone?.primary || '+9779851234567'}`}
+                      href={`tel:${contactInfo?.contact?.phone?.primary?.replace(/[^0-9+]/g, '') || '+9779851234567'}`}
                       whileTap={{ scale: 0.95 }}
                       className="flex items-center justify-center gap-2 py-3.5 rounded-none bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all duration-300 border border-gray-100"
                     >
@@ -217,7 +217,7 @@ const Navigation: React.FC = () => {
                     </motion.a>
 
                     <motion.a
-                      href="https://wa.me/9779705246799"
+                      href={`https://wa.me/${contactInfo?.contact?.phone?.whatsapp?.replace(/[^0-9]/g, '') || '9779705246799'}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       whileTap={{ scale: 0.95 }}

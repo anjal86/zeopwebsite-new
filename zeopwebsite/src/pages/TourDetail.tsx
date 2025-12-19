@@ -7,7 +7,7 @@ import TourImageSlider from '../components/Tours/TourImageSlider';
 import TourEnquiryButton from '../components/Tours/TourEnquiryButton';
 import TourHeader from '../components/Tours/TourHeader';
 import TourTabs, { type ItineraryDay } from '../components/Tours/TourTabs';
-import { useTours, useDestinations } from '../hooks/useApi';
+import { useTours, useDestinations, useContact } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 import { formatDuration } from '../utils/formatDuration';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
@@ -68,6 +68,7 @@ const TourDetail: React.FC = () => {
   const navigate = useNavigate();
   const { data: allTours, loading, error } = useTours();
   const { data: destinations } = useDestinations();
+  const { data: contactInfo } = useContact();
 
   const [tourDetails, setTourDetails] = useState<TourDetails | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
@@ -202,14 +203,14 @@ const TourDetail: React.FC = () => {
   // WhatsApp and Email handlers for floating button
   const handleFloatingWhatsApp = () => {
     const message = `Hi! I'm interested in the ${tourDetails?.title || 'tour'}. Could you please provide more details?`;
-    const whatsappUrl = `https://wa.me/9779851234567?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${contactInfo?.contact?.phone?.whatsapp?.replace(/[^0-9]/g, '') || '9779851234567'}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleFloatingEmail = () => {
     const subject = `Enquiry about ${tourDetails?.title || 'Tour'}`;
     const body = `Hi,\n\nI'm interested in the ${tourDetails?.title || 'tour'}. Could you please provide more details?\n\nThank you!`;
-    const emailUrl = `mailto:info@zeotourism.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const emailUrl = `mailto:${contactInfo?.contact?.email?.primary || 'info@zeotourism.com'}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = emailUrl;
   };
 
