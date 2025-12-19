@@ -252,14 +252,27 @@ const Hero: React.FC = () => {
                 playsInline
                 controls={false}
                 preload="auto"
+                ref={(el) => {
+                  if (el) {
+                    // Force muted for mobile autoplay policies
+                    el.muted = true;
+                    // Attempt to play
+                    const playPromise = el.play();
+                    if (playPromise !== undefined) {
+                      playPromise.catch((error) => {
+                        console.log("Autoplay prevented:", error);
+                        // Retry with User Interaction or keep muted
+                        el.muted = true;
+                        el.play().catch(e => console.error("Retry failed:", e));
+                      });
+                    }
+                  }
+                }}
                 onLoadedMetadata={(e) => {
                   const video = e.target as HTMLVideoElement;
                   if (slides[currentSlide].video_start_time) {
                     video.currentTime = slides[currentSlide].video_start_time;
                   }
-                  video.play().catch(() => {
-                    console.log("Autoplay blocked, waiting for interaction");
-                  });
                 }}
                 onError={() => {
                   const videoUrl = slides[currentSlide].video;
