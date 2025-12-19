@@ -868,18 +868,21 @@ const TourEditor: React.FC = () => {
     setUploadProgress(0);
 
     try {
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('destinationSlug', 'tours'); // Use tours folder for tour images
+      const uploadData = new FormData();
+      uploadData.append('image', file);
+      // Use the tour slug for folder organization, fallback to title or 'general'
+      const slugForFolder = formData.slug || (formData.title ? formData.title.toLowerCase().replace(/[^a-z0-9]/g, '-') : 'general');
+      uploadData.append('tourSlug', slugForFolder);
 
       const token = localStorage.getItem('adminToken');
 
-      const response = await fetch('/api/admin/upload', {
+      // Use the dedicated tour upload endpoint
+      const response = await fetch(`${getApiBaseUrl()}/admin/uploads/tours`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
-        body: formData,
+        body: uploadData,
       });
 
       if (!response.ok) {

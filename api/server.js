@@ -2032,6 +2032,59 @@ app.post('/api/admin/uploads/destinations', authenticateToken, upload.single('im
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+// Tour-specific upload endpoint
+app.post('/api/admin/uploads/tours', authenticateToken, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const tourSlug = req.body.tourSlug || 'general';
+    const file = req.file;
+
+    console.log(`Uploading file for tour: ${tourSlug}`, {
+      originalName: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size
+    });
+
+    // Create tour-specific directory with clean slug
+    const cleanSlug = tourSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+    const tourDir = path.join(uploadsDir, 'tours', cleanSlug);
+
+    if (!fs.existsSync(tourDir)) {
+      fs.mkdirSync(tourDir, { recursive: true });
+      console.log(`Created directory: ${tourDir}`);
+    }
+
+    // Generate simple filename with timestamp to avoid caching/overwriting issues
+    const timestamp = Date.now();
+    const fileExtension = path.extname(file.originalname);
+    const filename = `tour_${timestamp}${fileExtension}`;
+    const finalPath = path.join(tourDir, filename);
+
+    // Move file to final location
+    fs.renameSync(file.path, finalPath);
+
+    // Return the URL path
+    const relativePath = path.relative(uploadsDir, finalPath).replace(/\\/g, '/');
+    const fileUrl = `/uploads/${relativePath}`;
+
+    console.log(`File uploaded successfully: ${fileUrl}`);
+
+    res.json({
+      success: true,
+      url: fileUrl,
+      path: fileUrl,
+      filename: filename,
+      tour: cleanSlug
+    });
+  } catch (error) {
+    console.error('Error uploading tour file:', error);
+    // Cleanup allowed here if we had a temp mechanism
+    res.status(500).json({ error: 'Internal server error while uploading tour media' });
+  }
+});
 
 // ==================== CONTACT API ====================
 
