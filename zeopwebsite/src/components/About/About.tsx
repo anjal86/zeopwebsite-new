@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Heart, Shield, Globe, Award, Star, CheckCircle,
+  Heart, Shield, Globe, Award, Star,
   Plane, FileText, Hotel, Car, Ship, Sparkles, Target, Users,
   Palmtree, PartyPopper, MapPin, Calendar, TrendingUp, Building2,
   ChevronLeft, ChevronRight
@@ -417,8 +417,8 @@ const About: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className={`group relative px-6 py-4 rounded-2xl font-semibold transition-all duration-300 ${activeCategory === index
-                      ? 'bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg scale-105'
-                      : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg'
+                    ? 'bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg scale-105'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg'
                     }`}
                 >
                   <div className="flex items-center space-x-3">
@@ -449,17 +449,7 @@ const About: React.FC = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Category Description */}
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center space-x-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-md">
-                {React.createElement(serviceCategories[activeCategory].icon, {
-                  className: "w-6 h-6 text-primary"
-                })}
-                <span className="text-lg font-semibold text-gray-900">
-                  {serviceCategories[activeCategory].category}
-                </span>
-              </div>
-            </div>
+
 
             {/* Services Grid */}
             <div className={`grid md:grid-cols-2 ${serviceCategories[activeCategory].services.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'
@@ -497,15 +487,7 @@ const About: React.FC = () => {
               })}
             </div>
 
-            {/* Service Count Indicator */}
-            <div className="text-center mt-10">
-              <div className="inline-flex items-center space-x-2 text-sm text-gray-500">
-                <CheckCircle className="w-4 h-4 text-primary" />
-                <span>
-                  {serviceCategories[activeCategory].services.length} services in this category
-                </span>
-              </div>
-            </div>
+
           </motion.div>
         </div>
       </section>
