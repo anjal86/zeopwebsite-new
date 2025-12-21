@@ -14,7 +14,7 @@ import {
   Compass
 } from 'lucide-react';
 
-type MenuKey = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users';
+type MenuKey = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users' | 'blog';
 
 interface AdminSidebarProps {
   activeKey?: MenuKey;
@@ -35,6 +35,7 @@ const MENU_ITEMS: { id: MenuKey; label: string; icon: React.ComponentType<any>; 
   { id: 'kailash-gallery', label: 'Gallery', icon: Camera, pathQuery: '?tab=kailash-gallery' },
   { id: 'enquiries', label: 'Enquiries', icon: Mail, pathQuery: '?tab=enquiries' },
   { id: 'testimonials', label: 'Reviews', icon: MessageSquare, pathQuery: '?tab=testimonials' },
+  { id: 'blog', label: 'Blog', icon: ImageIcon, pathQuery: '?tab=blog' },
   { id: 'settings', label: 'Settings', icon: Settings, pathQuery: '?tab=settings' },
   { id: 'users', label: 'Users', icon: Users, pathQuery: '?tab=users' },
 ];

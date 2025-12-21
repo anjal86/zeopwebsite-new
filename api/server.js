@@ -263,6 +263,7 @@ let logoData = loadData('logos.json');
 let enquiriesData = loadData('enquiries.json');
 let kailashGalleryData = loadData('kailash-gallery.json');
 let tourDetails = loadTourDetails();
+let postsData = loadData('posts.json');
 
 // Extract arrays from the loaded data
 let tours = toursData.tours || toursData || [];
@@ -273,6 +274,8 @@ let users = usersData.users || usersData || [];
 let contact = contactData || {};
 let testimonials = testimonialsData.testimonials || testimonialsData || [];
 let enquiries = enquiriesData || {};
+let posts = postsData.posts || postsData || [];
+
 let logos = logoData.logos || logoData || {
   header: '/src/assets/zeo-logo.png',
   footer: '/src/assets/zeo-logo-white.png',
@@ -653,6 +656,150 @@ const updateDestinationRelationships = (tourId, newPrimaryDestId, newSecondaryDe
   // Save updated destinations
   saveData('destinations.json', destinations);
 };
+
+// ==================== BLOG POSTS API ====================
+
+// Get all posts
+app.get('/api/posts', async (req, res) => {
+  await delay(200);
+  // Sort posts by date descending
+  const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  res.json(sortedPosts);
+});
+
+// Get single post by slug
+app.get('/api/posts/:slug', async (req, res) => {
+  const { slug } = req.params;
+  const post = posts.find(p => p.slug === slug);
+
+  if (post) {
+    res.json(post);
+  } else {
+    res.status(404).json({ error: 'Post not found' });
+  }
+});
+
+// Admin: Get single post by ID for editing
+app.get('/api/admin/posts/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const post = posts.find(p => p.id === parseInt(id));
+
+  if (post) {
+    res.json(post);
+  } else {
+    res.status(404).json({ error: 'Post not found' });
+  }
+});
+
+// Admin: Create new post
+app.post('/api/admin/posts', authenticateToken, (req, res) => {
+  upload.single('image')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const postData = JSON.parse(req.body.postData || '{}');
+      const file = req.file;
+
+      const newPost = {
+        id: Math.max(...posts.map(p => p.id), 0) + 1,
+        slug: postData.slug || postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        title: postData.title,
+        excerpt: postData.excerpt,
+        content: postData.content,
+        author: postData.author || 'Admin',
+        date: postData.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        readTime: postData.readTime || '5 min read',
+        category: postData.category,
+        featured: postData.featured || false,
+        image: postData.image || '',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      if (file) {
+        // Compress image
+        const compressedFileName = `compressed_${file.filename}`;
+        const compressedPath = path.join(path.dirname(file.path), compressedFileName);
+
+        await compressImage(file.path, compressedPath, 85);
+
+        const relativePath = path.relative(uploadsDir, compressedPath).replace(/\\/g, '/');
+        // Ensure it uses the /uploads prefix
+        const fileUrl = `/uploads/${relativePath}`;
+        newPost.image = fileUrl;
+      }
+
+      posts.push(newPost);
+      saveData('posts.json', { posts });
+      res.status(201).json(newPost);
+
+    } catch (error) {
+      console.error('Error creating post:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+});
+
+// Admin: Update post
+app.put('/api/admin/posts/:id', authenticateToken, (req, res) => {
+  upload.single('image')(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      const { id } = req.params;
+      const postData = JSON.parse(req.body.postData || '{}');
+      const file = req.file;
+
+      const index = posts.findIndex(p => p.id === parseInt(id));
+      if (index === -1) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+
+      const updatedPost = {
+        ...posts[index],
+        ...postData,
+        updated_at: new Date().toISOString()
+      };
+
+      if (file) {
+        const compressedFileName = `compressed_${file.filename}`;
+        const compressedPath = path.join(path.dirname(file.path), compressedFileName);
+
+        await compressImage(file.path, compressedPath, 85);
+
+        const relativePath = path.relative(uploadsDir, compressedPath).replace(/\\/g, '/');
+        updatedPost.image = `/uploads/${relativePath}`;
+      }
+
+      posts[index] = updatedPost;
+      saveData('posts.json', { posts });
+      res.json(updatedPost);
+
+    } catch (error) {
+      console.error('Error updating post:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+});
+
+// Admin: Delete post
+app.delete('/api/admin/posts/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const index = posts.findIndex(p => p.id === parseInt(id));
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Post not found' });
+  }
+
+  posts.splice(index, 1);
+  saveData('posts.json', { posts });
+  res.json({ message: 'Post deleted successfully' });
+});
 
 // ==================== TOURS API ====================
 

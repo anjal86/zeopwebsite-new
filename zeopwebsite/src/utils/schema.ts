@@ -25,6 +25,9 @@ export const createOrganizationSchema = () => ({
   sameAs: [
     "https://www.facebook.com/zeotourism",
     "https://www.instagram.com/zeotourism",
+    "https://x.com/zeotourism",
+    "https://www.youtube.com/@zeotourism",
+    "https://www.linkedin.com/company/zeotourism",
     "https://www.tripadvisor.com/zeotourism"
   ],
   foundingDate: "2000-01-01",
@@ -41,13 +44,13 @@ export const createOrganizationSchema = () => ({
 export const createWebSiteSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://zeotourism.com/#website",
   name: "Zeo Tourism",
   url: "https://zeotourism.com",
   description: "Discover Nepal with expert-guided adventures, cultural tours, and spiritual journeys. 25+ years of experience in travel planning.",
   publisher: {
     "@type": "Organization",
-    name: "Zeo Tourism",
-    logo: "https://zeotourism.com/logo/zeo-logo.png"
+    "@id": "https://zeotourism.com/#organization"
   },
   potentialAction: {
     "@type": "SearchAction",
@@ -82,7 +85,8 @@ export const createArticleSchema = (article: {
   tags: string[];
 }) => ({
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "BlogPosting",
+  "@id": `${article.url}#article`,
   headline: article.title,
   description: article.description,
   image: article.image,
@@ -92,11 +96,7 @@ export const createArticleSchema = (article: {
   },
   publisher: {
     "@type": "Organization",
-    name: "Zeo Tourism",
-    logo: {
-      "@type": "ImageObject",
-      url: "https://zeotourism.com/logo/zeo-logo.png"
-    }
+    "@id": "https://zeotourism.com/#organization"
   },
   datePublished: article.publishDate,
   dateModified: article.modifiedDate || article.publishDate,
@@ -108,9 +108,63 @@ export const createArticleSchema = (article: {
   keywords: article.tags.join(", ")
 });
 
-export const createLocalBusinessSchema = () => ({
+export const createProductSchema = (tour: {
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  price: number;
+  currency: string;
+  category: string;
+  ratingValue?: number;
+  reviewCount?: number;
+}) => ({
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "Trip",
+  "@id": `${tour.url}#trip`,
+  name: tour.name,
+  description: tour.description,
+  image: tour.image,
+  url: tour.url,
+  offers: {
+    "@type": "Offer",
+    price: tour.price,
+    priceCurrency: tour.currency,
+    availability: "https://schema.org/InStock",
+    url: tour.url
+  },
+  itinerary: {
+    "@type": "ItemList",
+    numberOfItems: 1
+  },
+  provider: {
+    "@type": "Organization",
+    "@id": "https://zeotourism.com/#organization"
+  },
+  ...(tour.ratingValue && {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: tour.ratingValue,
+      reviewCount: tour.reviewCount || 10
+    }
+  })
+});
+
+export const createBlogListSchema = (posts: Array<{ title: string; url: string; date: string }>) => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Zeo Tourism Blog",
+  itemListElement: posts.map((post, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    url: post.url,
+    name: post.title
+  }))
+});
+
+export const createTravelAgencySchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
   "@id": "https://zeotourism.com/#organization",
   name: "Zeo Tourism",
   image: [
@@ -144,6 +198,9 @@ export const createLocalBusinessSchema = () => ({
   sameAs: [
     "https://www.facebook.com/zeotourism",
     "https://www.instagram.com/zeotourism",
+    "https://x.com/zeotourism",
+    "https://www.youtube.com/@zeotourism",
+    "https://www.linkedin.com/company/zeotourism",
     "https://www.tripadvisor.com/zeotourism"
   ],
   priceRange: "$$",

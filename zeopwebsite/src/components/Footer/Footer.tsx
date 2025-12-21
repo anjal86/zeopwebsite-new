@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Youtube, Linkedin, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { useContact } from '../../hooks/useApi';
 import { useLogos } from '../../hooks/useLogos';
 import footerLogo from '../../assets/zeo-logo-white.png';
@@ -29,10 +29,11 @@ const Footer: React.FC = () => {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: contactInfo?.social.facebook || '#', label: 'Facebook' },
-    { icon: Instagram, href: contactInfo?.social.instagram || '#', label: 'Instagram' },
-    { icon: Twitter, href: contactInfo?.social.twitter || '#', label: 'Twitter' },
-    { icon: Youtube, href: contactInfo?.social.youtube || '#', label: 'YouTube' }
+    { icon: Facebook, href: contactInfo?.social.facebook || 'https://www.facebook.com/zeotourism', label: 'Facebook' },
+    { icon: Instagram, href: contactInfo?.social.instagram || 'https://www.instagram.com/zeotourism', label: 'Instagram' },
+    { icon: Twitter, href: contactInfo?.social.twitter || 'https://x.com/zeotourism', label: 'X (Twitter)' },
+    { icon: Youtube, href: contactInfo?.social.youtube || 'https://www.youtube.com/@zeotourism', label: 'YouTube' },
+    { icon: Linkedin, href: contactInfo?.social.linkedin || 'https://www.linkedin.com/company/zeotourism', label: 'LinkedIn' }
   ];
 
   return (
@@ -69,7 +70,7 @@ const Footer: React.FC = () => {
                 <p className="text-gray-400 mb-6 max-w-sm text-sm">
                   Your trusted partner for Nepal tours and spiritual journeys since 2000.
                 </p>
-                
+
                 {/* Contact Info */}
                 <div className="space-y-2 mb-6">
                   <a href={`tel:${contactInfo?.contact.phone.primary || '+9779851234567'}`} className="flex items-center text-gray-400 hover:text-sky-blue transition-colors text-sm">
@@ -95,6 +96,7 @@ const Footer: React.FC = () => {
                       aria-label={social.label}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
+                      rel="nofollow noopener noreferrer"
                       className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-sky-blue transition-all duration-300"
                     >
                       <social.icon className="w-4 h-4" />
@@ -191,7 +193,7 @@ const Footer: React.FC = () => {
               <a
                 href="https://brandspire.com.np/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="flex items-center ml-2 hover:text-sky-blue transition-colors group"
               >
                 <img

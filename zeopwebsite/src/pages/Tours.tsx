@@ -6,6 +6,7 @@ import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
 import { usePaginatedTours, useDestinations } from '../hooks/useApi';
+import SEO from '../components/SEO/SEO';
 import type { Tour } from '../services/api';
 
 const ToursPage: React.FC = () => {
@@ -36,58 +37,66 @@ const ToursPage: React.FC = () => {
   };
 
   return (
-    <div className="tours-page">
-      <PageHeader
-        title="Handcrafted Experiences"
-        subtitle="Choose from our carefully curated collection of tours, each designed to create memories that last a lifetime"
-        breadcrumb="Tours"
-        backgroundImage="https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2070"
+    <>
+      <SEO
+        title="Nepal Tour Packages & Experiences - Zeo Tourism"
+        description="Browse our handcrafted Nepal tour packages. From classic Everest treks to spiritual Kailash journeys and cultural city tours."
+        keywords="nepal tour packages, trek nepal, travel experiences, guided tours nepal"
+        url="https://zeotourism.com/tours"
       />
-      
-      {/* Floating Filter between sections */}
-      <div className="relative -mt-16 mb-8 z-20">
-        <div className="section-container">
-          <TourFilters
-            onFiltersChange={setFilters}
-            totalTours={pagination.totalCount}
-            filteredCount={tours.length}
-          />
+      <div className="tours-page">
+        <PageHeader
+          title="Handcrafted Experiences"
+          subtitle="Choose from our carefully curated collection of tours, each designed to create memories that last a lifetime"
+          breadcrumb="Tours"
+          backgroundImage="https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=2070"
+        />
+
+        {/* Floating Filter between sections */}
+        <div className="relative -mt-16 mb-8 z-20">
+          <div className="section-container">
+            <TourFilters
+              onFiltersChange={setFilters}
+              totalTours={pagination.totalCount}
+              filteredCount={tours.length}
+            />
+          </div>
         </div>
+
+        <section className="pt-8 pb-12 bg-gray-50">
+          <div className="section-container">
+            {/* Loading State */}
+            {loading && (
+              <LoadingSpinner className="py-20" size="lg" />
+            )}
+
+            {/* Error State */}
+            {error && (
+              <ErrorMessage
+                message={`Failed to load tours: ${error}`}
+                className="py-20"
+              />
+            )}
+
+            {/* Tours Grid */}
+            {!loading && !error && (
+              <TourGrid
+                tours={tours}
+                filters={filters}
+                onTourBook={handleTourBook}
+                onTourView={handleTourView}
+                loadingMore={loadingMore}
+                hasMore={pagination.hasNext}
+                onLoadMore={loadMore}
+                totalCount={pagination.totalCount}
+                destinations={destinations || undefined}
+              />
+            )}
+          </div>
+        </section>
+
       </div>
-
-      <section className="pt-8 pb-12 bg-gray-50">
-        <div className="section-container">
-          {/* Loading State */}
-          {loading && (
-            <LoadingSpinner className="py-20" size="lg" />
-          )}
-
-          {/* Error State */}
-          {error && (
-            <ErrorMessage
-              message={`Failed to load tours: ${error}`}
-              className="py-20"
-            />
-          )}
-
-          {/* Tours Grid */}
-          {!loading && !error && (
-            <TourGrid
-              tours={tours}
-              filters={filters}
-              onTourBook={handleTourBook}
-              onTourView={handleTourView}
-              loadingMore={loadingMore}
-              hasMore={pagination.hasNext}
-              onLoadMore={loadMore}
-              totalCount={pagination.totalCount}
-              destinations={destinations || undefined}
-            />
-          )}
-        </div>
-      </section>
-
-    </div>
+    </>
   );
 };
 

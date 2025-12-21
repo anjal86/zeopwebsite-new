@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Send, MessageCircle, Mail, MapPin, Activity, Bed, Info, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
@@ -11,6 +11,8 @@ import { useTours, useDestinations, useContact } from '../hooks/useApi';
 import type { Tour } from '../services/api';
 import { formatDuration } from '../utils/formatDuration';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
+import SEO from '../components/SEO/SEO';
+import { createProductSchema, createBreadcrumbSchema } from '../utils/schema';
 
 // API base URL helper function
 const getApiBaseUrl = (): string => {
@@ -159,8 +161,6 @@ const TourDetail: React.FC = () => {
   // Get all destinations for this tour
   const allTourDestinations = [primaryDestination, ...secondaryDestinations].filter(Boolean);
 
-
-
   // Create image gallery using detailed tour data
   const images = tourDetails ? (
     tourDetails.gallery && tourDetails.gallery.length > 0
@@ -219,6 +219,41 @@ const TourDetail: React.FC = () => {
     enquirySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Memoize structured data to prevent unnecessary SEO component updates
+  const structuredData = useMemo(() => {
+    if (!tourDetails) return [];
+
+    const breadcrumbItems = [
+      { name: "Home", url: "https://zeotourism.com" },
+      { name: "Tours", url: "https://zeotourism.com/tours" }
+    ];
+
+    if (primaryDestination) {
+      breadcrumbItems.push({
+        name: primaryDestination.name,
+        url: `https://zeotourism.com/destinations/${primaryDestination.slug}`
+      });
+    }
+
+    breadcrumbItems.push({
+      name: tourDetails.title,
+      url: `https://zeotourism.com/tours/${tourDetails.slug}`
+    });
+
+    return [
+      createProductSchema({
+        name: tourDetails.title,
+        description: tourDetails.description,
+        image: tourDetails.image,
+        url: `https://zeotourism.com/tours/${tourDetails.slug}`,
+        price: tourDetails.price,
+        currency: "USD",
+        category: "Tours"
+      }),
+      createBreadcrumbSchema(breadcrumbItems)
+    ];
+  }, [tourDetails, primaryDestination]);
+
   if (loading || detailsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -250,240 +285,96 @@ const TourDetail: React.FC = () => {
   }
 
   return (
-    <div className="tour-detail-page">
-      {/* Breadcrumb Navigation */}
-      <div className="bg-gray-50 py-4">
-        <div className="container mx-auto px-4">
-          <nav className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-green-600">Home</Link>
-            <span>/</span>
-            <Link to="/tours" className="hover:text-green-600">Tours</Link>
-            <span>/</span>
-            <span className="text-gray-900">{tourDetails.title}</span>
-          </nav>
+    <>
+      <SEO
+        title={`${tourDetails.title} - Zeo Tourism`}
+        description={tourDetails.description}
+        keywords={`${tourDetails.title}, ${tourDetails.location}, ${tourDetails.category}, Nepal tours, trekking nepal, ${tourDetails.highlights?.[0] || ''}`}
+        image={tourDetails.image}
+        url={`https://zeotourism.com/tours/${tourSlug}`}
+        type="article"
+        structuredData={structuredData}
+      />
+      <div className="tour-detail-page">
+        {/* Breadcrumb Navigation */}
+        <div className="bg-gray-50 py-4">
+          <div className="container mx-auto px-4">
+            <nav className="flex items-center space-x-2 text-sm text-gray-600">
+              <Link to="/" className="hover:text-green-600">Home</Link>
+              <span>/</span>
+              <Link to="/tours" className="hover:text-green-600">Tours</Link>
+              <span>/</span>
+              <span className="text-gray-900">{tourDetails.title}</span>
+            </nav>
+          </div>
         </div>
-      </div>
 
-      {/* Slider and Tour Details Section - Side by Side */}
-      <section className="bg-gray-50">
-        <div className="container mx-auto px-4 py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Image Slider */}
-            <div className="lg:col-span-2">
-              <TourImageSlider images={images} title={tourDetails.title} />
+        {/* Slider and Tour Details Section - Side by Side */}
+        <section className="bg-gray-50">
+          <div className="container mx-auto px-4 py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Image Slider */}
+              <div className="lg:col-span-2">
+                <TourImageSlider images={images} title={tourDetails.title} />
 
-              {/* Tour Header - Title and Stats - Right below slider */}
-              <div className="mt-8">
-                <TourHeader
-                  title={tourDetails.title}
-                  duration={formatDuration(tourDetails.duration)}
-                  groupSize={tourDetails.group_size}
-                  bestTime={tourDetails.best_time}
-                  destinations={allTourDestinations.filter(Boolean) as Array<{ id: number; name: string }>}
-                  primaryDestination={primaryDestination}
-                  secondaryDestinations={secondaryDestinations}
-                />
-              </div>
-
-              {/* Tour Details - Below title and stats */}
-              <div>
-                <TourTabs
-                  description={tourDetails.description}
-                  highlights={tourDetails.highlights}
-                  inclusions={tourDetails.inclusions}
-                  exclusions={tourDetails.exclusions}
-                  itinerary={tourDetails.itinerary}
-                  title={tourDetails.title}
-                  goodToKnow={tourDetails.good_to_know}
-                  faqs={tourDetails.faqs}
-                />
-              </div>
-
-              {/* Good to Know Section - Accordion Style */}
-              {tourDetails.good_to_know && (
+                {/* Tour Header - Title and Stats - Right below slider */}
                 <div className="mt-8">
-                  <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="text-center p-6 sm:p-8 border-b border-gray-100">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Good to Know</h3>
-                      <p className="text-gray-600">Essential information for your journey</p>
-                    </div>
-
-                    <div className="divide-y divide-gray-100">
-                      {/* Main Attractions */}
-                      <div className="border-l-4 border-blue-500">
-                        <button
-                          onClick={() => toggleGoodToKnow('main_attractions')}
-                          className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
-                                <MapPin className="w-5 h-5 text-white" />
-                              </div>
-                              <h4 className="text-lg font-bold text-gray-900">Main Attractions</h4>
-                            </div>
-                            {expandedGoodToKnow.has('main_attractions') ? (
-                              <ChevronUp className="w-5 h-5 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-400" />
-                            )}
-                          </div>
-                        </button>
-                        {expandedGoodToKnow.has('main_attractions') && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-6 pb-6"
-                          >
-                            <div className="ml-14">
-                              <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.main_attractions}</p>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-
-                      {/* Travel Distances */}
-                      <div className="border-l-4 border-green-500">
-                        <button
-                          onClick={() => toggleGoodToKnow('travel_distances')}
-                          className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-4">
-                                <Activity className="w-5 h-5 text-white" />
-                              </div>
-                              <h4 className="text-lg font-bold text-gray-900">Travel Distances</h4>
-                            </div>
-                            {expandedGoodToKnow.has('travel_distances') ? (
-                              <ChevronUp className="w-5 h-5 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-400" />
-                            )}
-                          </div>
-                        </button>
-                        {expandedGoodToKnow.has('travel_distances') && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-6 pb-6"
-                          >
-                            <div className="ml-14">
-                              <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.travel_distances}</p>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-
-                      {/* Accommodation Standards */}
-                      <div className="border-l-4 border-purple-500">
-                        <button
-                          onClick={() => toggleGoodToKnow('accommodation_standards')}
-                          className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
-                                <Bed className="w-5 h-5 text-white" />
-                              </div>
-                              <h4 className="text-lg font-bold text-gray-900">Accommodation Standards</h4>
-                            </div>
-                            {expandedGoodToKnow.has('accommodation_standards') ? (
-                              <ChevronUp className="w-5 h-5 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-400" />
-                            )}
-                          </div>
-                        </button>
-                        {expandedGoodToKnow.has('accommodation_standards') && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-6 pb-6"
-                          >
-                            <div className="ml-14">
-                              <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.accommodation_standards}</p>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-
-                      {/* Additional Activities */}
-                      <div className="border-l-4 border-orange-500">
-                        <button
-                          onClick={() => toggleGoodToKnow('additional_activities')}
-                          className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center mr-4">
-                                <Info className="w-5 h-5 text-white" />
-                              </div>
-                              <h4 className="text-lg font-bold text-gray-900">Additional Activities</h4>
-                            </div>
-                            {expandedGoodToKnow.has('additional_activities') ? (
-                              <ChevronUp className="w-5 h-5 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-400" />
-                            )}
-                          </div>
-                        </button>
-                        {expandedGoodToKnow.has('additional_activities') && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-6 pb-6"
-                          >
-                            <div className="ml-14">
-                              <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.additional_activities}</p>
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <TourHeader
+                    title={tourDetails.title}
+                    duration={formatDuration(tourDetails.duration)}
+                    groupSize={tourDetails.group_size}
+                    bestTime={tourDetails.best_time}
+                    destinations={allTourDestinations.filter(Boolean) as Array<{ id: number; name: string }>}
+                    primaryDestination={primaryDestination}
+                    secondaryDestinations={secondaryDestinations}
+                  />
                 </div>
-              )}
 
-              {/* FAQs Section - Accordion Style */}
-              {tourDetails.faqs && tourDetails.faqs.length > 0 && (
-                <div className="mt-8">
-                  <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div className="text-center p-6 sm:p-8 border-b border-gray-100">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Frequently Asked Questions</h3>
-                      <p className="text-gray-600">Your questions, answered</p>
-                    </div>
+                {/* Tour Details - Below title and stats */}
+                <div>
+                  <TourTabs
+                    description={tourDetails.description}
+                    highlights={tourDetails.highlights}
+                    inclusions={tourDetails.inclusions}
+                    exclusions={tourDetails.exclusions}
+                    itinerary={tourDetails.itinerary}
+                    title={tourDetails.title}
+                    goodToKnow={tourDetails.good_to_know}
+                    faqs={tourDetails.faqs}
+                  />
+                </div>
 
-                    <div className="divide-y divide-gray-100">
-                      {tourDetails.faqs.map((faq, index) => (
-                        <div key={`faq-${tourDetails.id}-${index}`} className="border-l-4 border-primary">
+                {/* Good to Know Section - Accordion Style */}
+                {tourDetails.good_to_know && (
+                  <div className="mt-8">
+                    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                      <div className="text-center p-6 sm:p-8 border-b border-gray-100">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Good to Know</h3>
+                        <p className="text-gray-600">Essential information for your journey, including cultural insights and <a href="https://whc.unesco.org/en/statesparties/np" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">World Heritage</a> context.</p>
+                      </div>
+
+                      <div className="divide-y divide-gray-100">
+                        {/* Main Attractions */}
+                        <div className="border-l-4 border-blue-500">
                           <button
-                            onClick={() => toggleFAQ(index)}
+                            onClick={() => toggleGoodToKnow('main_attractions')}
                             className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
                           >
                             <div className="flex items-center justify-between">
-                              <div className="flex items-start gap-4 flex-1">
-                                <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                                  <HelpCircle className="w-4 h-4 text-white" />
+                              <div className="flex items-center">
+                                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                                  <MapPin className="w-5 h-5 text-white" />
                                 </div>
-                                <h4 className="text-lg font-semibold text-gray-900 text-left pr-4">{faq.question}</h4>
+                                <h4 className="text-lg font-bold text-gray-900">Main Attractions</h4>
                               </div>
-                              {expandedFAQs.has(index) ? (
-                                <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                              {expandedGoodToKnow.has('main_attractions') ? (
+                                <ChevronUp className="w-5 h-5 text-gray-400" />
                               ) : (
-                                <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                                <ChevronDown className="w-5 h-5 text-gray-400" />
                               )}
                             </div>
                           </button>
-                          {expandedFAQs.has(index) && (
+                          {expandedGoodToKnow.has('main_attractions') && (
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
@@ -491,105 +382,260 @@ const TourDetail: React.FC = () => {
                               transition={{ duration: 0.3 }}
                               className="px-6 pb-6"
                             >
-                              <div className="ml-12">
-                                <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                              <div className="ml-14">
+                                <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.main_attractions}</p>
                               </div>
                             </motion.div>
                           )}
                         </div>
-                      ))}
+
+                        {/* Travel Distances */}
+                        <div className="border-l-4 border-green-500">
+                          <button
+                            onClick={() => toggleGoodToKnow('travel_distances')}
+                            className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center">
+                                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                                  <Activity className="w-5 h-5 text-white" />
+                                </div>
+                                <h4 className="text-lg font-bold text-gray-900">Travel Distances</h4>
+                              </div>
+                              {expandedGoodToKnow.has('travel_distances') ? (
+                                <ChevronUp className="w-5 h-5 text-gray-400" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-400" />
+                              )}
+                            </div>
+                          </button>
+                          {expandedGoodToKnow.has('travel_distances') && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="px-6 pb-6"
+                            >
+                              <div className="ml-14">
+                                <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.travel_distances}</p>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
+
+                        {/* Accommodation Standards */}
+                        <div className="border-l-4 border-purple-500">
+                          <button
+                            onClick={() => toggleGoodToKnow('accommodation_standards')}
+                            className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center">
+                                <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+                                  <Bed className="w-5 h-5 text-white" />
+                                </div>
+                                <h4 className="text-lg font-bold text-gray-900">Accommodation Standards</h4>
+                              </div>
+                              {expandedGoodToKnow.has('accommodation_standards') ? (
+                                <ChevronUp className="w-5 h-5 text-gray-400" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-400" />
+                              )}
+                            </div>
+                          </button>
+                          {expandedGoodToKnow.has('accommodation_standards') && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="px-6 pb-6"
+                            >
+                              <div className="ml-14">
+                                <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.accommodation_standards}</p>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
+
+                        {/* Additional Activities */}
+                        <div className="border-l-4 border-orange-500">
+                          <button
+                            onClick={() => toggleGoodToKnow('additional_activities')}
+                            className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center">
+                                <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center mr-4">
+                                  <Info className="w-5 h-5 text-white" />
+                                </div>
+                                <h4 className="text-lg font-bold text-gray-900">Additional Activities</h4>
+                              </div>
+                              {expandedGoodToKnow.has('additional_activities') ? (
+                                <ChevronUp className="w-5 h-5 text-gray-400" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-gray-400" />
+                              )}
+                            </div>
+                          </button>
+                          {expandedGoodToKnow.has('additional_activities') && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="px-6 pb-6"
+                            >
+                              <div className="ml-14">
+                                <p className="text-gray-700 leading-relaxed">{tourDetails.good_to_know.additional_activities}</p>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
 
-            {/* Right Column - Enquiry Button */}
-            <div className="lg:col-span-1" ref={enquirySectionRef}>
-              <TourEnquiryButton
-                price={tourDetails.price}
-                hasDiscount={tourDetails.hasDiscount}
-                discountPercentage={tourDetails.discountPercentage}
-                priceAvailable={tourDetails.priceAvailable}
-                tourTitle={tourDetails.title}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+                {/* FAQs Section - Accordion Style */}
+                {tourDetails.faqs && tourDetails.faqs.length > 0 && (
+                  <div className="mt-8">
+                    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                      <div className="text-center p-6 sm:p-8 border-b border-gray-100">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Frequently Asked Questions</h3>
+                        <p className="text-gray-600">Your questions, answered</p>
+                      </div>
 
+                      <div className="divide-y divide-gray-100">
+                        {tourDetails.faqs.map((faq, index) => (
+                          <div key={`faq-${tourDetails.id}-${index}`} className="border-l-4 border-primary">
+                            <button
+                              onClick={() => toggleFAQ(index)}
+                              className="w-full p-6 text-left hover:bg-gray-50 transition-colors duration-200"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-start gap-4 flex-1">
+                                  <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-dark rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                                    <HelpCircle className="w-4 h-4 text-white" />
+                                  </div>
+                                  <h4 className="text-lg font-semibold text-gray-900 text-left pr-4">{faq.question}</h4>
+                                </div>
+                                {expandedFAQs.has(index) ? (
+                                  <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                                )}
+                              </div>
+                            </button>
+                            {expandedFAQs.has(index) && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="px-6 pb-6"
+                              >
+                                <div className="ml-12">
+                                  <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-      {/* Related Tours */}
-      {relatedTours.length > 0 && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">You Might Also Like</h2>
-              <p className="text-gray-600">Discover more amazing tours and experiences</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedTours.map((relatedTour, index) => (
-                <motion.div
-                  key={relatedTour.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <TourCard
-                    tour={relatedTour}
-                    onViewDetails={(tour) => navigate(`/tours/${tour.slug}`)}
-                    destinations={destinations || undefined}
-                  />
-                </motion.div>
-              ))}
+              {/* Right Column - Enquiry Button */}
+              <div className="lg:col-span-1" ref={enquirySectionRef}>
+                <TourEnquiryButton
+                  price={tourDetails.price}
+                  hasDiscount={tourDetails.hasDiscount}
+                  discountPercentage={tourDetails.discountPercentage}
+                  priceAvailable={tourDetails.priceAvailable}
+                  tourTitle={tourDetails.title}
+                />
+              </div>
             </div>
           </div>
         </section>
-      )}
 
-      {/* Floating Enquiry Button Bar for Mobile */}
-      {showFloatingButton && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
-          <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            exit={{ y: 100 }}
-            className="bg-white border-t border-gray-200 shadow-lg"
-          >
-            <div className="grid grid-cols-3 gap-0">
-              {/* Main Enquiry Button */}
-              <button
-                onClick={handleFloatingEnquiry}
-                className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
-              >
-                <Send className="w-5 h-5 mb-1" />
-                <span className="text-xs font-medium">Enquiry</span>
-              </button>
 
-              {/* WhatsApp Button */}
-              <button
-                onClick={handleFloatingWhatsApp}
-                className="bg-green-500 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
-              >
-                <MessageCircle className="w-5 h-5 mb-1" />
-                <span className="text-xs font-medium">WhatsApp</span>
-              </button>
+        {/* Related Tours */}
+        {relatedTours.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">You Might Also Like</h2>
+                <p className="text-gray-600">Discover more amazing tours and experiences</p>
+              </div>
 
-              {/* Email Button */}
-              <button
-                onClick={handleFloatingEmail}
-                className="bg-gray-600 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
-              >
-                <Mail className="w-5 h-5 mb-1" />
-                <span className="text-xs font-medium">Email</span>
-              </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {relatedTours.map((relatedTour, index) => (
+                  <motion.div
+                    key={relatedTour.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <TourCard
+                      tour={relatedTour}
+                      onViewDetails={(tour) => navigate(`/tours/${tour.slug}`)}
+                      destinations={destinations || undefined}
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </motion.div>
-        </div>
-      )}
-    </div>
+          </section>
+        )}
+
+        {/* Floating Enquiry Button Bar for Mobile */}
+        {showFloatingButton && (
+          <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
+            <motion.div
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              exit={{ y: 100 }}
+              className="bg-white border-t border-gray-200 shadow-lg"
+            >
+              <div className="grid grid-cols-3 gap-0">
+                {/* Main Enquiry Button */}
+                <button
+                  onClick={handleFloatingEnquiry}
+                  className="bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+                >
+                  <Send className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">Enquiry</span>
+                </button>
+
+                {/* WhatsApp Button */}
+                <button
+                  onClick={handleFloatingWhatsApp}
+                  className="bg-green-500 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+                >
+                  <MessageCircle className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">WhatsApp</span>
+                </button>
+
+                {/* Email Button */}
+                <button
+                  onClick={handleFloatingEmail}
+                  className="bg-gray-600 text-white py-4 px-4 flex flex-col items-center justify-center hover:opacity-90 transition-all duration-300"
+                >
+                  <Mail className="w-5 h-5 mb-1" />
+                  <span className="text-xs font-medium">Email</span>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

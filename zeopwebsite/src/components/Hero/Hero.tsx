@@ -6,14 +6,14 @@ import { useSliders } from '../../hooks/useApi';
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false); // Enable sound by default
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [videoErrors, setVideoErrors] = useState<Set<string>>(new Set());
   const [preloadedVideos, setPreloadedVideos] = useState<Set<string>>(new Set());
 
   // Fetch sliders from API
-  const { data: slides, loading, error } = useSliders();
+  const { data: slides, error } = useSliders();
 
   // Preload videos for faster loading
   useEffect(() => {
@@ -198,22 +198,15 @@ const Hero: React.FC = () => {
     }
   };
 
-  // Loading state
-  if (loading) {
-    return (
-      <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center pt-24 bg-black">
-        <div className="text-white">Loading...</div>
-      </section>
-    );
-  }
+
 
   // Error state
   if (error || !slides || slides.length === 0) {
     return (
       <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center pt-24 bg-black">
         <div className="text-center text-white">
-          <h1 className="text-4xl font-bold mb-4">Experience Nepal</h1>
-          <p className="text-xl">Immerse yourself in the beauty of Nepal</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4">Experience Nepal</h1>
+          <p className="text-lg sm:text-xl">Immerse yourself in the beauty of Nepal with our curated tours</p>
         </div>
       </section>
     );
@@ -247,15 +240,15 @@ const Hero: React.FC = () => {
                 key={`video-${currentSlide}-${slides[currentSlide].id}`}
                 className="absolute inset-0 w-full h-full object-cover"
                 autoPlay
-                muted
+                muted={isMuted}
                 loop
                 playsInline
                 controls={false}
                 preload="auto"
                 ref={(el) => {
                   if (el) {
-                    // Force muted for mobile autoplay policies
-                    el.muted = true;
+                    // Respect state for mute status
+                    el.muted = isMuted;
                     // Attempt to play
                     const playPromise = el.play();
                     if (playPromise !== undefined) {
@@ -263,6 +256,7 @@ const Hero: React.FC = () => {
                         console.log("Autoplay prevented:", error);
                         // Retry with User Interaction or keep muted
                         el.muted = true;
+                        setIsMuted(true); // Sync state if browser forced us to mute
                         el.play().catch(e => console.error("Retry failed:", e));
                       });
                     }

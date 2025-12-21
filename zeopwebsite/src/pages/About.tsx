@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PageHeader from '../components/PageHeader/PageHeader';
 import About from '../components/About/About';
 import SEO from '../components/SEO/SEO';
+import { createOrganizationSchema, createBreadcrumbSchema } from '../utils/schema';
 
 const AboutPage: React.FC = () => {
+  const structuredData = useMemo(() => [
+    createOrganizationSchema(),
+    createBreadcrumbSchema([
+      { name: "Home", url: "https://zeotourism.com" },
+      { name: "About", url: "https://zeotourism.com/about" }
+    ])
+  ], []);
+
   return (
     <>
       <SEO
         title="About Us - Zeo Tourism | 13+ Years of Professional Travel Expertise"
-        description="Founded in 2018 and headquartered in Kathmandu, Zeo Tourism Pvt. Ltd. delivers world-class travel experiences. Also registered in Dubai as ZEO Tourism LLC. 13+ years of expertise in customized international packages, corporate tours, and complete travel solutions."
+        description="Expert travel services in Nepal and Dubai by Zeo Tourism. 13+ years of experience in customized international and corporate tours."
         keywords="about zeo tourism, travel company Nepal, Dubai travel agency, ZEO Tourism LLC, customized travel packages, corporate incentive tours, visa processing, MICE"
         url="https://zeotourism.com/about"
         type="website"
+        structuredData={structuredData}
       />
 
       <div className="about-page">

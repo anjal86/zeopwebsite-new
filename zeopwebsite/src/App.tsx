@@ -21,12 +21,20 @@ import TripPlanning from './pages/TripPlanning';
 import AboutPage from './pages/About';
 import ContactPage from './pages/Contact';
 import NotFound from './pages/NotFound';
+// Import blog pages
+import BlogPage from './pages/Blog';
+import BlogPostPage from './pages/BlogPost';
+
 import PrivacyPolicy from './pages/PrivacyPolicy';
 
-// Import admin pages
+
+{/* Admin Routes */ }
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TourEditor from './pages/TourEditor';
+import BlogEditor from './pages/BlogEditor';
+
+
 
 // Component to handle scroll to top on route change
 function ScrollToTop() {
@@ -35,7 +43,7 @@ function ScrollToTop() {
   useEffect(() => {
     // Only scroll to top on route changes, not on initial load/reload
     const isInitialLoad = sessionStorage.getItem('initialLoad') === null;
-    
+
     if (isInitialLoad) {
       sessionStorage.setItem('initialLoad', 'false');
     } else {
@@ -55,15 +63,15 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="App">
       {/* Navigation - Only show on non-admin routes */}
       {!isAdminRoute && <Navigation />}
-      
+
       {/* Main Content (offset for fixed header) */}
       <main >
         {children}
       </main>
-      
+
       {/* Footer - Only show on non-admin routes */}
       {!isAdminRoute && <Footer />}
-      
+
       {/* Floating WhatsApp - Only show on non-admin routes */}
       {!isAdminRoute && (
         <div className="fixed bottom-6 right-6 z-30">
@@ -114,13 +122,18 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/tours/new" element={<TourEditor />} />
           <Route path="/admin/tours/:tourSlug" element={<TourEditor />} />
-          
+          <Route path="/admin/blog/new" element={<BlogEditor />} />
+          <Route path="/admin/blog/edit/:id" element={<BlogEditor />} />
+
           {/* Catch-all route for 404 pages */}
           <Route path="*" element={<NotFound />} />
         </Routes>

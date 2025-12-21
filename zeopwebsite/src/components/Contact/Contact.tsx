@@ -5,7 +5,7 @@ import { useContact } from '../../hooks/useApi';
 
 const Contact: React.FC = () => {
   const { data: contactInfo, loading: contactLoading, error: contactError } = useContact();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,7 +33,7 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
     setShowError(false);
     setErrorMessage('');
-    
+
     try {
       const response = await fetch('/api/contact/enquiry', {
         method: 'POST',
@@ -52,7 +52,7 @@ const Contact: React.FC = () => {
       // Success
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 5000);
-      
+
       // Reset form
       setFormData({
         name: '',
@@ -101,7 +101,7 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-4">
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          
+
           {/* Left Column - Contact Methods */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -177,7 +177,7 @@ const Contact: React.FC = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Send us a message
               </h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Success Message */}
                 {showSuccess && (
@@ -220,7 +220,7 @@ const Contact: React.FC = () => {
                       placeholder="Your Name *"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-blue focus:outline-none focus:ring-2 focus:ring-sky-blue/20 transition-all duration-300"
                     />
-                    
+
                     <input
                       type="email"
                       name="email"
@@ -241,7 +241,7 @@ const Contact: React.FC = () => {
                       placeholder="Phone Number"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-blue focus:outline-none focus:ring-2 focus:ring-sky-blue/20 transition-all duration-300"
                     />
-                    
+
                     <select
                       name="destination"
                       value={formData.destination}
@@ -270,7 +270,7 @@ const Contact: React.FC = () => {
                       placeholder="No. of Travelers"
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sky-blue focus:outline-none focus:ring-2 focus:ring-sky-blue/20 transition-all duration-300"
                     />
-                    
+
                     <input
                       type="date"
                       name="date"
@@ -295,13 +295,12 @@ const Contact: React.FC = () => {
                   <p className="text-sm text-gray-500">
                     {contactInfo?.business.support.response_time ? `We'll get back to you ${contactInfo.business.support.response_time.toLowerCase()}` : "We'll get back to you within 24 hours"}
                   </p>
-                  
+
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center ${
-                      isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-                    }`}
+                    className={`bg-gradient-to-r from-sky-blue to-sky-blue-dark text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                      }`}
                   >
                     {isSubmitting ? (
                       <>
@@ -336,7 +335,7 @@ const Contact: React.FC = () => {
                 Find Us Here
               </h3>
             </div>
-            <div className="h-[500px]">
+            <div className="h-[500px] relative">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2738.8293499738834!2d85.33145348661431!3d27.72530994398019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f625c6408f%3A0xa14006f9fceeea6a!2sZeo%20Tourism%20Pvt.Ltd!5e0!3m2!1sen!2snp!4v1758183095926!5m2!1sen!2snp"
                 width="100%"
@@ -346,6 +345,7 @@ const Contact: React.FC = () => {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Zeo Tourism Office Location"
+                className="w-full h-full"
               />
             </div>
             <div className="p-4 bg-gray-50">
@@ -356,7 +356,7 @@ const Contact: React.FC = () => {
                 <a
                   href={(contactInfo?.contact.location as any)?.maps_url || "https://maps.app.goo.gl/6ee4i6HGNKX9qdar8"}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-sky-blue hover:text-sky-blue-dark font-medium text-sm transition-colors"
                 >
                   Open in Google Maps →

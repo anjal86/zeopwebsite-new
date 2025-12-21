@@ -7,13 +7,15 @@ interface PageHeaderProps {
   subtitle: string;
   breadcrumb: string;
   backgroundImage: string;
+  iconImage?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   breadcrumb,
-  backgroundImage
+  backgroundImage,
+  iconImage
 }) => {
   // Parse breadcrumb to create proper navigation
   const breadcrumbParts = breadcrumb.split(' > ');
@@ -30,16 +32,21 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/60" />
       </div>
-      
+
       {/* Content */}
       <div className="section-container text-center relative z-10 w-full py-20 pt-40">
+        {iconImage && (
+          <div className="flex justify-center mb-6">
+            <img src={iconImage} alt="" className="w-20 h-20 object-contain drop-shadow-2xl" />
+          </div>
+        )}
         <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4">
           {title}
         </h1>
         <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6">
           {subtitle}
         </p>
-        
+
         {/* Breadcrumb */}
         <div className="flex items-center justify-center">
           <Link to="/" className="text-white/80 hover:text-white transition-colors">

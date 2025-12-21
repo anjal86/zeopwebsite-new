@@ -11,6 +11,7 @@ import {
 import {
   GiWaterDrop
 } from 'react-icons/gi';
+import SEO from '../components/SEO/SEO';
 import TourGrid from '../components/Tours/TourGrid';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import ErrorMessage from '../components/UI/ErrorMessage';
@@ -58,13 +59,13 @@ const KailashMansarovarPage: React.FC = () => {
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [galleryError, setGalleryError] = useState<string | null>(null);
-  
+
   // Hero slider state
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  
+
   // Parallax scroll effects
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 800], [0, 200]);
@@ -75,7 +76,7 @@ const KailashMansarovarPage: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -130,11 +131,11 @@ const KailashMansarovarPage: React.FC = () => {
   // Auto-advance slides
   useEffect(() => {
     if (!galleryPhotos || galleryPhotos.length === 0) return;
-    
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % galleryPhotos.length);
     }, 8000); // 8 seconds per slide
-    
+
     return () => clearInterval(interval);
   }, [galleryPhotos]);
 
@@ -148,7 +149,7 @@ const KailashMansarovarPage: React.FC = () => {
           throw new Error('Failed to fetch tours');
         }
         const kailashTours = await response.json();
-        
+
         // If no Kailash tours found with search, try broader search
         if (kailashTours.length === 0) {
           const fallbackResponse = await fetch('/api/tours');
@@ -163,7 +164,7 @@ const KailashMansarovarPage: React.FC = () => {
         } else {
           setKailashTours(kailashTours);
         }
-        
+
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load packages');
@@ -208,7 +209,7 @@ const KailashMansarovarPage: React.FC = () => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -222,207 +223,214 @@ const KailashMansarovarPage: React.FC = () => {
 
 
   return (
-    <div className="kailash-mansarovar-page overflow-hidden">
-      {/* Hero Slider Gallery */}
-      <section
-        className="relative w-full overflow-hidden bg-black h-[60vh] md:h-[80vh]"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        {galleryLoading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-white text-xl">Loading sacred gallery...</div>
-          </div>
-        ) : galleryError ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-red-400 text-xl">Error loading gallery: {galleryError}</div>
-          </div>
-        ) : galleryPhotos.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-white text-xl">No gallery photos available</div>
-          </div>
-        ) : (
-          <>
-            {/* Background Image Slider */}
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={currentSlide}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: isMobile ? 0.5 : 1, ease: "easeInOut" }}
-                className="absolute inset-0"
-                style={{ y: backgroundY }}
-              >
-                <img
-                  src={galleryPhotos[currentSlide]?.image}
-                  alt={galleryPhotos[currentSlide]?.alt}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
-                  }}
-                />
-                {/* Gradient Overlay */}
+    <>
+      <SEO
+        title="Kailash Mansarovar Yatra - Sacred Pilgrimage Tours | Zeo Tourism"
+        description="Embark on a sacred journey to Mount Kailash and Lake Mansarovar. Professional pilgrimage travel services with expert guidance."
+        keywords="Kailash Mansarovar Yatra, Kailash tour, sacred pilgrimage, Tibet tours, Mt Kailash trek"
+        url="https://zeotourism.com/kailash-mansarovar"
+      />
+      <div className="kailash-mansarovar-page overflow-hidden">
+        {/* Hero Slider Gallery */}
+        <section
+          className="relative w-full overflow-hidden bg-black h-[60vh] md:h-[80vh]"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          {galleryLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-white text-xl">Loading sacred gallery...</div>
+            </div>
+          ) : galleryError ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-red-400 text-xl">Error loading gallery: {galleryError}</div>
+            </div>
+          ) : galleryPhotos.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-white text-xl">No gallery photos available</div>
+            </div>
+          ) : (
+            <>
+              {/* Background Image Slider */}
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60"
-                  style={{ opacity: overlayOpacity }}
-                />
-              </motion.div>
-            </AnimatePresence>
-
-
-            {/* Navigation Arrows */}
-            {galleryPhotos && galleryPhotos.length > 1 && (
-              <>
-                <motion.button
-                  onClick={goToPrevSlide}
-                  whileHover={{ scale: 1.1, x: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-3 rounded-full text-white hover:bg-black/40 transition-all duration-300 border border-white/20"
-                  aria-label="Previous slide"
+                  key={currentSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: isMobile ? 0.5 : 1, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                  style={{ y: backgroundY }}
                 >
-                  <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-                </motion.button>
+                  <img
+                    src={galleryPhotos[currentSlide]?.image}
+                    alt={galleryPhotos[currentSlide]?.alt}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1920&h=1080&fit=crop';
+                    }}
+                  />
+                  {/* Gradient Overlay */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60"
+                    style={{ opacity: overlayOpacity }}
+                  />
+                </motion.div>
+              </AnimatePresence>
 
-                <motion.button
-                  onClick={goToNextSlide}
-                  whileHover={{ scale: 1.1, x: 2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-3 rounded-full text-white hover:bg-black/40 transition-all duration-300 border border-white/20"
-                  aria-label="Next slide"
-                >
-                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-                </motion.button>
-              </>
-            )}
 
-            {/* Slide Indicators */}
-            <motion.div className="absolute bottom-8 md:bottom-10 w-full z-20">
-              <div className="w-full flex justify-center items-center">
-                <div className="flex space-x-3">
-                  {galleryPhotos.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentSlide(index)}
-                      className={`transition-all duration-300 ${
-                        index === currentSlide
+              {/* Navigation Arrows */}
+              {galleryPhotos && galleryPhotos.length > 1 && (
+                <>
+                  <motion.button
+                    onClick={goToPrevSlide}
+                    whileHover={{ scale: 1.1, x: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="absolute left-2 sm:left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-3 rounded-full text-white hover:bg-black/40 transition-all duration-300 border border-white/20"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+                  </motion.button>
+
+                  <motion.button
+                    onClick={goToNextSlide}
+                    whileHover={{ scale: 1.1, x: 2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="absolute right-2 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-3 rounded-full text-white hover:bg-black/40 transition-all duration-300 border border-white/20"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                  </motion.button>
+                </>
+              )}
+
+              {/* Slide Indicators */}
+              <motion.div className="absolute bottom-8 md:bottom-10 w-full z-20">
+                <div className="w-full flex justify-center items-center">
+                  <div className="flex space-x-3">
+                    {galleryPhotos.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`transition-all duration-300 ${index === currentSlide
                           ? 'w-8 md:w-12 h-2 bg-orange-400'
                           : 'w-2 h-2 bg-white/50 hover:bg-white/70'
-                      } rounded-full`}
-                    />
-                  ))}
+                          } rounded-full`}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute bottom-20 md:bottom-24 w-full z-20"
-            >
-              <div className="w-full flex justify-center items-center">
-                <div className="text-white">
-                  <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+              {/* Scroll Indicator */}
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="absolute bottom-20 md:bottom-24 w-full z-20"
+              >
+                <div className="w-full flex justify-center items-center">
+                  <div className="text-white">
+                    <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </section>
+              </motion.div>
+            </>
+          )}
+        </section>
 
-      {/* Page Title Section - Overlaid on hero for desktop, separate for mobile */}
-      <div className="relative -mt-16 md:-mt-30 mb-8 z-30">
-        <div className="section-container">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 text-center md:mx-8 lg:mx-16 xl:mx-24">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
-                Kailash Mansarovar <span className="text-gradient bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Yatra</span>
-              </h1>
-              <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Choose from our sacred pilgrimage experiences to the most holy mountain.
-              </p>
-            </motion.div>
+        {/* Page Title Section - Overlaid on hero for desktop, separate for mobile */}
+        <div className="relative -mt-16 md:-mt-30 mb-8 z-30">
+          <div className="section-container">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 text-center md:mx-8 lg:mx-16 xl:mx-24">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
+                  Kailash Mansarovar <span className="text-gradient bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Yatra</span>
+                </h1>
+                <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                  Choose from our <a href="https://www.britannica.com/place/Mount-Kailas" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">sacred pilgrimage experiences</a> to the most holy mountain, a peak of deep spiritual significance and <a href="https://earthobservatory.nasa.gov/images/151740/navigating-the-high-peaks-of-the-himalaya" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">extraordinary geography</a>.
+                </p>
+              </motion.div>
+            </div>
           </div>
         </div>
+
+        {/* Tours Section */}
+        <section className="pt-8 pb-12 bg-gray-50">
+          <div className="section-container">
+            {/* Loading State */}
+            {loading && (
+              <LoadingSpinner className="py-20" size="lg" />
+            )}
+
+            {/* Error State */}
+            {error && (
+              <ErrorMessage
+                message={`Failed to load Kailash packages: ${error}`}
+                className="py-20"
+              />
+            )}
+
+            {/* Tours Grid */}
+            {!loading && !error && (
+              <TourGrid
+                tours={kailashTours}
+                filters={filters}
+                onTourBook={handleTourBook}
+                onTourView={handleTourView}
+                destinations={destinations || undefined}
+              />
+            )}
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-20 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+          <div className="section-container text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="flex justify-center mb-8">
+                <GiWaterDrop className="text-6xl text-orange-400" />
+              </div>
+              <h2 className="text-4xl md:text-6xl font-bold mb-6">
+                Your Sacred Journey Awaits
+              </h2>
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                The sacred mountain awaits. The holy waters are ready to purify your spirit.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl transition-all duration-300"
+                >
+                  <Phone className="inline mr-3 w-6 h-6" />
+                  Call for Guidance
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="border-2 border-orange-400 text-orange-400 px-10 py-5 rounded-full font-bold text-xl hover:bg-orange-400 hover:text-white transition-all duration-300"
+                >
+                  <Mail className="inline mr-3 w-6 h-6" />
+                  Request Information
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </div>
-
-      {/* Tours Section */}
-      <section className="pt-8 pb-12 bg-gray-50">
-        <div className="section-container">
-          {/* Loading State */}
-          {loading && (
-            <LoadingSpinner className="py-20" size="lg" />
-          )}
-
-          {/* Error State */}
-          {error && (
-            <ErrorMessage
-              message={`Failed to load Kailash packages: ${error}`}
-              className="py-20"
-            />
-          )}
-
-          {/* Tours Grid */}
-          {!loading && !error && (
-            <TourGrid
-              tours={kailashTours}
-              filters={filters}
-              onTourBook={handleTourBook}
-              onTourView={handleTourView}
-              destinations={destinations || undefined}
-            />
-          )}
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
-        <div className="section-container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="flex justify-center mb-8">
-              <GiWaterDrop className="text-6xl text-orange-400" />
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Your Sacred Journey Awaits
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              The sacred mountain awaits. The holy waters are ready to purify your spirit.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl transition-all duration-300"
-              >
-                <Phone className="inline mr-3 w-6 h-6" />
-                Call for Guidance
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border-2 border-orange-400 text-orange-400 px-10 py-5 rounded-full font-bold text-xl hover:bg-orange-400 hover:text-white transition-all duration-300"
-              >
-                <Mail className="inline mr-3 w-6 h-6" />
-                Request Information
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 };
 

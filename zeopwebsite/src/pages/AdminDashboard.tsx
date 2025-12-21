@@ -23,8 +23,10 @@ import KailashGalleryManager from '../components/Admin/KailashGalleryManager';
 import LogoManager from '../components/Admin/LogoManager';
 import AdminSidebar from '../components/Admin/AdminSidebar';
 import ActivityManager from '../components/Admin/ActivityManager';
+import BlogManager from '../components/Admin/BlogManager';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 
+// ... (lines 28-35)
 interface User {
   id: number;
   name: string;
@@ -32,7 +34,10 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'blog';
+
+// ... (lines 37-101)
+
 
 const AdminDashboard: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,6 +105,8 @@ const AdminDashboard: React.FC = () => {
         return <ContactEnquiryManager />;
       case 'testimonials':
         return <TestimonialManager />;
+      case 'blog':
+        return <BlogManager />;
       case 'settings':
         return <SettingsContent />;
       default:

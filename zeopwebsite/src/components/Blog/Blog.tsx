@@ -1,63 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight, BookOpen, Clock } from 'lucide-react';
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  image: string;
-  author: string;
-  date: string;
-  readTime: string;
-  category: string;
-  featured?: boolean;
-}
+import { useApi } from '../../hooks/useApi';
 
 const Blog: React.FC = () => {
-  const blogPosts: BlogPost[] = [
-    {
-      id: 1,
-      title: 'Essential Guide to Everest Base Camp Trek',
-      excerpt: 'Everything you need to know before embarking on the journey of a lifetime to the base of the world\'s highest mountain.',
-      image: 'https://images.unsplash.com/photo-1522163182402-834f871fd851?q=80&w=2070',
-      author: 'Pemba Sherpa',
-      date: 'March 15, 2024',
-      readTime: '8 min read',
-      category: 'Trekking Tips',
-      featured: true
-    },
-    {
-      id: 2,
-      title: 'Sacred Journey: Understanding Kailash Mansarovar',
-      excerpt: 'Discover the spiritual significance and practical aspects of this holy pilgrimage that attracts thousands each year.',
-      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2070',
-      author: 'Tenzin Norbu',
-      date: 'March 10, 2024',
-      readTime: '6 min read',
-      category: 'Spiritual Journeys'
-    },
-    {
-      id: 3,
-      title: 'Best Time to Visit Nepal: A Seasonal Guide',
-      excerpt: 'From clear mountain views to vibrant festivals, learn when to plan your Nepal adventure for the best experience.',
-      image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070',
-      author: 'Maya Gurung',
-      date: 'March 5, 2024',
-      readTime: '5 min read',
-      category: 'Travel Planning'
-    },
-    {
-      id: 4,
-      title: 'Altitude Sickness: Prevention and Management',
-      excerpt: 'Expert advice on recognizing, preventing, and dealing with altitude sickness during high-altitude treks.',
-      image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070',
-      author: 'Dr. Ang Dorje',
-      date: 'February 28, 2024',
-      readTime: '7 min read',
-      category: 'Health & Safety'
-    }
-  ];
+  const { data: posts, loading } = useApi<any[]>('/api/posts');
+
+  if (loading || !posts) {
+    return null; // Or a loading skeleton
+  }
+
+  // Sort slightly by date later if needed, but API usually returns insertion order. 
+  // Assuming backend returns newest last, or we can reverse.
+  // For now simple display.
+  const featuredPosts = posts.filter(p => p.featured).slice(0, 1);
+  const recentPosts = posts.filter(p => !p.featured).slice(0, 3); // Top 3 recent
 
   return (
     <section id="blog" className="py-20 bg-gray-50 relative overflow-hidden">
@@ -95,7 +52,7 @@ const Blog: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2"
           >
-            {blogPosts.filter(post => post.featured).map(post => (
+            {featuredPosts.map(post => (
               <motion.article
                 key={post.id}
                 whileHover={{ scale: 1.02 }}
@@ -108,7 +65,7 @@ const Blog: React.FC = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                  
+
                   {/* Featured Badge */}
                   <div className="absolute top-6 left-6">
                     <span className="bg-gradient-to-r from-sunrise-orange to-sunrise-orange-light text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -169,7 +126,7 @@ const Blog: React.FC = () => {
             <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">
               Recent Articles
             </h3>
-            {blogPosts.filter(post => !post.featured).map((post, index) => (
+            {recentPosts.map((post, index) => (
               <motion.article
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -213,6 +170,7 @@ const Blog: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => window.location.href = '/blog'}
               className="w-full bg-gradient-to-r from-earth-green to-earth-green-light text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300"
             >
               View All Articles

@@ -264,10 +264,10 @@ const About: React.FC = () => {
 
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
                 <p>
-                  Founded in <strong className="text-gray-900">2018</strong> and headquartered in <strong className="text-gray-900">Kathmandu</strong>, <strong className="text-primary">Zeo Tourism Pvt. Ltd.</strong> is a premier travel agency dedicated to delivering world-class travel experiences. With over <strong className="text-gray-900">13 years</strong> of professional expertise in the travel and hospitality industry, we specialize in customized international packages, corporate incentive tours, and complete travel solutions.
+                  Founded in <strong className="text-gray-900">2018</strong> and headquartered in <a href="https://ntb.gov.np" target="_blank" rel="noopener noreferrer" className="text-gray-900 hover:text-primary underline decoration-primary/30">Kathmandu</a>, <strong className="text-primary">Zeo Tourism Pvt. Ltd.</strong> is a premier travel agency dedicated to delivering world-class travel experiences. With over <strong className="text-gray-900">13 years</strong> of professional expertise in the travel and hospitality industry, we specialize in customized international packages, corporate incentive tours, and complete travel solutions.
                 </p>
                 <p>
-                  We are also officially registered in <strong className="text-gray-900">Dubai</strong> as <strong className="text-primary">ZEO Tourism LLC</strong>, expanding our premium services to clients based worldwide.
+                  We are also officially registered in <strong className="text-gray-900">Dubai</strong> as <strong className="text-primary">ZEO Tourism LLC</strong>, expanding our premium services to clients based worldwide. As a registered travel entity in <a href="https://ntb.gov.np/plan-your-trip/nepal-at-a-glance" target="_blank" rel="noopener noreferrer" className="text-gray-900 hover:text-primary underline decoration-primary/30">Nepal</a>, we uphold the highest standards of Himalayan hospitality.
                 </p>
               </div>
 
@@ -472,9 +472,9 @@ const About: React.FC = () => {
                       <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
                         <ServiceIcon className="w-8 h-8 text-white" />
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-300">
+                      <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-300">
                         {service.title}
-                      </h4>
+                      </h3>
                       <p className="text-gray-600 leading-relaxed">
                         {service.description}
                       </p>
