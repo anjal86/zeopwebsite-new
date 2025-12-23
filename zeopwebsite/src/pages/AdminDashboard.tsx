@@ -25,6 +25,8 @@ import AdminSidebar from '../components/Admin/AdminSidebar';
 import ActivityManager from '../components/Admin/ActivityManager';
 import BlogManager from '../components/Admin/BlogManager';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
+import DirectorMessageManager from '../components/Admin/DirectorMessageManager';
+import TeamManager from '../components/Admin/TeamManager';
 
 // ... (lines 28-35)
 interface User {
@@ -34,7 +36,7 @@ interface User {
   isAdmin: boolean;
 }
 
-type ActiveTab = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'blog';
+type ActiveTab = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'blog' | 'director' | 'team';
 
 // ... (lines 37-101)
 
@@ -86,7 +88,6 @@ const AdminDashboard: React.FC = () => {
     navigate('/admin/login');
   };
 
-
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
@@ -107,6 +108,10 @@ const AdminDashboard: React.FC = () => {
         return <TestimonialManager />;
       case 'blog':
         return <BlogManager />;
+      case 'director':
+        return <DirectorMessageManager />;
+      case 'team':
+        return <TeamManager />;
       case 'settings':
         return <SettingsContent />;
       default:

@@ -264,6 +264,8 @@ let enquiriesData = loadData('enquiries.json');
 let kailashGalleryData = loadData('kailash-gallery.json');
 let tourDetails = loadTourDetails();
 let postsData = loadData('posts.json');
+let directorMessageData = loadData('director-message.json');
+let teamData = loadData('team.json');
 
 // Extract arrays from the loaded data
 let tours = toursData.tours || toursData || [];
@@ -275,6 +277,8 @@ let contact = contactData || {};
 let testimonials = testimonialsData.testimonials || testimonialsData || [];
 let enquiries = enquiriesData || {};
 let posts = postsData.posts || postsData || [];
+let directorMessage = directorMessageData || {};
+let team = teamData.team || teamData || [];
 
 let logos = logoData.logos || logoData || {
   header: '/src/assets/zeo-logo.png',
@@ -798,8 +802,143 @@ app.delete('/api/admin/posts/:id', authenticateToken, (req, res) => {
 
   posts.splice(index, 1);
   saveData('posts.json', { posts });
-  res.json({ message: 'Post deleted successfully' });
+  res.json({ message: 'Post deleted' });
 });
+
+// ==================== DIRECTOR MESSAGE API ====================
+
+app.get('/api/director-message', async (req, res) => {
+  await delay(200);
+  res.json(directorMessage);
+});
+
+app.put('/api/admin/director-message', authenticateToken, (req, res) => {
+  upload.single('image')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(400).json({ error: err.message });
+    }
+
+    try {
+      // Handle both JSON-encoded data and direct form fields
+      let updatedMessage = {};
+      if (req.body.directorData) {
+        updatedMessage = JSON.parse(req.body.directorData);
+      } else {
+        updatedMessage = { ...req.body };
+      }
+
+      const file = req.file;
+
+      // Update basic fields
+      directorMessage = { ...directorMessage, ...updatedMessage };
+
+      // Handle file upload if present
+      if (file) {
+        console.log('Processing uploaded director image:', file.filename);
+
+        // Compress image
+        const compressedFileName = `compressed_${file.filename}`;
+        const compressedPath = path.join(path.dirname(file.path), compressedFileName);
+
+        await compressImage(file.path, compressedPath, 85);
+
+        const relativePath = path.relative(uploadsDir, compressedPath).replace(/\\/g, '/');
+        const fileUrl = `/uploads/${relativePath}`;
+
+        directorMessage.image = fileUrl;
+        console.log('Director image updated:', fileUrl);
+      }
+
+      saveData('director-message.json', directorMessage);
+      res.json(directorMessage);
+    } catch (error) {
+      console.error('Error updating director message:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+});
+
+// ==================== TEAM API ====================
+
+app.get('/api/team', async (req, res) => {
+  await delay(200);
+  // Sort by order_index
+  const sortedTeam = [...team].sort((a, b) => (a.order_index || 0) - (b.order_index || 0));
+  res.json(sortedTeam);
+});
+
+app.post('/api/admin/team', authenticateToken, (req, res) => {
+  try {
+    const newMember = {
+      id: Math.max(...team.map(m => m.id), 0) + 1,
+      ...req.body,
+      created_at: new Date().toISOString()
+    };
+    team.push(newMember);
+    saveData('team.json', team);
+    res.status(201).json(newMember);
+  } catch (error) {
+    console.error('Error creating team member:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/admin/team/:id', authenticateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    const index = team.findIndex(m => m.id === parseInt(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Team member not found' });
+    }
+
+    team[index] = { ...team[index], ...req.body };
+    saveData('team.json', team);
+    res.json(team[index]);
+  } catch (error) {
+    console.error('Error updating team member:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.delete('/api/admin/team/:id', authenticateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    const index = team.findIndex(m => m.id === parseInt(id));
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Team member not found' });
+    }
+
+    team.splice(index, 1);
+    saveData('team.json', team);
+    res.json({ message: 'Team member deleted' });
+  } catch (error) {
+    console.error('Error deleting team member:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/admin/team/order', authenticateToken, (req, res) => {
+  try {
+    const updates = req.body; // Array of { id, order_index }
+
+    updates.forEach(update => {
+      const member = team.find(m => m.id === update.id);
+      if (member) {
+        member.order_index = update.order_index;
+      }
+    });
+
+    saveData('team.json', team);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error reordering team:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 // ==================== TOURS API ====================
 

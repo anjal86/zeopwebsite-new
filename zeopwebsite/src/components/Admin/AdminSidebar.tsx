@@ -11,10 +11,12 @@ import {
   Mail,
   Camera,
   Users,
-  Compass
+  Compass,
+  User,
+  Briefcase
 } from 'lucide-react';
 
-type MenuKey = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users' | 'blog';
+type MenuKey = 'overview' | 'destinations' | 'tours' | 'activities' | 'sliders' | 'kailash-gallery' | 'enquiries' | 'testimonials' | 'settings' | 'users' | 'blog' | 'director' | 'team';
 
 interface AdminSidebarProps {
   activeKey?: MenuKey;
@@ -36,6 +38,8 @@ const MENU_ITEMS: { id: MenuKey; label: string; icon: React.ComponentType<any>; 
   { id: 'enquiries', label: 'Enquiries', icon: Mail, pathQuery: '?tab=enquiries' },
   { id: 'testimonials', label: 'Reviews', icon: MessageSquare, pathQuery: '?tab=testimonials' },
   { id: 'blog', label: 'Blog', icon: ImageIcon, pathQuery: '?tab=blog' },
+  { id: 'director', label: 'Director Msg', icon: User, pathQuery: '?tab=director' },
+  { id: 'team', label: 'Team', icon: Briefcase, pathQuery: '?tab=team' },
   { id: 'settings', label: 'Settings', icon: Settings, pathQuery: '?tab=settings' },
   { id: 'users', label: 'Users', icon: Users, pathQuery: '?tab=users' },
 ];

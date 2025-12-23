@@ -5,7 +5,7 @@ const getApiBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '/api';
 };
@@ -16,7 +16,7 @@ const getImageBaseUrl = (): string => {
     // Use the same domain as the frontend for production
     return `${window.location.protocol}//${window.location.host}`;
   }
-  
+
   // Development environment - use relative URL to leverage Vite proxy
   return '';
 };
@@ -292,22 +292,22 @@ const isMobileDevice = (): boolean => {
 // Helper function to convert relative image URLs to full URLs
 const convertImageUrl = (imageUrl: string): string => {
   if (!imageUrl) return '';
-  
+
   // If it's already a full URL, return as is
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
     return imageUrl;
   }
-  
+
   // If it starts with /uploads/, convert to full URL
   if (imageUrl.startsWith('/uploads/')) {
     return `${IMAGE_BASE_URL}${imageUrl}`;
   }
-  
+
   // If it doesn't start with /, add it
   if (!imageUrl.startsWith('/')) {
     return `${IMAGE_BASE_URL}/uploads/${imageUrl}`;
   }
-  
+
   // Default case - prepend IMAGE_BASE_URL
   return `${IMAGE_BASE_URL}${imageUrl}`;
 };
@@ -331,7 +331,7 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
 
   try {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     const defaultOptions: RequestInit = {
       method: 'GET',
       headers: {
@@ -362,7 +362,7 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
     return result;
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     if (error instanceof Error) {
       if (error.name === 'AbortError') {
         throw new Error('Request timeout - please check your connection');
@@ -371,7 +371,7 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
       console.warn(`API call to ${endpoint} failed:`, error.message);
       throw error;
     }
-    
+
     throw new Error('Unknown API error occurred');
   }
 };
@@ -379,13 +379,13 @@ const apiCall = async <T>(endpoint: string, options: RequestInit = {}): Promise<
 // Retry wrapper for critical API calls
 const apiCallWithRetry = async <T>(endpoint: string, maxRetries: number = 3): Promise<T> => {
   let lastError: Error;
-  
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await apiCall<T>(endpoint);
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt < maxRetries) {
         // Exponential backoff: 1s, 2s, 4s
         const delay = Math.pow(2, attempt - 1) * 1000;
@@ -393,7 +393,7 @@ const apiCallWithRetry = async <T>(endpoint: string, maxRetries: number = 3): Pr
       }
     }
   }
-  
+
   throw lastError!;
 };
 
@@ -437,7 +437,7 @@ export const toursApi = {
     }
 
     const tours = await response.json();
-    
+
     // Extract pagination info from headers
     const totalCount = parseInt(response.headers.get('X-Total-Count') || '0');
     const totalPages = parseInt(response.headers.get('X-Total-Pages') || '1');
@@ -521,7 +521,7 @@ export const destinationsApi = {
     try {
       return await apiCall<Destination>(`/destinations/${encodeURIComponent(slug)}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -541,7 +541,7 @@ export const destinationsApi = {
     try {
       return await apiCall<Destination>(`/destinations/name/${encodeURIComponent(name)}`);
     } catch (error) {
-      
+
       return null;
     }
   }
@@ -559,7 +559,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/${id}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -569,7 +569,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/${encodeURIComponent(slug)}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -584,7 +584,7 @@ export const activitiesApi = {
     try {
       return await apiCall<Activity>(`/activities/name/${encodeURIComponent(name)}`);
     } catch (error) {
-      
+
       return null;
     }
   }
@@ -617,7 +617,7 @@ export const slidersApi = {
     try {
       return await apiCall<Slider>(`/sliders/${id}`);
     } catch (error) {
-      
+
       return null;
     }
   }
@@ -635,7 +635,7 @@ export const blogsApi = {
     try {
       return await apiCall<Blog>(`/blogs/${encodeURIComponent(slug)}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -663,7 +663,7 @@ export const usersApi = {
     try {
       return await apiCall<User>(`/users/${id}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -697,7 +697,7 @@ export const bookingsApi = {
     try {
       return await apiCall<Booking>(`/bookings/${id}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -741,7 +741,7 @@ export const contentDestinationsApi = {
     try {
       return await apiCall<ContentDestination>(`/destinations/${encodeURIComponent(slug)}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -811,7 +811,7 @@ export const testimonialsApi = {
     try {
       return await apiCall<Testimonial>(`/testimonials/${id}`);
     } catch (error) {
-      
+
       return null;
     }
   },
@@ -859,6 +859,117 @@ export const logosApi = {
     return apiCallWithRetry('/logos');
   }
 };
+// Director Message API
+export interface DirectorMessage {
+  id: number;
+  name: string;
+  title: string;
+  message: string;
+  image: string;
+  updated_at?: string;
+}
+
+export const directorMessageApi = {
+  async get(): Promise<DirectorMessage | null> {
+    try {
+      return await apiCall<DirectorMessage>('/director-message');
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async update(data: Partial<DirectorMessage> | FormData): Promise<DirectorMessage> {
+    const token = localStorage.getItem('adminToken');
+    const isFormData = data instanceof FormData;
+
+    return apiCall<DirectorMessage>('/admin/director-message', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        ...(isFormData ? {} : { 'Content-Type': 'application/json' })
+      },
+      body: isFormData ? (data as FormData) : JSON.stringify(data)
+    });
+  }
+};
+
+// Team Members API
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  image: string;
+  bio?: string;
+  order_index: number;
+  social: {
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
+export const teamApi = {
+  async getAll(): Promise<TeamMember[]> {
+    return apiCallWithRetry<TeamMember[]>('/team');
+  },
+
+  async getById(id: number): Promise<TeamMember | null> {
+    try {
+      return await apiCall<TeamMember>(`/team/${id}`);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async create(data: Omit<TeamMember, 'id' | 'created_at' | 'updated_at'>): Promise<TeamMember> {
+    const token = localStorage.getItem('adminToken');
+    return apiCall<TeamMember>('/admin/team', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+  },
+
+  async update(id: number, data: Partial<TeamMember>): Promise<TeamMember> {
+    const token = localStorage.getItem('adminToken');
+    return apiCall<TeamMember>(`/admin/team/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+  },
+
+  async delete(id: number): Promise<void> {
+    const token = localStorage.getItem('adminToken');
+    await apiCall(`/admin/team/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
+
+  async updateOrder(orders: { id: number; order_index: number }[]): Promise<void> {
+    const token = localStorage.getItem('adminToken');
+    await apiCall('/admin/team/order', {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ orders })
+    });
+  }
+};
 
 // Export default API object
 const api = {
@@ -877,7 +988,9 @@ const api = {
   users: usersApi,
   bookings: bookingsApi,
   contentDestinations: contentDestinationsApi,
-  enhancedSearch: enhancedSearchApi
+  enhancedSearch: enhancedSearchApi,
+  directorMessage: directorMessageApi,
+  team: teamApi
 };
 
 export default api;

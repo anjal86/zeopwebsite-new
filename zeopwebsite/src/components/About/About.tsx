@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Heart, Shield, Globe, Award, Star,
@@ -7,10 +7,29 @@ import {
   ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import api, { type DirectorMessage, type TeamMember } from '../../services/api';
+import { Linkedin, Twitter, Facebook, Instagram, Quote } from 'lucide-react';
 
 const About: React.FC = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [activeCategory, setActiveCategory] = useState(0);
+  const [directorMessage, setDirectorMessage] = useState<DirectorMessage | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const msg = await api.directorMessage.get();
+        if (msg) setDirectorMessage(msg);
+
+        const team = await api.team.getAll();
+        setTeamMembers(team.sort((a, b) => a.order_index - b.order_index));
+      } catch (error) {
+        console.error('Failed to fetch about page data', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const coreValues = [
     {
@@ -330,6 +349,47 @@ const About: React.FC = () => {
         </div>
       </section>
 
+      {/* Director Message Section */}
+      {directorMessage && (
+        <section className="py-24 bg-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 transform translate-x-1/4"></div>
+
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+            >
+              <div className="grid md:grid-cols-12 gap-0">
+                <div className="md:col-span-5 relative min-h-[400px]">
+                  <img
+                    src={directorMessage.image || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800"}
+                    alt={directorMessage.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-8">
+                    <h3 className="text-2xl font-bold text-white">{directorMessage.name}</h3>
+                    <p className="text-white/90 font-medium">{directorMessage.title}</p>
+                  </div>
+                </div>
+
+                <div className="md:col-span-7 p-8 md:p-12 flex flex-col justify-center">
+                  <div className="mb-6">
+                    <Quote className="w-12 h-12 text-primary/20" />
+                  </div>
+                  <h2 className="text-3xl font-serif font-bold text-gray-900 mb-6">Message from the Director</h2>
+                  <div className="prose prose-lg text-gray-600 mb-8 leading-relaxed whitespace-pre-line">
+                    {directorMessage.message}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* Company Timeline Section - NEW */}
       <section className="py-24 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -531,6 +591,80 @@ const About: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Team Members Section */}
+      {teamMembers.length > 0 && (
+        <section className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
+                Meet the <span className="text-primary">Team</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                The experts behind your unforgettable journeys
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <div className="relative overflow-hidden rounded-2xl mb-4 shadow-lg aspect-[3/4]">
+                    <img
+                      src={member.image || 'https://via.placeholder.com/400x500'}
+                      alt={member.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <div className="flex gap-4">
+                        {member.social?.linkedin && (
+                          <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors">
+                            <Linkedin className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.social?.twitter && (
+                          <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors">
+                            <Twitter className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.social?.facebook && (
+                          <a href={member.social.facebook} target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors">
+                            <Facebook className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.social?.instagram && (
+                          <a href={member.social.instagram} target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors">
+                            <Instagram className="w-5 h-5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
+                    <p className="text-primary font-medium mb-3">{member.role}</p>
+                    {member.bio && (
+                      <p className="text-sm text-gray-500 line-clamp-2">{member.bio}</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Enhanced Testimonials Carousel */}
       <section className="py-24 bg-white">

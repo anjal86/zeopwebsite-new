@@ -32,10 +32,7 @@ const Navigation: React.FC = () => {
       label: 'Destinations',
       href: '/destinations'
     },
-    {
-      label: 'Tours',
-      href: '/tours'
-    },
+
     {
       label: 'Kailash Mansarovar',
       href: '/kailash-mansarovar'
